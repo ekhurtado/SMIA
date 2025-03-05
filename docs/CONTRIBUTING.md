@@ -10,9 +10,8 @@ There are multiple ways to contribute:
 
 ### Extending the SMIA base approach
 
-SMIA offers some extension methods to add new code to the base logic of the software. See how to develop an extension at [link to extension documentation page](https://smia.readthedocs.io/en/latest/).
+SMIA offers some extension methods to add new code to the base logic of the software. See how to develop an extension at [link to extension documentation page](https://smia.readthedocs.io/en/latest/smia_user_guide/extension_guide.html).
 
-[//]: # (TODO FALTA POR AÑADIR EL ENLACE A LA PAGINA DE LA DOCUMENTACION DONDE SE EXPLICA COMO GENERAR UNA EXTENSION)
 
 ### Report Bugs
 
