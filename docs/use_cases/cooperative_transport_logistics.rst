@@ -18,7 +18,7 @@ The operator represents a worker who must be able to interact with the system in
 
 .. image:: ../_static/images/SMIA_coop_trans_logis_graphical.jpg
   :align: center
-  :width: 400
+  :width: 600
   :alt: Cooperative transport logistics graphical representation
 
 
@@ -29,7 +29,7 @@ The assets identified in this case study are physical, but operator accessibilit
 
 .. image:: ../_static/images/SMIA_coop_trans_logis_dev.jpg
   :align: center
-  :width: 500
+  :width: 400
   :alt: Cooperative transport logistics development
 
 Deployment of the use case
