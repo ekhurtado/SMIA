@@ -3,7 +3,7 @@ Getting Started
 
 SMIA is a software that implements an AAS-compliant Digital Twin (DT) that is based on a flexible manufacturing-centered ontology.
 
-.. image:: _static/images/I4_0_SMIA_logo_positive.png
+.. image:: _static/images/SMIA_logo_positive.png
   :align: center
   :width: 400
   :alt: SMIA main logo
