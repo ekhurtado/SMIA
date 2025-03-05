@@ -24,7 +24,11 @@ The features of the SMIA approach include:
 
 .. note::
 
-    The page that details the SMIA cooperative transport logistics use case is available at `<https://smia.readthedocs.io/en/latest/use_cases/use_cases.html>`_.
+    This use case has been developed based on SMIA v0.2.2.
+
+.. note::
+
+    The page that details the SMIA cooperative transport logistics use case is available at `<https://smia.readthedocs.io/en/cooperative_transport_logistics/use_cases/use_cases.html>`_.
 
 Documentation project structure
 -------------------------------

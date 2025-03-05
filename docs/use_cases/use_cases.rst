@@ -4,55 +4,24 @@ SMIA Use Cases
 .. _SMIA Use Cases:
 
 
-TODO
-
-
-These guides are a comprehensive resource for using the :term:`SMIA` software. For a better understanding of the software, the guides are structured into several subguides, each of which focuses on one aspect of the approach.
+This page groups all the use cases developed for the SMIA approach.
 
 .. toctree::
     :hidden:
 
-    installation_guide
-    aas_development_guide
-    smia_configuration_guide
-    start_up_guide
-    extension_guide
+    cooperative_transport_logistics
 
-Installation of required resources
-----------------------------------
+Cooperative transport logistics
+-------------------------------
 
-To work in the SMIA ecosystem it is necessary to install some tools and resources.
+This use case represents a robotic logistics production scenario, in which a plant operator will request efficient transports performed by robots.
 
-    The guide is available at :octicon:`repo;1em` :ref:`Installation Guide`.
+    The use case is detailed in :octicon:`file-symlink-file;1em` :ref:`Use Case CoopTranspLogis`.
 
-Development of the AAS
-----------------------
-
-This guide is focused on the development of the :term:`AAS` model.
-
-    The guide is available at :octicon:`repo;1em` :ref:`AAS Development Guide`.
-
-
-SMIA configuration
--------------------
-
-Once the AAS model has been defined, SMIA can be configured so that it is ready to start up.
-
-    The guide is available at :octicon:`repo;1em` :ref:`SMIA Configuration Guide`.
-
-Running SMIA
-------------
-
-SMIA can be start-up and run through several methods, so they are detailed one by one.
-
-    The guide is available at :octicon:`repo;1em` :ref:`SMIA Start-up Guide`.
-
-SMIA extension
+More use cases
 --------------
 
-SMIA can be extended to add custom code to the offered base, in order to add more autonomy and intelligence to the software. The extension mechanisms are detailed in the following guide.
-
-    The guide is available at :octicon:`repo;1em` :ref:`SMIA Extension Guide`.
+When more use cases for SMIA are developed, they will be added here.
 
 
 

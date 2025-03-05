@@ -20,6 +20,9 @@ The Self-configurable Manufacturing Industrial Agent (SMIA) is a proposal for th
 > [!IMPORTANT]
 > This branch is focused on the SMIA use case for cooperative transport logistics. The main GitHub project of SMIA is available at [:octocat: **https://github.com/ekhurtado/SMIA/**](https://github.com/ekhurtado/SMIA/).
 
+> [!NOTE]
+> This use case has been developed based on SMIA v0.2.2.
+
 > [!TIP]
 > For more details on Self-configurable Manufacturing Industrial Agent regarding this use case see the [:blue_book: **full documentation**](https://smia.readthedocs.io/en/cooperative_transport_logistics/).
 
