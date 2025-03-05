@@ -18,6 +18,14 @@ The features of the SMIA approach include:
     - easy to start-up
     - containerized solution
 
+.. important::
+
+    This documentation project is associated to the branch focused on the SMIA use case for cooperative transport logistics. The main documentation project of SMIA is available at `<https://smia.readthedocs.io/en/latest/>`_.
+
+.. note::
+
+    The page that details the SMIA cooperative transport logistics use case is available at `<https://smia.readthedocs.io/en/latest/use_cases/use_cases.html>`_.
+
 Documentation project structure
 -------------------------------
 
