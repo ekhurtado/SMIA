@@ -28,7 +28,7 @@ The features of the SMIA approach include:
 
 .. note::
 
-    The page that details the SMIA cooperative transport logistics use case is available at `<https://smia.readthedocs.io/en/cooperative_transport_logistics/use_cases/use_cases.html>`_.
+    The page that details the SMIA cooperative transport logistics use case is available at :octicon:`repo-pull;1em` :ref:`SMIA Use Cases`.
 
 Documentation project structure
 -------------------------------
@@ -36,6 +36,8 @@ Documentation project structure
 The SMIA project documentation repository is structured as follows:
 
     :octicon:`repo;1em` :ref:`SMIA User Guide`: these guides helps with the usage of SMIA software and related tools.
+
+    :octicon:`repo-pull;1em` :ref:`SMIA Use Cases`: these pages detail all the use cases developed within the SMIA approach.
 
     .. :octicon:`repo;1em` :ref:`AAS Developer Guide`: this guide helps with the development of the :term:`AAS model`, that is the basis for SMIA self-configuration.
 

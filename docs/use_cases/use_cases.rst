@@ -11,12 +11,13 @@ This page groups all the use cases developed for the SMIA approach.
 
     cooperative_transport_logistics
 
-Cooperative transport logistics
--------------------------------
+
+Cooperative transport logistics use case
+----------------------------------------
 
 This use case represents a robotic logistics production scenario, in which a plant operator will request efficient transports performed by robots.
 
-    The use case is detailed in :octicon:`file-symlink-file;1em` :ref:`Use Case CoopTranspLogis`.
+    The use case is detailed in :octicon:`file-symlink-file;1em` :ref:`Cooperative transport logistics <Use case transport logistics>`.
 
 More use cases
 --------------
