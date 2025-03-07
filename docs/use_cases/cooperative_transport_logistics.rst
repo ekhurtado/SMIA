@@ -113,10 +113,44 @@ For this use case it has been decided to deploy SMIA using the Docker Compose me
 SMIA Operator dashboard
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-TODO aqui se mencionara como usar el dashboard
+During the development of the SMIA Operator extension, a dashboard was designed to facilitate the discovery of available SMIAs and the user's use of transport requests to those SMIAs.
 
+The developed dashboard is presented in the following figure. It is divided into different sections, related to the different phases of its use. Each one is detailed below:
+
+* ``External SMIAs loader`` section: this section offers the possibility to discover the SMIAs available within the deployment environment and to show in a clear way the information extracted from their analysis. Since it is necessary to know the functionalities of the assets in relation to the CSS model, for each SMIA identified its associated AAS model is analyzed, obtaining all its CSS elements.
+* ``Available capabilities and skills`` section: this section shows by means of a table all the information related to the CSS model obtained from the analysis of the available SMIAs, but without distinguishing from which of them it has been obtained. The table is organized in identified capabilities and offers the possibility to select one of them.
+* ``SMIA candidates`` section: this section shows the SMIA candidates for the selection made (i.e. if a constraint has been determined, the list shows only the SMIAs that meet the constraint).
+
+.. image:: ../_static/images/SMIA_coop_trans_logis_dashboard.jpg
+  :align: center
+  :width: 700
+  :alt: Cooperative transport logistics operator dashboard
+
+El proceso a seguir para el uso correcto del dashboard es el siguiente:
+
+The process to follow for the correct use of the dashboard is as follows:
+
+#. When accessing the page for the first time, only the top section will have content, as the SMIAs have not yet been loaded. Since the use case has been deployed with Docker Compose, you can click directly on :bdg-success:`LOAD` and it will automatically identify and parse the SMIAs deployed next to the SMIA Operator.
+     * * After clicking on the button, the GUI will be updated and all the information obtained will appear in the capabilities and skills table.
+#. In the table of available capabilities and skills you can choose a capability to be requested by clicking on the :bdg-warning:`SELECT` button in the row of the desired capability.
+    * After clicking on the button, if any extra data needs to be added, it will be requested. For example, if the capability has more than one skill, you will be asked if you want to select a specific one; or if there are capability constraints, you will have to determine their values.
+#. Finally, in the candidate SMIA table, you can decide which SMIA (a specific one or several to negotiate) you want the capability to perform, and you can request it through the :bdg-primary:`REQUEST` button.
+    * If the selected skill has input parameters, their values must be added in order to be able to request the capability.
+#. When the capability has been requested, the necessary interactions with the selected SMIAs will be performed and, when the full request process is completed, their execution information will be displayed on a new page. This is shown in the following figure. As can be seen, it is divided into two sections: general information on the capability execution request and a timeline with information on each step performed by the SMIA Operator.
+
+.. image:: ../_static/images/SMIA_coop_trans_logis_dashboard_results.jpg
+  :align: center
+  :width: 400
+  :alt: Cooperative transport logistics operator dashboard results
 
 Use case results
 ----------------
 
-TODO aqui se mencionaran algunos resultados obtenidos
+During the development of the case study and the tests performed in its application, some results and conclusions have been obtained:
+
+* Having a standard such as :term:`AAS` as a base, although it may be complex at first, offers a lot of advantages.
+* The inclusion of an architectural style focused on flexible manufacturing such as the :term:`CSS model` offers simplicity in encapsulating asset functionality.
+* A clear and simple dashboard is necessary to simplify the use of complex industry standards based solutions.
+* It has been concluded that an efficient discovery system is necessary to know the available SMIAs and therefore the available assets. This is because a global knowledge of the system is necessary in solutions that require interactions between different components.
+
+.. TODO PENSAR MAS RESULTADOS
