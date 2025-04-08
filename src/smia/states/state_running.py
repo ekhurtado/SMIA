@@ -36,7 +36,7 @@ class StateRunning(State):
 
         import time
         finish_time = time.time()
-        safe_metrics('/aas/' + self.agent.jid + '_metrics.csv', self.agent.start_time, finish_time,
+        safe_metrics('/aas/' + str(self.agent.jid) + '_metrics.csv', self.agent.start_time, finish_time,
                      finish_time - self.agent.start_time)
 
         _logger.info("## STATE 2: RUNNING ##  (Initial state)")
