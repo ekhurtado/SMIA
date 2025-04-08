@@ -96,6 +96,16 @@ docker run -e model=<path to AASX package> gcis-upv-ehu/smia:latest-alpine
 > [!NOTE]
 > [Discussions](https://github.com/ekhurtado/SMIA/discussions) page has been set as available to share announcements, create conversations, answer questions, and more.
 
+## Dependencies
+
+The SMIA software, as it has been built following an Open Source Software Engineering approach, integrates some mature Python packages.
+
+| Package name                                                   | Version | License             | Has it been modified |
+|----------------------------------------------------------------|---------|---------------------|----------------------|
+| [spade](https://pypi.org/project/spade/)                       | 3.3.3   | MIT                 | No                   |
+| [basyx-python-sdk](https://pypi.org/project/basyx-python-sdk/) | 1.1.0   | MIT                 | No                   |
+| [owlready2](https://pypi.org/project/owlready2/)               | 0.47    | GNU LGPL licence v3 | No                   |
+
 ## License
 
 GNU General Public License v3.0. See `LICENSE` for more information.
