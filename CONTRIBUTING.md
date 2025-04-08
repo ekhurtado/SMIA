@@ -1,5 +1,7 @@
 # Contributing
 
+(Contributing)=
+
 Contributions are what make it possible for the open source community to collaborate to build better solutions. All contributions are welcome and **greatly appreciated**. Everything helps the development of knowledge, and credit will always be given.
 
 There are multiple ways to contribute:
@@ -8,9 +10,8 @@ There are multiple ways to contribute:
 
 ### Extending the SMIA base approach
 
-SMIA offers some extension methods to add new code to the base logic of the software. See how to develop an extension at [link to extension documentation page](https://i4-0-smia.readthedocs.io/en/latest/).
+SMIA offers some extension methods to add new code to the base logic of the software. See how to develop an extension at [link to extension documentation page](https://smia.readthedocs.io/en/latest/smia_user_guide/extension_guide.html).
 
-[//]: # (TODO FALTA POR AÑADIR EL ENLACE A LA PAGINA DE LA DOCUMENTACION DONDE SE EXPLICA COMO GENERAR UNA EXTENSION)
 
 ### Report Bugs
 
@@ -43,7 +44,7 @@ One of the main objectives of the main contributors of the SMIA project is to pr
 
 In case of using additional dependencies please be sure that the licenses of these dependencies are compliant with the SMIA open-source license.
 
-## Get Started
+## Get Started!
 
 Ready to contribute? If there are any suggestions for improvement, a new issue can be opened or ``smia`` can be configured for local development. Here is how to do it:
 
@@ -65,5 +66,4 @@ Ready to contribute? If there are any suggestions for improvement, a new issue c
     git commit -m "feat: <The detailed description of the changes>"
     git push origin name-of-the-bugfix-or-new-feature
     ```
-   
 5. Submit a pull request through the GitHub repository or contact with one of the previous mentioned mechanisms.

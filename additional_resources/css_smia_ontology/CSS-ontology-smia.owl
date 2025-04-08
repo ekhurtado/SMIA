@@ -13,7 +13,12 @@
         <owl:imports rdf:resource="http://www.lesfleursdunormal.fr/static/_downloads/owlready_ontology.owl"/>
         <owlready_ontology:python_module>smia.css_ontology.capability_skill_module</owlready_ontology:python_module>
         <rdfs:comment>An ontology for the Capability, Skill and Service reference model defined by Plattform Industrie 4.0. See https://www.plattform-i40.de/IP/Redaktion/DE/Downloads/Publikation/CapabilitiesSkillsServices.html for a description of the abstract reference model.</rdfs:comment>
+        <rdfs:comment>This Capability-Skill-Service (CSS) ontology is an adaption for the Self-configurable Manufacturing Industrial Agents (SMIA) approach: https://github.com/ekhurtado/SMIA.</rdfs:comment>
+        <rdfs:comment>This OWL ontology extends a W3ID ontology: https://w3id.org/hsu-aut/css (MIT license).</rdfs:comment>
         <rdfs:isDefinedBy>https://www.plattform-i40.de/IP/Redaktion/DE/Downloads/Publikation/CapabilitiesSkillsServices.html</rdfs:isDefinedBy>
+        <rdfs:seeAlso>The official GitHub repository of the SMIA approach is available at: https://github.com/ekhurtado/SMIA.</rdfs:seeAlso>
+        <rdfs:seeAlso>The official PyPI Python package of the SMIA approach is available at: https://pypi.org/project/smia/.</rdfs:seeAlso>
+        <rdfs:seeAlso>The official documentation platform of the SMIA approach is available at: https://smia.readthedocs.io/en/latest/.</rdfs:seeAlso>
     </owl:Ontology>
     
 
@@ -447,15 +452,6 @@
     
 
 
-    <!-- http://www.w3id.org/upv-ehu/gcis/css-smia#pruebaABorrar -->
-
-    <owl:DatatypeProperty rdf:about="http://www.w3id.org/upv-ehu/gcis/css-smia#pruebaABorrar">
-        <rdfs:domain rdf:resource="http://www.w3id.org/hsu-aut/css#StateMachine"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    </owl:DatatypeProperty>
-    
-
-
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
@@ -759,15 +755,6 @@ Notes:
 
     <owl:Class rdf:about="http://www.w3id.org/upv-ehu/gcis/css-smia#AssetCapability">
         <rdfs:subClassOf rdf:resource="http://www.w3id.org/hsu-aut/css#Capability"/>
-    </owl:Class>
-    
-
-
-    <!-- http://www.w3id.org/upv-ehu/gcis/css-smia#AssetServiceNeeded -->
-
-    <owl:Class rdf:about="http://www.w3id.org/upv-ehu/gcis/css-smia#AssetServiceNeeded">
-        <rdfs:subClassOf rdf:resource="http://www.w3id.org/hsu-aut/css#SkillParameter"/>
-        <rdfs:comment>Data unit to configure, control and monitor the execution of a skill. In this case, for the correct execution of the skill, it is necessary to request a previous asset service.</rdfs:comment>
     </owl:Class>
     
 
