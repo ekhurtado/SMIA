@@ -34,10 +34,12 @@ class StateRunning(State):
         from ACL of another SMIA.
         """
 
+        # TODO BORRAR
         import time
         finish_time = time.time()
-        safe_metrics('/aas/' + str(self.agent.jid) + '_metrics.csv', self.agent.start_time, finish_time,
+        safe_metrics('/smia_archive/config/aas/' + str(self.agent.jid.localpart) + '_metrics.csv', self.agent.start_time, finish_time,
                      finish_time - self.agent.start_time)
+        print("Time between {} and {} has been {}s".format(self.agent.start_time, finish_time, finish_time - self.agent.start_time))
 
         _logger.info("## STATE 2: RUNNING ##  (Initial state)")
 
