@@ -39,10 +39,6 @@ class SMIAAgent(Agent):
     # def __init__(self, jid: str = None, password: str = None, port: int = 5222, verify_security: bool = False):     # For v4.0.0 and more
     def __init__(self, jid: str = None, password: str = None, *args, **kwargs):    # Generic constructor
 
-        # TODO BORRAR
-        import time
-        self.start_time= time.time()
-
         # The AAS_ID will be set in the associated ConfigMap, within the general-information of the AAS
         if jid is None:
             jid = properties_file_utils.get_dt_general_property('agentID')

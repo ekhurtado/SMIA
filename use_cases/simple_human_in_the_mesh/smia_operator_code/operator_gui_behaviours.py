@@ -16,6 +16,18 @@ from operator_gui_logic import GUIFeatures, GUIControllers
 
 _logger = logging.getLogger(__name__)
 
+def safe_metrics(file_path, elapsed_time):
+    import csv
+    import os
+    try:
+        with open(file_path, 'a', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
+            if not os.path.isfile(file_path) or os.path.getsize(file_path) == 0:
+                writer.writerow(['RequestTime'])
+            writer.writerow([f"{elapsed_time:.4f}"])
+    except Exception as e:
+        print(f"Error writing to file: {e}")
+
 class OperatorGUIBehaviour(OneShotBehaviour):
     """The behavior for the Operator only needs to add the web interface to the SMIA SPADE agent and the GUI related
     resources (HTML web pages and drivers)."""
@@ -293,6 +305,12 @@ class OperatorRequestBehaviour(OneShotBehaviour):
                         'The CSS-related execution has been completed.'})
 
                 self.myagent.request_exec_info['InteractionsDict'].append(response_info)
+
+            # TODO BORRAR
+            import time
+            safe_metrics('/smia_archive/config/aas/' + str(self.agent.jid.localpart) + '_css_requests.csv',
+                         time.time())
+            print("Time request is {}".format(time.time()))
 
             # As the CSS-related request has finished, the time information is added in the agent dictionary
             end_time = GeneralUtils.get_current_date_time()

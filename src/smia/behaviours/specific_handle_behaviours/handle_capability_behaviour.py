@@ -15,6 +15,18 @@ from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLJSONSchemas
 
 _logger = logging.getLogger(__name__)
 
+def safe_metrics(file_path, elapsed_time):
+    import csv
+    import os
+    try:
+        with open(file_path, 'a', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
+            if not os.path.isfile(file_path) or os.path.getsize(file_path) == 0:
+                writer.writerow(['RequestTime'])
+            writer.writerow([f"{elapsed_time:.4f}"])
+    except Exception as e:
+        print(f"Error writing to file: {e}")
+
 
 class HandleCapabilityBehaviour(OneShotBehaviour):
     """
@@ -93,6 +105,12 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
                 raise CapabilityRequestExecutionError(
                     cap_name,f"The capability {cap_name} cannot be executed because the capability checking "
                              f"result is invalid. Reason: {reason}.", self)
+
+            # TODO BORRAR
+            import time
+            safe_metrics('/smia_archive/config/aas/' + str(self.agent.jid.localpart) + '_css_requests.csv',
+                         time.time())
+            print("Time request is {}".format(time.time()))
 
             # Once all the data has been checked and obtained, the capability can be executed
             cap_execution_result = await self.execute_capability(cap_ontology_instance, skill_ontology_instance,

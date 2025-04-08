@@ -10,18 +10,6 @@ from smia.css_ontology.css_ontology_utils import CapabilitySkillOntologyInfo
 
 _logger = logging.getLogger(__name__)
 
-def safe_metrics(file_path, start, finish, elapsed_time):
-    import csv
-    import os
-    try:
-        with open(file_path, 'a', newline='', encoding='utf-8') as file:
-            writer = csv.writer(file)
-            if not os.path.isfile(file_path) or os.path.getsize(file_path) == 0:
-                writer.writerow(['Start', 'Finish', 'ElapsedTime'])
-            writer.writerow([f"{start:.4f}", f"{finish:.4f}", f"{elapsed_time:.4f}"])
-    except Exception as e:
-        print(f"Error writing to file: {e}")
-
 
 class StateRunning(State):
     """
@@ -33,13 +21,6 @@ class StateRunning(State):
         This method implements the running state of the common SMIA. Here all requests services are handled,
         from ACL of another SMIA.
         """
-
-        # TODO BORRAR
-        import time
-        finish_time = time.time()
-        safe_metrics('/smia_archive/config/aas/' + str(self.agent.jid.localpart) + '_metrics.csv', self.agent.start_time, finish_time,
-                     finish_time - self.agent.start_time)
-        print("Time between {} and {} has been {}s".format(self.agent.start_time, finish_time, finish_time - self.agent.start_time))
 
         _logger.info("## STATE 2: RUNNING ##  (Initial state)")
 
