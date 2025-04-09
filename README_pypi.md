@@ -1,4 +1,4 @@
-# Self-configurable Manufacturing Industrial Agent: SMIA 
+# Self-configurable Manufacturing Industrial Agents: SMIA 
 
 [![Python versions](https://img.shields.io/pypi/pyversions/smia.svg)](https://pypi.org/project/smia/) [![Docker badge](https://img.shields.io/docker/pulls/ekhurtado/smia.svg)](https://hub.docker.com/r/ekhurtado/smia/) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/ekhurtado/SMIA?sort=semver) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e87506fff1bb4a438c20e11bb7295f51)](https://app.codacy.com/gh/ekhurtado/SMIA/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) [![Documentation Status](https://readthedocs.org/projects/i4-0-smia/badge/?version=latest)](https://i4-0-smia.readthedocs.io/en/latest/)
 
@@ -9,7 +9,7 @@
 
 [//]: # (//Dependiendo del modo de GitHub oscuro o claro se añade una imagen u otra&#41;)
 
-The Self-configurable Manufacturing Industrial Agent (SMIA) is a proposal for the implementation of the concept of the I4.0 Component from the Reference Architectural Model Industrie 4.0 (RAMI 4.0) as an AAS-compliant agent-based Digital Twin (DT). The features of the SMIA approach include:
+The Self-configurable Manufacturing Industrial Agents (SMIA) is a proposal for the implementation of the concept of the I4.0 Component from the Reference Architectural Model Industrie 4.0 (RAMI 4.0) as an AAS-compliant agent-based Digital Twin (DT). The features of the SMIA approach include:
 
 - free & open-source
 - AAS-compliant: standardized approach
@@ -20,7 +20,7 @@ The Self-configurable Manufacturing Industrial Agent (SMIA) is a proposal for th
 - containerized solution
 
 > 💡 **TIP:**
-> For more details on Self-configurable Manufacturing Industrial Agent (SMIA) see the [📄 **full documentation**](https://smia.readthedocs.io/en/latest/).
+> For more details on Self-configurable Manufacturing Industrial Agents (SMIA) see the [📄 **full documentation**](https://smia.readthedocs.io/en/latest/).
 
 ## Usage
 

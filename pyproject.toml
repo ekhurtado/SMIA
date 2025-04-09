@@ -10,10 +10,10 @@ build-backend = "setuptools.build_meta"
 name = "smia"   # cambiar cuando funcione
 version = '0.2.2.7'  # cambiar cuando funcione a 0.2.3
 authors = [{ name="Ekaitz Hurtado", email="ekaitz.hurtado@ehu.eus" },]
-description = "Self-configurable Manufacturing Industrial Agent (SMIA)."
+description = "Self-configurable Manufacturing Industrial Agents (SMIA)."
 readme = 'README_pypi.md'
 license= {text="GNU Affero General Public License v3"}
-keywords=['smia', 'dt', 'aas', 'i4.0']
+keywords=['smia', 'dt', 'aas', 'i4.0', 'css']
 requires-python = ">= 3.10"
 classifiers = [
     'Development Status :: 2 - Pre-Alpha',
