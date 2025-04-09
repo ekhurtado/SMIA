@@ -7,7 +7,7 @@
 
 [//]: # (//Dependiendo del modo de GitHub oscuro o claro se añade una imagen u otra&#41;)
 
-The Self-configurable Manufacturing Industrial Agent (SMIA) is a proposal for the implementation of the concept of the I4.0 Component from the Reference Architectural Model Industrie 4.0 (RAMI 4.0) as an AAS-compliant agent-based Digital Twin (DT). The features of the SMIA approach include:
+The Self-configurable Manufacturing Industrial Agents (SMIA) is a proposal for the implementation of the concept of the I4.0 Component from the Reference Architectural Model Industrie 4.0 (RAMI 4.0) as an AAS-compliant agent-based Digital Twin (DT). The features of the SMIA approach include:
 
 - free & open-source
 - AAS-compliant: standardized approach
@@ -17,14 +17,8 @@ The Self-configurable Manufacturing Industrial Agent (SMIA) is a proposal for th
 - easy to start-up
 - containerized solution
 
-> [!IMPORTANT]
-> This branch is focused on the SMIA use case for cooperative transport logistics. The main GitHub project of SMIA is available at [:octocat: **https://github.com/ekhurtado/SMIA/**](https://github.com/ekhurtado/SMIA/).
-
-> [!NOTE]
-> This use case has been developed based on SMIA v0.2.2.
-
 > [!TIP]
-> For more details on Self-configurable Manufacturing Industrial Agent regarding this use case see the [:blue_book: **full documentation**](https://smia.readthedocs.io/en/cooperative_transport_logistics/).
+> For more details on Self-configurable Manufacturing Industrial Agents see the [:blue_book: **full documentation**](https://smia.readthedocs.io/en/latest/).
 
 ## Project structure
 
