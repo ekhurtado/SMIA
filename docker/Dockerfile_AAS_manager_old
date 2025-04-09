@@ -1,0 +1,19 @@
+FROM python:3.10-alpine
+
+RUN pip install --upgrade pip
+
+# aiokafka library requires installing these packages
+RUN apk add --no-cache gcc gpgme-dev libc-dev
+
+# All required Python packages are installed
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY src /
+
+WORKDIR /
+
+EXPOSE 7000
+
+CMD ["python3", "-u", "aas_manager.py"]
+CMD ["python3", "-u", "aas_manager.py"]
