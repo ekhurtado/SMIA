@@ -3,6 +3,9 @@ import datetime
 
 import six
 import typing
+
+from art import text2art
+
 from swagger_server import type_util
 
 
@@ -185,3 +188,39 @@ def remove_key_recursive(data, key_to_remove):
     else:
         # If it's neither a dict nor a list, just return it
         return data
+
+
+def print_smia_kb_banner():
+    """
+    This method prints the SMIA KB banner as a string. The banner has been created with Python 'art' library.
+    """
+    # The banner for the SMIA is set as string, avoiding installing 'art' library (which has been used to create it)
+    # The code to create the banner with the 'art' library is commented
+    # smia_name = "SMIA"
+    # kb_name = "KB"
+    # ascii_art_smia = text2art(smia_name, font="varsity")
+    # ascii_art_kb = text2art(kb_name, font="varsity")
+    # combined = []
+    # smia_lines = ascii_art_smia.split('\n')
+    # kb_lines = ascii_art_kb.split('\n')
+    # combined.append("-" * 73)
+    # for i in range(len(smia_lines)):
+    #     combined.append(smia_lines[i] + "   " + "\033[95m" + kb_lines[i] + "\033[0m")
+    # combined.append("-" * 73)
+    # combined_banner = '\n'.join(combined)
+    # print(combined_banner)
+
+    # The string result for the banner of SMIA_KB is the following
+    str_banner =   """-------------------------------------------------------------------------
+  ______    ____    ____   _____        _          [95m ___  ____    ______    [0m
+.' ____ \  |_   \  /   _| |_   _|      / \         [95m|_  ||_  _|  |_   _ \   [0m
+| (___ \_|   |   \/   |     | |       / _ \        [95m  | |_/ /      | |_) |  [0m
+ _.____`.    | |\  /| |     | |      / ___ \       [95m  |  __'.      |  __'.  [0m
+| \____) |  _| |_\/_| |_   _| |_   _/ /   \ \_     [95m _| |  \ \_   _| |__) | [0m
+ \______.' |_____||_____| |_____| |____| |____|    [95m|____||____| |_______/  [0m
+                                                   [95m                        [0m
+-------------------------------------------------------------------------
+                                                                   v0.1.0
+-------------------------------------------------------------------------
+"""
+    print(str_banner)
