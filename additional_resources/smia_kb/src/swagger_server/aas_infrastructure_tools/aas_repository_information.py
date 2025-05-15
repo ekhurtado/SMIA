@@ -39,14 +39,14 @@ class AASRepositoryInformation:
                 # Once the ontological instances have been created, the relationships between them are analyzed.
                 self.create_ontology_relationships_from_aas(aas_model_object)
 
-                # Todo borrar
-                print("PARA EL AAS CON ID [{}] SE HAN GENERADO ESTAS CLASES ONTOLOGICAS".format(aas_id))
-                for onto in CapabilitySkillOntology.get_instance().get_ontology().individuals():
-                    print("\t{} de la clase {}".format(onto, onto.is_a))
-                    print("\t\t y tiene las propiedades: {}".format(onto.data_properties_values_dict))
-                    cap_class = CapabilitySkillOntology.get_instance().get_ontology_class_by_iri(CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI)
-                    if isinstance(onto, cap_class):
-                        print("\t\tEsta capacidad esta asociada al activo {}".format(onto.get_associated_assets()))
+                # # Todo borrar
+                # print("PARA EL AAS CON ID [{}] SE HAN GENERADO ESTAS CLASES ONTOLOGICAS".format(aas_id))
+                # for onto in CapabilitySkillOntology.get_instance().get_ontology().individuals():
+                #     print("\t{} de la clase {}".format(onto, onto.is_a))
+                #     print("\t\t y tiene las propiedades: {}".format(onto.data_properties_values_dict))
+                #     cap_class = CapabilitySkillOntology.get_instance().get_ontology_class_by_iri(CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI)
+                #     if isinstance(onto, cap_class):
+                #         print("\t\tEsta capacidad tiene las skills [{}] esta asociada al activo {}".format(onto.isRealizedBy, onto.get_associated_assets()))
 
     def create_ontology_instances_from_aas(self, aas_model_object):
         for submodel_data in aas_model_object.submodel:
@@ -54,19 +54,18 @@ class AASRepositoryInformation:
 
             for ontology_class_iri in CapabilitySkillOntologyInfo.CSS_ONTOLOGY_THING_CLASSES_IRIS:
                 sme_list = AASModelUtils.get_submodel_elements_by_semantic_id(submodel_object, ontology_class_iri)
+                ontology_class = CapabilitySkillOntology.get_instance().get_ontology_class_by_iri(ontology_class_iri)
+                if ontology_class is None:
+                    print("ERROR:The ontology class with IRI {} does not exist in the given OWL ontology. Check the "
+                          "ontology file.", file=sys.stderr)
+                    break
                 for submodel_element in sme_list:
-                    ontology_class = CapabilitySkillOntology.get_instance().get_ontology_class_by_iri(ontology_class_iri)
-                    if ontology_class is None:
-                        print("ERROR:The ontology class with IRI {} does not exist in the given OWL ontology. Check the "
-                              "ontology file.", file=sys.stderr)
-                        break
-                    # TODO SI YA EXISTE LA CAPACIDAD NO HABRIA QUE CREARLA DE NUEVO
                     ontology_instance = CapabilitySkillOntology.get_instance().create_ontology_object_instance(
                         ontology_class, submodel_element.id_short)
                     capability_class = CapabilitySkillOntology.get_instance().get_ontology_class_by_iri(
                         CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI)
                     if isinstance(ontology_instance, capability_class):
-                        # The asset is associated to the created capability
+                        # The asset is associated to the created capability (or to the existing capability)
                         ontology_instance.add_associated_asset(AASModelUtils.get_asset_id_from_aas(aas_model_object))
                     ontology_required_value_iris = ontology_instance.get_data_properties_iris()
                     for required_value_iri in ontology_required_value_iris:
@@ -76,9 +75,33 @@ class AASRepositoryInformation:
 
     def create_ontology_relationships_from_aas(self, aas_model_object):
         for submodel_data in aas_model_object.submodel:
-            submodel_json = self.aas_model_object_store.get_identifiable(submodel_data.key[0].value)
+            submodel_object = self.aas_model_object_store.get_identifiable(submodel_data.key[0].value)
+            for ontology_class_iri in CapabilitySkillOntologyInfo.CSS_ONTOLOGY_OBJECT_PROPERTIES_IRIS:
+                rel_ontology_class = CapabilitySkillOntology.get_instance().get_ontology_class_by_iri(ontology_class_iri)
+                if rel_ontology_class is None:
+                    print("ERROR:The ontology class with IRI {} does not exist in the given OWL ontology. Check the "
+                          "ontology file.", file=sys.stderr)
+                    break
+                sme_rels_list = AASModelUtils.get_submodel_elements_by_semantic_id(submodel_object, ontology_class_iri)
+                for relationship_sm_elem in sme_rels_list:
+                    first_rel_elem = AASModelUtils.get_object_by_reference(
+                        self.aas_model_object_store, relationship_sm_elem.first)
+                    second_rel_elem = AASModelUtils.get_object_by_reference(
+                        self.aas_model_object_store, relationship_sm_elem.second)
+                    if first_rel_elem is None or second_rel_elem is None:
+                        print("WARNING: The relationship {} does not have the first and second elements well defined.".format(relationship_sm_elem))
+                        break
+                    domain_rel_elem, range_rel_elem = AASModelUtils.get_ontology_related_ordered_elements(
+                        first_rel_elem, second_rel_elem, rel_ontology_class)
+                    if domain_rel_elem is None or range_rel_elem is None:
+                        # It is not a valid relationship
+                        break
+                    # At this point it is a valid relationship
+                    # The ontological instances are obtained with the name since they are created by the same way
+                    domain_instance = CapabilitySkillOntology.get_instance().get_ontology_instance_by_name(domain_rel_elem.id_short)
+                    range_instance = CapabilitySkillOntology.get_instance().get_ontology_instance_by_name(range_rel_elem.id_short)
+                    domain_instance.set_object_property_value(rel_ontology_class.name, range_instance)
 
-            # TODO FALTA POR AÑADIR
 
     def save_all_aas_repository_information(self):
         """
@@ -87,7 +110,6 @@ class AASRepositoryInformation:
         # First, all the AAS JSON objects will be obtained
         print(f"Trying to obtain all the AAS JSON definitions from the repository")
         aas_json = AASOpenAPITools.send_http_get_request(AASRepositoryInfo.get_all_aas_json_url())
-        # aas_json = AASOpenAPITools.send_http_get_request(AASRepositoryInfo.get_aas_repository_url() + '/shells')
         if aas_json is None:
             print("ERROR: No AAS has been obtained.", file=sys.stderr)
             return
@@ -95,12 +117,8 @@ class AASRepositoryInformation:
         for aas_info in aas_json:
             aas_id = util.encode_string_in_base64_url(aas_info['id'])
             for submodel_ref_data in aas_info['submodels']:
-                # submodel_ref = util.encode_string_in_base64_url(submodel_ref_data['keys'][0]['value'])
-                # submodel_json = AASOpenAPITools.send_http_get_request(
-                #     AASRepositoryInfo.get_aas_repository_url() + '/submodels/' + submodel_ref)
                 submodel_json = AASOpenAPITools.send_http_get_request(
                         AASRepositoryInfo.get_submodel_json_url_by_id(submodel_ref_data['keys'][0]['value']))
-                # TODO PENSAR SI RECOGER LAS URLS DE LA CLASE AASRepositoryInfo: es decir, le pasas la referencia y te crea la url
                 self.all_aas_information_json['submodels'].append(submodel_json)
 
             # TODO Pensar si hace falta recoger los ConceptDescriptions
@@ -116,17 +134,13 @@ class AASRepositoryInformation:
         # The attribute 'Referable/Category' will be removed
         if isinstance(data, dict):
             # Create a new dictionary, removing the specified key and processing each value
-            if 'ExternalDescriptor' in data.values():
-                print()
             return {
                 key: (None if 'modelType' in data.keys() and data['modelType'] == 'File' and value == ""
                       # else "NoneIdShort" if key == 'idShort' and value == ""
                 else self.clean_aas_json_information(value))
-                # key: self.clean_aas_json_information(value)
                 for key, value in data.items()
                 if (key not in ['category']) # Add old attributes to be removed
                    and not (key == 'idShort' and value == "") # If idShort is not defined, it is removed
-                # if key not in ['category'] # Add old attributes to be removed
             }
         elif isinstance(data, list):
             # Apply recursively to each item in the list

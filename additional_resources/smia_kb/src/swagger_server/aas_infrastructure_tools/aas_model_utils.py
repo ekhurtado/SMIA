@@ -8,6 +8,28 @@ from basyx.aas.util import traversal
 class AASModelUtils:
 
     @staticmethod
+    def get_object_by_reference(aas_environment_object, reference):
+        """
+        This method gets the AAS meta-model Python object using the reference, distinguishing between ExternalReference
+         and ModelReference.
+
+        Args:
+            reference (basyx.aas.model.Reference): reference object related to desired element
+
+        Returns:
+            object: Python object of the desired element associated to the reference.
+        """
+        try:
+            if isinstance(reference, basyx.aas.model.ExternalReference):
+                for key in reference.key:
+                    return aas_environment_object.get_identifiable(key.value)
+            elif isinstance(reference, basyx.aas.model.ModelReference):
+                return reference.resolve(aas_environment_object)
+        except KeyError as e:
+            print("ERROR: The object within the AAS model with reference {} does not exist".format(reference),
+                  file=sys.stderr)
+
+    @staticmethod
     def get_submodel_elements_by_semantic_id(submodel_object_json, semantic_id_external_ref):
         rels_elements = []
         try:
@@ -99,3 +121,48 @@ class AASModelUtils:
         except KeyError as e:
             print("ERRRO: Qualifier with semanticID {} not found in the element {}".format(
                 qualifier_semantic_id, aas_qualifiable_object), file=sys.stderr)
+
+    @staticmethod
+    def get_ontology_related_ordered_elements(first_rel_aas_elem, second_rel_aas_elem, rel_ontology_class):
+
+        ordered_first_aas_elem = None
+        ordered_second_aas_elem = None
+
+        for domain_class in rel_ontology_class.domain:
+            # The element with the semantic ID in domain is the "first" element of the relationship
+            if AASModelUtils.check_semantic_id_exist(first_rel_aas_elem, domain_class.iri):
+                ordered_first_aas_elem = first_rel_aas_elem
+            if AASModelUtils.check_semantic_id_exist(second_rel_aas_elem, domain_class.iri):
+                ordered_first_aas_elem = second_rel_aas_elem
+            if domain_class.iri == 'http://www.w3id.org/hsu-aut/css#Capability':
+                # En este caso tambien hay que analizar Agent y AssetCapability
+                if (AASModelUtils.check_semantic_id_exist(
+                        first_rel_aas_elem, 'http://www.w3id.org/upv-ehu/gcis/css-smia#AgentCapability') or
+                    AASModelUtils.check_semantic_id_exist(
+                        first_rel_aas_elem, 'http://www.w3id.org/upv-ehu/gcis/css-smia#AssetCapability')):
+                    ordered_first_aas_elem = first_rel_aas_elem
+                if (AASModelUtils.check_semantic_id_exist(
+                        second_rel_aas_elem, 'http://www.w3id.org/upv-ehu/gcis/css-smia#AgentCapability') or
+                    AASModelUtils.check_semantic_id_exist(
+                        second_rel_aas_elem, 'http://www.w3id.org/upv-ehu/gcis/css-smia#AssetCapability')):
+                    ordered_first_aas_elem = second_rel_aas_elem
+        for range_class in rel_ontology_class.range:
+            # The element with the semantic ID in range is the "first" element of the relationship
+            if AASModelUtils.check_semantic_id_exist(first_rel_aas_elem, range_class.iri):
+                ordered_second_aas_elem = first_rel_aas_elem
+            if AASModelUtils.check_semantic_id_exist(second_rel_aas_elem, range_class.iri):
+                ordered_second_aas_elem = second_rel_aas_elem
+            if range_class == 'http://www.w3id.org/hsu-aut/css#Capability':
+                # En este caso tambien hay que analizar Agent y AssetCapability
+                if (AASModelUtils.check_semantic_id_exist(
+                        first_rel_aas_elem, 'http://www.w3id.org/upv-ehu/gcis/css-smia#AgentCapability') or
+                    AASModelUtils.check_semantic_id_exist(
+                        first_rel_aas_elem, 'http://www.w3id.org/upv-ehu/gcis/css-smia#AssetCapability')):
+                    ordered_first_aas_elem = first_rel_aas_elem
+                if (AASModelUtils.check_semantic_id_exist(
+                        second_rel_aas_elem, 'http://www.w3id.org/upv-ehu/gcis/css-smia#AgentCapability') or
+                    AASModelUtils.check_semantic_id_exist(
+                        second_rel_aas_elem, 'http://www.w3id.org/upv-ehu/gcis/css-smia#AssetCapability')):
+                    ordered_first_aas_elem = second_rel_aas_elem
+
+        return ordered_first_aas_elem, ordered_second_aas_elem

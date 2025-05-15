@@ -10,8 +10,6 @@ from css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo, Ca
 
 import builtins
 
-# css_ontology = CapabilitySkillOntology.get_instance()
-# css_ontology.initialize_ontology()
 css_ontology = get_ontology(CapabilitySkillOntologyUtils.get_ontology_file_path())
 base_namespace = css_ontology.get_namespace(CapabilitySkillOntologyInfo.CSS_ONTOLOGY_BASE_NAMESPACE)
 
@@ -44,6 +42,20 @@ class ExtendedThing(Thing):
         self.check_valid_data_property_value(data_property_name, data_property_value)
         # If the result of the check is True the execution reaches this point
         self.data_properties_values_dict[data_property_name] = data_property_value
+
+    def set_object_property_value(self, object_property_name, ontological_instance):
+        """
+        This method sets the value of an object property (a related ontological instances to the self through this property).
+
+        Args:
+            object_property_name (str): the name of the object property.
+            ontological_instance (css_ontology.Ontology):
+        """
+        try:
+            if ontological_instance not in getattr(self, object_property_name):
+                getattr(self, object_property_name).append(ontological_instance)
+        except AttributeError as e:
+            print("ERROR: The class {} does not have the attribute {}".format(self, object_property_name))
 
     def get_data_properties_names(self):
         """
@@ -151,6 +163,7 @@ class ExtendedThing(Thing):
                 if not isinstance(data_property_value, data_property_type):
                     print("ERROR: The data property value {} for the OWL class {} is not valid."
                           .format(data_property_value, self))
+
 
 class Capability(ExtendedThing):
     """

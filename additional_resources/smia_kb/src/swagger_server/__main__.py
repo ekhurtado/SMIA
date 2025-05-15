@@ -17,28 +17,21 @@ from swagger_server import encoder
 
 def main():
 
-    # TODO PRUEBA PARA USO DE ONTOLOGIA (de momento se ha colocado la carga de la ontologia aqui, pero hay que pensar donde realizarla)
-    # global ontology
-    # ontology = owlready2.get_ontology('./css_smia_ontology/CSS-ontology-smia-without-module.owl')
-    # try:
-    #     ontology.load()
-    # except owlready2.OwlReadyOntologyParsingError as e:
-    #     print("Error with the ontology!: {}".format(e))
+    # First, the ontology is initialized
     ontology = CapabilitySkillOntology.get_instance()
     ontology.initialize_ontology()
 
-    # Let's check the connection with the AAS Repository
+    # When the application has been started, the banner can be printed
+    util.print_smia_kb_banner()
+
+    # Now let's check the connection with the AAS Repository in order to obtain AAS information
     if not AASOpenAPITools.check_aas_repository_availability():
         print("The AAS repository is not available, please check it if any CSS information is to be extracted "
               "from AAS.", file=sys.stderr)
-
-    # TODO PRUEBA (BORRAR)
-    aas = AASRepositoryInformation()
-    aas.extract_css_information_from_aas_repository()
-    # aas.save_all_aas_repository_information()
-
-    # When the application has been started, the banner can be printed
-    util.print_smia_kb_banner()
+    else:
+        # If the AAS Repository is available, all the CSS information will be extracted from the AAS data
+        aas = AASRepositoryInformation()
+        aas.extract_css_information_from_aas_repository()
 
     app = connexion.App(__name__, specification_dir='./swagger/')
     app.app.json_encoder = encoder.JSONEncoder
