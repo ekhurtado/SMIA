@@ -1,0 +1,2562 @@
+openapi: 3.0.4
+info:
+  title: SMIA Knowledge Base (KB) | HTTP/REST | API Collection
+  description: |-
+    This is a sample Self-configurable Manufacturing Industrial Agents (SMIA) Knowledge Base (KB) based on the OpenAPI 3.0 specification.  You can find out more about at [GitHub](https://github.com/ekhurtado/SMIA). TODO Remove -> In the third iteration of the pet store, we've switched to the design first approach!
+    You can now help us improve the API whether it's by making changes to the definition itself or to the code.
+    That way, with time, we can improve the API in general, and expose some of the new features in OAS3.
+
+    Some useful links:
+    - [The Pet Store repository](https://github.com/swagger-api/swagger-petstore)
+    - [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)
+    - [SMIA GitHub repository](https://github.com/ekhurtado/SMIA)
+    - [SMIA ReadTheDocs documentation project](https://smia.readthedocs.io/en/latest/)
+    - [SMIA DockerHub repository](hub.docker.com/r/ekhurtado/smia/)
+  termsOfService: https://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: https://swagger.io
+servers:
+- url: https://smiakb.gcis.ehu/api/v3
+- url: https://petstore3.swagger.io/api/v3
+tags:
+- name: pet
+  description: Everything about your Pets
+  externalDocs:
+    description: Find out more
+    url: https://swagger.io
+- name: store
+  description: Access to Petstore orders
+  externalDocs:
+    description: Find out more about our store
+    url: https://swagger.io
+- name: user
+  description: Operations about user
+- name: Capability API
+  description: methods related to the Capability layer of the CSS model
+  externalDocs:
+    description: Find out more
+    url: https://smia.readthedocs.io/en/latest/
+- name: Skill API
+  description: methods related to the Skill layer of the CSS model
+  externalDocs:
+    description: Find out more
+    url: https://smia.readthedocs.io/en/latest/
+- name: SMIA API
+  description: methods related to SMIA instances
+  externalDocs:
+    description: Find out more
+    url: https://smia.readthedocs.io/en/latest/
+paths:
+  /capabilities:
+    get:
+      tags:
+      - Capability API
+      summary: Returns all capabilities related to the SMIA-CSS model.
+      description: Returns all capabilities related to the SMIA-CSS model. Capabilities
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: get_all_capabilities
+      responses:
+        "200":
+          description: Requested SMIA-CSS capabilities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Capability"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Capability"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+    post:
+      tags:
+      - Capability API
+      summary: Add a new Capability to the SMIA KB.
+      description: Add a new Capability to the SMIA KB.
+      operationId: post_capability
+      requestBody:
+        description: SMIA-CSS Capability object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Capability"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Capability"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Capability"
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Capability created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Capability"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Capability"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - api_key: []
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+  /capabilities/$identifiers:
+    get:
+      tags:
+      - Capability API
+      summary: Returns all capabilities identifiers related to the SMIA-CSS model.
+      description: Returns all capabilities identifiers related to the SMIA-CSS model.
+        Capabilities are extracted from the AAS repository or added by the user through
+        the SMIA KB API.
+      operationId: get_all_capabilities_identifiers
+      responses:
+        "200":
+          description: Requested SMIA-CSS capabilities identifiers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReferenceIRI"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReferenceIRI"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+  /capabilities/{capabilityIdentifier}:
+    get:
+      tags:
+      - Capability API
+      summary: Returns a specific capability related to the SMIA-CSS model.
+      description: Returns a specific capability related to the SMIA-CSS model. Capabilities
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: get_capability_by_id
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Capability"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Capability"
+        "400":
+          description: Invalid ontological IRI supplied
+        "404":
+          description: Capability not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+    put:
+      tags:
+      - Capability API
+      summary: Updates an existing capability related to the SMIA-CSS model.
+      description: Updates an existing capability related to the SMIA-CSS model. Capabilities
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: put_capability_by_id
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      requestBody:
+        description: SMIA-CSS Capability object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Capability"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Capability"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Capability"
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Capability updated successfully
+        "400":
+          description: bad request
+        "404":
+          description: Capability not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - api_key: []
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+    delete:
+      tags:
+      - Capability API
+      summary: Deletes a capability related to the SMIA-CSS model.
+      description: Deletes a capability related to the SMIA-CSS model.
+      operationId: delete_capability_by_id
+      parameters:
+      - name: api_key
+        in: header
+        description: ""
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      responses:
+        "200":
+          description: SMIA-CSS Capability deleted successfully
+        "400":
+          description: Invalid capability object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - api_key: []
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+  /capabilities/{capabilityIdentifier}/skill-refs:
+    get:
+      tags:
+      - Capability API
+      summary: Returns all references to the skills related to a specific capability
+        of the SMIA KB.
+      description: Returns all references to the skills related to a specific capability
+        of the SMIA KB. Associated skills of capabilities are extracted from the AAS-CSS
+        model and they are available through the Skill API.
+      operationId: get_all_skill_refs_by_capability_id
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      responses:
+        "200":
+          description: Requested skill references of a capability
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReferenceIRI"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReferenceIRI"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+    post:
+      tags:
+      - Capability API
+      summary: Add a new skill reference to a specific capability of the SMIA KB.
+      description: Add a new skill reference to a specific capability of the SMIA
+        KB.
+      operationId: post_skill_ref_to_capability
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      requestBody:
+        description: SMIA-CSS identifier of the Skill to be associated to the desired
+          capability.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReferenceIRI"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/ReferenceIRI"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/ReferenceIRI"
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Capability updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Capability"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Capability"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - api_key: []
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+  /capabilities/{capabilityIdentifier}/capabilitiesConstraints:
+    get:
+      tags:
+      - Capability API
+      summary: Returns all capabilities constraints related to the SMIA-CSS model.
+      description: Returns all capabilities constraints related to the SMIA-CSS model.
+        Capabilities are extracted from the AAS repository or added by the user through
+        the SMIA KB API.
+      operationId: get_all_capabilities_constraints_by_capability_id
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      responses:
+        "200":
+          description: Requested SMIA-CSS capabilities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CapabilityConstraint"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CapabilityConstraint"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+    post:
+      tags:
+      - Capability API
+      summary: Add a new Capability Constraint to the SMIA KB.
+      description: Add a new Capability Constraint to the SMIA KB.
+      operationId: post_capability_constraint
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      requestBody:
+        description: SMIA-CSS Capability Constraint object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CapabilityConstraint"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/CapabilityConstraint"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/CapabilityConstraint"
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Capability Constraint created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Capability"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Capability"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - api_key: []
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+  /capabilities/{capabilityIdentifier}/capabilitiesConstraints/{capabilityConstraintIdentifier}:
+    get:
+      tags:
+      - Capability API
+      summary: Returns a specific capability constraint related to the SMIA-CSS model.
+      description: Returns a specific capability related to the SMIA-CSS model. Capabilities
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: get_capability_constraint_by_capability_id
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      - name: capabilityConstraintIdentifier
+        in: path
+        description: The Capability Constraint's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CapabilityConstraint"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/CapabilityConstraint"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Capability Constraint not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+    put:
+      tags:
+      - Capability API
+      summary: Updates an existing capability related to the SMIA-CSS model.
+      description: Updates an existing capability related to the SMIA-CSS model. Capabilities
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: put_capability_constraint_by_capability_id
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      - name: capabilityConstraintIdentifier
+        in: path
+        description: The Capability Constraint's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      requestBody:
+        description: SMIA-CSS Capability Constraints object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CapabilityConstraint"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/CapabilityConstraint"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/CapabilityConstraint"
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Capability Constraint updated successfully
+        "400":
+          description: bad request
+        "404":
+          description: Capability Constraint not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - api_key: []
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+    delete:
+      tags:
+      - Capability API
+      summary: Deletes a capability constraint related to the SMIA-CSS model.
+      description: Deletes a capability related to the SMIA-CSS model.
+      operationId: delete_capability_constraint_by_capability_id
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      - name: api_key
+        in: header
+        description: ""
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: capabilityConstraintIdentifier
+        in: path
+        description: The Capability Constraint's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      responses:
+        "200":
+          description: SMIA-CSS Capability deleted successfully
+        "400":
+          description: Invalid capability object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - api_key: []
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+  /capabilities/{capabilityIdentifier}/assets:
+    get:
+      tags:
+      - Capability API
+      summary: Returns all assets related to the capability of the SMIA-CSS model.
+      description: Returns all assets related to the capability of the SMIA-CSS model.
+        Capabilities are extracted from the AAS repository or added by the user through
+        the SMIA KB API.
+      operationId: get_all_assets_by_capability_id
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      responses:
+        "200":
+          description: Requested assets related to a SMIA-CSS capability
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+    post:
+      tags:
+      - Capability API
+      summary: Add a new asset to a specific Capability of the SMIA KB.
+      description: Add a new asset to a specific Capability of the SMIA KB.
+      operationId: post_asset_to_capability
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      requestBody:
+        description: SMIA-CSS Capability asset identifier
+        content:
+          application/json:
+            schema:
+              type: string
+          application/xml:
+            schema:
+              type: string
+          application/x-www-form-urlencoded:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Capability asset created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Capability"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Capability"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - api_key: []
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+  /skills:
+    get:
+      tags:
+      - Skill API
+      summary: Returns all skills related to the SMIA-CSS model.
+      description: Returns all skills related to the SMIA-CSS model. Skills are extracted
+        from the AAS repository or added by the user through the SMIA KB API.
+      operationId: get_all_skills
+      responses:
+        "200":
+          description: Requested SMIA-CSS skills
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Skill"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Skill"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+    post:
+      tags:
+      - Skill API
+      summary: Add a new Skill to the SMIA KB.
+      description: Add a new Skill to the SMIA KB.
+      operationId: post_skill
+      requestBody:
+        description: SMIA-CSS Skill object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Skill"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Skill"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Skill"
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Skill created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Skill"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Skill"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - api_key: []
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+  /skills/$identifiers:
+    get:
+      tags:
+      - Skill API
+      summary: Returns all skills identifiers related to the SMIA-CSS model.
+      description: Returns all skills identifiers related to the SMIA-CSS model. Skills
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: get_all_skill_identifiers
+      responses:
+        "200":
+          description: Requested SMIA-CSS skills identifiers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReferenceIRI"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReferenceIRI"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+  /skills/{skillIdentifier}:
+    get:
+      tags:
+      - Skill API
+      summary: Returns a specific skill related to the SMIA-CSS model.
+      description: Returns a specific skill related to the SMIA-CSS model. Skills
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: get_skill_by_id
+      parameters:
+      - name: skillIdentifier
+        in: path
+        description: The Skill's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Skill"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Skill"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Capability not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+    put:
+      tags:
+      - Skill API
+      summary: Updates an existing skill related to the SMIA-CSS model.
+      description: Updates an existing skill related to the SMIA-CSS model. Capabilities
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: put_skill_by_id
+      parameters:
+      - name: skillIdentifier
+        in: path
+        description: The Skill's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      requestBody:
+        description: SMIA-CSS Skill object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Skill"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Skill"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Skill"
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Skill updated successfully
+        "400":
+          description: bad request
+        "404":
+          description: Skill not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - api_key: []
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+    delete:
+      tags:
+      - Skill API
+      summary: Deletes a skill related to the SMIA-CSS model.
+      description: Deletes a skill related to the SMIA-CSS model.
+      operationId: delete_skill_by_id
+      parameters:
+      - name: api_key
+        in: header
+        description: ""
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: skillIdentifier
+        in: path
+        description: Pet id to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      responses:
+        "200":
+          description: SMIA-CSS Skill deleted successfully
+        "400":
+          description: Invalid Skill object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - api_key: []
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+  /skills/{skillIdentifier}/parameters:
+    get:
+      tags:
+      - Skill API
+      summary: Returns all skill parameters related to a specific SMIA-CSS skill.
+      description: Returns all skill parameters related to the SMIA-CSS model. Skills
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: get_all_skill_parameters_by_skill_id
+      parameters:
+      - name: skillIdentifier
+        in: path
+        description: The Skill's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      responses:
+        "200":
+          description: Requested SMIA-CSS skill parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SkillParameter"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SkillParameter"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+    post:
+      tags:
+      - Skill API
+      summary: Add a new Skill Parameter to the SMIA KB.
+      description: Add a new Skill Parameter to the SMIA KB.
+      operationId: post_skill_parameter_by_skill_id
+      parameters:
+      - name: skillIdentifier
+        in: path
+        description: The Skill's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      requestBody:
+        description: SMIA-CSS Skill object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SkillParameter"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/SkillParameter"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/SkillParameter"
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Skill Parameter created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Skill"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Skill"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - api_key: []
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+  /skills/{skillIdentifier}/parameters/{skillParameterIdentifier}:
+    get:
+      tags:
+      - Skill API
+      summary: Returns a specific skill parameter related to the SMIA-CSS model.
+      description: Returns a specific skill related to the SMIA-CSS model. Skills
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: get_skill_parameters_by_skill_id
+      parameters:
+      - name: skillIdentifier
+        in: path
+        description: The Skill's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      - name: skillParameterIdentifier
+        in: path
+        description: The Skill parameter's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkillParameter"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/SkillParameter"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Capability not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+    put:
+      tags:
+      - Skill API
+      summary: Updates an existing skill related to the SMIA-CSS model with a new
+        Skill Parameter.
+      description: Updates an existing skill related to the SMIA-CSS model with a
+        new Skill Parameter. Capabilities are extracted from the AAS repository or
+        added by the user through the SMIA KB API.
+      operationId: put_skill_parameter_by_skill_id
+      parameters:
+      - name: skillIdentifier
+        in: path
+        description: The Skill's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      - name: skillParameterIdentifier
+        in: path
+        description: The Skill parameter's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      requestBody:
+        description: SMIA-CSS Skill object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Skill"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Skill"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Skill"
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Skill updated successfully
+        "400":
+          description: bad request
+        "404":
+          description: Skill not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - api_key: []
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+    delete:
+      tags:
+      - Skill API
+      summary: Deletes a skill parameter from a skill related to the SMIA-CSS model.
+      description: Deletes a skill parameter from a skill related to the SMIA-CSS
+        model.
+      operationId: delete_skill_parameter_by_skill_id
+      parameters:
+      - name: skillParameterIdentifier
+        in: path
+        description: The Skill parameter's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      - name: api_key
+        in: header
+        description: ""
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: skillIdentifier
+        in: path
+        description: The Skill's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRI"
+      responses:
+        "200":
+          description: SMIA-CSS Skill deleted successfully
+        "400":
+          description: Invalid Skill object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - api_key: []
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+  /smiaInstances:
+    get:
+      tags:
+      - SMIA API
+      summary: Finds all registered SMIA instances.
+      description: "Multiple tags can be provided with comma separated strings. Use\
+        \ tag1, tag2, tag3 for testing."
+      operationId: get_all_smi_ainstances
+      responses:
+        "200":
+          description: Requested SMIA instances
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SMIAinstance"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SMIAinstance"
+        "400":
+          description: Invalid tag value
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.smia_api_controller
+    post:
+      tags:
+      - SMIA API
+      summary: Add a new SMIA instance to the SMIA KB.
+      description: Add a new SMIA instance to the SMIA KB.
+      operationId: post_smi_ainstance
+      requestBody:
+        description: SMIA instance object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SMIAinstance"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/SMIAinstance"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/SMIAinstance"
+        required: true
+      responses:
+        "200":
+          description: SMIA instance created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SMIAinstance"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/SMIAinstance"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - api_key: []
+      x-openapi-router-controller: swagger_server.controllers.smia_api_controller
+  /smiaInstances/$identifiers:
+    get:
+      tags:
+      - SMIA API
+      summary: Returns all SMIA instances identifiers registered in the SMIA KB.
+      description: Returns all SMIA instances identifiers registered in the SMIA KB.
+      operationId: get_all_smi_ainstances_identifiers
+      responses:
+        "200":
+          description: Requested SMIA instances identifiers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReferenceSMIA"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReferenceSMIA"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.smia_api_controller
+  /smiaInstances/{smiaInstanceIdentifier}:
+    get:
+      tags:
+      - SMIA API
+      summary: Returns a specific SMIA instance registered in the SMIA KB.
+      description: Returns a specific SMIA instance registered in the SMIA KB.
+      operationId: get_smi_ainstance_by_id
+      parameters:
+      - name: smiaInstanceIdentifier
+        in: path
+        description: The SMIA instance's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceSMIA"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SMIAinstance"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/SMIAinstance"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: SMIA instance not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.smia_api_controller
+    put:
+      tags:
+      - SMIA API
+      summary: Updates an existing SMIA instance registered in the SMIA KB.
+      description: Updates an existing SMIA instance registered in the SMIA KB. SMIA
+        instances automatically register themselves when deployed.
+      operationId: put_smi_ainstance_by_id
+      parameters:
+      - name: smiaInstanceIdentifier
+        in: path
+        description: The SMIA instance's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceSMIA"
+      requestBody:
+        description: SMIA instance object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SMIAinstance"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/SMIAinstance"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/SMIAinstance"
+        required: true
+      responses:
+        "200":
+          description: SMIA instance updated successfully
+        "400":
+          description: bad request
+        "404":
+          description: SMIA instance not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - api_key: []
+      x-openapi-router-controller: swagger_server.controllers.smia_api_controller
+    delete:
+      tags:
+      - SMIA API
+      summary: Deletes a SMIA instance within the SMIA KB.
+      description: Deletes a SMIA instance within the SMIA KB.
+      operationId: delete_smi_ainstance_by_id
+      parameters:
+      - name: api_key
+        in: header
+        description: ""
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: smiaInstanceIdentifier
+        in: path
+        description: SMIA instance id to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceSMIA"
+      responses:
+        "200":
+          description: SMIA instance deleted successfully
+        "400":
+          description: Invalid SMIA instance object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - api_key: []
+      x-openapi-router-controller: swagger_server.controllers.smia_api_controller
+  /serialization:
+    put:
+      tags:
+      - Serialization API
+      summary: Serializes a string to the UTF8-BASE64-URL-encoded format necessary
+        to use within the SMIA KB API.
+      description: "Serializes a string to the UTF8-BASE64-URL-encoded format necessary\
+        \ to use within the SMIA KB API. The AAS and ontology identifiers need to\
+        \ be added in this format, as they are passed in the path. This method allows\
+        \ to encode a identifier of string format in UTF8-BASE64-URL."
+      operationId: serialize
+      requestBody:
+        description: Identifier in string format
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReferenceIRI"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/ReferenceIRI"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/ReferenceIRI"
+        required: true
+      responses:
+        "200":
+          description: Identifier encoded successfully
+        "400":
+          description: bad request
+        "404":
+          description: Identifier not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.serialization_api_controller
+  /deserialization:
+    put:
+      tags:
+      - Serialization API
+      summary: Deserializes a UTF8-BASE64-URL-encoded format necessary to use within
+        the SMIA KB API to a string.
+      description: "Serializes a string to the UTF8-BASE64-URL-encoded format necessary\
+        \ to use within the SMIA KB API. The AAS and ontology identifiers need to\
+        \ be added in this format, as they are passed in the path. This method allows\
+        \ to decode a identifier of UTF8-BASE64-URL format in string."
+      operationId: deserialize
+      requestBody:
+        description: Identifier in UTF8-BASE64-URL-encoded format
+        content:
+          application/json:
+            schema:
+              type: string
+              example: 'aHR0cDovL25hbWUub3JnL2Nzcy1zbWlhI0NhcGFiaWxpdHkwMQ=='
+          application/xml:
+            schema:
+              type: string
+              example: 'aHR0cDovL25hbWUub3JnL2Nzcy1zbWlhI0NhcGFiaWxpdHkwMQ=='
+          application/x-www-form-urlencoded:
+            schema:
+              type: string
+              example: 'aHR0cDovL25hbWUub3JnL2Nzcy1zbWlhI0NhcGFiaWxpdHkwMQ=='
+        required: true
+      responses:
+        "200":
+          description: Identifier decoded successfully
+        "400":
+          description: bad request
+        "404":
+          description: Identifier not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.serialization_api_controller
+  /pet/findByStatus:
+    get:
+      tags:
+      - pet
+      summary: Finds Pets by status.
+      description: Multiple status values can be provided with comma separated strings.
+      operationId: find_pets_by_status
+      parameters:
+      - name: status
+        in: query
+        description: Status values that need to be considered for filter
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: available
+          enum:
+          - available
+          - pending
+          - sold
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Pet"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Pet"
+        "400":
+          description: Invalid status value
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - petstore_auth:
+        - write:pets
+        - read:pets
+      x-openapi-router-controller: swagger_server.controllers.pet_controller
+  /pet/findByTags:
+    get:
+      tags:
+      - pet
+      summary: Finds Pets by tags.
+      description: "Multiple tags can be provided with comma separated strings. Use\
+        \ tag1, tag2, tag3 for testing."
+      operationId: find_pets_by_tags
+      parameters:
+      - name: tags
+        in: query
+        description: Tags to filter by
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Pet"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Pet"
+        "400":
+          description: Invalid tag value
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - petstore_auth:
+        - write:pets
+        - read:pets
+      x-openapi-router-controller: swagger_server.controllers.pet_controller
+  /pet/{petId}:
+    get:
+      tags:
+      - pet
+      summary: Find pet by ID.
+      description: Returns a single pet.
+      operationId: get_pet_by_id
+      parameters:
+      - name: petId
+        in: path
+        description: ID of pet to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pet"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Pet"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Pet not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - api_key: []
+      - petstore_auth:
+        - write:pets
+        - read:pets
+      x-openapi-router-controller: swagger_server.controllers.pet_controller
+    post:
+      tags:
+      - pet
+      summary: Updates a pet in the store with form data.
+      description: Updates a pet resource based on the form data.
+      operationId: update_pet_with_form
+      parameters:
+      - name: petId
+        in: path
+        description: ID of pet that needs to be updated
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      - name: name
+        in: query
+        description: Name of pet that needs to be updated
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Status of pet that needs to be updated
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pet"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Pet"
+        "400":
+          description: Invalid input
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - petstore_auth:
+        - write:pets
+        - read:pets
+      x-openapi-router-controller: swagger_server.controllers.pet_controller
+    delete:
+      tags:
+      - pet
+      summary: Deletes a pet.
+      description: Delete a pet.
+      operationId: delete_pet
+      parameters:
+      - name: api_key
+        in: header
+        description: ""
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: petId
+        in: path
+        description: Pet id to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Pet deleted
+        "400":
+          description: Invalid pet value
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - petstore_auth:
+        - write:pets
+        - read:pets
+      x-openapi-router-controller: swagger_server.controllers.pet_controller
+  /pet/{petId}/uploadImage:
+    post:
+      tags:
+      - pet
+      summary: Uploads an image.
+      description: Upload image of the pet.
+      operationId: upload_file
+      parameters:
+      - name: petId
+        in: path
+        description: ID of pet to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      - name: additionalMetadata
+        in: query
+        description: Additional Metadata
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+        "400":
+          description: No file uploaded
+        "404":
+          description: Pet not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - petstore_auth:
+        - write:pets
+        - read:pets
+      x-openapi-router-controller: swagger_server.controllers.pet_controller
+  /store/order/{orderId}:
+    get:
+      tags:
+      - store
+      summary: Find purchase order by ID.
+      description: For valid response try integer IDs with value <= 5 or > 10. Other
+        values will generate exceptions.
+      operationId: get_order_by_id
+      parameters:
+      - name: orderId
+        in: path
+        description: ID of order that needs to be fetched
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Order not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.store_controller
+    delete:
+      tags:
+      - store
+      summary: Delete purchase order by identifier.
+      description: For valid response try integer IDs with value < 1000. Anything
+        above 1000 or nonintegers will generate API errors.
+      operationId: delete_order
+      parameters:
+      - name: orderId
+        in: path
+        description: ID of the order that needs to be deleted
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: order deleted
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Order not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.store_controller
+  /users:
+    post:
+      tags:
+      - user
+      summary: Create user.
+      description: This can only be done by the logged in user.
+      operationId: create_user
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Asset"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Asset"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Asset"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Asset"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Asset"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.user_controller
+  /users/createWithList:
+    post:
+      tags:
+      - user
+      summary: Creates list of users with given input array.
+      description: Creates list of users with given input array.
+      operationId: create_users_with_list_input
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Asset"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Asset"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Asset"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.user_controller
+  /pets:
+    get:
+      tags:
+      - pet
+      summary: Finds Pets by tags.
+      description: "Multiple tags can be provided with comma separated strings. Use\
+        \ tag1, tag2, tag3 for testing."
+      operationId: find_petinstances
+      parameters:
+      - name: tags
+        in: query
+        description: Tags to filter by
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Pet"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Pet"
+        "400":
+          description: Invalid tag value
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+      - petstore_auth:
+        - write:pets
+        - read:pets
+      x-openapi-router-controller: swagger_server.controllers.pet_controller
+  /user/login:
+    get:
+      tags:
+      - user
+      summary: Logs user into the system.
+      description: Log into the system.
+      operationId: login_user
+      parameters:
+      - name: username
+        in: query
+        description: The user name for login
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: password
+        in: query
+        description: The password for login in clear text
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          headers:
+            X-Rate-Limit:
+              description: calls per hour allowed by the user
+              style: simple
+              explode: false
+              schema:
+                type: integer
+                format: int32
+            X-Expires-After:
+              description: date in UTC when token expires
+              style: simple
+              explode: false
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/xml:
+              schema:
+                type: string
+                x-content-type: application/xml
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: Invalid username/password supplied
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.user_controller
+  /user/logout:
+    get:
+      tags:
+      - user
+      summary: Logs out current logged in user session.
+      description: Log user out of the system.
+      operationId: logout_user
+      parameters: []
+      responses:
+        "200":
+          description: successful operation
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.user_controller
+  /user/{username}:
+    get:
+      tags:
+      - user
+      summary: Get user by user name.
+      description: Get user detail based on username.
+      operationId: get_user_by_name
+      parameters:
+      - name: username
+        in: path
+        description: The name that needs to be fetched. Use user1 for testing
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Invalid username supplied
+        "404":
+          description: User not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.user_controller
+    put:
+      tags:
+      - user
+      summary: Update user resource.
+      description: This can only be done by the logged in user.
+      operationId: update_user
+      parameters:
+      - name: username
+        in: path
+        description: name that need to be deleted
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Update an existent user in the store
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/User"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: bad request
+        "404":
+          description: user not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.user_controller
+    delete:
+      tags:
+      - user
+      summary: Delete user resource.
+      description: This can only be done by the logged in user.
+      operationId: delete_user
+      parameters:
+      - name: username
+        in: path
+        description: The name that needs to be deleted
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: User deleted
+        "400":
+          description: Invalid username supplied
+        "404":
+          description: User not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.user_controller
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        petId:
+          type: integer
+          format: int64
+          example: 198772
+        quantity:
+          type: integer
+          format: int32
+          example: 7
+        shipDate:
+          type: string
+          format: date-time
+        status:
+          type: string
+          description: Order Status
+          example: approved
+          enum:
+          - placed
+          - approved
+          - delivered
+        complete:
+          type: boolean
+      example:
+        petId: 198772
+        quantity: 7
+        id: 10
+        shipDate: 2000-01-23T04:56:07.000+00:00
+        complete: true
+        status: approved
+      xml:
+        name: order
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Dogs
+      example:
+        name: Dogs
+        id: 1
+      xml:
+        name: category
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: "12345"
+        phone:
+          type: string
+          example: "12345"
+        userStatus:
+          type: integer
+          description: User Status
+          format: int32
+          example: 1
+      example:
+        firstName: John
+        lastName: James
+        password: "12345"
+        userStatus: 1
+        phone: "12345"
+        id: 10
+        email: john@email.com
+        username: theUser
+      xml:
+        name: user
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      example:
+        name: name
+        id: 0
+      xml:
+        name: tag
+    Pet:
+      required:
+      - name
+      - photoUrls
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: doggie
+        category:
+          $ref: "#/components/schemas/Category"
+        photoUrls:
+          type: array
+          xml:
+            wrapped: true
+          items:
+            type: string
+            xml:
+              name: photoUrl
+        tags:
+          type: array
+          xml:
+            wrapped: true
+          items:
+            $ref: "#/components/schemas/Tag"
+        status:
+          type: string
+          description: pet status in the store
+          enum:
+          - available
+          - pending
+          - sold
+      example:
+        photoUrls:
+        - photoUrls
+        - photoUrls
+        name: doggie
+        id: 10
+        category:
+          name: Dogs
+          id: 1
+        tags:
+        - name: name
+          id: 0
+        - name: name
+          id: 0
+        status: available
+      xml:
+        name: pet
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      example:
+        code: 0
+        type: type
+        message: message
+      xml:
+        name: "##default"
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    ReferenceAAS:
+      type: string
+      example: http://example.com/ids/aasElement001
+    ReferenceIRI:
+      type: string
+      example: http://name.org/css-smia#Capability01
+    ReferenceSMIA:
+      type: string
+      example: agentInstance001
+    Capability:
+      required:
+      - category
+      - hasLifecycle
+      - iri
+      - isRealizedBy
+      - name
+      type: object
+      properties:
+        iri:
+          $ref: "#/components/schemas/ReferenceIRI"
+        name:
+          type: string
+          example: capability01
+        category:
+          type: string
+          example: AssetCapability
+          enum:
+          - AgentCapability
+          - AssetCapability
+        hasLifecycle:
+          type: string
+          description: The lifecycle of the capability.
+          example: ASSURANCE
+          enum:
+          - ASSURANCE
+          - OFFER
+          - REQUIREMENT
+        isRealizedBy:
+          minItems: 1
+          type: array
+          description: By which skills is the capability realized.
+          xml:
+            wrapped: true
+          items:
+            $ref: "#/components/schemas/ReferenceIRI"
+        isRestrictedBy:
+          type: array
+          description: By which constraints is the capability restricted.
+          xml:
+            wrapped: true
+          items:
+            $ref: "#/components/schemas/CapabilityConstraint"
+      example:
+        iri: http://name.org/css-smia#Capability01
+        isRestrictedBy:
+        - iri: null
+          name: capabilityConstraint01
+          hasCondition: INVARIANT
+        - iri: null
+          name: capabilityConstraint01
+          hasCondition: INVARIANT
+        name: capability01
+        isRealizedBy:
+        - null
+        - null
+        category: AssetCapability
+        hasLifecycle: ASSURANCE
+      xml:
+        name: capability
+    CapabilityConstraint:
+      required:
+      - hasCondition
+      - iri
+      - name
+      type: object
+      properties:
+        iri:
+          $ref: "#/components/schemas/ReferenceIRI"
+        name:
+          type: string
+          example: capabilityConstraint01
+        hasCondition:
+          type: string
+          description: The condition of the Capability Constraint.
+          example: INVARIANT
+          enum:
+          - INVARIANT
+          - POSTCONDITION
+          - PRECONDITION
+      example:
+        iri: null
+        name: capabilityConstraint01
+        hasCondition: INVARIANT
+      xml:
+        name: capabilityConstraint
+    Skill:
+      required:
+      - iri
+      - name
+      type: object
+      properties:
+        iri:
+          $ref: "#/components/schemas/ReferenceIRI"
+        name:
+          type: string
+          example: skill01
+        accessibleThrough:
+          minItems: 1
+          type: array
+          description: Through which skill interfaces is the capability accessible.
+          xml:
+            wrapped: true
+          items:
+            $ref: "#/components/schemas/ReferenceIRI"
+        hasParameter:
+          type: array
+          description: The associated skill parameters.
+          xml:
+            wrapped: true
+          items:
+            $ref: "#/components/schemas/SkillParameter"
+      example:
+        iri: http://name.org/css-smia#Capability01
+        accessibleThrough:
+        - null
+        - null
+        name: skill01
+        hasParameter:
+        - iri: null
+          name: skillParameter01
+          hasType: INPUT
+        - iri: null
+          name: skillParameter01
+          hasType: INPUT
+      xml:
+        name: skill
+    SkillParameter:
+      required:
+      - hasType
+      - iri
+      - name
+      type: object
+      properties:
+        iri:
+          $ref: "#/components/schemas/ReferenceIRI"
+        name:
+          type: string
+          example: skillParameter01
+        hasType:
+          type: string
+          description: The type of the Skill Parameter.
+          example: INPUT
+          enum:
+          - INOUTPUT
+          - INPUT
+          - OUTPUT
+      example:
+        iri: null
+        name: skillParameter01
+        hasType: INPUT
+    Asset:
+      required:
+      - id
+      - kind
+      type: object
+      properties:
+        id:
+          type: string
+          example: http://example.com/ids/asset001
+        kind:
+          type: string
+          description: The kind of the asset.
+          example: Type
+          enum:
+          - Type
+          - Instance
+          - NotApplicable
+        type:
+          $ref: "#/components/schemas/ReferenceAAS"
+      example:
+        kind: Type
+        id: http://example.com/ids/asset001
+        type: http://example.com/ids/aasElement001
+      xml:
+        name: asset
+    SMIAinstance:
+      required:
+      - asset
+      - id
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/ReferenceSMIA"
+        asset:
+          $ref: "#/components/schemas/Asset"
+        status:
+          type: string
+          example: Running
+        startedTimeStamp:
+          type: integer
+          format: int64
+          example: 1745932259
+        smiaVersion:
+          type: string
+          example: 0.2.3
+      example:
+        startedTimeStamp: 1745932259
+        smiaVersion: 0.2.3
+        id: agentInstance001
+        asset:
+          kind: Type
+          id: http://example.com/ids/asset001
+          type: http://example.com/ids/aasElement001
+        status: Running
+      xml:
+        name: smiaInstance
+  requestBodies:
+    Pet:
+      description: Pet object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Pet"
+        application/xml:
+          schema:
+            $ref: "#/components/schemas/Pet"
+    UserArray:
+      description: List of user object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/User"
+  securitySchemes:
+    petstore_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+      x-tokenInfoFunc: swagger_server.controllers.authorization_controller.check_petstore_auth
+      x-scopeValidateFunc: swagger_server.controllers.authorization_controller.validate_scope_petstore_auth
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+      x-apikeyInfoFunc: swagger_server.controllers.authorization_controller.check_api_key
+
