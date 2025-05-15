@@ -43,6 +43,13 @@ class ExtendedThing(Thing):
         # If the result of the check is True the execution reaches this point
         self.data_properties_values_dict[data_property_name] = data_property_value
 
+        # The data is also set as attribute of the instance
+        if getattr(self, data_property_name) is not None and isinstance(getattr(self, data_property_name), list):
+            if data_property_value not in getattr(self, data_property_name):
+                getattr(self, data_property_name).append(data_property_value)
+        else:
+            setattr(self, data_property_name, data_property_value)
+
     def set_object_property_value(self, object_property_name, ontological_instance):
         """
         This method sets the value of an object property (a related ontological instances to the self through this property).

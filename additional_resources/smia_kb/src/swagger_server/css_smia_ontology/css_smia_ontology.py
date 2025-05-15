@@ -169,8 +169,6 @@ class CapabilitySkillOntology:
             for parent_class in instance.is_a:
                 if parent_class.iri == class_iri:
                     instances_list.append(instance)
-        if len(instances_list) == 0:
-            return None
         return instances_list
 
     def delete_ontology_instance(self, instance_object):
@@ -204,6 +202,20 @@ class CapabilitySkillOntology:
             print("ERROR: The class {} does not have the attribute {}".format(domain_instance,
                                                                               object_property_name), file=sys.stderr)
 
+    def get_all_subclasses_of_class(self, owl_class):
+        """
+        This method gets all subclasses of a given OWL class.
+
+        Args:
+            owl_class (ThingClass): OWL class of which the subclasses are to be found.
+
+        Returns:
+            list(ThingClass): list of subclasses of the given OWL class.
+        """
+        if not isinstance(owl_class, ThingClass):
+            print("ERROR: The class {} is not an ontological class".format(owl_class), file=sys.stderr)
+            return None
+        return list(owl_class.subclasses())
 
     def get_all_subclasses_iris_of_class(self, owl_class):
         """

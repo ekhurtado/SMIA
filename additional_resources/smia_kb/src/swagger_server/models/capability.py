@@ -3,8 +3,10 @@
 from __future__ import absolute_import
 from datetime import date, datetime  # noqa: F401
 
-from typing import List, Dict  # noqa: F401
+from typing import List, Dict, Any  # noqa: F401
 
+from css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo
+from css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
 from swagger_server.models.base_model_ import Model
 from swagger_server.models.capability_constraint import CapabilityConstraint  # noqa: F401,E501
 from swagger_server.models.datatypes import ReferenceIRI  # noqa: F401,E501
@@ -66,6 +68,42 @@ class Capability(Model):
         :rtype: Capability
         """
         return util.deserialize_model(dikt, cls)
+
+    @classmethod
+    def from_ontology_instance_to_json(cls, ontology_instance) -> dict[str, str | Any] | None:
+        """Transforms an ontological instance into a dict
+
+        :param ontology_instance: An ontology instance.
+        :type: owlready2.ThingClass
+        :return: The JSON of this Capability.
+        :rtype: dict
+        """
+        capability_instance = Capability()
+        capability_json = {}
+        for attrib in capability_instance.attribute_map.values():
+            try:
+                if attrib == 'isRealizedBy':
+                    ontology_value = [
+                        instance.iri
+                        for instance in getattr(ontology_instance, attrib)
+                    ]
+                elif attrib == 'isRestrictedBy':
+                    ontology_value = [
+                        CapabilityConstraint.from_ontology_instance_to_json(constraint_instance)
+                        for constraint_instance in getattr(ontology_instance, attrib)
+                    ]
+                else:
+                    ontology_value = getattr(ontology_instance, attrib)
+                capability_json[attrib] = ontology_value
+            except AttributeError:
+                print("ERROR: The attribute {} does not exist in the ontology instance {}.".format(attrib, ontology_instance))
+        if CapabilitySkillOntologyInfo.CSS_ONTOLOGY_ASSET_CAPABILITY_IRI in ontology_instance.is_a[0].iri:
+            capability_json['category'] = 'AssetCapability'
+        elif CapabilitySkillOntologyInfo.CSS_ONTOLOGY_AGENT_CAPABILITY_IRI in ontology_instance.is_a[0].iri:
+            capability_json['category'] = 'AgentCapability'
+        # TODO HACER AHORA FALTA AÑADIR LOS ACTIVOS ASOCIADOS
+        return capability_json
+
 
     @property
     def iri(self) -> ReferenceIRI:

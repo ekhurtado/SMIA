@@ -4,6 +4,8 @@ import basyx.aas
 from basyx.aas import model
 from basyx.aas.util import traversal
 
+from css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
+
 
 class AASModelUtils:
 
@@ -128,41 +130,27 @@ class AASModelUtils:
         ordered_first_aas_elem = None
         ordered_second_aas_elem = None
 
-        for domain_class in rel_ontology_class.domain:
+        for domain_class in list(rel_ontology_class.domain):
             # The element with the semantic ID in domain is the "first" element of the relationship
             if AASModelUtils.check_semantic_id_exist(first_rel_aas_elem, domain_class.iri):
                 ordered_first_aas_elem = first_rel_aas_elem
             if AASModelUtils.check_semantic_id_exist(second_rel_aas_elem, domain_class.iri):
                 ordered_first_aas_elem = second_rel_aas_elem
-            if domain_class.iri == 'http://www.w3id.org/hsu-aut/css#Capability':
-                # En este caso tambien hay que analizar Agent y AssetCapability
-                if (AASModelUtils.check_semantic_id_exist(
-                        first_rel_aas_elem, 'http://www.w3id.org/upv-ehu/gcis/css-smia#AgentCapability') or
-                    AASModelUtils.check_semantic_id_exist(
-                        first_rel_aas_elem, 'http://www.w3id.org/upv-ehu/gcis/css-smia#AssetCapability')):
-                    ordered_first_aas_elem = first_rel_aas_elem
-                if (AASModelUtils.check_semantic_id_exist(
-                        second_rel_aas_elem, 'http://www.w3id.org/upv-ehu/gcis/css-smia#AgentCapability') or
-                    AASModelUtils.check_semantic_id_exist(
-                        second_rel_aas_elem, 'http://www.w3id.org/upv-ehu/gcis/css-smia#AssetCapability')):
-                    ordered_first_aas_elem = second_rel_aas_elem
+
+            # En caso de que tenga subclases definidas, tambien se añaden para analizarlas (p.e. Capability con Agent y AssetCapability)
+            subclasses = CapabilitySkillOntology.get_instance().get_all_subclasses_of_class(domain_class)
+            if len(subclasses) > 0:
+                for subclass in subclasses:
+                    rel_ontology_class.domain.append(subclass)
         for range_class in rel_ontology_class.range:
             # The element with the semantic ID in range is the "first" element of the relationship
             if AASModelUtils.check_semantic_id_exist(first_rel_aas_elem, range_class.iri):
                 ordered_second_aas_elem = first_rel_aas_elem
             if AASModelUtils.check_semantic_id_exist(second_rel_aas_elem, range_class.iri):
                 ordered_second_aas_elem = second_rel_aas_elem
-            if range_class == 'http://www.w3id.org/hsu-aut/css#Capability':
-                # En este caso tambien hay que analizar Agent y AssetCapability
-                if (AASModelUtils.check_semantic_id_exist(
-                        first_rel_aas_elem, 'http://www.w3id.org/upv-ehu/gcis/css-smia#AgentCapability') or
-                    AASModelUtils.check_semantic_id_exist(
-                        first_rel_aas_elem, 'http://www.w3id.org/upv-ehu/gcis/css-smia#AssetCapability')):
-                    ordered_first_aas_elem = first_rel_aas_elem
-                if (AASModelUtils.check_semantic_id_exist(
-                        second_rel_aas_elem, 'http://www.w3id.org/upv-ehu/gcis/css-smia#AgentCapability') or
-                    AASModelUtils.check_semantic_id_exist(
-                        second_rel_aas_elem, 'http://www.w3id.org/upv-ehu/gcis/css-smia#AssetCapability')):
-                    ordered_first_aas_elem = second_rel_aas_elem
+            subclasses = CapabilitySkillOntology.get_instance().get_all_subclasses_of_class(range_class)
+            if len(subclasses) > 0:
+                for subclass in subclasses:
+                    rel_ontology_class.domain.append(subclass)
 
         return ordered_first_aas_elem, ordered_second_aas_elem

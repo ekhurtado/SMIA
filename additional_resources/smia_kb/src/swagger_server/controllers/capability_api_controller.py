@@ -87,18 +87,18 @@ def get_all_capabilities():  # noqa: E501
 
     :rtype: List[Capability]
     """
-    all_cap_string = ''
-    for cap in all_capabilities:
-        all_cap_string += cap.name + ','
+    all_capabilities = []
+    capability_instances = (CapabilitySkillOntology.get_instance().get_ontology_instances_by_class_iri(
+        CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI) +
+                            CapabilitySkillOntology.get_instance().get_ontology_instances_by_class_iri(
+        CapabilitySkillOntologyInfo.CSS_ONTOLOGY_AGENT_CAPABILITY_IRI) +
+                            CapabilitySkillOntology.get_instance().get_ontology_instances_by_class_iri(
+        CapabilitySkillOntologyInfo.CSS_ONTOLOGY_ASSET_CAPABILITY_IRI))
+    for onto_instance in capability_instances:
+        all_capabilities.append(Capability.from_ontology_instance_to_json(onto_instance))
 
-    # TODO PRUEBA CON ONTOLOGIA
-    all_cap_string = ''
-    ontology = CapabilitySkillOntology.get_instance()
-    for onto_instance in ontology.ontology.individuals():
-    # for onto_instance in __main__.ontology.individuals():
-        all_cap_string += onto_instance.name + ','
-
-    return 'do some magic! I am returning all capability: {}...'.format(all_cap_string)
+    return all_capabilities
+    # return 'do some magic! I am returning all capability: {}...'.format(all_cap_string)
     # return 'do some magic! I am returning all capability: {}...'.format(all_cap_string)
     # return 'do some magic!'
 

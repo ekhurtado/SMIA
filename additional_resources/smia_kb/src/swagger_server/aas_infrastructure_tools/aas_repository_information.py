@@ -101,6 +101,7 @@ class AASRepositoryInformation:
                     domain_instance = CapabilitySkillOntology.get_instance().get_ontology_instance_by_name(domain_rel_elem.id_short)
                     range_instance = CapabilitySkillOntology.get_instance().get_ontology_instance_by_name(range_rel_elem.id_short)
                     domain_instance.set_object_property_value(rel_ontology_class.name, range_instance)
+                    # print("Rel entre {} y {} en base a {}".format(domain_instance, range_instance, rel_ontology_class.name))
 
 
     def save_all_aas_repository_information(self):
