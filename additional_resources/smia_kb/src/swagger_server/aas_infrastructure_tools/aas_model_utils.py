@@ -66,3 +66,36 @@ class AASModelUtils:
                 # if operation_variable.check_semantic_id_exist(semantic_id):
                     operation_variables.append(operation_variable)
         return operation_variables
+
+    @staticmethod
+    def get_asset_id_from_aas(aas_model_object):
+        if aas_model_object.asset_information.global_asset_id is not None:
+            return aas_model_object.asset_information.global_asset_id
+        elif aas_model_object.asset_information.specific_asset_id is not None and len(aas_model_object.asset_information.specific_asset_id) > 0:
+            return aas_model_object.asset_information.specific_asset_id[0].value
+        return None
+
+    @staticmethod
+    def get_qualifier_value_by_semantic_id(aas_qualifiable_object, qualifier_semantic_id):
+        """
+        This method gets the value of the qualifier that has a given semanticID.
+
+        Args:
+            aas_qualifiable_object (model.SubmodelElement): JSON object of the AAS Qualifiable SubmodelElement.
+            qualifier_semantic_id (str): semanticID of the qualifier.
+
+        Returns:
+            str: value of the qualifier with the given type
+        """
+        try:
+            if len(aas_qualifiable_object.qualifier) == 0:
+                return None
+            for qualifier in aas_qualifiable_object.qualifier:
+                if AASModelUtils.check_semantic_id_exist(qualifier, qualifier_semantic_id) is True:
+                    return qualifier.value
+            else:
+                return None
+
+        except KeyError as e:
+            print("ERRRO: Qualifier with semanticID {} not found in the element {}".format(
+                qualifier_semantic_id, aas_qualifiable_object), file=sys.stderr)

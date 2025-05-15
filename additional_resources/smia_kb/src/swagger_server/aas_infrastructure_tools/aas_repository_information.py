@@ -35,9 +35,6 @@ class AASRepositoryInformation:
             if isinstance(aas_model_object, model.AssetAdministrationShell):
                 aas_id = aas_model_object.id
                 # First the ontological instances are created
-                # for submodel_data in aas_model_object.submodel:
-                #     submodel_json = self.aas_model_object_store.get_identifiable(submodel_data.key[0].value)
-                    # submodel_json = self.aas_model_object_store[submodel_data.key[0].value]
                 self.create_ontology_instances_from_aas(aas_model_object)
                 # Once the ontological instances have been created, the relationships between them are analyzed.
                 self.create_ontology_relationships_from_aas(aas_model_object)
@@ -46,6 +43,10 @@ class AASRepositoryInformation:
                 print("PARA EL AAS CON ID [{}] SE HAN GENERADO ESTAS CLASES ONTOLOGICAS".format(aas_id))
                 for onto in CapabilitySkillOntology.get_instance().get_ontology().individuals():
                     print("\t{} de la clase {}".format(onto, onto.is_a))
+                    print("\t\t y tiene las propiedades: {}".format(onto.data_properties_values_dict))
+                    cap_class = CapabilitySkillOntology.get_instance().get_ontology_class_by_iri(CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI)
+                    if isinstance(onto, cap_class):
+                        print("\t\tEsta capacidad esta asociada al activo {}".format(onto.get_associated_assets()))
 
     def create_ontology_instances_from_aas(self, aas_model_object):
         for submodel_data in aas_model_object.submodel:
@@ -59,10 +60,19 @@ class AASRepositoryInformation:
                         print("ERROR:The ontology class with IRI {} does not exist in the given OWL ontology. Check the "
                               "ontology file.", file=sys.stderr)
                         break
+                    # TODO SI YA EXISTE LA CAPACIDAD NO HABRIA QUE CREARLA DE NUEVO
                     ontology_instance = CapabilitySkillOntology.get_instance().create_ontology_object_instance(
                         ontology_class, submodel_element.id_short)
+                    capability_class = CapabilitySkillOntology.get_instance().get_ontology_class_by_iri(
+                        CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI)
+                    if isinstance(ontology_instance, capability_class):
+                        # The asset is associated to the created capability
+                        ontology_instance.add_associated_asset(AASModelUtils.get_asset_id_from_aas(aas_model_object))
                     ontology_required_value_iris = ontology_instance.get_data_properties_iris()
-                    print()
+                    for required_value_iri in ontology_required_value_iris:
+                        required_value = AASModelUtils.get_qualifier_value_by_semantic_id(submodel_element, required_value_iri)
+                        required_value_name = ontology_instance.get_data_property_name_by_iri(required_value_iri)
+                        ontology_instance.set_data_property_value(required_value_name, required_value)
 
     def create_ontology_relationships_from_aas(self, aas_model_object):
         for submodel_data in aas_model_object.submodel:

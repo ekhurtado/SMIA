@@ -4,16 +4,15 @@
 import logging
 from itertools import chain
 
-import basyx.aas.model
 from owlready2 import Thing, get_ontology, DataPropertyClass, DatatypeClass
 
-from css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo
-from css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
+from css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo, CapabilitySkillOntologyUtils
 
 import builtins
 
-css_ontology = CapabilitySkillOntology.get_instance()
-css_ontology.initialize_ontology()
+# css_ontology = CapabilitySkillOntology.get_instance()
+# css_ontology.initialize_ontology()
+css_ontology = get_ontology(CapabilitySkillOntologyUtils.get_ontology_file_path())
 base_namespace = css_ontology.get_namespace(CapabilitySkillOntologyInfo.CSS_ONTOLOGY_BASE_NAMESPACE)
 
 
@@ -30,8 +29,8 @@ class ExtendedThing(Thing):
         self.data_properties_types_dict = {}
         self.data_properties_values_dict = {}
 
-        # The reference to the associated AAS model element will be also necessary.
-        self.aas_sme_ref = None
+        # The data properties associated to this instance class are found
+        self.seek_associated_data_properties()
 
     def set_data_property_value(self, data_property_name, data_property_value):
         """
@@ -89,24 +88,6 @@ class ExtendedThing(Thing):
         print("WARNING: The data property with IRI {} does not exist in class {}".format(property_iri, self))
         return None
 
-    def get_aas_sme_ref(self):
-        """
-        This method gets the AAS submodel element (SME) related to this instance class.
-
-        Returns:
-            aas_ref (str): reference to the submodel element of the AAS model.
-        """
-        return self.aas_sme_ref
-
-    def set_aas_sme_ref(self, aas_ref):
-        """
-        This method sets the AAS submodel element (SME) related to this instance class.
-
-        Args:
-            aas_ref (str): reference to the submodel element of the AAS model.
-        """
-        self.aas_sme_ref = aas_ref
-
     def check_and_get_related_instance_by_instance_name(self, other_instance_name):
         """
         This method checks if there is some Object Property defined that connects the self instance class with the given
@@ -125,18 +106,72 @@ class ExtendedThing(Thing):
                     return True, related_instance
         return False, None
 
+    def seek_associated_data_properties(self):
+        """
+        This method seeks possible limited values for attributes of Capability, in order to validate when the attribute
+        value is assigned. The possible values for limited attributes are stored in a global dictionary.
+        """
+        for prop in css_ontology.properties():
+            if isinstance(prop, DataPropertyClass):
+                if CapabilitySkillOntologyUtils.check_whether_part_of_domain(self, prop.domain):
+                    # First, the data property object is saved
+                    self.data_properties_dict.add(prop)
+                    # The possible values of the data properties are also stored
+                    for range_value in prop.range:
+                        if isinstance(range_value, DatatypeClass):
+                            possible_values = CapabilitySkillOntologyUtils.get_possible_values_of_datatype(range_value)
+                            xsd_value_type = CapabilitySkillOntologyUtils.check_and_get_xsd_datatypes(range_value)
+                            if possible_values is not None:
+                                self.data_properties_types_dict[prop.name] = possible_values
+                            elif xsd_value_type is not None:
+                                self.data_properties_types_dict[prop.name] = xsd_value_type
+                        else:
+                            self.data_properties_types_dict[prop.name] = range_value
+
+    def check_valid_data_property_value(self, data_property_name, data_property_value):
+        """
+        This method checks if the given value of a given data property is valid, in terms of the type of the data. If
+        the data property type is simple, the type will be directly checked, and in case of an enumeration, if the given
+        value is within the possible values will be checked.
+
+        Args:
+            data_property_name (str): the name of the data property.
+            data_property_value (str): the value of the data property to be checked.
+        """
+        if data_property_name not in self.data_properties_types_dict:
+           print("WARNING: The data property {} does not exist in this OWL class ({}).".format(data_property_name,
+                                                                                                 self))
+        else:
+            data_property_type = self.data_properties_types_dict[data_property_name]
+            if isinstance(data_property_type, set):
+                if data_property_value not in data_property_type:
+                    print("ERROR: The data property value {} for the OWL class {} is not within  the valid "
+                          "values.".format(data_property_value, self))
+            else:
+                if not isinstance(data_property_value, data_property_type):
+                    print("ERROR: The data property value {} for the OWL class {} is not valid."
+                          .format(data_property_value, self))
 
 class Capability(ExtendedThing):
     """
     This class represent the OWL class for Capabilities. It contains all necessary methods to ensure the correct
     execution of SMIA software.
     """
+    # namespace = base_namespace
 
     # The associated SubmodelElement class of the AAS is also defined
     # _aas_sme_class = 1
     # aas_sme_class = extended_submodel.ExtendedCapability
     # aas_sme_class = basyx.aas.model.Capability
     # category = None
+
+    # associated_assets = set()  # The associated assets are also saved in the SMIA KB
+
+    def add_associated_asset(self, asset_id):
+        if not hasattr(self, 'associated_assets'):
+            self.associated_assets = set()
+        self.associated_assets.add(asset_id)
+
 
     def set_category(self, category_value):
         """
@@ -164,15 +199,28 @@ class Capability(ExtendedThing):
 
     def get_associated_constraint_instances(self):
         """
-        This method gets all associated constraint instances and, if there is no one, returns the None object.
+        This method gets all associated assets, if there is no one, returns the None object.
 
         Returns:
-            IndividualValueList: generator with all associated constraint instances.
+            Set: list with all associated assets.
         """
         if len(self.isRestrictedBy) == 0:
             return None
         else:
             return self.isRestrictedBy
+
+    def get_associated_assets(self):
+        """
+        This method gets all associated skill instances and, if there is no skill, returns the None object.
+
+        Returns:
+            IndividualValueList: generator with all associated skill instances.
+        """
+        if len(self.associated_assets) == 0:
+            return None
+        else:
+            return self.associated_assets
+
 
 class CapabilityConstraint(ExtendedThing):
 
