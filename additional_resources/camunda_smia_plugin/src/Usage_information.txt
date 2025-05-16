@@ -1,0 +1,14 @@
+Camunda Modeler is based on JavaScript, so plugins are also developed in JS.
+
+The plugins must be added in the location where the Camunda Modeler software has been installed. For instance, if the v5.33.1 version for Windows has been installed, there will be a folder named "camunda-modeler-5.33.1-win-x64".
+
+First, if you do not have all the dependencies, you can install them with the following command (you can open cmd for this in the location of this 'src' folder):
+
+    > npm install
+
+When the plugin code is finished, you have to compile it to create the "dist" and "node_modules" folder. They are quite large folders, so you can copy the code to the plugins folder of the Camunda Modeler installation and compile there. To compile, you have to analyze the definition of the "package.json" file. In the "scripts" section you can see the different commands set. In the case of this plugin, "all" is used to compile everything, so to compile the plugin you have to execute the following command:
+
+    > npm run all
+
+Either compiled earlier and copied to the Camunda installation folder or copied to the folder and then compiled, once the plugin is inside the Camunda installation folder it can be used. If there have been changes (recompilation), Camunda must be restarted. There are two options: close and open the program, or execute Ctrl+R
+
