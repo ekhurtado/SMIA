@@ -31,6 +31,7 @@ class AASRepositoryInformation:
         self.read_aas_json_information()
 
         # Once objects are created, all AAS and their submodels will be analyzed to obtain the CSS data
+        print(f"Trying to extract all the CSS information from the AAS data.")
         for aas_model_object in self.aas_model_object_store:
             if isinstance(aas_model_object, model.AssetAdministrationShell):
                 aas_id = aas_model_object.id
@@ -51,6 +52,7 @@ class AASRepositoryInformation:
         # When all the CSS information has been extracted, it is saved in an SQLite database (if SMIA KB is running in
         # a compatible Operating System)
         CapabilitySkillOntology.get_instance().persistent_save_ontology()
+        print(f"Extracted and saved all the CSS information from the AAS data.")
 
     def create_ontology_instances_from_aas(self, aas_model_object):
         for submodel_data in aas_model_object.submodel:
@@ -131,6 +133,7 @@ class AASRepositoryInformation:
 
         # Lastly, the data will be cleaned to meet with the last version of the AAS meta-model
         self.all_aas_information_json = self.clean_aas_json_information(self.all_aas_information_json)
+        print(f"Obtain all the AAS JSON definitions from the repository")
 
     def clean_aas_json_information(self, data):
         """

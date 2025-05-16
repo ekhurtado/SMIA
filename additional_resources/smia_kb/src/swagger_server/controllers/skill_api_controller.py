@@ -2,6 +2,9 @@ import connexion
 import six
 
 import __main__
+from css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo
+from css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
+from models.datatypes import ReferenceIRI
 from swagger_server.models.category import Category  # noqa: E501
 from swagger_server.models.error import Error  # noqa: E501
 from swagger_server.models.skill import Skill  # noqa: E501
@@ -49,9 +52,12 @@ def get_all_skill_identifiers():  # noqa: E501
     Returns all skills identifiers related to the SMIA-CSS model. Skills are extracted from the AAS repository or added by the user through the SMIA KB API. # noqa: E501
 
 
-    :rtype: List[CSSidentifier]
+    :rtype: List[ReferenceIRI]
     """
-    return 'do some magic!'
+    skills_instances = CapabilitySkillOntology.get_instance().get_ontology_instances_by_class_iri(
+        CapabilitySkillOntologyInfo.CSS_ONTOLOGY_SKILL_IRI)
+
+    return [onto_instance.iri for onto_instance in skills_instances]
 
 
 def get_all_skill_parameters_by_skill_id(skill_identifier):  # noqa: E501
@@ -77,6 +83,7 @@ def get_all_skills():  # noqa: E501
 
     :rtype: List[Skill]
     """
+    # TODO HACER AHORA, Hay que desarrollar el codigo para lograr el JSON de las Skills (al igual que con las capacidades)
     return 'do some magic!I am returning all skills: skill1, skill2...'
     # return 'do some magic!'
 
@@ -202,7 +209,7 @@ def post_skill_parameter_by_skill_id(id, name, category, photo_urls, tags, statu
     :rtype: Skill
     """
     if connexion.request.is_json:
-        name = CSSidentifier.from_dict(connexion.request.get_json())  # noqa: E501
+        name = ReferenceIRI.from_dict(connexion.request.get_json())  # noqa: E501
     if connexion.request.is_json:
         category = Category.from_dict(connexion.request.get_json())  # noqa: E501
     if connexion.request.is_json:
