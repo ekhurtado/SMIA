@@ -113,7 +113,6 @@ class Capability(Model):
                 capability_json[attrib] = ontology_value
             except AttributeError:
                 print("ERROR: The attribute {} does not exist in the ontology instance {}.".format(attrib, ontology_instance))
-        # TODO HACER AHORA FALTA AÑADIR LOS ACTIVOS ASOCIADOS
         return capability_json
 
 

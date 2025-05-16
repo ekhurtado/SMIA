@@ -57,7 +57,7 @@ class CapabilityConstraint(Model):
 
         :param ontology_instance: An ontology instance.
         :type: owlready2.ThingClass
-        :return: The JSON of this Capability.
+        :return: The JSON of this Capability Constraint.
         :rtype: dict
         """
         cap_constraint_instance = CapabilityConstraint()
@@ -66,7 +66,8 @@ class CapabilityConstraint(Model):
             try:
                 ontology_value = getattr(ontology_instance, attrib)
                 if isinstance(ontology_value, list):
-                    ontology_value = ontology_value[0]  # Si se ha definido un DataProperty puede que venga en tipo lista, hay que pasarlo a string
+                    # Si se ha definido un DataProperty puede que venga en tipo lista, hay que pasarlo a string
+                    ontology_value = ontology_value[0]
                 cap_constraint_json[attrib] = ontology_value
             except AttributeError:
                 print("ERROR: The attribute {} does not exist in the ontology instance {}.".format(attrib,

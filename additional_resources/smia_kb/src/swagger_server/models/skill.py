@@ -3,8 +3,9 @@
 from __future__ import absolute_import
 from datetime import date, datetime  # noqa: F401
 
-from typing import List, Dict  # noqa: F401
+from typing import List, Dict, Any  # noqa: F401
 
+from css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo
 from swagger_server.models.base_model_ import Model
 from swagger_server.models.datatypes import ReferenceIRI  # noqa: F401,E501
 from swagger_server.models.skill_parameter import SkillParameter  # noqa: F401,E501
@@ -16,7 +17,7 @@ class Skill(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, iri: ReferenceIRI=None, name: str=None, accessible_through: List[ReferenceIRI]=None, has_parameter: List[SkillParameter]=None):  # noqa: E501
+    def __init__(self, iri: ReferenceIRI=None, name: str=None, accessible_through: List[ReferenceIRI]=None, has_parameter: List[SkillParameter]=None, has_implementation_type: str=None):  # noqa: E501
         """Skill - a model defined in Swagger
 
         :param iri: The iri of this Skill.  # noqa: E501
@@ -27,24 +28,29 @@ class Skill(Model):
         :type accessible_through: List[ReferenceIRI]
         :param has_parameter: The has_parameter of this Skill.  # noqa: E501
         :type has_parameter: List[SkillParameter]
+        :param has_implementation_type: The has_implementation_type of this Skill.  # noqa: E501
+        :type has_implementation_type: str
         """
         self.swagger_types = {
             'iri': ReferenceIRI,
             'name': str,
             'accessible_through': List[ReferenceIRI],
-            'has_parameter': List[SkillParameter]
+            'has_parameter': List[SkillParameter],
+            'has_implementation_type': str
         }
 
         self.attribute_map = {
             'iri': 'iri',
             'name': 'name',
             'accessible_through': 'accessibleThrough',
-            'has_parameter': 'hasParameter'
+            'has_parameter': 'hasParameter',
+            'has_implementation_type': 'hasImplementationType'
         }
         self._iri = iri
         self._name = name
         self._accessible_through = accessible_through
         self._has_parameter = has_parameter
+        self._has_implementation_type = has_implementation_type
 
     @classmethod
     def from_dict(cls, dikt) -> 'Skill':
@@ -56,6 +62,42 @@ class Skill(Model):
         :rtype: Skill
         """
         return util.deserialize_model(dikt, cls)
+
+    @classmethod
+    def from_ontology_instance_to_json(cls, ontology_instance) -> dict[str, str | Any] | None:
+        """Transforms an ontological instance into a dict
+
+        :param ontology_instance: An ontology instance.
+        :type: owlready2.ThingClass
+        :return: The JSON of this Skill.
+        :rtype: dict
+        """
+        skill_instance = Skill()
+        skill_json = {}
+        for attrib in skill_instance.attribute_map.values():
+            try:
+                if attrib == 'accessibleThrough':
+                    attribs = ['accessibleThrough', 'accessibleThroughAssetService', 'accessibleThroughAgentService']
+                    ontology_value = [
+                        instance.iri
+                        for attr in attribs
+                        if hasattr(ontology_instance, attr) for instance in getattr(ontology_instance, attr)
+                    ]
+                elif attrib == 'hasParameter':
+                    ontology_value = [
+                        SkillParameter.from_ontology_instance_to_json(skill_parameter_instance)
+                        for skill_parameter_instance in getattr(ontology_instance, attrib)
+                    ]
+                else:
+                    ontology_value = getattr(ontology_instance, attrib)
+                    if isinstance(ontology_value, list):
+                        # Si se ha definido un DataProperty puede que venga en tipo lista, hay que pasarlo a string
+                        ontology_value = ontology_value[0]
+                skill_json[attrib] = ontology_value
+            except AttributeError:
+                print("ERROR: The attribute {} does not exist in the ontology instance {}.".format(attrib,
+                                                                                                   ontology_instance))
+        return skill_json
 
     @property
     def iri(self) -> ReferenceIRI:
@@ -148,3 +190,26 @@ class Skill(Model):
         """
 
         self._has_parameter = has_parameter
+
+    @property
+    def has_implementation_type(self) -> str:
+        """Gets the has_implementation_type of this Skill.
+
+        The implementation type of the skill: OPERATION, GUI_BEHAVIOUR...  # noqa: E501
+
+        :return: The has_implementation_type of this Skill.
+        :rtype: str
+        """
+        return self._has_implementation_type
+
+    @has_implementation_type.setter
+    def has_implementation_type(self, has_implementation_type: str):
+        """Sets the has_implementation_type of this Skill.
+
+        The implementation type of the skill: OPERATION, GUI_BEHAVIOUR...  # noqa: E501
+
+        :param has_implementation_type: The has_implementation_type of this Skill.
+        :type has_implementation_type: str
+        """
+
+        self._has_implementation_type = has_implementation_type

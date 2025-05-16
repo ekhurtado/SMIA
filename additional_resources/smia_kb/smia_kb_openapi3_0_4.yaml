@@ -2333,6 +2333,10 @@ components:
             wrapped: true
           items:
               $ref: '#/components/schemas/SkillParameter'
+        hasImplementationType:
+          description: "The implementation type of the skill: OPERATION, SPADE_BEHAVIOUR..."
+          type: string
+          example: OPERATION
       xml:
         name: skill
     SkillParameter:

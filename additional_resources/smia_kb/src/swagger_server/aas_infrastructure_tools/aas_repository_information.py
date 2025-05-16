@@ -110,6 +110,23 @@ class AASRepositoryInformation:
                     domain_instance.set_object_property_value(rel_ontology_class.name, range_instance)
                     # print("Rel entre {} y {} en base a {}".format(domain_instance, range_instance, rel_ontology_class.name))
 
+            # Skills that are of type 'Operation' SubmodelElement are a special case, because they have their parameters
+            # in their OperationVariables, so they are not related by semantic identifiers.
+            skills_list = AASModelUtils.get_submodel_elements_by_semantic_id(
+                submodel_object, CapabilitySkillOntologyInfo.CSS_ONTOLOGY_SKILL_IRI)
+            rel_ontology_class = CapabilitySkillOntology.get_instance().get_ontology_class_by_iri(
+                CapabilitySkillOntologyInfo.CSS_ONTOLOGY_PROP_HASPARAMETER_IRI)
+            for skill_sme in skills_list:
+                if isinstance(skill_sme, model.Operation):
+                    valid_operation_variables = AASModelUtils.get_operation_variables_by_semantic_id(
+                        skill_sme, CapabilitySkillOntologyInfo.CSS_ONTOLOGY_SKILL_PARAMETER_IRI)
+                    for variable in valid_operation_variables:
+                        domain_instance = CapabilitySkillOntology.get_instance().get_ontology_instance_by_name(
+                            skill_sme.id_short)
+                        range_instance = CapabilitySkillOntology.get_instance().get_ontology_instance_by_name(
+                            variable.id_short)
+                        domain_instance.set_object_property_value(rel_ontology_class.name, range_instance)
+
 
     def save_all_aas_repository_information(self):
         """

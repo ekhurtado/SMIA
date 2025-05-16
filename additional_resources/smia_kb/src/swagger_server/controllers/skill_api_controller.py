@@ -83,9 +83,11 @@ def get_all_skills():  # noqa: E501
 
     :rtype: List[Skill]
     """
-    # TODO HACER AHORA, Hay que desarrollar el codigo para lograr el JSON de las Skills (al igual que con las capacidades)
-    return 'do some magic!I am returning all skills: skill1, skill2...'
-    # return 'do some magic!'
+    skill_instances = CapabilitySkillOntology.get_instance().get_ontology_instances_by_class_iri(
+        CapabilitySkillOntologyInfo.CSS_ONTOLOGY_SKILL_IRI)
+
+    return [Skill.from_ontology_instance_to_json(onto_instance) for onto_instance in skill_instances]
+    # return 'do some magic!I am returning all skills: skill1, skill2...'
 
 
 def get_skill_by_id(skill_identifier):  # noqa: E501

@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 from datetime import date, datetime  # noqa: F401
 
-from typing import List, Dict  # noqa: F401
+from typing import List, Dict, Any  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
 from swagger_server.models.datatypes import ReferenceIRI  # noqa: F401,E501
@@ -45,6 +45,29 @@ class SkillParameter(Model):
         :rtype: SkillParameter
         """
         return util.deserialize_model(dikt, cls)
+
+    @classmethod
+    def from_ontology_instance_to_json(cls, ontology_instance) -> dict[str, str | Any] | None:
+        """Transforms an ontological instance into a dict
+
+        :param ontology_instance: An ontology instance.
+        :type: owlready2.ThingClass
+        :return: The JSON of this SkillParameter.
+        :rtype: dict
+        """
+        skill_parameter_instance = SkillParameter()
+        skill_parameter_json = {}
+        for attrib in skill_parameter_instance.attribute_map.values():
+            try:
+                ontology_value = getattr(ontology_instance, attrib)
+                if isinstance(ontology_value, list):
+                    # Si se ha definido un DataProperty puede que venga en tipo lista, hay que pasarlo a string
+                    ontology_value = ontology_value[0]
+                skill_parameter_json[attrib] = ontology_value
+            except AttributeError:
+                print("ERROR: The attribute {} does not exist in the ontology instance {}.".format(attrib,
+                                                                                                   ontology_instance))
+        return skill_parameter_json
 
     @property
     def iri(self) -> ReferenceIRI:

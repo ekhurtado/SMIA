@@ -2475,8 +2475,13 @@ components:
             wrapped: true
           items:
             $ref: "#/components/schemas/SkillParameter"
+        hasImplementationType:
+          type: string
+          description: "The implementation type of the skill: OPERATION, SPADE_BEHAVIOUR..."
+          example: OPERATION
       example:
         iri: http://name.org/css-smia#Capability01
+        hasImplementationType: OPERATION
         accessibleThrough:
         - null
         - null
