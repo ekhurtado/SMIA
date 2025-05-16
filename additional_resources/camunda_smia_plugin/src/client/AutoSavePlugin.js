@@ -19,8 +19,9 @@ import classNames from 'classnames';
 import Icon from '../resources/SMIA_logo_vertical.svg';
 import Icon_OK from '../resources/circle-check-solid.svg';
 import Icon_ERROR from '../resources/circle-xmark-solid.svg';
+import Icon_UNKNOWN from '../resources/circle-question-solid.svg';
 
-let Icon_KB = Icon_OK;
+let Icon_KB = Icon_UNKNOWN;
 
 import ConfigOverlay from './ConfigOverlay';
 
@@ -176,12 +177,11 @@ export default class AutoSavePlugin extends PureComponent {
       text = "http://" + text
     }
     this.serverUrl = text;
+
+    // Before starting, the Icon for unknown status of SMIA KB is set
+    Icon_KB = Icon_UNKNOWN;
+
     this.displayInformNotification('SMIA KB availability', 'Trying to connect to SMIA KB in: ' + text);
-    // displayNotification({
-    //   title: 'SMIA KB availability',
-    //   content: 'Trying to connect to SMIA KB in: ' + text,
-    //   duration: 5000
-    // });
 
     return new Promise((resolve, reject) => {
         // First, the availability with SMIA KB is checked
@@ -193,80 +193,79 @@ export default class AutoSavePlugin extends PureComponent {
           }
 
           // Once the SMIA KB is available, all the required information will be obtained
-          // First, the capability identifiers (IRIs) will be obtained
-          // TODO, DE MOMENTO SE HA PENSADO RECOGER LAS IRIs y con eso el resto de datos, pero quizas es suficiente recogiendo todos los objetos JSON de todas las capaciades ('/capabilities'), y procesar todo ello. Si es cierto que las skills habria que recogerlas desde su API, ya que en las capacidades solo estan las referencias (IRIs)
-          this.displayInformNotification('CSS Capability identifiers',
-              'Obtaining CSS Capability identifiers from SMIA KB');
-          return httpGetData(`${this.serverUrl}/api/v3/capabilities/$identifiers`);
+          // First, the capabilities information (in JSON format) will be obtained, taking advantage that SMIA KB
+          // returns it already structured
+          this.displayInformNotification('CSS Capabilities information',
+              'Obtaining CSS Capabilities information from SMIA KB');
+          return httpGetData(`${this.serverUrl}/api/v3/capabilities`);
 
-        }).then((allCapabilityIDs) => {
-          if (allCapabilityIDs.includes("ERROR: ")) {
-            throw new Error(`Error while interacting with the SMIA KB (requesting capability identifiers). Reason: ${allCapabilityIDs.replace("ERROR: ", '')}`);
+        }).then((allCapabilitiesInfo) => {
+          if (allCapabilitiesInfo.includes("ERROR: ")) {
+            throw new Error(`Error while interacting with the SMIA KB (requesting capabilities). Reason: ${allCapabilitiesInfo.replace("ERROR: ", '')}`);
           }
-          this.displayInformNotification('CSS Capability identifiers',
-              'Obtained data: ' + allCapabilityIDs);
+          let allCapabilitiesJSON;
+          try {
+            allCapabilitiesJSON = JSON.parse(allCapabilitiesInfo);
+          } catch (error) {
+            throw new Error(`Invalid JSON format in SMIA KB response for all capabilities info: ${error.message}`);
+          }
 
-          // TODO DE MOMENTO SE RECOGE DE LA VERSION DE PRUEBAS DE SMIA (mas adelante la respuesta vendra mejor estructurada)
-          allCapabilityIDs = allCapabilityIDs.split(': ')[1];
-          this.displayInformNotification('CSS Capability identifiers',
-              'AHORA SI data: ' + allCapabilityIDs);
+          this.displayInformNotification('CSS Skills information',
+              'Obtaining CSS Skills information from SMIA KB');
+          // return {allCapabilitiesJSON, httpGetData(`${this.serverUrl}/api/v3/capabilities`)};
+          return Promise.all([ allCapabilitiesJSON, httpGetData(`${this.serverUrl}/api/v3/skills`) ]);
 
-          // TODO PENSAR COMO AÑADIR EL CODIGO DE FORMA QUE ITERE SOBRE TODOS LOS IDENTIFICADORES DE CAPACIDADES, Y VARA RECOGIENDO TODA SU INFORMACION (despues se debera hacer lo mismo con las skills).
+        }).then(([allCapabilitiesJSON, allSkillsInfo]) => {
 
+          if (allSkillsInfo.includes("ERROR: ")) {
+            throw new Error(`Error while interacting with the SMIA KB (requesting skills). Reason: ${allSkillsInfo.replace("ERROR: ", '')}`);
+          }
+          let allSkillsJSON;
+          try {
+            allSkillsJSON = JSON.parse(allSkillsInfo);
+          } catch (error) {
+            throw new Error(`Invalid JSON format in SMIA KB response for all skills info: ${error.message}`);
+          }
 
-          // Simulate async logic (e.g., fetching data or processing)
-          setTimeout(() => {
-            const data = "This is the processed text"; // Replace with actual logic
-            displayNotification({
-              title: 'Processing...',
-              content: 'Segundo mensaje con el contenido de procesando... ' + text,
-              duration: 7000
-            });
+          // When all CSS information has been obtained, it will save in a global variable in order to be available for
+          // showing to the user
+          window.SMIA_KB_DATA = {'Capabilities': allCapabilitiesJSON, 'Skills': allSkillsJSON}
+
+          // As the SMIA KB information has been successfully achieved, we update the status to show the URL and the
+          // connection icon available in the UI.
+          Icon_KB = Icon_OK;
+          this.setState({
+            showRequestText: true,
+            requestText: this.serverUrl
+          });
+
+          this.displayNotificationWithType('CSS information obtained',
+              'Successfully obtained all CSS information from SMIA KB', 'success');
+
 
             // TODO Prueba para datos recogidos del SMIA KB=
             // TODO En esta primera version todos los datos de la skill estan dentro de cada capacidad, pero yo creo que
             //  seria mejor tener dos grandes JSON (capacidad y skill), y en el de capacidad tener solo las referencias
             //  a las skills (es decir, seguir la misma estructura que dentro del KB)
-            window.SMIA_KB_DATA = [{
-              'capID001': {
-                'name': 'capability1', 'assetsID': ['asset1', 'asset2'],
-                'skills': [{
-                  'name': 'skill1_1',
-                  'inputParams': ['inputparam1_1', 'inputparam1_2']
-                }, {'name': 'skill1_2'}]
-              }
-            },
-              {
-                'capID002': {
-                  'name': 'capability2', 'assetsID': ['asset3'], 'constraints': ['constraint2_1', 'constraint2_2'],
-                  'skills': [{'name': 'skill2_1'}, {'name': 'skill2_2'}]
-                }
-              }];
-
-            // También actualizar el estado para mostrar el texto en la UI si se desea
-            Icon_KB = Icon_OK;  // Una vez finalizado correctamente añadimos el icono de OK con la conexión de SMIA KB
-            this.setState({
-              showRequestText: true,
-              requestText: this.serverUrl
-            });
-
-            displayNotification({
-              type: 'error',
-              title: 'Processing failed...',
-              content: 'Mensaje de error... ' + text,
-              duration: 7000
-            });
-
-            setTimeout(() => {
-              this.displayNotificationWithType('Process finished',
-                  'All data have been correctly obtained from SMIA KB', 'success');
-              resolve(data);
-            }, 1000);
-
-          }, 1000);
+            // window.SMIA_KB_DATA = [{
+            //   'capID001': {
+            //     'name': 'capability1', 'assetsID': ['asset1', 'asset2'],
+            //     'skills': [{
+            //       'name': 'skill1_1',
+            //       'inputParams': ['inputparam1_1', 'inputparam1_2']
+            //     }, {'name': 'skill1_2'}]
+            //   }
+            // },
+            //   {
+            //     'capID002': {
+            //       'name': 'capability2', 'assetsID': ['asset3'], 'constraints': ['constraint2_1', 'constraint2_2'],
+            //       'skills': [{'name': 'skill2_1'}, {'name': 'skill2_2'}]
+            //     }
+            //   }];
         }).catch(error => {
           this.displayNotificationWithType('ERROR', 'Some error occured: ' + error, 'error');
 
+          // In case of error
           Icon_KB = Icon_ERROR;
             // displayNotification({
             //   type: 'error',

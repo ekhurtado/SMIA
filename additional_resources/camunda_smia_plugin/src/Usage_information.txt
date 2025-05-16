@@ -12,3 +12,7 @@ When the plugin code is finished, you have to compile it to create the "dist" an
 
 Either compiled earlier and copied to the Camunda installation folder or copied to the folder and then compiled, once the plugin is inside the Camunda installation folder it can be used. If there have been changes (recompilation), Camunda must be restarted. There are two options: close and open the program, or execute Ctrl+R
 
+
+# TODO REMOVE
+# Current installation of Camunda Modeler in laptop:
+cd 'C:\Users\ekait\OneDrive - UPV EHU\GCIS\Camunda_Modeler\camunda-modeler-5.33.1-win-x64\resources\plugins\smia-plugin'

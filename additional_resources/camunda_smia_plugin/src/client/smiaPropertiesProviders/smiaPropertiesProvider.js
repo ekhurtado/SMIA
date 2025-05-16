@@ -148,9 +148,8 @@ function CapabilityEntry(props) {
   if (window.SMIA_KB_DATA.length === 0) {
     CAPABILITIES_OPTIONS = [{value: '', label: ''}]
   } else {
-    CAPABILITIES_OPTIONS = window.SMIA_KB_DATA.map((capItem) => {
-      const key = Object.keys(capItem)[0];
-      return {value: key, label: capItem[key].name}
+    CAPABILITIES_OPTIONS = window.SMIA_KB_DATA.Capabilities.map((capItem) => {
+      return {value: capItem.iri, label: capItem.name}
     });
   }
 
@@ -194,6 +193,12 @@ function ConstraintsEntry(props) {
   //   "constraint-2": "",
   //   "constraint-3": ""
   // };
+  // TODO ES NECESARIA NUEVA ESTRUCTURA PARA GUARDAR TAMBIEN EL IRI
+  // const CONSTRAINTS_VALUES = {
+  //   "constraint-1": {'label': '', 'value': ''},
+  //   "constraint-2": {'label': '', 'value': ''},
+  //   "constraint-3": {'label': '', 'value': ''}
+  // };
 
   const {element} = props;
   const translate = useService('translate');
@@ -204,14 +209,13 @@ function ConstraintsEntry(props) {
   let CONSTRAINTS_VALUES = {};
   const capSelection = element.businessObject.get('smia:capability') || '';
   if (capSelection === '') {
-    CONSTRAINTS_VALUES = {'': ''}
+    CONSTRAINTS_VALUES = {'': {'label': '', 'value': ''}}
   } else {
-    CONSTRAINTS_VALUES =  window.SMIA_KB_DATA.reduce((result, capItem) => {
+    CONSTRAINTS_VALUES =  window.SMIA_KB_DATA.Capabilities.reduce((result, capItem) => {
       // uso de reduce para construir el JSON gradualmente
-      const key = Object.keys(capItem)[0];
-      if ((key === capSelection) && (capItem[key].constraints !== undefined)) {
-        capItem[key].constraints.forEach((constraintItem) => {
-          result[constraintItem] = '';
+      if ((capItem.iri === capSelection) && (capItem.isRestrictedBy.length > 0)) {
+        capItem.isRestrictedBy.forEach((constraintItem) => {
+          result[constraintItem.iri] = {'label': constraintItem.name, 'value': ''};
         })
       }
       return result;
@@ -220,6 +224,7 @@ function ConstraintsEntry(props) {
 
   // Solo añadimos constraints si existen
   if (JSON.stringify(CONSTRAINTS_VALUES) !== '{}') {
+    // TODO HAY QUE REPASAR QUE FUNCIONA ESTO CON LA NUEVA ESTRUCTURA
     // Obtener y parsear valores actuales
     const constraints = parseStringWithDelimiters(element.businessObject.get('smia:constraints') || '');
 
@@ -230,7 +235,7 @@ function ConstraintsEntry(props) {
         id: `constraint-${index}`, // Key única basada en índice
         label: translate(key),
         tooltip: translate('In this TextField you can add the value of the Capability Constraint.'),
-        getValue: () => constraints[key] || '',
+        getValue: () => constraints[key].value || '',
         setValue: (value) => {
           const newConstraints = {...constraints, [key]: value};
           commandStack.execute('element.updateModdleProperties', {
@@ -267,11 +272,10 @@ function SkillEntry(props) {
   if (capSelection === '') {
     SKILLS_OPTIONS = [{value: '', label: ''}]
   } else {
-    SKILLS_OPTIONS =  window.SMIA_KB_DATA.map((capItem) => {
-      const key = Object.keys(capItem)[0];
-      if (key === capSelection) {
-        return capItem[key].skills.map((skillItem) => {
-          return {value: skillItem.name, label: skillItem.name}
+    SKILLS_OPTIONS =  window.SMIA_KB_DATA.Skills.map((capItem) => {
+      if (capItem.iri === capSelection) {
+        return capItem.isRealizedBy.map((skillItem) => {
+          return {value: skillItem.iri, label: skillItem.name}
         })
       }
       return null;
@@ -326,12 +330,12 @@ function SkillParametersEntry(props) {
   if (skillSelection === '') {
     SKILL_PARAMS_VALUES = {'': ''}
   } else {
-    SKILL_PARAMS_VALUES =  window.SMIA_KB_DATA.reduce((result, capItem) => {
+    SKILL_PARAMS_VALUES =  window.SMIA_KB_DATA.Capabilities.reduce((result, capItem) => {
       // uso de reduce para construir el JSON gradualmente
-      const key = Object.keys(capItem)[0];
-      capItem[key].skills.forEach((skillItem) => {
-        if ((skillItem.name === skillSelection) && (skillItem.inputParams !== undefined)) {
-          skillItem.inputParams.forEach((skillParamItem) => {
+      capItem.isRealizedBy.forEach((skillItem) => {
+        if ((skillItem.iri === skillSelection) && (skillItem.hasParameter.length > 0)) {
+          skillItem.hasParameter.forEach((skillParamItem) => {
+            // TODO HACER AHORA REPASAR SI ES NECESARIO GUARDAR EL IRI (como se hace con las constraints)
             result[skillParamItem] = '';
           })
         }
@@ -390,11 +394,10 @@ function AssetEntry(props) {
   if (capSelection === '') {
     ASSETS_OPTIONS = [{value: '', label: ''}]
   } else {
-    ASSETS_OPTIONS =  window.SMIA_KB_DATA.map((capItem) => {
-      const key = Object.keys(capItem)[0];
-      if (key === capSelection) {
-        return capItem[key].assetsID.map((assetItem) => {
-          return {value: assetItem, label: assetItem}
+    ASSETS_OPTIONS =  window.SMIA_KB_DATA.Capabilities.map((capItem) => {
+      if (capItem.iri === capSelection) {
+        return capItem.assets.map((assetItem) => {
+          return {value: assetItem.asset_id, label: assetItem.asset_id}
         })
       }
       return null;
