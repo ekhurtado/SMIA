@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 from datetime import date, datetime  # noqa: F401
 
-from typing import List, Dict  # noqa: F401
+from typing import List, Dict, Any  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
 from swagger_server.models.datatypes import ReferenceAAS  # noqa: F401,E501
@@ -50,6 +50,23 @@ class Asset(Model):
         :rtype: Asset
         """
         return util.deserialize_model(dikt, cls)
+
+    @classmethod
+    def from_ontology_instance_data_to_json(cls, asset_id, asset_info) -> dict[str, str | Any] | None:
+        """Transforms an ontological instance data of an asset associated to a Capability into a dict
+
+        :param asset_id: The identifier of the asset.
+        :type: str
+        :param asset_info: The information of the asset.
+        :type: dict
+        :return: The JSON of this Capability.
+        :rtype: dict
+        """
+        return {
+            'asset_id': asset_id,
+            'kind': asset_info['kind'],
+            'type': asset_info['type']
+        }
 
     @property
     def id(self) -> str:

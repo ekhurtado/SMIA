@@ -53,6 +53,11 @@ tags:
   externalDocs:
     description: Find out more
     url: https://smia.readthedocs.io/en/latest/
+- name: Serialization API
+  description: useful methods for working with AAS and OWL identifiers
+  externalDocs:
+    description: Find out more
+    url: https://smia.readthedocs.io/en/latest/
 paths:
   /capabilities:
     get:
@@ -170,12 +175,13 @@ paths:
       parameters:
       - name: capabilityIdentifier
         in: path
-        description: The Capability's unique id
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       responses:
         "200":
           description: successful operation
@@ -208,12 +214,13 @@ paths:
       parameters:
       - name: capabilityIdentifier
         in: path
-        description: The Capability's unique id
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       requestBody:
         description: SMIA-CSS Capability object
         content:
@@ -260,12 +267,13 @@ paths:
           type: string
       - name: capabilityIdentifier
         in: path
-        description: The Capability's unique id
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       responses:
         "200":
           description: SMIA-CSS Capability deleted successfully
@@ -293,12 +301,13 @@ paths:
       parameters:
       - name: capabilityIdentifier
         in: path
-        description: The Capability's unique id
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       responses:
         "200":
           description: Requested skill references of a capability
@@ -331,12 +340,13 @@ paths:
       parameters:
       - name: capabilityIdentifier
         in: path
-        description: The Capability's unique id
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       requestBody:
         description: SMIA-CSS identifier of the Skill to be associated to the desired
           capability.
@@ -386,12 +396,13 @@ paths:
       parameters:
       - name: capabilityIdentifier
         in: path
-        description: The Capability's unique id
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       responses:
         "200":
           description: Requested SMIA-CSS capabilities
@@ -423,12 +434,13 @@ paths:
       parameters:
       - name: capabilityIdentifier
         in: path
-        description: The Capability's unique id
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       requestBody:
         description: SMIA-CSS Capability Constraint object
         content:
@@ -477,12 +489,13 @@ paths:
       parameters:
       - name: capabilityIdentifier
         in: path
-        description: The Capability's unique id
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       - name: capabilityConstraintIdentifier
         in: path
         description: The Capability Constraint's unique id
@@ -490,7 +503,7 @@ paths:
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       responses:
         "200":
           description: successful operation
@@ -523,20 +536,22 @@ paths:
       parameters:
       - name: capabilityIdentifier
         in: path
-        description: The Capability's unique id
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       - name: capabilityConstraintIdentifier
         in: path
-        description: The Capability Constraint's unique id
+        description: The Capability Constraint's unique identifier (must be added
+          base64-url encoded. The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       requestBody:
         description: SMIA-CSS Capability Constraints object
         content:
@@ -575,12 +590,13 @@ paths:
       parameters:
       - name: capabilityIdentifier
         in: path
-        description: The Capability's unique id
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       - name: api_key
         in: header
         description: ""
@@ -591,12 +607,13 @@ paths:
           type: string
       - name: capabilityConstraintIdentifier
         in: path
-        description: The Capability Constraint's unique id
+        description: The Capability Constraint's unique identifier (must be added
+          base64-url encoded. The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       responses:
         "200":
           description: SMIA-CSS Capability deleted successfully
@@ -623,12 +640,13 @@ paths:
       parameters:
       - name: capabilityIdentifier
         in: path
-        description: The Capability's unique id
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       responses:
         "200":
           description: Requested assets related to a SMIA-CSS capability
@@ -637,13 +655,13 @@ paths:
               schema:
                 type: array
                 items:
-                  type: string
+                  $ref: "#/components/schemas/Asset"
                 x-content-type: application/json
             application/xml:
               schema:
                 type: array
                 items:
-                  type: string
+                  $ref: "#/components/schemas/Asset"
         default:
           description: Unexpected error
           content:
@@ -660,12 +678,13 @@ paths:
       parameters:
       - name: capabilityIdentifier
         in: path
-        description: The Capability's unique id
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       requestBody:
         description: SMIA-CSS Capability asset identifier
         content:
@@ -817,12 +836,13 @@ paths:
       parameters:
       - name: skillIdentifier
         in: path
-        description: The Skill's unique id
+        description: The Skill's unique identifier (must be added base64-url encoded.
+          The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       responses:
         "200":
           description: successful operation
@@ -855,12 +875,13 @@ paths:
       parameters:
       - name: skillIdentifier
         in: path
-        description: The Skill's unique id
+        description: The Skill's unique identifier (must be added base64-url encoded.
+          The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       requestBody:
         description: SMIA-CSS Skill object
         content:
@@ -907,12 +928,13 @@ paths:
           type: string
       - name: skillIdentifier
         in: path
-        description: Pet id to delete
+        description: The Skill's unique identifier (must be added base64-url encoded.
+          The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       responses:
         "200":
           description: SMIA-CSS Skill deleted successfully
@@ -939,12 +961,13 @@ paths:
       parameters:
       - name: skillIdentifier
         in: path
-        description: The Skill's unique id
+        description: The Skill's unique identifier (must be added base64-url encoded.
+          The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       responses:
         "200":
           description: Requested SMIA-CSS skill parameters
@@ -976,12 +999,13 @@ paths:
       parameters:
       - name: skillIdentifier
         in: path
-        description: The Skill's unique id
+        description: The Skill's unique identifier (must be added base64-url encoded.
+          The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       requestBody:
         description: SMIA-CSS Skill object
         content:
@@ -1030,20 +1054,22 @@ paths:
       parameters:
       - name: skillIdentifier
         in: path
-        description: The Skill's unique id
+        description: The Skill's unique identifier (must be added base64-url encoded.
+          The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       - name: skillParameterIdentifier
         in: path
-        description: The Skill parameter's unique id
+        description: The Skill parameter's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       responses:
         "200":
           description: successful operation
@@ -1077,20 +1103,22 @@ paths:
       parameters:
       - name: skillIdentifier
         in: path
-        description: The Skill's unique id
+        description: The Skill's unique identifier (must be added base64-url encoded.
+          The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       - name: skillParameterIdentifier
         in: path
-        description: The Skill parameter's unique id
+        description: The Skill parameter's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       requestBody:
         description: SMIA-CSS Skill object
         content:
@@ -1130,12 +1158,13 @@ paths:
       parameters:
       - name: skillParameterIdentifier
         in: path
-        description: The Skill parameter's unique id
+        description: The Skill parameter's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       - name: api_key
         in: header
         description: ""
@@ -1146,12 +1175,13 @@ paths:
           type: string
       - name: skillIdentifier
         in: path
-        description: The Skill's unique id
+        description: The Skill's unique identifier (must be added base64-url encoded.
+          The Serialization API can be used to obtain it)
         required: true
         style: simple
         explode: false
         schema:
-          $ref: "#/components/schemas/ReferenceIRI"
+          $ref: "#/components/schemas/ReferenceIRIencoded"
       responses:
         "200":
           description: SMIA-CSS Skill deleted successfully
@@ -1442,16 +1472,13 @@ paths:
         content:
           application/json:
             schema:
-              type: string
-              example: 'aHR0cDovL25hbWUub3JnL2Nzcy1zbWlhI0NhcGFiaWxpdHkwMQ=='
+              $ref: "#/components/schemas/ReferenceIRIencoded"
           application/xml:
             schema:
-              type: string
-              example: 'aHR0cDovL25hbWUub3JnL2Nzcy1zbWlhI0NhcGFiaWxpdHkwMQ=='
+              $ref: "#/components/schemas/ReferenceIRIencoded"
           application/x-www-form-urlencoded:
             schema:
-              type: string
-              example: 'aHR0cDovL25hbWUub3JnL2Nzcy1zbWlhI0NhcGFiaWxpdHkwMQ=='
+              $ref: "#/components/schemas/ReferenceIRIencoded"
         required: true
       responses:
         "200":
@@ -2315,11 +2342,15 @@ components:
     ReferenceIRI:
       type: string
       example: http://name.org/css-smia#Capability01
+    ReferenceIRIencoded:
+      type: string
+      example: aHR0cDovL25hbWUub3JnL2Nzcy1zbWlhI0NhcGFiaWxpdHkwMQ==
     ReferenceSMIA:
       type: string
       example: agentInstance001
     Capability:
       required:
+      - assets
       - category
       - hasLifecycle
       - iri
@@ -2354,6 +2385,13 @@ components:
             wrapped: true
           items:
             $ref: "#/components/schemas/ReferenceIRI"
+        assets:
+          type: array
+          description: Which assets can perform this capability.
+          xml:
+            wrapped: true
+          items:
+            $ref: "#/components/schemas/Asset"
         isRestrictedBy:
           type: array
           description: By which constraints is the capability restricted.
@@ -2363,6 +2401,13 @@ components:
             $ref: "#/components/schemas/CapabilityConstraint"
       example:
         iri: http://name.org/css-smia#Capability01
+        assets:
+        - kind: Type
+          id: http://example.com/ids/asset001
+          type: http://example.com/ids/aasElement001
+        - kind: Type
+          id: http://example.com/ids/asset001
+          type: http://example.com/ids/aasElement001
         isRestrictedBy:
         - iri: null
           name: capabilityConstraint01
@@ -2496,6 +2541,7 @@ components:
         name: asset
     SMIAinstance:
       required:
+      - aasID
       - asset
       - id
       type: object
@@ -2504,6 +2550,8 @@ components:
           $ref: "#/components/schemas/ReferenceSMIA"
         asset:
           $ref: "#/components/schemas/Asset"
+        aasID:
+          $ref: "#/components/schemas/ReferenceAAS"
         status:
           type: string
           example: Running
@@ -2517,6 +2565,7 @@ components:
       example:
         startedTimeStamp: 1745932259
         smiaVersion: 0.2.3
+        aasID: http://example.com/ids/aasElement001
         id: agentInstance001
         asset:
           kind: Type

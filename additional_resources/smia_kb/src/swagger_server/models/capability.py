@@ -7,6 +7,7 @@ from typing import List, Dict, Any  # noqa: F401
 
 from css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo
 from css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
+from swagger_server.models import Asset
 from swagger_server.models.base_model_ import Model
 from swagger_server.models.capability_constraint import CapabilityConstraint  # noqa: F401,E501
 from swagger_server.models.datatypes import ReferenceIRI  # noqa: F401,E501
@@ -18,7 +19,7 @@ class Capability(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, iri: ReferenceIRI=None, name: str=None, category: str=None, has_lifecycle: str=None, is_realized_by: List[ReferenceIRI]=None, is_restricted_by: List[CapabilityConstraint]=None):  # noqa: E501
+    def __init__(self, iri: ReferenceIRI=None, name: str=None, category: str=None, has_lifecycle: str=None, is_realized_by: List[ReferenceIRI]=None, assets: List[Asset]=None, is_restricted_by: List[CapabilityConstraint]=None):  # noqa: E501
         """Capability - a model defined in Swagger
 
         :param iri: The iri of this Capability.  # noqa: E501
@@ -31,6 +32,8 @@ class Capability(Model):
         :type has_lifecycle: str
         :param is_realized_by: The is_realized_by of this Capability.  # noqa: E501
         :type is_realized_by: List[ReferenceIRI]
+        :param assets: The assets of this Capability.  # noqa: E501
+        :type assets: List[Asset]
         :param is_restricted_by: The is_restricted_by of this Capability.  # noqa: E501
         :type is_restricted_by: List[CapabilityConstraint]
         """
@@ -40,6 +43,7 @@ class Capability(Model):
             'category': str,
             'has_lifecycle': str,
             'is_realized_by': List[ReferenceIRI],
+            'assets': List[Asset],
             'is_restricted_by': List[CapabilityConstraint]
         }
 
@@ -49,6 +53,7 @@ class Capability(Model):
             'category': 'category',
             'has_lifecycle': 'hasLifecycle',
             'is_realized_by': 'isRealizedBy',
+            'assets': 'assets',
             'is_restricted_by': 'isRestrictedBy'
         }
         self._iri = iri
@@ -56,6 +61,7 @@ class Capability(Model):
         self._category = category
         self._has_lifecycle = has_lifecycle
         self._is_realized_by = is_realized_by
+        self._assets = assets
         self._is_restricted_by = is_restricted_by
 
     @classmethod
@@ -92,15 +98,21 @@ class Capability(Model):
                         CapabilityConstraint.from_ontology_instance_to_json(constraint_instance)
                         for constraint_instance in getattr(ontology_instance, attrib)
                     ]
+                elif attrib == 'category':
+                    if CapabilitySkillOntologyInfo.CSS_ONTOLOGY_ASSET_CAPABILITY_IRI in ontology_instance.is_a[0].iri:
+                        ontology_value = 'AssetCapability'
+                    elif CapabilitySkillOntologyInfo.CSS_ONTOLOGY_AGENT_CAPABILITY_IRI in ontology_instance.is_a[0].iri:
+                        ontology_value = 'AgentCapability'
+                elif attrib == 'assets':
+                    ontology_value = [
+                        Asset.from_ontology_instance_data_to_json(asset_id, asset_info)
+                        for asset_id, asset_info in getattr(ontology_instance, attrib).items()
+                    ]
                 else:
                     ontology_value = getattr(ontology_instance, attrib)
                 capability_json[attrib] = ontology_value
             except AttributeError:
                 print("ERROR: The attribute {} does not exist in the ontology instance {}.".format(attrib, ontology_instance))
-        if CapabilitySkillOntologyInfo.CSS_ONTOLOGY_ASSET_CAPABILITY_IRI in ontology_instance.is_a[0].iri:
-            capability_json['category'] = 'AssetCapability'
-        elif CapabilitySkillOntologyInfo.CSS_ONTOLOGY_AGENT_CAPABILITY_IRI in ontology_instance.is_a[0].iri:
-            capability_json['category'] = 'AgentCapability'
         # TODO HACER AHORA FALTA AÑADIR LOS ACTIVOS ASOCIADOS
         return capability_json
 
@@ -246,3 +258,29 @@ class Capability(Model):
         """
 
         self._is_restricted_by = is_restricted_by
+
+    @property
+    def assets(self) -> List[Asset]:
+        """Gets the assets of this Capability.
+
+        Which assets can perform this capability.  # noqa: E501
+
+        :return: The assets of this Capability.
+        :rtype: List[Asset]
+        """
+        return self._assets
+
+
+    @assets.setter
+    def assets(self, assets: List[Asset]):
+        """Sets the assets of this Capability.
+
+        Which assets can perform this capability.  # noqa: E501
+
+        :param assets: The assets of this Capability.
+        :type assets: List[Asset]
+        """
+        if assets is None:
+            raise ValueError("Invalid value for `assets`, must not be `None`")  # noqa: E501
+
+        self._assets = assets

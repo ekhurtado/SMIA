@@ -54,6 +54,11 @@ tags:
     externalDocs:
       description: Find out more
       url: https://smia.readthedocs.io/en/latest/
+  - name: Serialization API
+    description: useful methods for working with AAS and OWL identifiers
+    externalDocs:
+      description: Find out more
+      url: https://smia.readthedocs.io/en/latest/
 paths:
   /capabilities:
     get:
@@ -178,11 +183,11 @@ paths:
       parameters:
         - name: capabilityIdentifier
           in: path
-          description: The Capability's unique id
+          description: The Capability's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
             # type: string
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
       responses:
@@ -214,10 +219,10 @@ paths:
       parameters:
         - name: capabilityIdentifier
           in: path
-          description: The Capability's unique id
+          description: The Capability's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
       requestBody:
@@ -264,10 +269,10 @@ paths:
             type: string
         - name: capabilityIdentifier
           in: path
-          description: The Capability's unique id
+          description: The Capability's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
       responses:
@@ -293,10 +298,10 @@ paths:
       parameters:
         - name: capabilityIdentifier
           in: path
-          description: The Capability's unique id
+          description: The Capability's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
       responses:
@@ -335,10 +340,10 @@ paths:
       parameters:
         - name: capabilityIdentifier
           in: path
-          description: The Capability's unique id
+          description: The Capability's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
       requestBody:
@@ -390,10 +395,10 @@ paths:
       parameters:
         - name: capabilityIdentifier
           in: path
-          description: The Capability's unique id
+          description: The Capability's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
       responses:
@@ -432,10 +437,10 @@ paths:
       parameters:
         - name: capabilityIdentifier
           in: path
-          description: The Capability's unique id
+          description: The Capability's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
       requestBody:
@@ -487,10 +492,10 @@ paths:
       parameters:
         - name: capabilityIdentifier
           in: path
-          description: The Capability's unique id
+          description: The Capability's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
         - name: capabilityConstraintIdentifier
@@ -498,7 +503,7 @@ paths:
           description: The Capability Constraint's unique id
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
       responses:
@@ -530,18 +535,18 @@ paths:
       parameters:
         - name: capabilityIdentifier
           in: path
-          description: The Capability's unique id
+          description: The Capability's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
         - name: capabilityConstraintIdentifier
           in: path
-          description: The Capability Constraint's unique id
+          description: The Capability Constraint's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
       requestBody:
@@ -581,10 +586,10 @@ paths:
       parameters:
         - name: capabilityIdentifier
           in: path
-          description: The Capability's unique id
+          description: The Capability's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
         - name: api_key
@@ -595,10 +600,10 @@ paths:
             type: string
         - name: capabilityConstraintIdentifier
           in: path
-          description: The Capability Constraint's unique id
+          description: The Capability Constraint's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
       responses:
         '200':
           description: SMIA-CSS Capability deleted successfully
@@ -622,10 +627,10 @@ paths:
       parameters:
         - name: capabilityIdentifier
           in: path
-          description: The Capability's unique id
+          description: The Capability's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
       responses:
@@ -641,12 +646,12 @@ paths:
                 #   format: int32
                 type: array
                 items:
-                  type: string
+                  $ref: "#/components/schemas/Asset"
             application/xml:
               schema:
                 type: array
                 items:
-                  type: string
+                  $ref: "#/components/schemas/Asset"
         default:
           description: Unexpected error
           content:
@@ -664,10 +669,10 @@ paths:
       parameters:
         - name: capabilityIdentifier
           in: path
-          description: The Capability's unique id
+          description: The Capability's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
       requestBody:
@@ -830,10 +835,10 @@ paths:
       parameters:
         - name: skillIdentifier
           in: path
-          description: The Skill's unique id
+          description: The Skill's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
       responses:
@@ -865,10 +870,10 @@ paths:
       parameters:
         - name: skillIdentifier
           in: path
-          description: The Skill's unique id
+          description: The Skill's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
       requestBody:
@@ -914,10 +919,10 @@ paths:
             type: string
         - name: skillIdentifier
           in: path
-          description: Pet id to delete
+          description: The Skill's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
       responses:
         '200':
           description: SMIA-CSS Skill deleted successfully
@@ -941,10 +946,10 @@ paths:
       parameters:
         - name: skillIdentifier
           in: path
-          description: The Skill's unique id
+          description: The Skill's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
       responses:
@@ -983,10 +988,10 @@ paths:
       parameters:
         - name: skillIdentifier
           in: path
-          description: The Skill's unique id
+          description: The Skill's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
       requestBody:
@@ -1038,18 +1043,18 @@ paths:
       parameters:
         - name: skillIdentifier
           in: path
-          description: The Skill's unique id
+          description: The Skill's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
         - name: skillParameterIdentifier
           in: path
-          description: The Skill parameter's unique id
+          description: The Skill parameter's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
       responses:
@@ -1081,18 +1086,18 @@ paths:
       parameters:
         - name: skillIdentifier
           in: path
-          description: The Skill's unique id
+          description: The Skill's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
         - name: skillParameterIdentifier
           in: path
-          description: The Skill parameter's unique id
+          description: The Skill parameter's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
       requestBody:
@@ -1132,10 +1137,10 @@ paths:
       parameters:
         - name: skillParameterIdentifier
           in: path
-          description: The Skill parameter's unique id
+          description: The Skill parameter's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
           style: simple  # añadido de la definicion de AAS API
           explode: false  # añadido de la definicion de AAS API
         - name: api_key
@@ -1146,10 +1151,10 @@ paths:
             type: string
         - name: skillIdentifier
           in: path
-          description: The Skill's unique id
+          description: The Skill's unique identifier (must be added base64-url encoded. The Serialization API can be used to obtain it)
           required: true
           schema:
-            $ref: '#/components/schemas/ReferenceIRI'
+            $ref: '#/components/schemas/ReferenceIRIencoded'
       responses:
         '200':
           description: SMIA-CSS Skill deleted successfully
@@ -1424,16 +1429,13 @@ paths:
         content:
           application/json:
             schema:
-              type: string
-              example: 'aHR0cDovL25hbWUub3JnL2Nzcy1zbWlhI0NhcGFiaWxpdHkwMQ=='
+              $ref: '#/components/schemas/ReferenceIRIencoded'
           application/xml:
             schema:
-              type: string
-              example: 'aHR0cDovL25hbWUub3JnL2Nzcy1zbWlhI0NhcGFiaWxpdHkwMQ=='
+              $ref: '#/components/schemas/ReferenceIRIencoded'
           application/x-www-form-urlencoded:
             schema:
-              type: string
-              example: 'aHR0cDovL25hbWUub3JnL2Nzcy1zbWlhI0NhcGFiaWxpdHkwMQ=='
+              $ref: '#/components/schemas/ReferenceIRIencoded'
         required: true
       responses:
         '200':
@@ -2201,6 +2203,9 @@ components:
     ReferenceIRI:
       type: string
       example: http://name.org/css-smia#Capability01
+    ReferenceIRIencoded:
+      type: string
+      example: aHR0cDovL25hbWUub3JnL2Nzcy1zbWlhI0NhcGFiaWxpdHkwMQ==
     ReferenceSMIA:
       type: string
       example: agentInstance001
@@ -2211,6 +2216,7 @@ components:
         - category
         - hasLifecycle
         - isRealizedBy
+        - assets
       type: object
       properties:
         iri:
@@ -2244,6 +2250,13 @@ components:
             # TODO comprobar si hay que meter Skill o reference (igual aqui solo hay que añadir la referencia en string)
             # $ref: '#/components/schemas/Skill'
             $ref: '#/components/schemas/ReferenceIRI'
+        assets:
+          type: array
+          description: "Which assets can perform this capability."
+          xml:
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/Asset'
         isRestrictedBy:
           type: array
           description: "By which constraints is the capability restricted."
@@ -2365,6 +2378,7 @@ components:
       required:
         - id
         - asset
+        - aasID
       type: object
       properties:
         id:
@@ -2375,6 +2389,8 @@ components:
           # type: string
           # example: assetIdentifier001
           $ref: '#/components/schemas/Asset'
+        aasID:
+          $ref: '#/components/schemas/ReferenceAAS'
         status:
           type: string
           example: Running

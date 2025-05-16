@@ -6,6 +6,7 @@ import six
 from owlready2 import get_ontology
 
 import __main__
+from controllers import controllers_util
 from css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo
 from css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
 from swagger_server.models.capability import Capability  # noqa: E501
@@ -75,8 +76,14 @@ def get_all_assets_by_capability_id(capability_identifier):  # noqa: E501
 
     :rtype: List[str]
     """
-    return 'do some magic! I am returning all assets for capability with id {}: asset1, asset2...'.format(capability_identifier)
-    # return 'do some magic!'
+    # The ontology instance is obtained (if data is invalid, Error object is returned)
+    capability_instance = controllers_util.check_and_get_ontology_instance(capability_identifier)
+    if isinstance(capability_instance, Error):
+        return capability_instance
+    else:
+        capability_json = Capability.from_ontology_instance_to_json(capability_instance)
+        return capability_json['assets']
+    # return 'do some magic! I am returning all assets for capability with id {}: asset1, asset2...'.format(capability_identifier)
 
 
 def get_all_capabilities():  # noqa: E501
@@ -87,20 +94,15 @@ def get_all_capabilities():  # noqa: E501
 
     :rtype: List[Capability]
     """
-    all_capabilities = []
     capability_instances = (CapabilitySkillOntology.get_instance().get_ontology_instances_by_class_iri(
         CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI) +
                             CapabilitySkillOntology.get_instance().get_ontology_instances_by_class_iri(
         CapabilitySkillOntologyInfo.CSS_ONTOLOGY_AGENT_CAPABILITY_IRI) +
                             CapabilitySkillOntology.get_instance().get_ontology_instances_by_class_iri(
         CapabilitySkillOntologyInfo.CSS_ONTOLOGY_ASSET_CAPABILITY_IRI))
-    for onto_instance in capability_instances:
-        all_capabilities.append(Capability.from_ontology_instance_to_json(onto_instance))
 
-    return all_capabilities
+    return [Capability.from_ontology_instance_to_json(onto_instance) for onto_instance in capability_instances]
     # return 'do some magic! I am returning all capability: {}...'.format(all_cap_string)
-    # return 'do some magic! I am returning all capability: {}...'.format(all_cap_string)
-    # return 'do some magic!'
 
 
 def get_all_capabilities_constraints_by_capability_id(capability_identifier):  # noqa: E501
@@ -113,7 +115,13 @@ def get_all_capabilities_constraints_by_capability_id(capability_identifier):  #
 
     :rtype: List[CapabilityConstraint]
     """
-    return 'do some magic!'
+    # The ontology instance is obtained (if data is invalid, Error object is returned)
+    capability_instance = controllers_util.check_and_get_ontology_instance(capability_identifier)
+    if isinstance(capability_instance, Error):
+        return capability_instance
+    else:
+        capability_json = Capability.from_ontology_instance_to_json(capability_instance)
+        return capability_json['isRestrictedBy']
 
 
 def get_all_capabilities_identifiers():  # noqa: E501
@@ -124,8 +132,15 @@ def get_all_capabilities_identifiers():  # noqa: E501
 
     :rtype: List[CSSidentifier]
     """
-    return 'do some magic! I am returning all capability identifiers: capabilityId1,capabilityId2,capabilityId3...'
-    # return 'do some magic!'
+    capability_instances = (CapabilitySkillOntology.get_instance().get_ontology_instances_by_class_iri(
+        CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI) +
+                            CapabilitySkillOntology.get_instance().get_ontology_instances_by_class_iri(
+                                CapabilitySkillOntologyInfo.CSS_ONTOLOGY_AGENT_CAPABILITY_IRI) +
+                            CapabilitySkillOntology.get_instance().get_ontology_instances_by_class_iri(
+                                CapabilitySkillOntologyInfo.CSS_ONTOLOGY_ASSET_CAPABILITY_IRI))
+
+    return [onto_instance.iri for onto_instance in capability_instances]
+    # return 'do some magic! I am returning all capability identifiers: capabilityId1,capabilityId2,capabilityId3...'
 
 
 def get_all_skill_refs_by_capability_id(capability_identifier):  # noqa: E501
@@ -138,18 +153,14 @@ def get_all_skill_refs_by_capability_id(capability_identifier):  # noqa: E501
 
     :rtype: List[CSSidentifier]
     """
-    if capability_identifier is None:
-        return 'The Capability identifier cannot be None'
-    for onto_class in __main__.ontology.individuals():
-        if onto_class.name == capability_identifier:
-
-            return 'do some magic! The skill references for capability with id {}: {}...'.format(
-                capability_identifier, str(onto_class.isRealizedBy))
-
-    return 'do some magic! The capability identifier is not valid. It does not exist an associated ontological instance.'
-    # return 'do some magic! I am returning all skill references for capability with id {}: skill1, skill2...'.format(
-    #     capability_identifier)
-    # return 'do some magic!'
+    # The ontology instance is obtained (if data is invalid, Error object is returned)
+    capability_instance = controllers_util.check_and_get_ontology_instance(capability_identifier)
+    if isinstance(capability_instance, Error):
+        return capability_instance
+    else:
+        capability_json = Capability.from_ontology_instance_to_json(capability_instance)
+        return capability_json['isRealizedBy']
+    # return 'do some magic! The capability identifier is not valid. It does not exist an associated ontological instance.'
 
 
 def get_capability_by_id(capability_identifier):  # noqa: E501
@@ -162,7 +173,12 @@ def get_capability_by_id(capability_identifier):  # noqa: E501
 
     :rtype: Capability
     """
-    return 'do some magic!'
+    # The ontology instance is obtained (if data is invalid, Error object is returned)
+    capability_instance = controllers_util.check_and_get_ontology_instance(capability_identifier)
+    if isinstance(capability_instance, Error):
+        return capability_instance
+    else:
+        return Capability.from_ontology_instance_to_json(capability_instance)
 
 
 def get_capability_constraint_by_capability_id(capability_identifier, capability_constraint_identifier):  # noqa: E501
@@ -177,7 +193,19 @@ def get_capability_constraint_by_capability_id(capability_identifier, capability
 
     :rtype: CapabilityConstraint
     """
-    return 'do some magic!'
+    # The ontology instance is obtained (if data is invalid, Error object is returned)
+    capability_instance = controllers_util.check_and_get_ontology_instance(capability_identifier)
+    capability_constraint_instance = controllers_util.check_and_get_ontology_instance(capability_constraint_identifier)
+    if isinstance(capability_instance, Error):
+        return capability_instance
+    elif isinstance(capability_constraint_instance, Error):
+        return capability_constraint_instance
+    else:
+        capability_json = Capability.from_ontology_instance_to_json(capability_instance)
+        for constraint_data in capability_json['isRestrictedBy']:
+            if constraint_data['iri'] == capability_constraint_instance.iri:
+                return constraint_data
+        return Error(code='400', message="The specified constraint it is not associated to the specified capability.")
 
 
 def post_asset_to_capability(body, capability_identifier):  # noqa: E501
@@ -243,12 +271,6 @@ def post_capability(body):  # noqa: E501
             new_capability_instance.isRestrictedBy.append(new_cap_constraint_instance)
 
     ontology.persistent_save_ontology()
-
-    # owlready2.default_world.set_backend(filename='C:\\Users\\ekait\\OneDrive - UPV EHU\\GCIS\\TestRepositories\\SMIA_KB\\python-flask-smia-kb-server-generated\\swagger_server\\css_smia_ontology\\smia_kb.sqlite3')
-    # owlready2.default_world.set_backend(filename='./css_smia_ontology/smia_kb.sqlite3')
-    # __main__.ontology.world.set_backend(filename='./css_smia_ontology/smia_kb.sqlite3')
-    # owlready2.default_world.save()
-    # __main__.ontology.world.save()
 
     return new_capability   # Se ha especificado en el YAML que devuelve el JSON del objeto Capability
     # return 'do some magic! The capability to register has the following information: {}'.format(body)

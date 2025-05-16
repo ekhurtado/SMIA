@@ -7,7 +7,7 @@ from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
 from swagger_server.models.asset import Asset  # noqa: F401,E501
-from swagger_server.models.datatypes import ReferenceSMIA  # noqa: F401,E501
+from swagger_server.models.datatypes import ReferenceSMIA, ReferenceAAS  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -16,13 +16,15 @@ class SMIAinstance(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: ReferenceSMIA=None, asset: Asset=None, status: str=None, started_time_stamp: int=None, smia_version: str=None):  # noqa: E501
+    def __init__(self, id: ReferenceSMIA=None, asset: Asset=None, aas_id: ReferenceAAS=None, status: str=None, started_time_stamp: int=None, smia_version: str=None):  # noqa: E501
         """SMIAinstance - a model defined in Swagger
 
         :param id: The id of this SMIAinstance.  # noqa: E501
         :type id: ReferenceSMIA
         :param asset: The asset of this SMIAinstance.  # noqa: E501
         :type asset: Asset
+        :param aas_id: The aas_id of this SMIAinstance.  # noqa: E501
+        :type aas_id: ReferenceAAS
         :param status: The status of this SMIAinstance.  # noqa: E501
         :type status: str
         :param started_time_stamp: The started_time_stamp of this SMIAinstance.  # noqa: E501
@@ -33,6 +35,7 @@ class SMIAinstance(Model):
         self.swagger_types = {
             'id': ReferenceSMIA,
             'asset': Asset,
+            'aas_id': ReferenceAAS,
             'status': str,
             'started_time_stamp': int,
             'smia_version': str
@@ -41,12 +44,14 @@ class SMIAinstance(Model):
         self.attribute_map = {
             'id': 'id',
             'asset': 'asset',
+            'aas_id': 'aasID',
             'status': 'status',
             'started_time_stamp': 'startedTimeStamp',
             'smia_version': 'smiaVersion'
         }
         self._id = id
         self._asset = asset
+        self._aas_id = aas_id
         self._status = status
         self._started_time_stamp = started_time_stamp
         self._smia_version = smia_version
@@ -107,6 +112,29 @@ class SMIAinstance(Model):
             raise ValueError("Invalid value for `asset`, must not be `None`")  # noqa: E501
 
         self._asset = asset
+
+    @property
+    def aas_id(self) -> ReferenceAAS:
+        """Gets the aas_id of this SMIAinstance.
+
+
+        :return: The aas_id of this SMIAinstance.
+        :rtype: ReferenceAAS
+        """
+        return self._aas_id
+
+    @aas_id.setter
+    def aas_id(self, aas_id: ReferenceAAS):
+        """Sets the aas_id of this SMIAinstance.
+
+
+        :param aas_id: The aas_id of this SMIAinstance.
+        :type aas_id: ReferenceAAS
+        """
+        if aas_id is None:
+            raise ValueError("Invalid value for `aas_id`, must not be `None`")  # noqa: E501
+
+        self._aas_id = aas_id
 
     @property
     def status(self) -> str:

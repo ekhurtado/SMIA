@@ -48,6 +48,10 @@ class AASRepositoryInformation:
                 #     if isinstance(onto, cap_class):
                 #         print("\t\tEsta capacidad tiene las skills [{}] esta asociada al activo {}".format(onto.isRealizedBy, onto.get_associated_assets()))
 
+        # When all the CSS information has been extracted, it is saved in an SQLite database (if SMIA KB is running in
+        # a compatible Operating System)
+        CapabilitySkillOntology.get_instance().persistent_save_ontology()
+
     def create_ontology_instances_from_aas(self, aas_model_object):
         for submodel_data in aas_model_object.submodel:
             submodel_object = self.aas_model_object_store.get_identifiable(submodel_data.key[0].value)
@@ -66,7 +70,8 @@ class AASRepositoryInformation:
                         CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI)
                     if isinstance(ontology_instance, capability_class):
                         # The asset is associated to the created capability (or to the existing capability)
-                        ontology_instance.add_associated_asset(AASModelUtils.get_asset_id_from_aas(aas_model_object))
+                        asset_id, asset_kind, asset_type = AASModelUtils.get_asset_information_from_aas(aas_model_object)
+                        ontology_instance.add_associated_asset(asset_id, asset_kind, asset_type)
                     ontology_required_value_iris = ontology_instance.get_data_properties_iris()
                     for required_value_iri in ontology_required_value_iris:
                         required_value = AASModelUtils.get_qualifier_value_by_semantic_id(submodel_element, required_value_iri)

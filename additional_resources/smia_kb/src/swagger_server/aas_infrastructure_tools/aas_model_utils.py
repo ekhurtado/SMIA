@@ -92,12 +92,19 @@ class AASModelUtils:
         return operation_variables
 
     @staticmethod
-    def get_asset_id_from_aas(aas_model_object):
+    def get_asset_information_from_aas(aas_model_object):
+        asset_id = None
+        asset_kind = None
+        asset_type = None
         if aas_model_object.asset_information.global_asset_id is not None:
-            return aas_model_object.asset_information.global_asset_id
+            asset_id = aas_model_object.asset_information.global_asset_id
         elif aas_model_object.asset_information.specific_asset_id is not None and len(aas_model_object.asset_information.specific_asset_id) > 0:
-            return aas_model_object.asset_information.specific_asset_id[0].value
-        return None
+            asset_id = aas_model_object.asset_information.specific_asset_id[0].value
+        if aas_model_object.asset_information.asset_kind is not None:
+            asset_kind = aas_model_object.asset_information.asset_kind.name
+        if hasattr(aas_model_object.asset_information, 'asset_type'):
+            asset_type = aas_model_object.asset_information.asset_type
+        return asset_id, asset_kind, asset_type
 
     @staticmethod
     def get_qualifier_value_by_semantic_id(aas_qualifiable_object, qualifier_semantic_id):

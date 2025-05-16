@@ -187,10 +187,17 @@ class Capability(ExtendedThing):
 
     # associated_assets = set()  # The associated assets are also saved in the SMIA KB
 
-    def add_associated_asset(self, asset_id):
-        if not hasattr(self, 'associated_assets'):
-            self.associated_assets = set()
-        self.associated_assets.add(asset_id)
+    def add_associated_asset(self, asset_id, asset_kind, asset_type):
+        if not hasattr(self, 'assets'):
+            self.assets = {}
+        if asset_id not in self.assets:
+            self.assets[asset_id] = {'kind': asset_kind, 'type': asset_type}
+        else:
+            # If it exists, only the information not filled in is added
+            if 'kind' not in self.assets[asset_id]:
+                self.assets[asset_id]['kind'] = asset_kind
+            if 'type' not in self.assets[asset_id]:
+                self.assets[asset_id]['type'] = asset_type
 
 
     def set_category(self, category_value):
@@ -236,10 +243,10 @@ class Capability(ExtendedThing):
         Returns:
             IndividualValueList: generator with all associated skill instances.
         """
-        if len(self.associated_assets) == 0:
+        if len(self.assets) == 0:
             return None
         else:
-            return self.associated_assets
+            return self.assets
 
 
 class CapabilityConstraint(ExtendedThing):
