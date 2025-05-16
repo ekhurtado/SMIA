@@ -2,6 +2,7 @@ import connexion
 import six
 
 import __main__
+from controllers import controllers_util
 from css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo
 from css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
 from models.datatypes import ReferenceIRI
@@ -70,9 +71,15 @@ def get_all_skill_parameters_by_skill_id(skill_identifier):  # noqa: E501
 
     :rtype: List[SkillParameter]
     """
-    return 'do some magic!I am returning all skill parameters for skill with id {}: skillparam1, skillparam2...'.format(
-        skill_identifier)
-    # return 'do some magic!'
+    # The ontology instance is obtained (if data is invalid, Error object is returned)
+    skill_instance = controllers_util.check_and_get_ontology_instance(skill_identifier)
+    if isinstance(skill_instance, Error):
+        return skill_instance
+    else:
+        capability_json = Skill.from_ontology_instance_to_json(skill_instance)
+        return capability_json['hasParameter']
+    # return 'do some magic!I am returning all skill parameters for skill with id {}: skillparam1, skillparam2...'.format(
+    #     skill_identifier)
 
 
 def get_all_skills():  # noqa: E501
@@ -100,7 +107,12 @@ def get_skill_by_id(skill_identifier):  # noqa: E501
 
     :rtype: Skill
     """
-    return 'do some magic!'
+    # The ontology instance is obtained (if data is invalid, Error object is returned)
+    skill_instance = controllers_util.check_and_get_ontology_instance(skill_identifier)
+    if isinstance(skill_instance, Error):
+        return skill_instance
+    else:
+        return Skill.from_ontology_instance_to_json(skill_instance)
 
 
 def get_skill_parameters_by_skill_id(skill_identifier, skill_parameter_identifier):  # noqa: E501
@@ -115,7 +127,19 @@ def get_skill_parameters_by_skill_id(skill_identifier, skill_parameter_identifie
 
     :rtype: SkillParameter
     """
-    return 'do some magic!'
+    # The ontology instance is obtained (if data is invalid, Error object is returned)
+    skill_instance = controllers_util.check_and_get_ontology_instance(skill_identifier)
+    skill_parameter_instance = controllers_util.check_and_get_ontology_instance(skill_parameter_identifier)
+    if isinstance(skill_instance, Error):
+        return skill_instance
+    elif isinstance(skill_parameter_instance, Error):
+        return skill_parameter_instance
+    else:
+        capability_json = Skill.from_ontology_instance_to_json(skill_instance)
+        for skill_param_data in capability_json['hasParameter']:
+            if skill_param_data['iri'] == skill_parameter_instance.iri:
+                return skill_param_data
+        return Error(code='400', message="The specified constraint it is not associated to the specified capability.")
 
 
 def post_skill(body):  # noqa: E501
