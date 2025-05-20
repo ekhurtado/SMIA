@@ -233,9 +233,9 @@ function ConstraintsEntry(props) {
       return TextFieldEntry({
         element,
         id: `constraint-${index}`, // Key única basada en índice
-        label: translate(key),
+        label: translate(CONSTRAINTS_VALUES[key].label),
         tooltip: translate('In this TextField you can add the value of the Capability Constraint.'),
-        getValue: () => constraints[key].value || '',
+        getValue: () => constraints[key] || '',
         setValue: (value) => {
           const newConstraints = {...constraints, [key]: value};
           commandStack.execute('element.updateModdleProperties', {
@@ -272,10 +272,13 @@ function SkillEntry(props) {
   if (capSelection === '') {
     SKILLS_OPTIONS = [{value: '', label: ''}]
   } else {
-    SKILLS_OPTIONS =  window.SMIA_KB_DATA.Skills.map((capItem) => {
+    SKILLS_OPTIONS =  window.SMIA_KB_DATA.Capabilities.map((capItem) => {
       if (capItem.iri === capSelection) {
-        return capItem.isRealizedBy.map((skillItem) => {
-          return {value: skillItem.iri, label: skillItem.name}
+        return capItem.isRealizedBy.map((skillIRI) => {
+          const associatedSkill = window.SMIA_KB_DATA.Skills.find(skillItem =>
+            skillItem.iri === skillIRI
+          );
+          return associatedSkill? {value: associatedSkill.iri, label: associatedSkill.name} : null;
         })
       }
       return null;
@@ -358,11 +361,11 @@ function SkillParametersEntry(props) {
         tooltip: translate('In this TextField you can add the value of the Skill Parameter.'),
         getValue: () => currentParams[key] || '',
         setValue: (value) => {
-          const newConstraints = {...currentParams, [key]: value};
+          const newCurrentParams = {...currentParams, [key]: value};
           commandStack.execute('element.updateModdleProperties', {
             element,
             moddleElement: element.businessObject,
-            properties: {'smia:skillParameters': serializeJSONToStringWithDelimiters(newConstraints)}
+            properties: {'smia:skillParameters': serializeJSONToStringWithDelimiters(newCurrentParams)}
           });
         },
         debounce: useService('debounceInput')
@@ -548,7 +551,8 @@ function parseStringWithDelimiters(stringToParse) {
 
 function serializeJSONToStringWithDelimiters(jsonObject) {
   return Object.entries(jsonObject)
-      .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v || '')}`)
+      .map(([k, v]) => `${k}=${v || ''}`)
+      // .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v || '')}`)
       .join(';');
 }
 
