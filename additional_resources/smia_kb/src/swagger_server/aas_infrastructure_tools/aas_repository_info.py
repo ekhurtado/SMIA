@@ -1,7 +1,7 @@
 import util
 
 
-class AASRepositoryInfo:
+class AASRepositoryInfrastructureInfo:
     """
         Class to store server connection information with dynamic URL generation.
         """

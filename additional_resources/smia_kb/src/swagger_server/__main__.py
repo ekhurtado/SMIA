@@ -17,7 +17,10 @@ from swagger_server import encoder
 
 def main():
 
-    # First, the ontology is initialized
+    # First, whether the user has configured the SMIA KB is check
+    util.configure_smia_kb(sys.argv[1:])
+
+    # Then, the ontology is initialized
     ontology = CapabilitySkillOntology.get_instance()
     ontology.initialize_ontology()
 

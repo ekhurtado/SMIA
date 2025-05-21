@@ -1,0 +1,11 @@
+#version: "2"
+
+services:
+
+  smia-kb:
+    build:
+      context: .
+      dockerfile: Dockerfile_SMIA_KB
+    image: ekhurtado/smia-tools:latest-smia-kb
+    container_name: smia-kb
+

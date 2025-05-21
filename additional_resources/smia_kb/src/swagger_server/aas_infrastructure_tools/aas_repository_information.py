@@ -8,7 +8,7 @@ from basyx.aas import model
 import util
 from aas_infrastructure_tools.aas_model_utils import AASModelUtils
 from aas_infrastructure_tools.aas_open_api_tools import AASOpenAPITools
-from aas_infrastructure_tools.aas_repository_info import AASRepositoryInfo
+from aas_infrastructure_tools.aas_repository_info import AASRepositoryInfrastructureInfo
 from css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo
 from css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
 
@@ -134,7 +134,7 @@ class AASRepositoryInformation:
         """
         # First, all the AAS JSON objects will be obtained
         print(f"Trying to obtain all the AAS JSON definitions from the repository")
-        aas_json = AASOpenAPITools.send_http_get_request(AASRepositoryInfo.get_all_aas_json_url())
+        aas_json = AASOpenAPITools.send_http_get_request(AASRepositoryInfrastructureInfo.get_all_aas_json_url())
         if aas_json is None:
             print("ERROR: No AAS has been obtained.", file=sys.stderr)
             return
@@ -143,7 +143,7 @@ class AASRepositoryInformation:
             aas_id = util.encode_string_in_base64_url(aas_info['id'])
             for submodel_ref_data in aas_info['submodels']:
                 submodel_json = AASOpenAPITools.send_http_get_request(
-                        AASRepositoryInfo.get_submodel_json_url_by_id(submodel_ref_data['keys'][0]['value']))
+                        AASRepositoryInfrastructureInfo.get_submodel_json_url_by_id(submodel_ref_data['keys'][0]['value']))
                 self.all_aas_information_json['submodels'].append(submodel_json)
 
             # TODO Pensar si hace falta recoger los ConceptDescriptions

@@ -239,7 +239,8 @@ class CapabilitySkillOntology:
         """
         This method saves all the ontological data in a persistent way: in a SQLite3 database file.
         """
-        ontology_persistence_file_path = '../css_smia_ontology/persistence.sqlite3'     # TODO PENSAR SI DEJAR COMO OPCION EL PODER DECIDIR DONDE GUARDARLO (p.e. con variable de entorno en Docker)
+        ontology_persistence_file_path = './swagger_server/css_smia_ontology/persistence.sqlite3'     # TODO PENSAR SI DEJAR COMO OPCION EL PODER DECIDIR DONDE GUARDARLO (p.e. con variable de entorno en Docker)
+        # ontology_persistence_file_path = '../css_smia_ontology/persistence.sqlite3'     # TODO PENSAR SI DEJAR COMO OPCION EL PODER DECIDIR DONDE GUARDARLO (p.e. con variable de entorno en Docker)
         try:
             if os.path.isfile(ontology_persistence_file_path):
                 print('A SQLite file already exists, so it will be deleted so that it can be updated.')

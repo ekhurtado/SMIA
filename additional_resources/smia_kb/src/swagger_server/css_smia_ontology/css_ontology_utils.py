@@ -9,19 +9,50 @@ class CapabilitySkillOntologyUtils:
     """This class contains all information about the proposal of the ontology based on Capability-Skill model. This
     information groups the required semanticIDs or the qualifiers to analyze AAS models."""
 
+
     @staticmethod
     def get_ontology_file_path():
         """
-        This method gets the valid file path of the ontology file. The file is obtained from the AASX package or from
-        the configuration folder inside the SMIA Archive, depending on the definition in the properties file.
+        This method gets the valid file path of the ontology file.
 
         Returns:
             str: file path to the ontology file.
         """
-        # TODO PENSAR SI DEJAR LA POSIBILIDAD DE AÑADIR EL ARCHIVO ONTOLOGICO COMO PARAMETRO (p.e. variable de entorno para Docker)
-        # return './css_smia_ontology/CSS-ontology-smia.owl'
-        # return './css_smia_ontology/CSS-ontology-smia-without-module.owl'
-        return './css_smia_ontology/CSS-SMIA-KB-ontology.owl'
+        # return './swagger_server/css_smia_ontology/CSS-SMIA-KB-ontology.owl'    # Location running swagger_server module
+        # return './css_smia_ontology/CSS-SMIA-KB-ontology.owl'    # Location running _main__.py file
+        return CapabilitySkillOntologyInfo.ONTOLOGY_FILE_PATH
+
+    @staticmethod
+    def set_ontology_file_path(new_ontology_file_path):
+        """
+        This method sets the file path of the ontology file.
+
+        Args:
+            new_ontology_file_path (str): file path to the new ontology file.
+        """
+        CapabilitySkillOntologyInfo.ONTOLOGY_FILE_PATH = new_ontology_file_path
+
+    @staticmethod
+    def get_ontology_persistence_file_path():
+        """
+        This method gets the valid file path of the ontology persistence SQLite3 fil.
+
+        Returns:
+            str: file path to the ontology persistence file.
+        """
+        # return './swagger_server/css_smia_ontology/CSS-SMIA-KB-ontology.owl'    # Location running swagger_server module
+        # return './css_smia_ontology/CSS-SMIA-KB-ontology.owl'    # Location running _main__.py file
+        return CapabilitySkillOntologyInfo.ONTOLOGY_PERSISTENCE_FILE_PATH
+
+    @staticmethod
+    def set_ontology_persistence_file_path(new_ontology_persistence_file_path):
+        """
+        This method sets the file path of the ontology persistence SQLite3 file.
+
+        Args:
+            new_ontology_persistence_file_path (str): file path to the new ontology persistence file.
+        """
+        CapabilitySkillOntologyInfo.ONTOLOGY_PERSISTENCE_FILE_PATH = new_ontology_persistence_file_path
 
     @staticmethod
     def get_possible_values_of_datatype(datatype):
@@ -150,3 +181,8 @@ class CapabilitySkillOntologyInfo:
                                            CSS_ONTOLOGY_PROP_BEHAVIOURSCONFORMSTO_IRI
                                            ]
 
+
+    ONTOLOGY_FILE_PATH = './swagger_server/css_smia_ontology/CSS-SMIA-KB-ontology.owl'    # Location running swagger_server module
+    # ONTOLOGY_FILE_PATH = './css_smia_ontology/CSS-SMIA-KB-ontology.owl'    # Location running _main__.py file
+
+    ONTOLOGY_PERSISTENCE_FILE_PATH = './swagger_server/css_smia_ontology/persistence.sqlite3'

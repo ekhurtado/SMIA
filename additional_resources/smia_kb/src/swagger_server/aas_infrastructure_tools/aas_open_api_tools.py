@@ -4,7 +4,7 @@ import time
 
 import requests
 
-from aas_infrastructure_tools.aas_repository_info import AASRepositoryInfo
+from aas_infrastructure_tools.aas_repository_info import AASRepositoryInfrastructureInfo
 
 
 class AASOpenAPITools:
@@ -25,16 +25,17 @@ class AASOpenAPITools:
         Returns:
             bool: true if it is available, else false
         """
-        aas_repository_url = AASRepositoryInfo.get_aas_repository_url()
+        aas_repository_url = AASRepositoryInfrastructureInfo.get_aas_repository_url()
         # Try to make request with retries
         for attempt in range(max_retries):
             try:
-                print(f"Attempt {attempt + 1}/{max_retries} checking AAS Repository at {aas_repository_url}")
+                if attempt != 0:
+                    print(f"Attempt {attempt + 1}/{max_retries} checking AAS Repository at {aas_repository_url}")
                 response = requests.head(aas_repository_url, timeout=timeout, allow_redirects=True)
 
                 # Success criteria: <5xx status codes
                 if 200 <= response.status_code < 500:
-                    print(f"AAS Repository available: {aas_repository_url}")
+                    print(f"AAS Repository available at: {aas_repository_url}")
                     return True
                 else:
                     print(f"Non-success status from {aas_repository_url}: {response.status_code}")
@@ -64,7 +65,7 @@ class AASOpenAPITools:
         This method sends an HTTP GET request to the AAS Repository and obtains the response JSON.
         """
         if headers is None:
-            headers = AASRepositoryInfo.AAS_OPEN_API_COMMON_HEADERS
+            headers = AASRepositoryInfrastructureInfo.AAS_OPEN_API_COMMON_HEADERS
         try:
             response = requests.get(url, headers=headers, timeout=timeout)
 
