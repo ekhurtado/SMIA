@@ -6,7 +6,7 @@ from itertools import chain
 
 from owlready2 import Thing, get_ontology, DataPropertyClass, DatatypeClass
 
-from css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo, CapabilitySkillOntologyUtils
+from swagger_server.css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo, CapabilitySkillOntologyUtils
 
 import builtins
 

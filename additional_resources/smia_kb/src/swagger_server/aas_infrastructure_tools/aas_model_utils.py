@@ -4,7 +4,7 @@ import basyx.aas
 from basyx.aas import model
 from basyx.aas.util import traversal
 
-from css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
+from swagger_server.css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
 
 
 class AASModelUtils:

@@ -1,6 +1,6 @@
 import binascii
 
-from css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
+from swagger_server.css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
 from swagger_server.models import Error
 from swagger_server import util
 

@@ -6,9 +6,9 @@ import six
 from owlready2 import get_ontology
 
 import __main__
-from controllers import controllers_util
-from css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo
-from css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
+from swagger_server.controllers import controllers_util
+from swagger_server.css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo
+from swagger_server.css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
 from swagger_server.models.capability import Capability  # noqa: E501
 from swagger_server.models.capability_constraint import CapabilityConstraint  # noqa: E501
 from swagger_server.models.category import Category  # noqa: E501

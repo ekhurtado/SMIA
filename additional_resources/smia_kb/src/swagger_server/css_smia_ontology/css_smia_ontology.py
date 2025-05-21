@@ -1,6 +1,7 @@
 import logging
 import os
 import sys
+import threading
 
 import owlready2
 from owlready2 import get_ontology, OwlReadyOntologyParsingError, sync_reasoner_pellet, \
@@ -8,12 +9,12 @@ from owlready2 import get_ontology, OwlReadyOntologyParsingError, sync_reasoner_
 
 from swagger_server.css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyUtils
 
-
 class CapabilitySkillOntology:
     """
     This class contains related methods of the Capability-Skill ontology.
     """
     _instance = None    # Object for adding Singleton pattern to the class
+    _lock = threading.Lock()
 
     def __init__(self):
         self.ontology: Ontology = None
@@ -246,7 +247,7 @@ class CapabilitySkillOntology:
                 print('A SQLite file already exists, so it will be deleted so that it can be updated.')
                 os.remove(ontology_persistence_file_path)
 
-            self.ontology.world.set_backend(filename='./persistence.sqlite3')
+            self.ontology.world.set_backend(filename=ontology_persistence_file_path)
             self.ontology.world.save()
             print("OWL information saved in SQLite.")
         except Exception as e:

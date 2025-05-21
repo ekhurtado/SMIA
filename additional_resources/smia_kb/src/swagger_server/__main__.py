@@ -1,23 +1,18 @@
 #!/usr/bin/env python3
-import io
-import json
-import logging
 import sys
 
 import connexion
-import owlready2
 
-import util
-from aas_infrastructure_tools.aas_open_api_tools import AASOpenAPITools
-from aas_infrastructure_tools.aas_repository_information import AASRepositoryInformation
-from css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
-from swagger_server import encoder
+from swagger_server.aas_infrastructure_tools.aas_open_api_tools import AASOpenAPITools
+from swagger_server.aas_infrastructure_tools.aas_repository_information import AASRepositoryInformation
+from swagger_server.css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
+from swagger_server import encoder, util
 
 # ontology = None
 
 def main():
 
-    # First, whether the user has configured the SMIA KB is check
+    # First, whether the user has configured the SMIA KB is checked
     util.configure_smia_kb(sys.argv[1:])
 
     # Then, the ontology is initialized
@@ -40,7 +35,6 @@ def main():
     app.app.json_encoder = encoder.JSONEncoder
     app.add_api('swagger.yaml', arguments={'title': 'SMIA Knowledge Base (KB) | HTTP/REST | API Collection'}, pythonic_params=True)
     app.run(port=8080)
-
 
 
 if __name__ == '__main__':

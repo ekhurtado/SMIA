@@ -5,7 +5,6 @@ from datetime import date, datetime  # noqa: F401
 
 from typing import List, Dict, Any  # noqa: F401
 
-from css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo
 from swagger_server.models.base_model_ import Model
 from swagger_server.models.datatypes import ReferenceIRI  # noqa: F401,E501
 from swagger_server.models.skill_parameter import SkillParameter  # noqa: F401,E501

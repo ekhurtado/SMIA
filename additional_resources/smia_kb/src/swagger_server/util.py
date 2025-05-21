@@ -7,10 +7,10 @@ import sys
 import six
 import typing
 
-from art import text2art
+# from art import text2art      # Uncomment if you want to create another banner
 
-from aas_infrastructure_tools.aas_repository_info import AASRepositoryInfrastructureInfo
-from css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyUtils
+from swagger_server.aas_infrastructure_tools.aas_repository_infrastructure_info import AASRepositoryInfrastructureInfo
+from swagger_server.css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyUtils
 from swagger_server import type_util
 
 
@@ -208,9 +208,10 @@ def get_information_from_cli(cli_args):
     parser.add_argument("-o", "--ontology")
     parser.add_argument("-o-p", "--ontology-persistence")
     parser.add_argument("-aas-ip", "--aas-env-ip")
+    parser.add_argument("-aas-host", "--aas-env-host")
     parser.add_argument("-aas-port", "--aas-env-port")
     args = parser.parse_args(cli_args)
-    return args.ontology, args.ontology_persistence, args.aas_env_ip, args.aas_env_port
+    return args.ontology, args.ontology_persistence, args.aas_env_ip, args.aas_env_host, args.aas_env_port
 
 def configure_smia_kb(cli_args):
     """
@@ -223,13 +224,15 @@ def configure_smia_kb(cli_args):
     try:
         # First, let's check if CLI attributes has been set
         if len(cli_args) > 0:
-            ontology_path, ontology_persistence_path, aas_env_ip, aas_env_port = get_information_from_cli(cli_args)
+            ontology_path, ontology_persistence_path, aas_env_ip, aas_env_host, aas_env_port = get_information_from_cli(cli_args)
             if ontology_path is not None:
                 CapabilitySkillOntologyUtils.set_ontology_file_path(ontology_path)
             if ontology_persistence_path is not None:
                 CapabilitySkillOntologyUtils.set_ontology_persistence_file_path(ontology_persistence_path)
             if aas_env_ip is not None:
                 AASRepositoryInfrastructureInfo.set_ip_address(aas_env_ip)
+            if aas_env_host is not None:
+                AASRepositoryInfrastructureInfo.set_ip_address_host(aas_env_ip)
             if aas_env_port is not None:
                 AASRepositoryInfrastructureInfo.set_port(int(aas_env_port))
         # Then, let's check also the environmental variables
@@ -239,6 +242,8 @@ def configure_smia_kb(cli_args):
             CapabilitySkillOntologyUtils.set_ontology_persistence_file_path(os.environ.get('ONTOLOGY_PERSISTENCE_FILE'))
         if os.environ.get('AAS_ENV_IP') is not None:
             AASRepositoryInfrastructureInfo.set_ip_address(os.environ.get('AAS_ENV_IP'))
+        if os.environ.get('AAS_ENV_HOST') is not None:
+            AASRepositoryInfrastructureInfo.set_ip_address_host(os.environ.get('AAS_ENV_HOST'))
         if os.environ.get('AAS_ENV_PORT') is not None:
             AASRepositoryInfrastructureInfo.set_port(int(os.environ.get('AAS_ENV_PORT')))
     except ValueError as e:

@@ -5,12 +5,12 @@ import sys
 import basyx.aas.adapter.json
 from basyx.aas import model
 
-import util
-from aas_infrastructure_tools.aas_model_utils import AASModelUtils
-from aas_infrastructure_tools.aas_open_api_tools import AASOpenAPITools
-from aas_infrastructure_tools.aas_repository_info import AASRepositoryInfrastructureInfo
-from css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo
-from css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
+from swagger_server import util
+from swagger_server.aas_infrastructure_tools.aas_model_utils import AASModelUtils
+from swagger_server.aas_infrastructure_tools.aas_open_api_tools import AASOpenAPITools
+from swagger_server.aas_infrastructure_tools.aas_repository_infrastructure_info import AASRepositoryInfrastructureInfo
+from swagger_server.css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo
+from swagger_server.css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
 
 
 class AASRepositoryInformation:

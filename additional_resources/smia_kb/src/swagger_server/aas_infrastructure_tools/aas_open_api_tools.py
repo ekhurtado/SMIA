@@ -4,7 +4,7 @@ import time
 
 import requests
 
-from aas_infrastructure_tools.aas_repository_info import AASRepositoryInfrastructureInfo
+from swagger_server.aas_infrastructure_tools.aas_repository_infrastructure_info import AASRepositoryInfrastructureInfo
 
 
 class AASOpenAPITools:
@@ -38,16 +38,16 @@ class AASOpenAPITools:
                     print(f"AAS Repository available at: {aas_repository_url}")
                     return True
                 else:
-                    print(f"Non-success status from {aas_repository_url}: {response.status_code}")
+                    print(f"Non-success status from AAS Repository at {aas_repository_url}: {response.status_code}")
 
             except requests.exceptions.ConnectTimeout:
-                print(f"\tERROR: Connection timeout for {aas_repository_url}", file=sys.stderr)
+                print(f"\tERROR: Connection timeout for AAS Repository at {aas_repository_url}", file=sys.stderr)
 
             except requests.exceptions.ConnectionError:
-                print(f"\tERROR: Connection error for {aas_repository_url}", file=sys.stderr)
+                print(f"\tERROR: Connection error for AAS Repository at {aas_repository_url}", file=sys.stderr)
 
             except Exception as e:
-                print(f"\tERROR: Unexpected error checking {aas_repository_url}: {str(e)}", file=sys.stderr)
+                print(f"\tERROR: Unexpected error checking AAS Repository at {aas_repository_url}: {str(e)}", file=sys.stderr)
 
             # If we're not on the last attempt, wait before retrying
             if attempt < max_retries - 1:
