@@ -68,14 +68,15 @@ export default class SMIAPaletteProvider {
 		};
 
 		// Prueba, se añade un nuevo ServiceTask al grupo creado
+		// let randomID = [...Array(5)].map(() => Math.random().toString(36)[2]).join('').toUpperCase();
 		var modelerPlugs = {create, bpmnFactory, elementFactory, moddle}
 		CUSTOM_PALETTE.Actions['capabilityServiceTask'] = {
 	    group: 'SMIAServicesGroup',
 	    className: 'bpmn-icon-service-task smia-capability-service-task',
 	    title: lblAasWebServ + 'capability',
 	    action: {
-	    	dragstart: createSMIAServiceTask(modelerPlugs, 'capability001', 'capID001', 'urn:aas:001', 'my_aas_test'),
-	      	click: createSMIAServiceTask(modelerPlugs, 'capability001', 'capID001', 'urn:aas:001', 'my_aas_test')
+	    	dragstart: createSMIAServiceTask(modelerPlugs, 'Capability', 'capID', 'urn:aas:001', 'my_aas_test'),
+	      	click: createSMIAServiceTask(modelerPlugs, 'Capability', 'capID', 'urn:aas:001', 'my_aas_test')
 	    }
 		}
 
@@ -114,6 +115,8 @@ function createSMIAServiceTask(modelerPlugs, name, id, aasIdentifier, aasIdShort
   	const {create, bpmnFactory, elementFactory, moddle} = modelerPlugs;
 
   	return function (event) {
+
+		  const randomID = createRandomID();
 
 		  const serviceTask = elementFactory.createShape({
 			  type: "bpmn:ServiceTask"
@@ -166,8 +169,8 @@ function createSMIAServiceTask(modelerPlugs, name, id, aasIdentifier, aasIdShort
 		  serviceTask.businessObject.extensionElements = extensionElements;
 
 		  // Set to the businessObject
-		  serviceTask.businessObject.name = name;
-		  serviceTask.businessObject.id = id;
+		  serviceTask.businessObject.name = `Capability ${randomID}`;
+		  serviceTask.businessObject.id = `cap_${randomID}`;
 		  serviceTask.businessObject.taskType = 'smiaTask';
 
 		  // Set SMIA specific properties ??? (de momento esta comentado, probar si hace falta)
@@ -220,4 +223,9 @@ function createSMIATimeoutGateway(modelerPlugs) {
 		// Iniciar la creación
 		create.start(event, gateway);
 	};
+}
+
+// Funcion para crear un ID random
+function createRandomID() {
+	return [...Array(5)].map(() => Math.random().toString(36)[2]).join('').toUpperCase();
 }

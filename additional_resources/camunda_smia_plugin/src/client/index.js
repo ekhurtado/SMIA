@@ -31,6 +31,7 @@ registerBpmnJSPlugin(smiaPropertiesProviderModule);
 registerBpmnJSModdleExtension(smiaPropertiesDescriptor);
 
 
+// TODO The SMIA KB data is initialized in order not presents errors if it has not been connected yet
 
 // const modeler = new BpmnModeler({
 //   additionalModules: [],
