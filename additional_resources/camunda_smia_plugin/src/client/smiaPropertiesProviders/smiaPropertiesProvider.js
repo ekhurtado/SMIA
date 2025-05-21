@@ -161,7 +161,10 @@ function CapabilityEntry(props) {
     commandStack.execute('element.updateModdleProperties', {
       element,
       moddleElement: element.businessObject,
-      properties: { 'smia:capability': value }
+      // When the capability selection is changed the other data need to be reinitialized
+      properties: {
+        'smia:capability': value , 'smia:skill': undefined, 'smia:constraints': undefined, 'smia:asset': undefined
+      }
     });
   };
 
@@ -188,18 +191,6 @@ function CapabilityEntry(props) {
 // Función principal para el grupo Prop2
 function ConstraintsEntry(props) {
 
-  // const CONSTRAINTS_VALUES = {
-  //   "constraint-1": "",
-  //   "constraint-2": "",
-  //   "constraint-3": ""
-  // };
-  // TODO ES NECESARIA NUEVA ESTRUCTURA PARA GUARDAR TAMBIEN EL IRI
-  // const CONSTRAINTS_VALUES = {
-  //   "constraint-1": {'label': '', 'value': ''},
-  //   "constraint-2": {'label': '', 'value': ''},
-  //   "constraint-3": {'label': '', 'value': ''}
-  // };
-
   const {element} = props;
   const translate = useService('translate');
   const commandStack = useService('commandStack');
@@ -209,7 +200,7 @@ function ConstraintsEntry(props) {
   let CONSTRAINTS_VALUES = {};
   const capSelection = element.businessObject.get('smia:capability') || '';
   if (capSelection === '') {
-    CONSTRAINTS_VALUES = {'': {'label': '', 'value': ''}}
+    CONSTRAINTS_VALUES = {}
   } else {
     CONSTRAINTS_VALUES =  window.SMIA_KB_DATA.Capabilities.reduce((result, capItem) => {
       // uso de reduce para construir el JSON gradualmente
@@ -224,7 +215,6 @@ function ConstraintsEntry(props) {
 
   // Solo añadimos constraints si existen
   if (JSON.stringify(CONSTRAINTS_VALUES) !== '{}') {
-    // TODO HAY QUE REPASAR QUE FUNCIONA ESTO CON LA NUEVA ESTRUCTURA
     // Obtener y parsear valores actuales
     const constraints = parseStringWithDelimiters(element.businessObject.get('smia:constraints') || '');
 
@@ -295,7 +285,9 @@ function SkillEntry(props) {
     commandStack.execute('element.updateModdleProperties', {
       element,
       moddleElement: element.businessObject,
-      properties: { 'smia:skill': value }
+      // When the skill selection is changed the associated data need to be reinitialized
+      properties: { 'smia:skill': value , 'smia:skillParameters': undefined}
+      // properties: { 'smia:skill': value }
     });
   };
 
@@ -331,16 +323,20 @@ function SkillParametersEntry(props) {
   let SKILL_PARAMS_VALUES = {};
   const skillSelection = element.businessObject.get('smia:skill') || '';
   if (skillSelection === '') {
-    SKILL_PARAMS_VALUES = {'': ''}
+    SKILL_PARAMS_VALUES = {};
   } else {
     SKILL_PARAMS_VALUES =  window.SMIA_KB_DATA.Capabilities.reduce((result, capItem) => {
       // uso de reduce para construir el JSON gradualmente
-      capItem.isRealizedBy.forEach((skillItem) => {
-        if ((skillItem.iri === skillSelection) && (skillItem.hasParameter.length > 0)) {
-          skillItem.hasParameter.forEach((skillParamItem) => {
-            // TODO HACER AHORA REPASAR SI ES NECESARIO GUARDAR EL IRI (como se hace con las constraints)
-            result[skillParamItem] = '';
-          })
+      capItem.isRealizedBy.forEach((skillIRI) => {
+        if (skillIRI === skillSelection) {
+          const associatedSkill = window.SMIA_KB_DATA.Skills.find(skillItem =>
+            skillItem.iri === skillIRI
+          );
+          if (associatedSkill.hasParameter.length > 0) {
+            associatedSkill.hasParameter.forEach((skillParamItem) => {
+              result[skillParamItem.iri] = {'label': skillParamItem.name, 'value': ''};
+            });
+          }
         }
       })
       return result;
@@ -356,8 +352,8 @@ function SkillParametersEntry(props) {
 
       return TextFieldEntry({
         element,
-        id: `constraint-${index}`, // Key única basada en índice
-        label: translate(key),
+        id: `skill-parameter-${index}`, // Key única basada en índice
+        label: translate(SKILL_PARAMS_VALUES[key].label),
         tooltip: translate('In this TextField you can add the value of the Skill Parameter.'),
         getValue: () => currentParams[key] || '',
         setValue: (value) => {
