@@ -202,15 +202,17 @@ function ConstraintsEntry(props) {
   if (capSelection === '') {
     CONSTRAINTS_VALUES = {}
   } else {
-    CONSTRAINTS_VALUES =  window.SMIA_KB_DATA.Capabilities.reduce((result, capItem) => {
-      // uso de reduce para construir el JSON gradualmente
-      if ((capItem.iri === capSelection) && (capItem.isRestrictedBy.length > 0)) {
-        capItem.isRestrictedBy.forEach((constraintItem) => {
-          result[constraintItem.iri] = {'label': constraintItem.name, 'value': ''};
-        })
-      }
-      return result;
-    }, {});
+    if ('Capabilities' in window.SMIA_KB_DATA) {
+      CONSTRAINTS_VALUES = window.SMIA_KB_DATA.Capabilities.reduce((result, capItem) => {
+        // uso de reduce para construir el JSON gradualmente
+        if ((capItem.iri === capSelection) && (capItem.isRestrictedBy.length > 0)) {
+          capItem.isRestrictedBy.forEach((constraintItem) => {
+            result[constraintItem.iri] = {'label': constraintItem.name, 'value': ''};
+          })
+        }
+        return result;
+      }, {});
+    } else { CONSTRAINTS_VALUES = {} }
   }
 
   // Solo añadimos constraints si existen
@@ -262,19 +264,21 @@ function SkillEntry(props) {
   if (capSelection === '') {
     SKILLS_OPTIONS = [{value: '', label: ''}]
   } else {
-    SKILLS_OPTIONS =  window.SMIA_KB_DATA.Capabilities.map((capItem) => {
-      if (capItem.iri === capSelection) {
-        return capItem.isRealizedBy.map((skillIRI) => {
-          const associatedSkill = window.SMIA_KB_DATA.Skills.find(skillItem =>
-            skillItem.iri === skillIRI
-          );
-          return associatedSkill? {value: associatedSkill.iri, label: associatedSkill.name} : null;
-        })
-      }
-      return null;
-    })
-    .filter(item => item !== null)
-    .flat() || [];
+    if ('Capabilities' in window.SMIA_KB_DATA) {
+      SKILLS_OPTIONS = window.SMIA_KB_DATA.Capabilities.map((capItem) => {
+        if (capItem.iri === capSelection) {
+          return capItem.isRealizedBy.map((skillIRI) => {
+            const associatedSkill = window.SMIA_KB_DATA.Skills.find(skillItem =>
+                skillItem.iri === skillIRI
+            );
+            return associatedSkill ? {value: associatedSkill.iri, label: associatedSkill.name} : null;
+          })
+        }
+        return null;
+      })
+          .filter(item => item !== null)
+          .flat() || [];
+    } else { SKILLS_OPTIONS = [{value: '', label: ''}] }
   }
 
   const getValue = () => {
@@ -325,22 +329,24 @@ function SkillParametersEntry(props) {
   if (skillSelection === '') {
     SKILL_PARAMS_VALUES = {};
   } else {
-    SKILL_PARAMS_VALUES =  window.SMIA_KB_DATA.Capabilities.reduce((result, capItem) => {
-      // uso de reduce para construir el JSON gradualmente
-      capItem.isRealizedBy.forEach((skillIRI) => {
-        if (skillIRI === skillSelection) {
-          const associatedSkill = window.SMIA_KB_DATA.Skills.find(skillItem =>
-            skillItem.iri === skillIRI
-          );
-          if (associatedSkill.hasParameter.length > 0) {
-            associatedSkill.hasParameter.forEach((skillParamItem) => {
-              result[skillParamItem.iri] = {'label': skillParamItem.name, 'value': ''};
-            });
+    if ('Capabilities' in window.SMIA_KB_DATA) {
+      SKILL_PARAMS_VALUES = window.SMIA_KB_DATA.Capabilities.reduce((result, capItem) => {
+        // uso de reduce para construir el JSON gradualmente
+        capItem.isRealizedBy.forEach((skillIRI) => {
+          if (skillIRI === skillSelection) {
+            const associatedSkill = window.SMIA_KB_DATA.Skills.find(skillItem =>
+                skillItem.iri === skillIRI
+            );
+            if (associatedSkill.hasParameter.length > 0) {
+              associatedSkill.hasParameter.forEach((skillParamItem) => {
+                result[skillParamItem.iri] = {'label': skillParamItem.name, 'value': ''};
+              });
+            }
           }
-        }
-      })
-      return result;
-    }, {});
+        })
+        return result;
+      }, {});
+    } else { SKILL_PARAMS_VALUES = {} }
   }
 
   // Solo añadimos constraints si existen
@@ -393,16 +399,18 @@ function AssetEntry(props) {
   if (capSelection === '') {
     ASSETS_OPTIONS = [{value: '', label: ''}]
   } else {
-    ASSETS_OPTIONS =  window.SMIA_KB_DATA.Capabilities.map((capItem) => {
-      if (capItem.iri === capSelection) {
-        return capItem.assets.map((assetItem) => {
-          return {value: assetItem.asset_id, label: assetItem.asset_id}
-        })
-      }
-      return null;
-    })
-    .filter(item => item !== null)
-    .flat() || [];
+    if ('Capabilities' in window.SMIA_KB_DATA) {
+      ASSETS_OPTIONS = window.SMIA_KB_DATA.Capabilities.map((capItem) => {
+        if (capItem.iri === capSelection) {
+          return capItem.assets.map((assetItem) => {
+            return {value: assetItem.asset_id, label: assetItem.asset_id}
+          })
+        }
+        return null;
+      })
+          .filter(item => item !== null)
+          .flat() || [];
+    } else { ASSETS_OPTIONS= [{value: '', label: ''}]}
   }
 
   const getValue = () => {

@@ -106,7 +106,10 @@ export default class AutoSavePlugin extends PureComponent {
     });
 
     // Se inicializa la variable para almacenar los datos del SMIA KB
-    window.SMIA_KB_DATA = []
+    if (!('SMIA_KB_DATA' in window)) {
+      window.SMIA_KB_DATA = [];
+    }
+
   }
 
   componentDidUpdate() {
@@ -230,6 +233,9 @@ export default class AutoSavePlugin extends PureComponent {
           // When all CSS information has been obtained, it will save in a global variable in order to be available for
           // showing to the user
           window.SMIA_KB_DATA = {'Capabilities': allCapabilitiesJSON, 'Skills': allSkillsJSON}
+
+          // TODO COMPROBAR
+          localStorage.setItem('smia-kb-current-data', JSON.stringify(window.SMIA_KB_DATA));
 
           // As the SMIA KB information has been successfully achieved, we update the status to show the URL and the
           // connection icon available in the UI.

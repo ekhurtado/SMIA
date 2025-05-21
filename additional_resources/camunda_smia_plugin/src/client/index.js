@@ -18,6 +18,7 @@ import smiaPaletteProviderModule from './smiaPaletteProviders';
 import smiaPropertiesProviderModule from './smiaPropertiesProviders';
 import smiaPropertiesDescriptor from './smiaPropertiesProviders/properties/smiaPropertiesDescriptor.json';
 
+
 // Registramos el plugin para configuracion de la interfaz para el usuario
 registerClientExtension(AutoSavePlugin);
 
@@ -31,7 +32,23 @@ registerBpmnJSPlugin(smiaPropertiesProviderModule);
 registerBpmnJSModdleExtension(smiaPropertiesDescriptor);
 
 
-// TODO The SMIA KB data is initialized in order not presents errors if it has not been connected yet
+
+// import SMIA_KB_OLD_DATA from '../resources/smia_kb_data.json';
+// try {
+//     if (SMIA_KB_OLD_DATA.length > 0) {
+//         window.SMIA_KB_DATA = SMIA_KB_OLD_DATA;
+//     }
+// } catch (e) {
+//   console.log('SMIA KB JSON file does not exist:' + e);
+// }
+if ('smia-kb-current-data' in localStorage) {
+    // The SMIA KB data is updated with old data if available. If there are capabilities already configured and the
+    // connection with the SMIA KB has not been realized, it can present errors
+    window.SMIA_KB_DATA = JSON.parse(localStorage.getItem('smia-kb-current-data'));
+} else {
+    localStorage.setItem('smia-kb-current-data', []);
+}
+
 
 // const modeler = new BpmnModeler({
 //   additionalModules: [],
