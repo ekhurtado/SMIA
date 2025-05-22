@@ -12,8 +12,7 @@ Welcome to SMIA's documentation!
 
    getting_started
    smia_user_guide/smia_user_guide
-   .. aas_developer_guide
-
+   use_cases/use_cases
    apidoc/modules
    glossary
    CONTRIBUTING.md
