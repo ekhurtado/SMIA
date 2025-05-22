@@ -8,16 +8,17 @@ from swagger_server.aas_infrastructure_tools.aas_repository_information import A
 from swagger_server.css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
 from swagger_server import encoder, util
 
-# ontology = None
-
 def main():
 
     # First, whether the user has configured the SMIA KB is checked
     util.configure_smia_kb(sys.argv[1:])
 
     # Then, the ontology is initialized
-    ontology = CapabilitySkillOntology.get_instance()
-    ontology.initialize_ontology()
+    CapabilitySkillOntology.get_instance().initialize_ontology()
+
+    # If thre is an SQLite persistence file with ontology data, it will be loaded
+    # TODO De momento sin implementar
+    # CapabilitySkillOntology.get_instance().load_ontology_from_persistence()
 
     # When the application has been started, the banner can be printed
     util.print_smia_kb_banner()

@@ -13,7 +13,6 @@ import builtins
 css_ontology = get_ontology(CapabilitySkillOntologyUtils.get_ontology_file_path())
 base_namespace = css_ontology.get_namespace(CapabilitySkillOntologyInfo.CSS_ONTOLOGY_BASE_NAMESPACE)
 
-
 class ExtendedThing(Thing):
 
     # The namespace of the base CSS ontology must be defined

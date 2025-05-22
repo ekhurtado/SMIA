@@ -63,7 +63,7 @@ class AASRepositoryInformation:
                 ontology_class = CapabilitySkillOntology.get_instance().get_ontology_class_by_iri(ontology_class_iri)
                 if ontology_class is None:
                     print("ERROR:The ontology class with IRI {} does not exist in the given OWL ontology. Check the "
-                          "ontology file.", file=sys.stderr)
+                          "ontology file.".format(ontology_class), file=sys.stderr)
                     break
                 for submodel_element in sme_list:
                     ontology_instance = CapabilitySkillOntology.get_instance().create_ontology_object_instance(

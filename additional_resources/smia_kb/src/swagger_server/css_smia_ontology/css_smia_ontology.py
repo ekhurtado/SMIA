@@ -7,7 +7,7 @@ import owlready2
 from owlready2 import get_ontology, OwlReadyOntologyParsingError, sync_reasoner_pellet, \
     OwlReadyInconsistentOntologyError, ThingClass, Ontology, destroy_entity
 
-from swagger_server.css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyUtils
+from swagger_server.css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyUtils, CapabilitySkillOntologyInfo
 
 class CapabilitySkillOntology:
     """
@@ -69,6 +69,30 @@ class CapabilitySkillOntology:
             return
         # The ontology has been loaded
         print("CSS ontology initialized")
+
+    def load_ontology_from_persistence(self):
+        """
+        This method loads all the ontological data from a persistence SQLite file (if exists)
+        """
+        ontology_persistence_file_path = CapabilitySkillOntologyInfo.ONTOLOGY_PERSISTENCE_FILE_PATH    # TODO PENSAR SI DEJAR COMO OPCION EL PODER DECIDIR DONDE GUARDARLO (p.e. con variable de entorno en Docker)
+        if os.path.isfile(ontology_persistence_file_path):
+            # A SQLite file already exists, so it will try to load its data
+            try:
+                sqlite_world = owlready2.World(filename=ontology_persistence_file_path)
+                # OWLReady2 does not automatically reapply python_module logic when you load an ontology from a SQLite file, so all the instances need to be manually copied
+                for instance in sqlite_world.individuals():
+                    instance_class_iri = instance.is_instance_of[0].iri
+                    instance_class = CapabilitySkillOntology.get_instance().get_ontology_class_by_iri(instance_class_iri)
+                    new_instance = instance_class(instance.name)
+                    # TODO no se puede una instancia a otra directamente, hay que hacerlo atributo a atributo. Para pasar
+                    #  solo los atributos necesarios, podriamos añadir un metodo en cada clase OWL extendida (Capability,
+                    #  Skill...), que, en cada caso, copiaria de una instancia a otra solo los atributos de SMIA (p.e.
+                    #  data_properties_types_dict...) Se podria usar con instance_class.copy_attributes(old_instance, new_instance)
+                    print()
+
+                print("Persistence OWL information loaded from existing SQLite file.")
+            except Exception as e:
+                print("There is an SQLite file with ontology persistence data, but it cannot be loaded. Reason: ", e)
 
     def execute_ontology_reasoner(self, debug=False):
         """
@@ -240,11 +264,12 @@ class CapabilitySkillOntology:
         """
         This method saves all the ontological data in a persistent way: in a SQLite3 database file.
         """
-        ontology_persistence_file_path = './swagger_server/css_smia_ontology/persistence.sqlite3'     # TODO PENSAR SI DEJAR COMO OPCION EL PODER DECIDIR DONDE GUARDARLO (p.e. con variable de entorno en Docker)
+        ontology_persistence_file_path = CapabilitySkillOntologyInfo.ONTOLOGY_PERSISTENCE_FILE_PATH    # TODO PENSAR SI DEJAR COMO OPCION EL PODER DECIDIR DONDE GUARDARLO (p.e. con variable de entorno en Docker)
+        # ontology_persistence_file_path = './swagger_server/css_smia_ontology/persistence.sqlite3'     # TODO PENSAR SI DEJAR COMO OPCION EL PODER DECIDIR DONDE GUARDARLO (p.e. con variable de entorno en Docker)
         # ontology_persistence_file_path = '../css_smia_ontology/persistence.sqlite3'     # TODO PENSAR SI DEJAR COMO OPCION EL PODER DECIDIR DONDE GUARDARLO (p.e. con variable de entorno en Docker)
         try:
             if os.path.isfile(ontology_persistence_file_path):
-                print('A SQLite file already exists, so it will be deleted so that it can be updated.')
+                # print('A SQLite file already exists, so it will be deleted so that it can be updated.')
                 os.remove(ontology_persistence_file_path)
 
             self.ontology.world.set_backend(filename=ontology_persistence_file_path)
