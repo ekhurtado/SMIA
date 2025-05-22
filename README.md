@@ -105,7 +105,7 @@ The SMIA software, as it has been built following an Open Source Software Engine
 | Package name                                                   | Version | License             | Has it been modified |
 |----------------------------------------------------------------|---------|---------------------|----------------------|
 | [spade](https://pypi.org/project/spade/)                       | 3.3.3   | MIT                 | No                   |
-| [basyx-python-sdk](https://pypi.org/project/basyx-python-sdk/) | 1.1.0   | MIT                 | No                   |
+| [basyx-python-sdk](https://pypi.org/project/basyx-python-sdk/) | 1.2.0   | MIT                 | No                   |
 | [owlready2](https://pypi.org/project/owlready2/)               | 0.47    | GNU LGPL licence v3 | No                   |
 
 ## License
