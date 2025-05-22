@@ -90,6 +90,9 @@ class CapabilitySkillOntology:
                     #  data_properties_types_dict...) Se podria usar con instance_class.copy_attributes(old_instance, new_instance)
                     print()
 
+                for relation in sqlite_world.properties():
+                    print("Properties also need to be copied")
+
                 print("Persistence OWL information loaded from existing SQLite file.")
             except Exception as e:
                 print("There is an SQLite file with ontology persistence data, but it cannot be loaded. Reason: ", e)
