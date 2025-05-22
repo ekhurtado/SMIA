@@ -16,7 +16,7 @@ The objective is to enable operators to manage logistics through efficient trans
 
 The operator represents a worker who must be able to interact with the system in order to perform the transport requests, so a Graphical User Interface (GUI) is required to interact within the SMIA ecosystem. On the other hand, it should be noted that the experiments have been performed in a simulated scenario for the ROS Noetic distribution including Turtlebot 3 Waffle Pi robots. The following figure graphically represents the use case:
 
-.. image:: ../_static/images/SMIA_coop_trans_logis_graphical.jpg
+.. image:: ../_static/images/use_cases_images/SMIA_coop_trans_logis_graphical.jpg
   :align: center
   :width: 600
   :alt: Cooperative transport logistics graphical representation
@@ -27,7 +27,7 @@ Development of the use case
 
 The assets identified in this case study are physical, but operator accessibility is achieved through a GUI, while ROS-based robots can be managed through HTTP-based asset integration. The SPADE development platform provides the ability to add customized, web-accessible GUIs to the agents. Using this functionality, an extension of SMIA has been developed that adds a new agent capability which is in charge of managing the GUI offered by SPADE. In this way the operator can interact within the SMIA ecosystem. For transport robots it is not necessary to extend SMIA, since SMIA base presents connection with active via HTTP. Both cases are graphically presented in the following figure:
 
-.. image:: ../_static/images/SMIA_coop_trans_logis_dev.jpg
+.. image:: ../_static/images/use_cases_images/SMIA_coop_trans_logis_dev.jpg
   :align: center
   :width: 400
   :alt: Cooperative transport logistics development
@@ -121,7 +121,7 @@ The developed dashboard is presented in the following figure. It is divided into
 * ``Available capabilities and skills`` section: this section shows by means of a table all the information related to the CSS model obtained from the analysis of the available SMIAs, but without distinguishing from which of them it has been obtained. The table is organized in identified capabilities and offers the possibility to select one of them.
 * ``SMIA candidates`` section: this section shows the SMIA candidates for the selection made (i.e. if a constraint has been determined, the list shows only the SMIAs that meet the constraint).
 
-.. image:: ../_static/images/SMIA_coop_trans_logis_dashboard.jpg
+.. image:: ../_static/images/use_cases_images/SMIA_coop_trans_logis_dashboard.jpg
   :align: center
   :width: 700
   :alt: Cooperative transport logistics operator dashboard
@@ -138,7 +138,7 @@ The process to follow for the correct use of the dashboard is as follows:
     * If the selected skill has input parameters, their values must be added in order to be able to request the capability.
 #. When the capability has been requested, the necessary interactions with the selected SMIAs will be performed and, when the full request process is completed, their execution information will be displayed on a new page. This is shown in the following figure. As can be seen, it is divided into two sections: general information on the capability execution request and a timeline with information on each step performed by the SMIA Operator.
 
-.. image:: ../_static/images/SMIA_coop_trans_logis_dashboard_results.jpg
+.. image:: ../_static/images/use_cases_images/SMIA_coop_trans_logis_dashboard_results.jpg
   :align: center
   :width: 400
   :alt: Cooperative transport logistics operator dashboard results

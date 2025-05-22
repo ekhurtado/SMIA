@@ -25,6 +25,8 @@ The SMIA project documentation repository is structured as follows:
 
     :octicon:`repo;1em` :ref:`SMIA User Guide`: these guides helps with the usage of SMIA software and related tools.
 
+    :octicon:`repo-pull;1em` :ref:`SMIA Use Cases`: these pages detail all the use cases developed within the SMIA approach.
+
     .. :octicon:`repo;1em` :ref:`AAS Developer Guide`: this guide helps with the development of the :term:`AAS model`, that is the basis for SMIA self-configuration.
 
     :octicon:`code-review;1em` :ref:`API documentation`: the entire documented source code of SMIA software.
