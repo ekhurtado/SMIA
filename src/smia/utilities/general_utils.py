@@ -87,7 +87,7 @@ class GeneralUtils:
         This method prints the SMIA banner as a string. The banner has been created with Python 'art' library.
         """
         # The banner for the SMIA is set as string, avoiding installing 'art' library (which has been used to create it)
-        banner_str = ("----------------------------------------------\n" +
+        banner_str = ("===============================================\n" +
                       "  ______    ____    ____   _____        _\n" +
                       ".' ____ \  |_   \  /   _| |_   _|      / \      \n" +
                       "| (___ \_|   |   \/   |     | |       / _ \     \n" +
@@ -95,9 +95,9 @@ class GeneralUtils:
                       "| \____) |  _| |_\/_| |_   _| |_   _/ /   \ \_  \n" +
                       " \______.' |_____||_____| |_____| |____| |____| \n" +
                       # "                                                \n" +
-                      "----------------------------------------------\n" +
+                      "===============================================\n" +
                       "                                       v0.2.3 \n" +
-                      "----------------------------------------------\n")
+                      "===============================================\n")
         print(banner_str)
 
     @staticmethod
