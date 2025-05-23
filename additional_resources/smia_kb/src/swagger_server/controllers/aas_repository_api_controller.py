@@ -16,6 +16,7 @@ def check_aas_repository(aas_repository_url=None):  # noqa: E501
 
     :rtype: str
     """
+    # TODO PROBARLO CON AAS REPOSITORY
     if connexion.request.is_json:
         aas_repository_url = AASRepositoryURL.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
@@ -31,6 +32,7 @@ def extract_css_from_aas_repository(aas_repository_url=None):  # noqa: E501
 
     :rtype: str
     """
+    # TODO PROBARLO CON AAS REPOSITORY
     if connexion.request.is_json:
         aas_repository_url = AASRepositoryURL.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
