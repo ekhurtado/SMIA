@@ -11,7 +11,6 @@ from swagger_server.css_smia_ontology.css_ontology_utils import CapabilitySkillO
 from swagger_server.css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
 from swagger_server.models.capability import Capability  # noqa: E501
 from swagger_server.models.capability_constraint import CapabilityConstraint  # noqa: E501
-from swagger_server.models.category import Category  # noqa: E501
 from swagger_server.models.error import Error  # noqa: E501
 from swagger_server.models.skill import Skill  # noqa: E501
 from swagger_server.models.tag import Tag  # noqa: E501
