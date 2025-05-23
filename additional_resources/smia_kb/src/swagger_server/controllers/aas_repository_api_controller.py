@@ -1,6 +1,9 @@
 import connexion
 import six
 
+from swagger_server.aas_infrastructure_tools.aas_open_api_tools import AASOpenAPITools
+from swagger_server.aas_infrastructure_tools.aas_repository_information import AASRepositoryInformation
+from swagger_server.aas_infrastructure_tools.aas_repository_infrastructure_info import AASRepositoryInfrastructureInfo
 from swagger_server.models.datatypes import AASRepositoryURL  # noqa: E501
 from swagger_server.models.error import Error  # noqa: E501
 from swagger_server import util
@@ -16,10 +19,11 @@ def check_aas_repository(aas_repository_url=None):  # noqa: E501
 
     :rtype: str
     """
-    # TODO PROBARLO CON AAS REPOSITORY
-    if connexion.request.is_json:
-        aas_repository_url = AASRepositoryURL.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    # If aas_repository_url is None, within check_availability method is taken the predefined URL
+    try:
+        return AASOpenAPITools.check_aas_repository_availability(aas_repository_url=aas_repository_url)
+    except Exception as e:
+        return Error(code='400', message=str(e))
 
 
 def extract_css_from_aas_repository(aas_repository_url=None):  # noqa: E501
@@ -32,7 +36,16 @@ def extract_css_from_aas_repository(aas_repository_url=None):  # noqa: E501
 
     :rtype: str
     """
-    # TODO PROBARLO CON AAS REPOSITORY
-    if connexion.request.is_json:
-        aas_repository_url = AASRepositoryURL.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    try:
+        predefined_aas_repo_url = None
+        if aas_repository_url is not None:
+            predefined_aas_repo_url = AASRepositoryInfrastructureInfo.get_aas_repository_url()
+            AASRepositoryInfrastructureInfo.set_ip_address(aas_repository_url)
+        aas = AASRepositoryInformation()
+        aas.extract_css_information_from_aas_repository()
+        if aas_repository_url is not None:
+            # The predefined URL is set again
+            AASRepositoryInfrastructureInfo.set_ip_address(predefined_aas_repo_url)
+        return "CSS information successfully extracted."
+    except Exception as e:
+        return Error(code='400', message=str(e))

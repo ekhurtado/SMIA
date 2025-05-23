@@ -1497,7 +1497,7 @@ paths:
       parameters:
       - name: AASRepositoryURL
         in: query
-        description: The IP address and port of the AAS Repository (optional).
+        description: The IP address and port [http://{ip}:{port}] of the AAS Repository (optional).
         required: false
         style: form
         explode: false
@@ -1541,7 +1541,7 @@ paths:
       parameters:
       - name: AASRepositoryURL
         in: query
-        description: The IP address and port of the AAS Repository (optional).
+        description: The IP address and port [http://{ip}:{port}] of the AAS Repository (optional).
         required: false
         style: form
         explode: false
@@ -1828,7 +1828,6 @@ components:
         name: smiaInstance
     AASRepositoryURL:
       type: string
-      example: http://0.0.0.0:8081
   securitySchemes:
     api_key:
       type: apiKey

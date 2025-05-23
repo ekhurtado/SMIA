@@ -13,7 +13,7 @@ class AASOpenAPITools:
 
     @staticmethod
     def check_aas_repository_availability(timeout: int = COMMON_TIMEOUT, max_retries: int = 3,
-                                          retry_delay: int = 1) -> bool:
+                                          retry_delay: int = 1, aas_repository_url=None) -> bool:
         """
         Checks if a server is available by making an HTTP request.
 
@@ -21,11 +21,12 @@ class AASOpenAPITools:
             timeout: Connection timeout in seconds
             max_retries: Maximum number of retry attempts
             retry_delay: Delay between retries in seconds
-
+            aas_repository_url (str, optional): The URL of the AAS Repository
         Returns:
             bool: true if it is available, else false
         """
-        aas_repository_url = AASRepositoryInfrastructureInfo.get_aas_repository_url()
+        if aas_repository_url is None:
+            aas_repository_url = AASRepositoryInfrastructureInfo.get_aas_repository_url()
         # Try to make request with retries
         for attempt in range(max_retries):
             try:

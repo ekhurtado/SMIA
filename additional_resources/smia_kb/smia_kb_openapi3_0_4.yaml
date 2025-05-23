@@ -1451,7 +1451,7 @@ paths:
       parameters:
         - name: AASRepositoryURL
           in: query
-          description: The IP address and port of the AAS Repository (optional).
+          description: The IP address and port [http://{ip}:{port}] of the AAS Repository (optional).
           required: false
           schema:
             $ref: '#/components/schemas/AASRepositoryURL'
@@ -1488,7 +1488,7 @@ paths:
       parameters:
         - name: AASRepositoryURL
           in: query
-          description: The IP address and port of the AAS Repository (optional).
+          description: The IP address and port [http://{ip}:{port}] of the AAS Repository (optional).
           required: false
           schema:
             $ref: '#/components/schemas/AASRepositoryURL'
@@ -1743,7 +1743,6 @@ components:
 
     AASRepositoryURL:
       type: string
-      example: http://0.0.0.0:8081
 
 
   securitySchemes:
