@@ -67,6 +67,10 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
             # The msg body will be parsed to a JSON object
             msg_json_body = json.loads(msg.body)
 
+            # TODO PENSAR SI ESTABLECER TODOS ESTOS SERVICIOS DEL TIPO: AAS Infrastructure Services . Por definicion,
+            #  estos son no son ofrecidos por un AAS, sino por la plataforma (infraestructura computacional), por lo que
+            #  estan muy relacionados con los que ofrece SMIA IG (p.e. AAS Registry o Discovery es de este tipo)
+
             # Depending on the performative of the message, the agent will have to perform some actions or others
             match msg.get_metadata('performative'):
                 case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST:
