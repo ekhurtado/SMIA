@@ -2,6 +2,42 @@
 
 (Release Notes)=
 
+## v0.2.3
+
+This release of Self-Configurable Manufacturing Industrial Agents (SMIA) comes with an upgrade of the solution in terms of validation and accesibility. 
+
+> SMIA: All Python files structured in Python modules.
+> - It includes the launcher files to run the software in the ``launchers`` module: _smia_cli_starter.py_, _smia_starter.py_ and _smia_docker_starter.py_.
+
+### Features
+
+- All relevant tests have been conducted with the first case study (SMIA operator and transport robots within the “Cooperative transport logistics” case).
+- The tutorials for SMIA (AAS development, SMIA extension and deployment of the “Cooperative transport logistics” case study) have been completed.
+- CSS-SMIA ontology has been published in w3id: now using the IRIs in the browser you can access the SMIA GitHub.
+- Improved RTD glossary:
+  - Added more terms.
+  - Improved explanations of each term.
+- Added SMIA approach PDF and demo video as additional resource.
+- Created branches for additional infrastructure services development: SMIA KB (``smia_kb_development``) and Camunda plugin (``camunda_plugin_development``).
+
+### Major Changes
+
+- Renamed ``additional_tools`` folder to ``additional_resources``.
+- Renamed additional resources folder ``capability_skill_ontology`` to ``css_smia_ontology``.
+- Changed I4.0 SMIA to SMIA:
+  - Both on GitHub and on ReadTheDocs.
+  - Updated all files that contain the old name (PyPI configuration files, READMEs…).
+- Modified SMIA banner style. 
+- Upgraded “basyx-python-sdk” dependency to its latest version (1.2.0).
+
+### Fixed errors
+- Fixed bugs during testing of CSS-based AAS development tutorial
+- Removed old Kubernetes test files (YAML deployment files in “examples” folder)
+- Removed tests with CSS-SMIA ontology from “additional_resources/css_smia_ontology/tests” folder
+- Removed code from old SMIA approach: folder with the different AAS Cores
+- Removed ``deploy`` folder: contained deployment files of the old SMIA approach
+- Modified README file to improve the important message in the “Usage” section mentioning the validations being conducted with the use cases.
+
 ## v0.2.2
 
 This release of Self-Configurable Manufacturing Industrial Agent (SMIA) comes with an upgrade of the solution. Similar to the other releases, it is available with the  source code in a ZIP file. Content of ``SMIA.source.code.zip`` file:
