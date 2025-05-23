@@ -2,6 +2,8 @@ openapi: 3.0.4
 info:
   title: SMIA Knowledge Base (KB) | HTTP/REST | API Collection
   description: |-
+    <img src="https://raw.githubusercontent.com/ekhurtado/SMIA/refs/heads/smia_kb_development/additional_resources/smia_kb/src/SMIA_KB_logo.png" alt="SMIA KB logo" height="100" />
+    
     This is a sample Self-configurable Manufacturing Industrial Agents (SMIA) Knowledge Base (KB) based on the OpenAPI 3.0 specification.  You can find out more about at [GitHub](https://github.com/ekhurtado/SMIA). The SMIA KB has been developed as a SMIA-compliant infrastructure service, but it is designed to be interoperable with other approaches, taking advantage of following the OpenAPI specification. It addresses the realization of a Knowledge Base based on Capability-Skill-Service (CSS) model and driven by an ontological implementation, capable of providing CSS ontology information management.
 
     Some useful links:
