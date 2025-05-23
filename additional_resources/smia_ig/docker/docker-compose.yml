@@ -1,0 +1,11 @@
+#version: "2"
+
+services:
+
+  smia-ig:
+    image: ekhurtado/smia-tools:latest-smia-ig
+    build:
+      context: .
+      dockerfile: Dockerfile_SMIA_IG
+    container_name: smia-ig
+

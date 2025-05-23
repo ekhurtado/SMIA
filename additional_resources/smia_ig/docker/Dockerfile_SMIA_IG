@@ -1,0 +1,8 @@
+FROM ekhurtado/smia:latest-alpine-base
+
+COPY smia_ig /smia_ig
+
+WORKDIR /smia_ig
+
+CMD ["python3", "-u", "smia_ig_starter.py"]
+#CMD [ "tail", "-f", "/dev/null"]

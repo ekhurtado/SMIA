@@ -1,0 +1,5 @@
+
+
+def seralize_base_64_url():
+    # TODO POR EJEMPLO, ESTE ES UNO DE LOS METODOS UTILES QUE SE PUEDEN USAR
+    pass
