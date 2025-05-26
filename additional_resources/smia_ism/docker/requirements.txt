@@ -1,0 +1,6 @@
+# In this file all the necessary libraries for SMIA ISM to be installed will be added.
+# A specific version will be assigned to avoid unexpected errors.
+# --------------------
+
+# Related to HTTP communications
+requests == 2.32.3

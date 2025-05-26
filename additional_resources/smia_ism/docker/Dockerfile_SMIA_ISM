@@ -1,5 +1,8 @@
 FROM ekhurtado/smia:latest-alpine-base
 
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
 COPY smia_ism /smia_ism
 
 WORKDIR /smia_ism
