@@ -47,7 +47,16 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
             await self.myagent.acl_openapi_services.save_agent_service(service_id, service_method)
 
         # TODO TEST
-        result = await self.myagent.acl_openapi_services.execute_agent_service_by_id('printeo')
+        try:
+            params = {'asset_id': 'myasset001'}
+            result = await self.myagent.acl_openapi_services.execute_agent_service_by_id('GetSMIAInstanceByAssetId',
+                                                                                         **params)
+            params = {'capability_iri': 'myasset001'}
+            result = await self.myagent.acl_openapi_services.execute_agent_service_by_id('GetAssetIDsOfCapability',
+                                                                                         **params)
+        except ValueError as e:
+            if "required parameters have not been provided" in str(e):
+                print("Aqui habria que responder con failure por el motivo (no se ha enviado el parametro)")
 
 
     async def run(self):
