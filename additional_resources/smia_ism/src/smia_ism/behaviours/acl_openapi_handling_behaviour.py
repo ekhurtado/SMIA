@@ -68,6 +68,8 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
         msg = await self.receive(
             timeout=10)  # Timeout set to 10 seconds so as not to continuously execute the behavior.
         if msg:
+
+
             # An ACL message has been received by a SMIA agent, so it needs to perform some service related to the OpenAPI
             # TODO PENSAR SI AÑADIR ALGUN TIPO DE TEMPLATE PARA FILTRAR SOLO MENSAJES PARA OpenAPI (https://spade-mas.readthedocs.io/en/latest/agents.html#using-templates)
             _logger.aclinfo("         + Message received on SMIA IG (ACLOpenAPIHandlingBehaviour) from {}".format(msg.sender))
