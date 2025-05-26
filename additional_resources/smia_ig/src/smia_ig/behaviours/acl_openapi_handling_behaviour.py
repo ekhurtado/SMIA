@@ -48,10 +48,10 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
 
         # TODO TEST
         try:
-            params = {'asset_id': 'myasset001'}
-            result = await self.myagent.acl_openapi_services.execute_agent_service_by_id('GetSMIAInstanceByAssetId',
-                                                                                         **params)
-            params = {'capability_iri': 'myasset001'}
+            # params = {'asset_id': 'myasset001'}
+            # result = await self.myagent.acl_openapi_services.execute_agent_service_by_id('GetSMIAInstanceByAssetId',
+            #                                                                              **params)
+            params = {'capability_iri': 'http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation'}
             result = await self.myagent.acl_openapi_services.execute_agent_service_by_id('GetAssetIDsOfCapability',
                                                                                          **params)
         except ValueError as e:
