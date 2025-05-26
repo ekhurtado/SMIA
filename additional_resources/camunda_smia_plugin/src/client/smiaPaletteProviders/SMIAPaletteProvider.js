@@ -121,64 +121,57 @@ function createSMIAServiceTask(modelerPlugs, name, id, aasIdentifier, aasIdShort
 		  const serviceTask = elementFactory.createShape({
 			  type: "bpmn:ServiceTask"
 		  });
-		  const extensionElements = moddle.create('bpmn:ExtensionElements');
-
-		  const payloadInputParameter = moddle.create('camunda:InputParameter', {
-			  name: 'payload',
-			  value: 'payload'
-		  });
-		  // Crear el contenedor de inputOutput
-		  const inputOutput = moddle.create('camunda:InputOutput', {
-			  inputParameters: [payloadInputParameter],
-			  outputParameters: []
-		  });
-
-		  var connector = moddle.create("camunda:Connector", {
-			  connectorId: "http-connector", inputOutput
-		  });
-
-		  const testProperty = moddle.create('camunda:Property', {
-			  name: 'testName',
-			  value: 'testValue'
-		  });
-
-		  const testProperty3 = moddle.create('camunda:Property', {
-			  name: 'testName3',
-			  value: 'testValue3'
-		  });
-
-
-		  const camundaProperties = moddle.create('camunda:Properties', {
-			  name: 'sadddsada',
-			  values: [testProperty, testProperty3]
-		  });
-
-		  const testProperty2 = moddle.create('camunda:Property', {
-			  name: 'testName2',
-			  value: 'testValue2'
-		  });
-
-		  const camundaProperties2 = moddle.create('camunda:Properties', {
-			  name: 'as',
-			  values: [testProperty2]
-		  });
-
-
-		  extensionElements.values = [connector, camundaProperties, camundaProperties2];
-
-		  serviceTask.businessObject.extensionElements = extensionElements;
+		  // const extensionElements = moddle.create('bpmn:ExtensionElements');
+		  //
+		  // const payloadInputParameter = moddle.create('camunda:InputParameter', {
+			//   name: 'payload',
+			//   value: 'payload'
+		  // });
+		  // // Crear el contenedor de inputOutput
+		  // const inputOutput = moddle.create('camunda:InputOutput', {
+			//   inputParameters: [payloadInputParameter],
+			//   outputParameters: []
+		  // });
+		  //
+		  // var connector = moddle.create("camunda:Connector", {
+			//   connectorId: "http-connector", inputOutput
+		  // });
+		  //
+		  // const testProperty = moddle.create('camunda:Property', {
+			//   name: 'testName',
+			//   value: 'testValue'
+		  // });
+		  //
+		  // const testProperty3 = moddle.create('camunda:Property', {
+			//   name: 'testName3',
+			//   value: 'testValue3'
+		  // });
+		  //
+		  //
+		  // const camundaProperties = moddle.create('camunda:Properties', {
+			//   name: 'sadddsada',
+			//   values: [testProperty, testProperty3]
+		  // });
+		  //
+		  // const testProperty2 = moddle.create('camunda:Property', {
+			//   name: 'testName2',
+			//   value: 'testValue2'
+		  // });
+		  //
+		  // const camundaProperties2 = moddle.create('camunda:Properties', {
+			//   name: 'as',
+			//   values: [testProperty2]
+		  // });
+		  //
+		  //
+		  // extensionElements.values = [connector, camundaProperties, camundaProperties2];
+		  //
+		  // serviceTask.businessObject.extensionElements = extensionElements;
 
 		  // Set to the businessObject
 		  serviceTask.businessObject.name = `Capability ${randomID}`;
 		  serviceTask.businessObject.id = `cap_${randomID}`;
 		  serviceTask.businessObject.taskType = 'smiaTask';
-
-		  // Set SMIA specific properties ??? (de momento esta comentado, probar si hace falta)
-		  // serviceTask.businessObject.set('smia:capability', '');
-		  // serviceTask.businessObject.set('smia:constraints', '');
-		  // serviceTask.businessObject.set('smia:skill', '');
-		  // serviceTask.businessObject.set('smia:skillParameters', '');
-		  // serviceTask.businessObject.set('smia:asset', '');
 
 		  create.start(event, serviceTask);
   	};
@@ -194,23 +187,23 @@ function createSMIATimeoutGateway(modelerPlugs) {
 			type: 'bpmn:ExclusiveGateway'
 		});
 
-		// Añadir extensión de elementos para metadata
-		const extensionElements = moddle.create('bpmn:ExtensionElements');
-
-		// Crear propiedades Camunda para el timeout
-		const timeoutProperty = moddle.create('camunda:Property', {
-			name: 'timeoutValue',
-			value: '30' // Valor por defecto de 30 segundos
-		});
-
-		const camundaProperties = moddle.create('camunda:Properties', {
-			name: 'timeoutConfiguration',
-			values: [timeoutProperty]
-		});
-
-		extensionElements.values = [camundaProperties];
-
-		gateway.businessObject.extensionElements = extensionElements;
+		// // Añadir extensión de elementos para metadata
+		// const extensionElements = moddle.create('bpmn:ExtensionElements');
+		//
+		// // Crear propiedades Camunda para el timeout
+		// const timeoutProperty = moddle.create('camunda:Property', {
+		// 	name: 'timeoutValue',
+		// 	value: '30' // Valor por defecto de 30 segundos
+		// });
+		//
+		// const camundaProperties = moddle.create('camunda:Properties', {
+		// 	name: 'timeoutConfiguration',
+		// 	values: [timeoutProperty]
+		// });
+		//
+		// extensionElements.values = [camundaProperties];
+		//
+		// gateway.businessObject.extensionElements = extensionElements;
 
 		// Establecer propiedades del gateway
 		gateway.businessObject.name = 'Timeout Gateway';
@@ -218,7 +211,7 @@ function createSMIATimeoutGateway(modelerPlugs) {
 
 		// Establecer propiedades SMIA personalizadas
 		gateway.businessObject.set('smia:isTimeoutGateway', true);
-		gateway.businessObject.set('smia:timeout', 30); // Valor por defecto 30 segundos
+		// gateway.businessObject.set('smia:timeout', 30); // Valor por defecto 30 segundos
 
 		// Iniciar la creación
 		create.start(event, gateway);

@@ -403,7 +403,7 @@ function AssetEntry(props) {
       ASSETS_OPTIONS = window.SMIA_KB_DATA.Capabilities.map((capItem) => {
         if (capItem.iri === capSelection) {
           return capItem.assets.map((assetItem) => {
-            return {value: assetItem.asset_id, label: assetItem.asset_id}
+            return {value: assetItem.id, label: assetItem.id}
           })
         }
         return null;
