@@ -21,7 +21,7 @@ class ACLOpenAPIServices:
             return "ERROR: No SMIA instance is registered."
         # Then, the associated SMIA instance is obtained
         for smia_instance in smia_instances_json:
-            if smia_instance['asset']['asset_id'] == asset_id:
+            if smia_instance['asset']['id'] == asset_id:
                 return smia_instance['id']
         return "ERROR: SMIA instance for asset identifier [{}] not found.".format(asset_id)
 
@@ -34,7 +34,7 @@ class ACLOpenAPIServices:
         assets_json = send_openapi_http_get_request(smia_kb_capability_url)
         if assets_json is None:  # TODO Analizar que devuelve cuando no hay instancias o cuando hay error
             return "ERROR: No SMIA instance is registered."
-        assets_ids = [asset_data['asset_id'] for asset_data in assets_json]
+        assets_ids = [asset_data['id'] for asset_data in assets_json]
         return assets_ids
 
 

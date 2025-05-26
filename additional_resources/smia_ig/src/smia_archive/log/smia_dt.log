@@ -790,3 +790,144 @@ ConnectionError: stream shut down
 2025-05-26 11:55:29,193 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:80
 2025-05-26 11:55:29,193 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:39
 2025-05-26 11:55:29,193 [behaviours.acl_openapi_handling_behaviour] [INFO] ACLOpenAPIHandlingBehaviour starting... line:43
+2025-05-26 14:24:47,003 [__main__] [INFO] Initializing SMIA IG (Infrastructure Gateway)... line:17
+2025-05-26 14:24:47,003 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:302
+2025-05-26 14:24:47,010 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-05-26 14:24:47,010 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-05-26 14:24:47,017 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-05-26 14:24:47,019 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/SMIA_InfrastructureGateway.aasx file is already in SMIA archive. line:180
+2025-05-26 14:24:47,019 [smia] [INFO] AAS model SMIA_InfrastructureGateway.aasx copied to the SMIA Archive. line:91
+2025-05-26 14:24:47,052 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ACLOpenAPIHandlingBehaviour line:43
+2025-05-26 14:24:50,039 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-05-26 14:24:51,223 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/1177982820743513114414953397698 line:935
+2025-05-26 14:24:51,514 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB8xMTc3OTgyODIwNzQzNTEzMTE0NDE0OTUzMzk3Njk4bQAAAAi9bYe9u7Kxzg==' line:2209
+2025-05-26 14:24:52,127 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-05-26 14:24:52,128 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:97
+2025-05-26 14:24:52,129 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:117
+2025-05-26 14:24:52,129 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-05-26 14:24:52,129 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-05-26 14:24:52,129 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:30
+2025-05-26 14:24:52,159 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-05-26 14:24:52,178 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:77
+2025-05-26 14:24:52,178 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [InfrastructureGateway] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:89
+2025-05-26 14:24:52,180 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-05-26 14:24:52,192 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-05-26 14:24:53,066 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-05-26 14:24:53,258 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-05-26 14:24:53,258 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-05-26 14:24:54,254 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['ACLOpenAPIHandlingCapability']
+	- Analyzed capability constraints: []
+	- Analyzed skills: ['ACLOpenAPIHandlingBehaviour']
+	- Analyzed skill interfaces: []
+	- Analyzed skill parameters: []
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-05-26 14:24:54,254 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-05-26 14:24:54,255 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-05-26 14:24:54,257 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:49
+2025-05-26 14:24:54,257 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-05-26 14:24:54,257 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-05-26 14:24:54,258 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-05-26 14:24:54,260 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:80
+2025-05-26 14:24:54,260 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:39
+2025-05-26 14:24:54,261 [behaviours.acl_openapi_handling_behaviour] [INFO] ACLOpenAPIHandlingBehaviour starting... line:43
+2025-05-26 14:25:31,749 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-05-26 14:25:31,750 [gcis1] [INFO] client shutting down (on request) line:975
+2025-05-26 14:25:31,751 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-05-26 14:25:40,539 [__main__] [INFO] Initializing SMIA IG (Infrastructure Gateway)... line:17
+2025-05-26 14:25:40,540 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:302
+2025-05-26 14:25:40,546 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-05-26 14:25:40,546 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-05-26 14:25:40,552 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-05-26 14:25:40,554 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/SMIA_InfrastructureGateway.aasx file is already in SMIA archive. line:180
+2025-05-26 14:25:40,555 [smia] [INFO] AAS model SMIA_InfrastructureGateway.aasx copied to the SMIA Archive. line:91
+2025-05-26 14:25:40,586 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ACLOpenAPIHandlingBehaviour line:43
+2025-05-26 14:25:43,497 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-05-26 14:25:44,687 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/551425104083862696314953450626 line:935
+2025-05-26 14:25:44,984 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB41NTE0MjUxMDQwODM4NjI2OTYzMTQ5NTM0NTA2MjZtAAAACLQ41db92vGn' line:2209
+2025-05-26 14:25:45,596 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-05-26 14:25:45,596 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:97
+2025-05-26 14:25:45,597 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:117
+2025-05-26 14:25:45,597 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-05-26 14:25:45,598 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-05-26 14:25:45,598 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:30
+2025-05-26 14:25:45,620 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-05-26 14:25:45,640 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:77
+2025-05-26 14:25:45,640 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [InfrastructureGateway] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:89
+2025-05-26 14:25:45,642 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-05-26 14:25:45,651 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-05-26 14:25:46,521 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-05-26 14:25:46,716 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-05-26 14:25:46,716 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-05-26 14:25:47,693 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['ACLOpenAPIHandlingCapability']
+	- Analyzed capability constraints: []
+	- Analyzed skills: ['ACLOpenAPIHandlingBehaviour']
+	- Analyzed skill interfaces: []
+	- Analyzed skill parameters: []
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-05-26 14:25:47,693 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-05-26 14:25:47,694 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-05-26 14:25:47,696 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:49
+2025-05-26 14:25:47,697 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-05-26 14:25:47,697 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-05-26 14:25:47,698 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-05-26 14:25:47,701 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:80
+2025-05-26 14:25:47,701 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:39
+2025-05-26 14:25:47,702 [behaviours.acl_openapi_handling_behaviour] [INFO] ACLOpenAPIHandlingBehaviour starting... line:43
+2025-05-26 14:26:03,256 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-05-26 14:26:03,257 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-05-26 14:26:03,257 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-05-26 14:26:03,259 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:80
+2025-05-26 14:26:03,259 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-05-26 14:26:03,259 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:39
+2025-05-26 14:26:03,259 [behaviours.acl_openapi_handling_behaviour] [INFO] ACLOpenAPIHandlingBehaviour starting... line:43
+2025-05-26 14:28:00,394 [__main__] [INFO] Initializing SMIA IG (Infrastructure Gateway)... line:17
+2025-05-26 14:28:00,394 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:302
+2025-05-26 14:28:00,403 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-05-26 14:28:00,404 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-05-26 14:28:00,412 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-05-26 14:28:00,415 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/SMIA_InfrastructureGateway.aasx file is already in SMIA archive. line:180
+2025-05-26 14:28:00,415 [smia] [INFO] AAS model SMIA_InfrastructureGateway.aasx copied to the SMIA Archive. line:91
+2025-05-26 14:28:00,447 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ACLOpenAPIHandlingBehaviour line:43
+2025-05-26 14:28:03,501 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-05-26 14:28:04,711 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/78702091735751457214953609570 line:935
+2025-05-26 14:28:05,006 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB03ODcwMjA5MTczNTc1MTQ1NzIxNDk1MzYwOTU3MG0AAAAIfL498SAHQNY=' line:2209
+2025-05-26 14:28:05,620 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-05-26 14:28:05,621 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:97
+2025-05-26 14:28:05,621 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:117
+2025-05-26 14:28:05,622 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-05-26 14:28:05,622 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-05-26 14:28:05,622 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:30
+2025-05-26 14:28:05,649 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-05-26 14:28:05,669 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:77
+2025-05-26 14:28:05,670 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [InfrastructureGateway] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:89
+2025-05-26 14:28:05,671 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-05-26 14:28:05,681 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-05-26 14:28:06,552 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-05-26 14:28:06,746 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-05-26 14:28:06,746 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-05-26 14:28:07,724 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['ACLOpenAPIHandlingCapability']
+	- Analyzed capability constraints: []
+	- Analyzed skills: ['ACLOpenAPIHandlingBehaviour']
+	- Analyzed skill interfaces: []
+	- Analyzed skill parameters: []
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-05-26 14:28:07,725 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-05-26 14:28:07,725 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-05-26 14:28:07,728 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:49
+2025-05-26 14:28:07,729 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-05-26 14:28:07,729 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-05-26 14:28:07,730 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-05-26 14:28:07,733 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:80
+2025-05-26 14:28:07,734 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:39
+2025-05-26 14:28:07,734 [behaviours.acl_openapi_handling_behaviour] [INFO] ACLOpenAPIHandlingBehaviour starting... line:43
+2025-05-26 14:28:21,618 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-05-26 14:28:21,619 [gcis1] [INFO] client shutting down (on request) line:975
+2025-05-26 14:28:21,620 [gcis1.StanzaStream] [INFO] stopping SM stream line:2473
+2025-05-26 14:28:21,620 [gcis1] [INFO] stopping stream line:989
+2025-05-26 14:28:21,620 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
