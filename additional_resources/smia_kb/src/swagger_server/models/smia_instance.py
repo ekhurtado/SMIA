@@ -198,3 +198,13 @@ class SMIAinstance(Model):
         """
 
         self._smia_version = smia_version
+
+
+    # Methods required to be part of a set(): for SMIA database
+    def __hash__(self):
+        return hash(self._id)   # The id of the SMIA instance will be unique, so it will be used
+
+    def __eq__(self, other):
+        if not isinstance(other, SMIAinstance):
+            return False
+        return self._id == other._id

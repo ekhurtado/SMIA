@@ -63,7 +63,7 @@ class Asset(Model):
         :rtype: dict
         """
         return {
-            'asset_id': asset_id,
+            'id': asset_id,
             'kind': asset_info['kind'],
             'type': asset_info['type']
         }

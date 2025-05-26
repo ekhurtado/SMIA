@@ -119,8 +119,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-      - api_key: []
+
       x-openapi-router-controller: swagger_server.controllers.capability_api_controller
   /capabilities/$identifiers:
     get:
@@ -237,8 +236,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-      - api_key: []
+
       x-openapi-router-controller: swagger_server.controllers.capability_api_controller
     delete:
       tags:
@@ -275,8 +273,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-      - api_key: []
+
       x-openapi-router-controller: swagger_server.controllers.capability_api_controller
   /capabilities/{capabilityIdentifier}/skill-refs:
     get:
@@ -371,8 +368,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-      - api_key: []
+
       x-openapi-router-controller: swagger_server.controllers.capability_api_controller
   /capabilities/{capabilityIdentifier}/capabilitiesConstraints:
     get:
@@ -464,8 +460,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-      - api_key: []
+
       x-openapi-router-controller: swagger_server.controllers.capability_api_controller
   /capabilities/{capabilityIdentifier}/capabilitiesConstraints/{capabilityConstraintIdentifier}:
     get:
@@ -568,8 +563,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-      - api_key: []
+
       x-openapi-router-controller: swagger_server.controllers.capability_api_controller
     delete:
       tags:
@@ -615,8 +609,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-      - api_key: []
+
       x-openapi-router-controller: swagger_server.controllers.capability_api_controller
   /capabilities/{capabilityIdentifier}/assets:
     get:
@@ -708,8 +701,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-      - api_key: []
+
       x-openapi-router-controller: swagger_server.controllers.capability_api_controller
   /skills:
     get:
@@ -780,8 +772,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-      - api_key: []
+
       x-openapi-router-controller: swagger_server.controllers.skill_api_controller
   /skills/$identifiers:
     get:
@@ -898,8 +889,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-      - api_key: []
+
       x-openapi-router-controller: swagger_server.controllers.skill_api_controller
     delete:
       tags:
@@ -936,8 +926,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-      - api_key: []
+
       x-openapi-router-controller: swagger_server.controllers.skill_api_controller
   /skills/{skillIdentifier}/parameters:
     get:
@@ -1029,8 +1018,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-      - api_key: []
+
       x-openapi-router-controller: swagger_server.controllers.skill_api_controller
   /skills/{skillIdentifier}/parameters/{skillParameterIdentifier}:
     get:
@@ -1135,8 +1123,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-      - api_key: []
+
       x-openapi-router-controller: swagger_server.controllers.skill_api_controller
     delete:
       tags:
@@ -1183,8 +1170,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-      - api_key: []
+
       x-openapi-router-controller: swagger_server.controllers.skill_api_controller
   /smiaInstances:
     get:
@@ -1193,7 +1179,7 @@ paths:
       summary: Finds all registered SMIA instances.
       description: "Multiple tags can be provided with comma separated strings. Use\
         \ tag1, tag2, tag3 for testing."
-      operationId: get_all_smi_ainstances
+      operationId: get_all_smia_instances
       responses:
         "200":
           description: Requested SMIA instances
@@ -1223,7 +1209,7 @@ paths:
       - SMIA API
       summary: Add a new SMIA instance to the SMIA KB.
       description: Add a new SMIA instance to the SMIA KB.
-      operationId: post_smi_ainstance
+      operationId: post_smia_instance
       requestBody:
         description: SMIA instance object
         content:
@@ -1257,8 +1243,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-      - api_key: []
+
       x-openapi-router-controller: swagger_server.controllers.smia_api_controller
   /smiaInstances/$identifiers:
     get:
@@ -1266,7 +1251,7 @@ paths:
       - SMIA API
       summary: Returns all SMIA instances identifiers registered in the SMIA KB.
       description: Returns all SMIA instances identifiers registered in the SMIA KB.
-      operationId: get_all_smi_ainstances_identifiers
+      operationId: get_all_smia_instances_identifiers
       responses:
         "200":
           description: Requested SMIA instances identifiers
@@ -1295,7 +1280,7 @@ paths:
       - SMIA API
       summary: Returns a specific SMIA instance registered in the SMIA KB.
       description: Returns a specific SMIA instance registered in the SMIA KB.
-      operationId: get_smi_ainstance_by_id
+      operationId: get_smia_instance_by_id
       parameters:
       - name: smiaInstanceIdentifier
         in: path
@@ -1332,7 +1317,7 @@ paths:
       summary: Updates an existing SMIA instance registered in the SMIA KB.
       description: Updates an existing SMIA instance registered in the SMIA KB. SMIA
         instances automatically register themselves when deployed.
-      operationId: put_smi_ainstance_by_id
+      operationId: put_smia_instance_by_id
       parameters:
       - name: smiaInstanceIdentifier
         in: path
@@ -1368,15 +1353,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-      - api_key: []
+
       x-openapi-router-controller: swagger_server.controllers.smia_api_controller
     delete:
       tags:
       - SMIA API
       summary: Deletes a SMIA instance within the SMIA KB.
       description: Deletes a SMIA instance within the SMIA KB.
-      operationId: delete_smi_ainstance_by_id
+      operationId: delete_smia_instance_by_id
       parameters:
       - name: api_key
         in: header
@@ -1405,8 +1389,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-      - api_key: []
+
       x-openapi-router-controller: swagger_server.controllers.smia_api_controller
   /serialization:
     put:
@@ -1829,7 +1812,7 @@ components:
     AASRepositoryURL:
       type: string
   securitySchemes:
-    api_key:
+    api_key:  # Esto se puede usar para añadir la necesidad de usar una api_key. Despues en authorization_controller se podria añadir la logica para validarla
       type: apiKey
       name: api_key
       in: header

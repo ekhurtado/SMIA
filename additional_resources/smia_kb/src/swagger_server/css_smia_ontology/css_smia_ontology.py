@@ -7,6 +7,7 @@ import owlready2
 from owlready2 import get_ontology, OwlReadyOntologyParsingError, sync_reasoner_pellet, \
     OwlReadyInconsistentOntologyError, ThingClass, Ontology, destroy_entity
 
+from swagger_server.models import SMIAinstance
 from swagger_server.css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyUtils, CapabilitySkillOntologyInfo
 
 class CapabilitySkillOntology:
@@ -18,6 +19,7 @@ class CapabilitySkillOntology:
 
     def __init__(self):
         self.ontology: Ontology = None
+        self.smia_database: set[SMIAinstance] = set()    # This class will be used to store all registered SMIA instances
 
     @staticmethod
     def get_instance():
@@ -284,3 +286,37 @@ class CapabilitySkillOntology:
                 pass
             else:
                 print("Some error occured, so it cannot saved ontological information in SQLite:", e)
+
+
+    # -----------------------------
+    # SMIA database-related methods
+    # -----------------------------
+    def add_new_smia_instance_to_database(self, new_smia_instance):
+        """
+        This method adds a new SMIA instance to the SMIA database.
+
+        Args:
+            new_smia_instance (SMIAinstance): new SMIA instance to be added.
+        """
+        self.smia_database.add(new_smia_instance)
+
+    def get_smia_instance_by_id(self, smia_instance_id):
+        """
+        This method gets a SMIA instance by its ID.
+
+        Args:
+            smia_instance_id (str): SMIA instance Identifier.
+        """
+        for smia_instance in self.smia_database:
+            if smia_instance.id == smia_instance_id:
+                return smia_instance
+        return None
+
+    def get_smia_instances_list(self):
+        """
+        This method returns the registered SMIA instances in form of a list.
+
+        Returns:
+            list(SMIAinstance): list of SMIA instances.
+        """
+        return list(self.smia_database)

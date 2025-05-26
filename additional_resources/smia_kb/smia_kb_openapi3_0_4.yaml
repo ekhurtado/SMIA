@@ -122,12 +122,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      # security:
-      #   - petstore_auth:
-      #       - write:pets
-      #       - read:pets
-      security:
-        - api_key: []
+#      security:
+#        - api_key: []   # Esto se puede usar para añadir la necesidad de usar una api_key. Despues en authorization_controller se podria añadir la logica para validarla
   /capabilities/$identifiers:
     get:
       tags:
@@ -240,8 +236,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-        - api_key: []
+#      security:
+#        - api_key: []   # Esto se puede usar para añadir la necesidad de usar una api_key. Despues en authorization_controller se podria añadir la logica para validarla
     delete:
       tags:
         - Capability API
@@ -275,8 +271,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-        - api_key: []
+#      security:
+#        - api_key: []   # Esto se puede usar para añadir la necesidad de usar una api_key. Despues en authorization_controller se podria añadir la logica para validarla
   /capabilities/{capabilityIdentifier}/skill-refs:
     get:
       tags:
@@ -368,12 +364,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      # security:
-      #   - petstore_auth:
-      #       - write:pets
-      #       - read:pets
-      security:
-        - api_key: []
+#      security:
+#        - api_key: []   # Esto se puede usar para añadir la necesidad de usar una api_key. Despues en authorization_controller se podria añadir la logica para validarla
   /capabilities/{capabilityIdentifier}/capabilitiesConstraints:
     get:
       tags:
@@ -465,12 +457,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      # security:
-      #   - petstore_auth:
-      #       - write:pets
-      #       - read:pets
-      security:
-        - api_key: []
+#      security:
+#        - api_key: []   # Esto se puede usar para añadir la necesidad de usar una api_key. Despues en authorization_controller se podria añadir la logica para validarla
   /capabilities/{capabilityIdentifier}/capabilitiesConstraints/{capabilityConstraintIdentifier}:
     get:
       tags:
@@ -564,8 +552,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-        - api_key: []
+#      security:
+#        - api_key: []
     delete:
       tags:
         - Capability API
@@ -604,8 +592,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-        - api_key: []
+#      security:
+#        - api_key: []
   /capabilities/{capabilityIdentifier}/assets:
     get:
       tags:
@@ -697,12 +685,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      # security:
-      #   - petstore_auth:
-      #       - write:pets
-      #       - read:pets
-      security:
-        - api_key: []
+#      security:
+#        - api_key: []
 
 
 
@@ -779,12 +763,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      # security:
-      #   - petstore_auth:
-      #       - write:pets
-      #       - read:pets
-      security:
-        - api_key: []
+#      security:
+#        - api_key: []
   /skills/$identifiers:
     get:
       tags:
@@ -891,8 +871,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-        - api_key: []
+#      security:
+#        - api_key: []
     delete:
       tags:
         - Skill API
@@ -923,8 +903,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-        - api_key: []
+#      security:
+#        - api_key: []
   /skills/{skillIdentifier}/parameters:
     get:
       tags:
@@ -1016,12 +996,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      # security:
-      #   - petstore_auth:
-      #       - write:pets
-      #       - read:pets
-      security:
-        - api_key: []
+#      security:
+#        - api_key: []
   /skills/{skillIdentifier}/parameters/{skillParameterIdentifier}:
     get:
       tags:
@@ -1115,8 +1091,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-        - api_key: []
+#      security:
+#        - api_key: []
     delete:
       tags:
         - Skill API
@@ -1155,8 +1131,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-        - api_key: []
+#      security:
+#        - api_key: []
 
 
   /smiaInstances:
@@ -1227,12 +1203,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      # security:
-      #   - petstore_auth:
-      #       - write:pets
-      #       - read:pets
-      security:
-        - api_key: []
+#      security:
+#        - api_key: []
   /smiaInstances/$identifiers:
     get:
       tags:
@@ -1337,8 +1309,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-        - api_key: []
+#      security:
+#        - api_key: []
     delete:
       tags:
         - SMIA API
@@ -1369,8 +1341,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-        - api_key: []
+#      security:
+#        - api_key: []
 
 
   /serialization:
