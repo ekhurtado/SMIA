@@ -2,10 +2,10 @@
 
 services:
 
-  smia-ig:
-    image: ekhurtado/smia-tools:latest-smia-ig
+  smia-ism:
+    image: ekhurtado/smia-tools:latest-smia-ism
     build:
       context: .
-      dockerfile: Dockerfile_SMIA_IG
-    container_name: smia-ig
+      dockerfile: Dockerfile_SMIA_ISM
+    container_name: smia-ism
 

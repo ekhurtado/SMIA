@@ -9,13 +9,14 @@ from smia.utilities.fipa_acl_info import FIPAACLInfo
 
 from behaviours.handle_acl_openapi_behaviour import HandleACLOpenAPIBehaviour
 from logic.acl_open_api_services import ACLOpenAPIServices
+from utilities.smia_acl_message_info import SMIAACLMessageInfo
 
 _logger = logging.getLogger(__name__)
 
 
 class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
     """
-    This class implements the behaviour that handles all the ACL messages that the SMIA IG will receive from the
+    This class implements the behaviour that handles all the ACL messages that the SMIA ISM will receive from the
     others SMIAs in the I4.0 System to perform some service related to OpenAPI infrastructures.
     """
 
@@ -42,21 +43,22 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
         """
         _logger.info("ACLOpenAPIHandlingBehaviour starting...")
 
-        # Let's register all Infrastructure Services of SMIA IG in relation with ACL-OpenAPI
+        # Let's register all Infrastructure Services of SMIA ISM in relation with ACL-OpenAPI
         for service_id, service_method in ACLOpenAPIServices.ACLOpenAPIServicesMap.items():
             await self.myagent.acl_openapi_services.save_agent_service(service_id, service_method)
 
+        _logger.info("Successfully loaded all Infrastructure Services with their associated execution methods.")
         # TODO TEST
-        try:
-            params = {'asset_id': 'http://example.com/ids/asset001'}
-            result = await self.myagent.acl_openapi_services.execute_agent_service_by_id('GetSMIAInstanceByAssetId',
-                                                                                         **params)
-            params = {'capability_iri': 'http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation'}
-            result = await self.myagent.acl_openapi_services.execute_agent_service_by_id('GetAssetIDsOfCapability',
-                                                                                         **params)
-        except ValueError as e:
-            if "required parameters have not been provided" in str(e):
-                print("Aqui habria que responder con failure por el motivo (no se ha enviado el parametro)")
+        # try:
+        #     params = {'asset_id': 'http://example.com/ids/asset001'}
+        #     result = await self.myagent.acl_openapi_services.execute_agent_service_by_id('GetSMIAInstanceByAssetId',
+        #                                                                                  **params)
+        #     params = {'capability_iri': 'http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation'}
+        #     result = await self.myagent.acl_openapi_services.execute_agent_service_by_id('GetAssetIDsOfCapability',
+        #                                                                                  **params)
+        # except ValueError as e:
+        #     if "required parameters have not been provided" in str(e):
+        #         print("Aqui habria que responder con failure por el motivo (no se ha enviado el parametro)")
 
 
     async def run(self):
@@ -68,19 +70,19 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
         msg = await self.receive(
             timeout=10)  # Timeout set to 10 seconds so as not to continuously execute the behavior.
         if msg:
+            if not SMIAACLMessageInfo.SMIA_ACL_INFRASTRUCTURE_SERVICE_TEMPLATE.match(msg):
+                _logger.warning("Invalid message received on SMIA ISM: ACL message with invalid template.")
+                return  # If it does not match the template, the ACL message is for SMIA ISM
 
 
             # An ACL message has been received by a SMIA agent, so it needs to perform some service related to the OpenAPI
-            # TODO PENSAR SI AÑADIR ALGUN TIPO DE TEMPLATE PARA FILTRAR SOLO MENSAJES PARA OpenAPI (https://spade-mas.readthedocs.io/en/latest/agents.html#using-templates)
-            _logger.aclinfo("         + Message received on SMIA IG (ACLOpenAPIHandlingBehaviour) from {}".format(msg.sender))
+            _logger.aclinfo("         + Message received on SMIA ISM (ACLOpenAPIHandlingBehaviour) from {}".format(msg.sender))
             _logger.aclinfo("                 |___ Message received with content: {}".format(msg.body))
 
             # The msg body will be parsed to a JSON object
             msg_json_body = json.loads(msg.body)
 
-            # TODO PENSAR SI ESTABLECER TODOS ESTOS SERVICIOS DEL TIPO: AAS Infrastructure Services . Por definicion,
-            #  estos son no son ofrecidos por un AAS, sino por la plataforma (infraestructura computacional), por lo que
-            #  estan muy relacionados con los que ofrece SMIA IG (p.e. AAS Registry o Discovery es de este tipo)
+            # TODO BORRAR (para pruebas con GUI Agent): {"serviceID": "serviceID", "serviceType": "InfrastructureService","SMIAInfrastructureService": "GetAssetIDsOfCapability", "serviceParams": {"capability_iri": "http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation"}}
 
             # Depending on the performative of the message, the agent will have to perform some actions or others
             match msg.get_metadata('performative'):
@@ -99,4 +101,4 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
                     _logger.error("ACL performative type not available.")
 
         else:
-            _logger.info("         - No message received within 10 seconds on SMIA IG (ACLOpenAPIHandlingBehaviour)")
+            _logger.info("         - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour)")

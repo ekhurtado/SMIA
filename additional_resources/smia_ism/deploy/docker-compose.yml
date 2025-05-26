@@ -2,12 +2,12 @@
 
 services:
 
-  smia-ig:
-    image: ekhurtado/smia-tools:latest-smia-ig
-    container_name: smia-ig
+  smia-ism:
+    image: ekhurtado/smia-tools:latest-smia-ism
+    container_name: smia-ism
     environment:
-      - AAS_MODEL_NAME=SMIA_InfrastructureGateway.aasx
-      - AGENT_ID=transportrobot001@ejabberd
+      - AAS_MODEL_NAME=SMIA_ISM_model.aasx
+      - AGENT_ID=smia-ism@ejabberd
       - AGENT_PSSWD=gcis1234
     depends_on:
       xmpp-server:

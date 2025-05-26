@@ -25,6 +25,8 @@ class GUIAgentBehaviours:
             msg.set_metadata('performative', data_json['performative'])
             msg.set_metadata('ontology', data_json['ontology'])
 
+            # msg.set_metadata('Classification','AASInfrastructureService')    # TODO BORRAR
+
             if data_json['messageType'] == 'normal':  # message body with normal format
                 msg.body = data_json['normalMessage']
             elif 'acl' in data_json['messageType']:
