@@ -1,0 +1,7 @@
+2025-05-27 10:01:10,652 [__main__] [INFO] Initializing SPIA ... line:18
+2025-05-27 10:01:10,652 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:302
+2025-05-27 10:01:10,658 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-05-27 10:01:10,658 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-05-27 10:01:10,663 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-05-27 10:01:10,665 [smia.logic.exceptions] [ERROR] It is not possible to copy the specified AAS model into the SMIA Archive, so the SMIA cannot be started. Reason: [Errno 2] No such file or directory: '../smia_archive/config/aas/SMIA_ISM_model.aasx' line:17
+2025-05-27 10:01:10,665 [smia.logic.exceptions] [ERROR] The program must end. line:18
