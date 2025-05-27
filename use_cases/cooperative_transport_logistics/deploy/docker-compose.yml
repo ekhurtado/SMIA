@@ -3,7 +3,7 @@
 services:
 
   smia-robot-1:
-    image: ekhurtado/smia:latest-alpine
+    image: ekhurtado/smia:0.2.2-alpine  # This use case was developed based on SMIA v0.2.2
     container_name: smia-robot-1
     environment:
       - AAS_MODEL_NAME=SMIA_TransportRobot_article_1.aasx
@@ -16,7 +16,7 @@ services:
       - ./aas:/smia_archive/config/aas
 
   smia-robot-2:
-    image: ekhurtado/smia:latest-alpine
+    image: ekhurtado/smia:0.2.2-alpine  # This use case was developed based on SMIA v0.2.2
     container_name: smia-robot-2
     environment:
       - AAS_MODEL_NAME=SMIA_TransportRobot_article_2.aasx
@@ -30,7 +30,6 @@ services:
 
   smia-operator:
     image: ekhurtado/smia-use-cases:latest-operator
-#    image: ekhurtado/i4-0-smia-tools:gui-agent
     container_name: smia-operator
     environment:
       - AAS_MODEL_NAME=SMIA_Operator_article.aasx
