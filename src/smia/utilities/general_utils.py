@@ -5,6 +5,7 @@ import os
 import time
 from datetime import datetime
 
+import smia
 from spade.message import Message
 from spade.template import Template
 
@@ -96,7 +97,7 @@ class GeneralUtils:
                       " \______.' |_____||_____| |_____| |____| |____| \n" +
                       # "                                                \n" +
                       "===============================================\n" +
-                      "                                       v0.2.3 \n" +
+                      f"                                       v{smia.__version__} \n" +
                       "===============================================\n")
         print(banner_str)
 
