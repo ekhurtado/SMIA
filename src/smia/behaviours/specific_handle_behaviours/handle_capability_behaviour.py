@@ -11,7 +11,7 @@ from smia.logic.exceptions import CapabilityRequestExecutionError, CapabilityChe
 from smia.css_ontology.css_ontology_utils import CapabilitySkillACLInfo
 from smia.utilities import smia_archive_utils
 from smia.utilities.smia_info import AssetInterfacesInfo
-from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLJSONSchemas
+from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAJSONSchemas
 
 _logger = logging.getLogger(__name__)
 
@@ -214,7 +214,7 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
         #  opcionales, sean validos (p.e. que los datos añadidos estén conformes a la ontologia CSS)
         # First, the structure and attributes of the received data are checked and validated
         await inter_aas_interactions_utils.check_received_request_data_structure(
-            self.svc_req_data, ACLJSONSchemas.JSON_SCHEMA_CAPABILITY_REQUEST)
+            self.svc_req_data, ACLSMIAJSONSchemas.JSON_SCHEMA_CAPABILITY_REQUEST)
         received_cap_data = self.svc_req_data['serviceData']['serviceParams']
         # if CapabilitySkillACLInfo.REQUIRED_CAPABILITY_NAME not in received_cap_data:
         #     raise RequestDataError("The received capability data is invalid due to missing #{} field in request "

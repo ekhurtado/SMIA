@@ -27,6 +27,17 @@ class FIPAACLInfo:
     FIPA_ACL_ONTOLOGY_CAPABILITY_RESPONSE = 'CapabilityResponse'
     FIPA_ACL_ONTOLOGY_SVC_NEGOTIATION = 'Negotiation'
 
+class ACLSMIAOntologyInfo:
+    """
+    This class contains the values related to ACL-SMIA ontology library information: the ontology classification
+    established for the SMIA approach.
+    """
+    ACL_ONTOLOGY_ASSET_RELATED_SERVICE = 'asset-related-service'
+    ACL_ONTOLOGY_AGENT_RELATED_SERVICE = 'agent-related-service'
+    ACL_ONTOLOGY_AAS_SERVICE = 'aas-service'
+    ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE = 'aas-infrastructure-service'
+    ACL_ONTOLOGY_CSS_SERVICE = 'css-service'
+
 class ServiceTypes:
     """
     This class contains all service types defined in the Functional View of RAMI 4.0.
@@ -37,7 +48,7 @@ class ServiceTypes:
     SUBMODEL_SERVICE = 'SubmodelService'
     CSS_RELATED_SERVICE = 'CSSRelatedService'   # TODO duda con este ya que contiene el concepto de service dentro, y no es lo mismo
 
-class ACLJSONSchemas:
+class ACLSMIAJSONSchemas:
     """This class contains all the JSON schemas related to ACL messages sent between SMIA agents."""
 
     JSON_SCHEMA_AAS_MODEL_REFERENCE = {
@@ -99,3 +110,142 @@ class ACLJSONSchemas:
         },
         "required": ["capabilityName"]
     }
+
+    # NEW SCHEMAS FOR SMIA: added in v0.2.4
+    # -------------------------------------
+    # -------------------------------------
+
+    # Common schemas
+    # --------------
+    JSON_SCHEMA_SMIA_INSTANCE_INFORMATION = {
+        "type": "object",
+        "properties": {
+            "id": { "type": "string" },
+            "asset": {
+                "type": "object",
+                "properties": {
+                    "id": {"type": "string"},
+                    "kind": {"type": "string"},
+                    "type": {"type": "string"},
+                }
+            },
+            "aasID": {"type": "string"},
+            "status": {"type": "string"},
+            "startedTimeStamp": {"type": "integer"},
+            "smiaVersion": {"type": "string"},
+        },
+        "required": ["id", "asset", "aasID"],
+    }
+    # TODO
+
+    # Asset-related services / agent-related services schemas
+    # -------------------------------------------------------
+    # TODO
+
+    # AAS Services schemas
+    # --------------------
+    JSON_SCHEMA_AAS_SERVICE = {
+        # "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "AASServiceSchema",
+        "type": "object",
+
+        "properties": {
+            "serviceID": {"type": "string"},
+            "serviceType": {
+                "type": "string",
+                "enum": ["SubmodelRegistryService", "MetaInformationManagementService", "DiscoveryService"]  # TODO in the future think about adding more
+            },
+            "serviceParams": {}
+        },
+        "required": ["serviceID", "serviceType"],
+        "allOf": [
+            {
+                "if": {
+                    "properties": {"serviceID": {"const": "GetSubmodelElementByReference"}}
+                },
+                "then": {
+                    "properties": {
+                        "serviceParams": {
+                            "oneOf": [
+                                {
+                                    "type": "object",
+                                    "required": ["ModelReference"],
+                                    "properties": {"ModelReference": JSON_SCHEMA_AAS_MODEL_REFERENCE},
+                                },
+                                {
+                                    "type": "object",
+                                    "required": ["ExternalReference"],
+                                    "properties": {"ExternalReference": {"type": "string"}},
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            {
+                "if": {
+                    "properties": {
+                        "serviceID": {
+                            # TODO Think of more AAS services that simply require a string.
+                            "enum": ["GetAASInformationByAssetID"]
+                        }
+                    }
+                },
+                "then": {
+                    "properties": {
+                        "serviceParams": {"type": "string"}
+                    }
+                }
+            }
+        ]
+    }
+    # TODO falta probarlos
+
+    # AAS Infrastructure Services schemas
+    # -----------------------------------
+    JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE = {
+        # "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "AASInfrastructureServiceSchema",
+        "type": "object",
+
+        "properties": {
+            "serviceID": { "type": "string" },
+            "serviceType": {
+                "type": "string",
+                "enum": ["RegistryService", "DiscoveryService"]   # TODO in the future think about adding more
+            },
+        "serviceParams": {}
+        },
+        "required": ["serviceID", "serviceType"],
+        "allOf": [
+            {
+                "if": {
+                    "properties": { "serviceID": { "const": "RegistrySMIAInstance" } }
+                },
+                "then": {
+                    "properties": { "serviceParams": {JSON_SCHEMA_SMIA_INSTANCE_INFORMATION} }
+                }
+            },
+            {
+                "if": {
+                    "properties": {
+                        "serviceID": {
+                            # TODO Think of more infrastructure services that simply require a string.
+                            "enum": ["GetSMIAInstanceIDByAssetID", "GetAssetIDBySMIAInstanceID",
+                                     "GetAllAssetIDByCapability"]
+                        }
+                    }
+                },
+                "then": {
+                    "properties": {
+                        "serviceParams": { "type": "string" }
+                    }
+                }
+            }
+        ]
+    }
+    # TODO falta probarlos
+
+    # CSS Services schemas
+    # --------------------
+    # TODO

@@ -9,7 +9,7 @@ from smia.logic import inter_aas_interactions_utils
 from smia.logic.exceptions import RequestDataError, ServiceRequestExecutionError, AASModelReadingError, \
     AssetConnectionError
 from smia.utilities import smia_archive_utils
-from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLJSONSchemas, ServiceTypes
+from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAJSONSchemas, ServiceTypes
 from smia.utilities.smia_info import AssetInterfacesInfo
 
 _logger = logging.getLogger(__name__)
@@ -108,7 +108,7 @@ class HandleSvcRequestBehaviour(OneShotBehaviour):
         try:
             # First, the received data is checked and validated
             await inter_aas_interactions_utils.check_received_request_data_structure(
-                self.svc_req_data, ACLJSONSchemas.JSON_SCHEMA_ASSET_SERVICE_REQUEST)
+                self.svc_req_data, ACLSMIAJSONSchemas.JSON_SCHEMA_ASSET_SERVICE_REQUEST)
             service_params = self.svc_req_data['serviceData']['serviceParams']
 
             # If the received data is valid, the AAS Reference object need to be created
@@ -200,7 +200,7 @@ class HandleSvcRequestBehaviour(OneShotBehaviour):
         try:
             # First, the received data is checked and validated
             await inter_aas_interactions_utils.check_received_request_data_structure(
-                self.svc_req_data, ACLJSONSchemas.JSON_SCHEMA_SUBMODEL_SERVICE_REQUEST)
+                self.svc_req_data, ACLSMIAJSONSchemas.JSON_SCHEMA_SUBMODEL_SERVICE_REQUEST)
 
             # If the data is valid, the SubmodelElement is obtained from the AAS model. For this purpose, the
             # appropriate BaSyx object must be created

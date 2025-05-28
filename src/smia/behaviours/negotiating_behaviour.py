@@ -9,7 +9,7 @@ from smia.css_ontology.css_ontology_utils import CapabilitySkillACLInfo, Capabil
 from smia.logic import negotiation_utils, inter_aas_interactions_utils
 from smia.logic.exceptions import RequestDataError
 from smia.utilities import smia_archive_utils
-from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLJSONSchemas, ServiceTypes
+from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAJSONSchemas, ServiceTypes
 from smia.utilities.smia_info import SMIAInteractionInfo
 from smia.utilities.general_utils import GeneralUtils
 
@@ -180,7 +180,7 @@ class NegotiatingBehaviour(CyclicBehaviour):
         """
         # First, the structure and attributes of the received data are checked and validated
         await inter_aas_interactions_utils.check_received_request_data_structure(
-            cap_req_data, ACLJSONSchemas.JSON_SCHEMA_CAPABILITY_REQUEST)
+            cap_req_data, ACLSMIAJSONSchemas.JSON_SCHEMA_CAPABILITY_REQUEST)
         received_cap_data = cap_req_data['serviceData']['serviceParams']
         cap_name = received_cap_data[CapabilitySkillACLInfo.REQUIRED_CAPABILITY_NAME]
         cap_ontology_instance = await self.myagent.css_ontology.get_ontology_instance_by_name(cap_name)
