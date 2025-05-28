@@ -194,14 +194,48 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
         # TODO falta por hacer
         pass
 
-    async def send_request_data_acl_message(self, smia_instance_id, requested_data):
+    async def execute_acl_qp_aas_protocol(self, smia_instance_id, requested_aas_ref):
+        """
+        This method executes the FIPA-ACL QP interaction protocol (Query Protocol), to query an AAS element to a given
+        SMIA instance.
+
+        Args:
+            smia_instance_id (str): identifier of SMIA instance to be the requested.
+            requested_aas_ref (str): reference of the AAS element to be queried.
+
+        Returns:
+            object: returns the queried AAS element content.
+        """
         # TODO falta por hacer
         pass
 
-    async def send_cnp_protocol_acl_message(self, smia_instance_ids):
+    async def execute_acl_cnp_protocol(self, smia_instance_ids):
+        """
+        This method executes the FIPA-ACL CNP interaction protocol (Contract Net Protocol), to obtain the best option among several.
+
+        Args:
+            smia_instance_ids (list): list with all the identifiers of SMIA instances to be the participants of the protocol.
+
+        Returns:
+            str, str: returns the asset identifier and the SMIA instance identifier of the best option.
+        """
         # TODO falta por hacer
         pass
 
-    async def send_capability_execution_acl_message(self, smia_instance_id, capability, skill, constraints=None, skill_parameters=None):
+    async def execute_acl_rp_css_protocol(self, smia_instance_id, capability, skill, constraints=None, skill_parameters=None):
+        """
+        This method executes the FIPA-ACL RP interaction protocol (Request Protocol), to request the execution of
+        an CSS-based capability.
+
+        Args:
+            smia_instance_id (str): identifier of SMIA instance to be the requested.
+            capability (str): IRI of the capability to be requested
+            skill (str): IRI of the skill to be requested
+            constraints (list): IRIs of the constraints with their values
+            skill_parameters (list): IRIs of the skill_parameters with their values
+
+        Returns:
+            object: returns the response content.
+        """
         # TODO falta por hacer
         pass
