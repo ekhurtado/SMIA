@@ -136,11 +136,24 @@ class ACLSMIAJSONSchemas:
         },
         "required": ["id", "asset", "aasID"],
     }
-    # TODO
+    # TODO pensar mas (ademas de añadir ModelReference mas adelante)
 
     # Asset-related services / agent-related services schemas
     # -------------------------------------------------------
-    # TODO
+    JSON_SCHEMA_ASSET_AGENT_RELATED_SERVICE = {
+        "title": "AssetAgentRelatedServiceSchema",
+        "type": "object",
+
+        "properties": {
+            "serviceRef": JSON_SCHEMA_AAS_MODEL_REFERENCE,
+            "serviceParams": {
+                "type": "object",
+                "additionalProperties": {"type": "string"}
+            }
+        },
+        "required": ["serviceRef"]
+    }
+    # TODO falta probarlos
 
     # AAS Services schemas
     # --------------------
@@ -248,4 +261,44 @@ class ACLSMIAJSONSchemas:
 
     # CSS Services schemas
     # --------------------
-    # TODO
+    JSON_SCHEMA_CSS_SERVICE = {
+        "type": "object",
+        "properties": {
+            "capabilityIRI": {"type": "string"},
+            "skillIRI": {"type": "string"},
+            "constraints": {
+                "type": "object",
+                "additionalProperties": {"type": "string"}
+            },
+            "skillParams": {
+                "type": "object",
+                "additionalProperties": {"type": "string"}
+            },
+            "skillInterfaceIRI": {"type": "string"},
+
+            # Optional parameters for SMIA instances negotiation within FIPA-CNP protocol
+            "negCriterion": {"type": "string"},
+            "negTargets": {
+                "type": "array",
+                "items": {"type": "string"}
+            },
+            "negValue": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+            },
+        },
+        "required": ["capabilityIRI"]
+    }
+    # TODO falta probarlos
+
+
+    # JSON schemas mapping to ACL-SMIA ontologies
+    # -------------------------------------------
+    JSON_SCHEMA_ACL_SMIA_ONTOLOGIES_MAP = {
+        ACLSMIAOntologyInfo.ACL_ONTOLOGY_ASSET_RELATED_SERVICE: JSON_SCHEMA_ASSET_AGENT_RELATED_SERVICE,
+        ACLSMIAOntologyInfo.ACL_ONTOLOGY_AGENT_RELATED_SERVICE: JSON_SCHEMA_ASSET_AGENT_RELATED_SERVICE,
+        ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_SERVICE: JSON_SCHEMA_AAS_SERVICE,
+        ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE: JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE,
+        ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE: JSON_SCHEMA_CSS_SERVICE
+    }
