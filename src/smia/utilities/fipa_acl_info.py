@@ -236,7 +236,7 @@ class ACLSMIAJSONSchemas:
                     "properties": { "serviceID": { "const": "RegistrySMIAInstance" } }
                 },
                 "then": {
-                    "properties": { "serviceParams": {JSON_SCHEMA_SMIA_INSTANCE_INFORMATION} }
+                    "properties": { "serviceParams": JSON_SCHEMA_SMIA_INSTANCE_INFORMATION }
                 }
             },
             {
