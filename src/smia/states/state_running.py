@@ -63,16 +63,18 @@ class StateRunning(State):
         behaviours_instances = []
         agent_capabilities = await self.agent.css_ontology.get_ontology_instances_by_class_iri(
             CapabilitySkillOntologyInfo.CSS_ONTOLOGY_AGENT_CAPABILITY_IRI)
-        for capability_instance in agent_capabilities:
-            if capability_instance.name == 'Negotiation':
-                # The negotiation behaviour has to be added to the agent
-                _logger.info("This SMIA has negotiation capability.")
-                negotiation_behav = NegotiatingBehaviour(self.agent)
-                self.agent.add_behaviour(negotiation_behav, SMIAInteractionInfo.NEG_STANDARD_ACL_TEMPLATE)
-                behaviours_instances.append(negotiation_behav)
-            elif capability_instance.name == 'OtherAgentCapability':
-                # TODO pensarlo
-                pass
+        # If no agent capabilities were found it returns None
+        if agent_capabilities is not None:
+            for capability_instance in agent_capabilities:
+                if capability_instance.name == 'Negotiation':
+                    # The negotiation behaviour has to be added to the agent
+                    _logger.info("This SMIA has negotiation capability.")
+                    negotiation_behav = NegotiatingBehaviour(self.agent)
+                    self.agent.add_behaviour(negotiation_behav, SMIAInteractionInfo.NEG_STANDARD_ACL_TEMPLATE)
+                    behaviours_instances.append(negotiation_behav)
+                elif capability_instance.name == 'OtherAgentCapability':
+                    # TODO pensarlo
+                    pass
 
         from smia.agents.extensible_smia_agent import ExtensibleSMIAAgent  # Local import to avoid circular import error
         if isinstance(self.agent, ExtensibleSMIAAgent):
