@@ -222,7 +222,7 @@ class AssetConnection(metaclass=abc.ABCMeta):
             obj: service data in the content-type format.
         """
         content_type = await self.get_interaction_metadata_content_type(interaction_metadata)
-        match content_type:
+        match content_type.value:
             case '':    # Add the format of the ContentType
                 pass    # Add the method to convert a JSON into de format of the ContentType
             case _:

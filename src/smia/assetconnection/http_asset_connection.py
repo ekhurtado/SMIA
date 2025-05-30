@@ -262,7 +262,7 @@ class HTTPAssetConnection(AssetConnection):
             obj: service data in the content-type format.
         """
         content_type = await self.get_interaction_metadata_content_type(interaction_metadata)
-        match content_type:
+        match content_type.value:
             case 'application/json':
                 return service_data
             case 'text/plain':
