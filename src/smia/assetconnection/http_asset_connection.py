@@ -236,8 +236,7 @@ class HTTPAssetConnection(AssetConnection):
                     response = await session.patch(url=self.request_uri, params=self.request_params)
                 elif self.request_method == 'POST':
                     # TODO a probar
-                    response = await session.post(url=self.request_uri, params=self.request_params,
-                                                  data=self.request_body)
+                    response = await session.post(url=self.request_uri, data=self.request_body)
                 elif self.request_method == 'PUT':
                     # TODO a probar
                     response = await session.put(url=self.request_uri, params=self.request_params)
