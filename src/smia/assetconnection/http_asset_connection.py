@@ -204,8 +204,10 @@ class HTTPAssetConnection(AssetConnection):
                 # TODO analizar otro tipo de metodos HTTP donde tambien se añaden los datos en el body
                 # As it is a POST configured without params, the data will be placed in the body of the message
                 self.request_body = await self.serialize_data_by_content_type(interaction_metadata, service_input_data)
-            AssetConnectionError("The interface need input data but there is no location defined for it.",
-                                 'Invalid interface SubmodelElement', 'MissingAttribute')
+            else:
+                # TODO PENSAR MAS CASOS
+                AssetConnectionError("The interface need input data but there is no location defined for it.",
+                                     'Invalid interface SubmodelElement', 'MissingAttribute')
 
 
     async def send_http_request(self):
@@ -235,7 +237,7 @@ class HTTPAssetConnection(AssetConnection):
                 elif self.request_method == 'POST':
                     # TODO a probar
                     response = await session.post(url=self.request_uri, params=self.request_params,
-                                                  body=self.request_body)
+                                                  data=self.request_body)
                 elif self.request_method == 'PUT':
                     # TODO a probar
                     response = await session.put(url=self.request_uri, params=self.request_params)
