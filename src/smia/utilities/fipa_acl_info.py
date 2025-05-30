@@ -4,12 +4,23 @@ class FIPAACLInfo:
     """
 
     # Performative values
-    FIPA_ACL_PERFORMATIVE_CFP = 'CallForProposal'
-    FIPA_ACL_PERFORMATIVE_INFORM = 'Inform'
-    FIPA_ACL_PERFORMATIVE_REQUEST = 'Request'
-    FIPA_ACL_PERFORMATIVE_PROPOSE = 'Propose'
-    FIPA_ACL_PERFORMATIVE_FAILURE = 'Failure'
-    FIPA_ACL_PERFORMATIVE_QUERY_IF = 'Query-If'
+    FIPA_ACL_PERFORMATIVE_CFP = 'cfp'
+    FIPA_ACL_PERFORMATIVE_INFORM = 'inform'
+    FIPA_ACL_PERFORMATIVE_REQUEST = 'request'
+    FIPA_ACL_PERFORMATIVE_PROPOSE = 'propose'
+    FIPA_ACL_PERFORMATIVE_FAILURE = 'failure'
+    FIPA_ACL_PERFORMATIVE_QUERY_IF = 'query-if'
+    FIPA_ACL_PERFORMATIVE_QUERY_REF = 'query-ref'
+    FIPA_ACL_PERFORMATIVE_REFUSE = 'refuse'
+    FIPA_ACL_PERFORMATIVE_NOT_UNDERSTOOD = 'not-understood'
+
+    # TODO borrar: Antiguos nombres (se han actualizado a los formatos definidos en FIPA (en minuscula))
+    # FIPA_ACL_PERFORMATIVE_CFP = 'CallForProposal'
+    # FIPA_ACL_PERFORMATIVE_INFORM = 'Inform'
+    # FIPA_ACL_PERFORMATIVE_REQUEST = 'Request'
+    # FIPA_ACL_PERFORMATIVE_PROPOSE = 'Propose'
+    # FIPA_ACL_PERFORMATIVE_FAILURE = 'Failure'
+    # FIPA_ACL_PERFORMATIVE_QUERY_IF = 'Query-If'
     # TODO add more if they are needed
     # TODO se han añadido estos pero todavia no se utilizan:
     FIPA_ACL_PERFORMATIVE_ACCEPT_PROPOSAL = 'AcceptProposal'

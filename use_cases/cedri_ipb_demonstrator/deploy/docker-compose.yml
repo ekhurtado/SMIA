@@ -147,6 +147,58 @@ services:
     volumes:
       - ./aas:/smia_archive/config/aas
 
+  smia-punching-machine-a:
+    image: ekhurtado/smia:latest-alpine
+    container_name: smia-punching-machine-a
+    environment:
+      - AAS_MODEL_NAME=CeDRI_PunchingMachine_instanceA.aasx
+      - AGENT_ID=smia-punchingmachine-a@ejabberd
+      - AGENT_PSSWD=gciscedri1234
+    depends_on:
+      xmpp-server:
+        condition: service_healthy
+    volumes:
+      - ./aas:/smia_archive/config/aas
+
+  smia-punching-machine-b:
+    image: ekhurtado/smia:latest-alpine
+    container_name: smia-punching-machine-b
+    environment:
+      - AAS_MODEL_NAME=CeDRI_PunchingMachine_instanceB.aasx
+      - AGENT_ID=smia-punchingmachine-b@ejabberd
+      - AGENT_PSSWD=gciscedri1234
+    depends_on:
+      xmpp-server:
+        condition: service_healthy
+    volumes:
+      - ./aas:/smia_archive/config/aas
+
+  smia-indexed-line-a:
+    image: ekhurtado/smia:latest-alpine
+    container_name: smia-indexed-line-a
+    environment:
+      - AAS_MODEL_NAME=CeDRI_IndexedLine_instanceA.aasx
+      - AGENT_ID=smia-indexedline-a@ejabberd
+      - AGENT_PSSWD=gciscedri1234
+    depends_on:
+      xmpp-server:
+        condition: service_healthy
+    volumes:
+      - ./aas:/smia_archive/config/aas
+
+  smia-indexed-line-b:
+    image: ekhurtado/smia:latest-alpine
+    container_name: smia-indexed-line-b
+    environment:
+      - AAS_MODEL_NAME=CeDRI_IndexedLine_instanceB.aasx
+      - AGENT_ID=smia-indexedline-b@ejabberd
+      - AGENT_PSSWD=gciscedri1234
+    depends_on:
+      xmpp-server:
+        condition: service_healthy
+    volumes:
+      - ./aas:/smia_archive/config/aas
+
 
   # !!!!!!!!!!!!!!!!!!!!!!!!1
   # TODO BORRAR: Para enviar solicitudes CSS de prueba
