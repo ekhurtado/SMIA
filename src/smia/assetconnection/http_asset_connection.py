@@ -1,3 +1,4 @@
+import json
 import logging
 
 import aiohttp
@@ -198,6 +199,11 @@ class HTTPAssetConnection(AssetConnection):
             # TODO pensar como se haria si no hay que añadirlo en los parametros (p.e. en el body)
             # TODO PENSAR EN MAS OPCIONES DE AÑADIR LOS PARAMETROS (P.E. EN LA URI)
         else:
+            # In this case, no parameters have been established, so other options will be analyzed.
+            if self.request_method == 'POST':
+                # TODO analizar otro tipo de metodos HTTP donde tambien se añaden los datos en el body
+                # As it is a POST configured without params, the data will be placed in the body of the message
+                self.request_body = await self.serialize_data_by_content_type(interaction_metadata, service_input_data)
             AssetConnectionError("The interface need input data but there is no location defined for it.",
                                  'Invalid interface SubmodelElement', 'MissingAttribute')
 
@@ -228,7 +234,8 @@ class HTTPAssetConnection(AssetConnection):
                     response = await session.patch(url=self.request_uri, params=self.request_params)
                 elif self.request_method == 'POST':
                     # TODO a probar
-                    response = await session.post(url=self.request_uri, params=self.request_params)
+                    response = await session.post(url=self.request_uri, params=self.request_params,
+                                                  body=self.request_body)
                 elif self.request_method == 'PUT':
                     # TODO a probar
                     response = await session.put(url=self.request_uri, params=self.request_params)
@@ -242,6 +249,28 @@ class HTTPAssetConnection(AssetConnection):
                     raise AssetConnectionError("The connection with the asset has raised an exception.",
                                                connection_error.__class__.__name__, connection_error.args[0].reason)
 
+
+    async def serialize_data_by_content_type(self, interaction_metadata, service_data):
+        """
+        This method serializes the data for the given InteractionMetadata.
+
+        Args:
+            interaction_metadata(basyx.aas.model.SubmodelElementCollection): interactionMetadata Python object.
+            service_data (dict): the data to be serialized in JSON format.
+
+        Returns:
+            obj: service data in the content-type format.
+        """
+        content_type = await self.get_interaction_metadata_content_type(interaction_metadata)
+        match content_type:
+            case 'application/json':
+                return service_data
+            case 'text/plain':
+                return json.dumps(service_data)
+            case 'application/xml':
+                pass  # Add the method to convert a JSON into XML
+            case _:
+                pass
 
 class HTTPAssetInterfaceSemantics:
     """

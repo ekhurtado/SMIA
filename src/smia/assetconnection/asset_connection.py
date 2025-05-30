@@ -169,6 +169,7 @@ class AssetConnection(metaclass=abc.ABCMeta):
             content_type_elem = await self.get_interaction_metadata_content_type(interaction_metadata)
             await self.check_data_query_type(interaction_metadata.id_short, content_type_elem.value, data_query_elem)
 
+
     async def get_interaction_metadata_content_type(self, interaction_metadata):
         """
         This method gets the content type of the interaction metadata. If it is not defined, the type defined in the
@@ -205,6 +206,29 @@ class AssetConnection(metaclass=abc.ABCMeta):
                                        f"object does not have required '{sm_id_short}' element",
                                        "missing submodel element",
                                        f"{submodel_elem_col.id_short} does not have required '{sm_id_short}'")
+
+    # --------------------------------------------
+    # Useful methods to build message to the asset
+    # --------------------------------------------
+    async def serialize_data_by_content_type(self, interaction_metadata, service_data):
+        """
+        This method serializes the data for the given InteractionMetadata.
+
+        Args:
+            interaction_metadata(basyx.aas.model.SubmodelElementCollection): interactionMetadata Python object.
+            service_data (dict): the data to be serialized in JSON format.
+
+        Returns:
+            obj: service data in the content-type format.
+        """
+        content_type = await self.get_interaction_metadata_content_type(interaction_metadata)
+        match content_type:
+            case '':    # Add the format of the ContentType
+                pass    # Add the method to convert a JSON into de format of the ContentType
+            case _:
+                pass
+
+
 
     # --------------------------------------------------------
     # Useful methods to extract information from asset message
