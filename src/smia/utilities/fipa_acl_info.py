@@ -308,9 +308,9 @@ class ACLSMIAJSONSchemas:
                 "items": {"type": "string"}
             },
             "negValue": {
-                "type": "integer",
-                "minimum": 0,
-                "maximum": 100
+                "type": "number",   # It is a float number between 0 and 1
+                "minimum": 0.0,
+                "maximum": 1.0
             },
         },
         "required": ["capabilityIRI"]
