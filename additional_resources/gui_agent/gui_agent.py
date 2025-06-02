@@ -69,13 +69,16 @@ async def main():
     gui_agent.web.add_get("/acl_message", GeneralGUIFeatures.hello_controller, "/htmls/send_acl.html")
     gui_agent.web.add_post("/acl_message/submit", gui_agent.general_features.acl_post_controller, "/htmls/send_acl_submit.html")
 
+    gui_agent.web.add_get("/acl_message_v0", GeneralGUIFeatures.hello_controller, "/htmls/send_acl_v0.html")
+    gui_agent.web.add_post("/acl_message_v0/submit", gui_agent.general_features.acl_post_controller_v0, "/htmls/send_acl_submit_v0.html")
+
     gui_agent.web.add_get("/receive_acl_msgs", GeneralGUIFeatures.hello_controller, "/htmls/receive_acl.html")
 
     gui_agent.web.add_get("/negotiation", GeneralGUIFeatures.hello_controller, "/htmls/negotiation.html")
     gui_agent.web.add_post("/negotiation/submit", gui_agent.general_features.neg_post_controller, "/htmls/negotiation_submit.html")
 
     gui_agent.web.add_get("/editor", GeneralGUIFeatures.hello_controller, "/htmls/own_programming_language_editor.html")
-    gui_agent.web.add_post("/editor/submit", gui_agent.general_features.acl_post_controller,
+    gui_agent.web.add_post("/editor/submit", gui_agent.general_features.acl_post_controller_v0,
                            "/htmls/own_programming_language_editor.html")
 
     gui_agent.web.add_get("/aas_library", GeneralGUIFeatures.hello_controller, "/htmls/aas_library.html")
@@ -100,6 +103,7 @@ async def main():
     # gui_agent.web.add_menu_entry("AAS Library", "/aas_library", "fa fa-book")
 
     await gui_agent.general_features.add_new_menu_entry("Send ACL message", "/acl_message", "fa fa-envelope")
+    await gui_agent.general_features.add_new_menu_entry("Send ACL message (OLD)", "/acl_message_v0", "fa fa-envelope")
     await gui_agent.general_features.add_new_menu_entry("Received ACL messages", "/receive_acl_msgs", "fa fa-inbox")
     await gui_agent.general_features.add_new_menu_entry("Negotiation", "/negotiation", "fa fa-comments")
     await gui_agent.general_features.add_new_menu_entry("Programming language editor", "/editor", "fa fa-code")

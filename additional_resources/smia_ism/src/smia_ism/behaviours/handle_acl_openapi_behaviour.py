@@ -58,6 +58,7 @@ class HandleACLOpenAPIBehaviour(OneShotBehaviour):
         # mapped with the service identifier and the associated execution method. This behaviour will get the service
         # identifier and will execute its associated service method. All services will respond with a boolean status
         # object (True if it has been correctly executed and False if it not) and the content for the ACL reply message
+        requested_infrastructure_svc = None
         try:
             requested_infrastructure_svc = self.received_json_data['serviceID']
             if requested_infrastructure_svc not in ACLOpenAPIServices.ACLOpenAPIServicesMap:
@@ -65,7 +66,7 @@ class HandleACLOpenAPIBehaviour(OneShotBehaviour):
                 raise ServiceRequestExecutionError(
                     self.received_acl_msg.thread,'ACL-OpenAPI infrastructure service not found',
                     ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE, self,
-                    affectedElement= requested_infrastructure_svc)
+                    affected_elem=requested_infrastructure_svc)
             # At this point the Infrastructure Service can be executed
             _logger.info("The AAS Infrastructure Service {} has been requested.".format(requested_infrastructure_svc))
             result = await self.myagent.acl_openapi_services.execute_agent_service_by_id(requested_infrastructure_svc,
@@ -78,7 +79,7 @@ class HandleACLOpenAPIBehaviour(OneShotBehaviour):
                 svc_execution_error = ServiceRequestExecutionError(
                     self.received_acl_msg.thread, 'Failure during the execution of the Infrastructure Service. '
                     'Reason: KeyError', ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE, self,
-                    affectedElement= requested_infrastructure_svc)
+                    affected_elem=requested_infrastructure_svc)
             # The ServiceRequestExecutionError can handle directly the response to the sender with the Failure message
             await svc_execution_error.handle_service_execution_error()
 

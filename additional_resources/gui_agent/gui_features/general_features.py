@@ -63,6 +63,22 @@ class GeneralGUIFeatures:
 
         return {"status": "OK"}
 
+    async def acl_post_controller_v0(self, request):
+
+        self.myagent.acl_sent = False  # se inicializa en False
+        print("HA LLEGADO AL POST DEL AGENTE: " + str(self.myagent.jid))
+        print(request)
+        data_str = await self.bytes_to_string(request)
+
+        self.myagent.b = GUIAgentBehaviours.SendBehaviour_v0()
+        self.myagent.b.msg_data = data_str
+        self.myagent.add_behaviour(self.myagent.b)
+        print("Behaviour added to the agent")
+        await self.myagent.b.join()
+        self.myagent.acl_sent = True
+
+        return {"status": "OK"}
+
     async def neg_post_controller(self, request):
 
         self.myagent.neg_sent = False  # se inicializa en False
@@ -148,7 +164,7 @@ class GeneralGUIFeatures:
                         'serviceParams': json.dumps(cap_request_data),
                         }
 
-            self.myagent.cap_request_send_behav = GUIAgentBehaviours.SendBehaviour()
+            self.myagent.cap_request_send_behav = GUIAgentBehaviours.SendBehaviour_v0()
             self.myagent.cap_request_send_behav.msg_data = acl_data
             self.myagent.add_behaviour(self.myagent.cap_request_send_behav)
             print("Behaviour added to the agent")
