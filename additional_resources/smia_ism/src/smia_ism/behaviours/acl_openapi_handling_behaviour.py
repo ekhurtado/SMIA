@@ -88,18 +88,14 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
             msg_json_body = json.loads(msg.body)
             try:
                 await inter_aas_interactions_utils.check_received_request_data_structure(
-                    msg_json_body, ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE)
+                    msg_json_body, ACLSMIAJSONSchemas.JSON_SCHEMA_ACL_SMIA_ONTOLOGIES_MAP.get(
+                        msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB)))
             except RequestDataError as cap_request_error:
                 # The added data are not valid, so a Refuse message to the requester must be sent
                 # TODO MODIFICAR LA RESPUESTA CON LA NUEVA ESTRUCTURA
-                acl_msg = inter_aas_interactions_utils.create_inter_smia_response_msg(
-                    receiver=GeneralUtils.get_sender_from_acl_msg(msg),
-                    thread=msg.thread,
-                    performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE,
-                    ontology=FIPAACLInfo.FIPA_ACL_ONTOLOGY_SVC_NEGOTIATION,
-                    service_id=msg_json_body['serviceID'],
-                    service_type=msg_json_body['serviceType'],
-                    service_params=json.dumps({'reason': cap_request_error.message})
+                acl_msg = inter_aas_interactions_utils.create_acl_response_from_received_msg(msg,
+                    performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REFUSE,
+                    response_body={'reason': cap_request_error.message}
                 )
                 await self.send(acl_msg)
                 _logger.warning("The sender [{}] has sent an message with thread [{}] that has invalid data, therefore "
@@ -115,10 +111,6 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
                             "request..".format(GeneralUtils.get_sender_from_acl_msg(msg), msg.thread))
             specific_handling_behav = HandleACLOpenAPIBehaviour(self.agent, received_acl_msg=msg)
             self.myagent.add_behaviour(specific_handling_behav)
-
-
-                case _:
-                    _logger.error("ACL performative type not available.")
 
         else:
             _logger.info("         - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour)")
