@@ -33,15 +33,24 @@ class GUIAgentBehaviours:
             # Now the body of the ACL-SMIA message is built
             msg_body_json = None
             match data_json['ontology']:
-                case 'asset-related-service', 'agent-related-service':
+                case 'asset-related-service' | 'agent-related-service':
                     # TODO recoger los atributos para este caso
-                    pass
+                    msg_body_json = {'serviceRef': json.loads(data_json['serviceRefARS'])}
+                    if 'serviceParamsARS' in data_json:
+                        msg_body_json.update({'serviceParams': json.loads(data_json['serviceParamsARS'])})
                 case 'aas-service':
                     # TODO recoger los atributos para este caso
-                    pass
+                    msg_body_json = {'serviceID': data_json['serviceIDAS'],
+                                     'serviceType': data_json['serviceTypeAS']}
+                    if 'serviceParamsAS' in data_json:
+                        msg_body_json.update({'serviceParams': json.loads(data_json['serviceParamsAS'])})
+
                 case 'aas-infrastructure-service':
                     # TODO recoger los atributos para este caso
-                    pass
+                    msg_body_json = {'serviceID': data_json['serviceIDAIS'],
+                                     'serviceType': data_json['serviceTypeAIS']}
+                    if 'serviceParamsAIS' in data_json:
+                        msg_body_json.update({'serviceParams': json.loads(data_json['serviceParamsAIS'])})
                 case 'css-service':
                     msg_body_json = {'capabilityIRI': data_json['capabilityIRI']}
                     if 'skillIRI' in data_json:
@@ -64,8 +73,10 @@ class GUIAgentBehaviours:
                             processed_targets.append(target)
                         msg_body_json.update({'negTargets': processed_targets})
                 case _:
-                    msg.body = data_json['normalMessage']
-
+                    if 'normalMessage' in data_json:
+                        msg.body = data_json['normalMessage']
+                    else:
+                        msg.body = ''
             print(json.dumps(msg_body_json))
             if 'normalMessage' not in data_json:
                 msg.body = json.dumps(msg_body_json)

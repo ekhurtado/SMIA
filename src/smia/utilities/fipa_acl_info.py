@@ -62,7 +62,7 @@ class ServiceTypes:
 class ACLSMIAJSONSchemas:
     """This class contains all the JSON schemas related to ACL messages sent between SMIA agents."""
 
-    JSON_SCHEMA_AAS_MODEL_REFERENCE = {
+    JSON_SCHEMA_AAS_MODEL_REFERENCE_old = {
         "type": "object",
         "properties": {
             "keys": {
@@ -83,7 +83,7 @@ class ACLSMIAJSONSchemas:
     JSON_SCHEMA_SUBMODEL_SERVICE_REQUEST = {
         "type": "object",
         "properties": {
-            "ModelReference": JSON_SCHEMA_AAS_MODEL_REFERENCE,
+            "ModelReference": JSON_SCHEMA_AAS_MODEL_REFERENCE_old,
             "ExternalReference": {
                 "type": "string"
             }
@@ -101,7 +101,7 @@ class ACLSMIAJSONSchemas:
                 "type": "object",
                 "additionalProperties": {"type": "string"}
             },
-            "ModelReference": JSON_SCHEMA_AAS_MODEL_REFERENCE,
+            "ModelReference": JSON_SCHEMA_AAS_MODEL_REFERENCE_old,
         },
         "required": ["ModelReference"]
     }
@@ -128,6 +128,33 @@ class ACLSMIAJSONSchemas:
 
     # Common schemas
     # --------------
+    JSON_SCHEMA_AAS_MODEL_REFERENCE = {
+        "oneOf": [
+            {
+                "type": "object",
+                "properties": {
+                    "keys": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "type": {"type": "string"},
+                                "value": {"type": "string"}
+                            },
+                            "required": ["type", "value"]
+                        }
+                    }
+                },
+                "required": ["keys"]
+            },
+            {
+                "type": "string",
+                "pattern": "^(\\[[^\\[\\],]+,[^\\[\\],]+\\])+$",
+                "description": "ModelReference format for strings: [type,value][type,value]..."
+            }
+        ]
+    }
+
     JSON_SCHEMA_SMIA_INSTANCE_INFORMATION = {
         "type": "object",
         "properties": {
