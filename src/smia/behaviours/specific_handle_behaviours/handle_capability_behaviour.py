@@ -213,7 +213,7 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
         #  ejecutaría la capacidad con una skill aleatoria). Lo que si se va a comprobar es que si se añaden datos
         #  opcionales, sean validos (p.e. que los datos añadidos estén conformes a la ontologia CSS)
         # First, the structure and attributes of the received data are checked and validated
-        await inter_aas_interactions_utils.check_received_request_data_structure(
+        await inter_aas_interactions_utils.check_received_request_data_structure_old(
             self.svc_req_data, ACLSMIAJSONSchemas.JSON_SCHEMA_CAPABILITY_REQUEST)
         received_cap_data = self.svc_req_data['serviceData']['serviceParams']
         # if CapabilitySkillACLInfo.REQUIRED_CAPABILITY_NAME not in received_cap_data:

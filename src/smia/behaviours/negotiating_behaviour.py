@@ -179,7 +179,7 @@ class NegotiatingBehaviour(CyclicBehaviour):
             cap_req_data: (dict): all the information about the agent capability request
         """
         # First, the structure and attributes of the received data are checked and validated
-        await inter_aas_interactions_utils.check_received_request_data_structure(
+        await inter_aas_interactions_utils.check_received_request_data_structure_old(
             cap_req_data, ACLSMIAJSONSchemas.JSON_SCHEMA_CAPABILITY_REQUEST)
         received_cap_data = cap_req_data['serviceData']['serviceParams']
         cap_name = received_cap_data[CapabilitySkillACLInfo.REQUIRED_CAPABILITY_NAME]

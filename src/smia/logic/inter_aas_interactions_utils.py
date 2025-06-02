@@ -70,7 +70,7 @@ def create_inter_smia_response_msg(receiver, thread, performative, ontology, ser
     request_msg.body = json.dumps(request_msg_body_json)
     return request_msg
 
-async def check_received_request_data_structure(received_data, json_schema):
+async def check_received_request_data_structure_old(received_data, json_schema):
     """
     This method checks if the received data for a request is valid. The JSON object with the specific
     data is also validated against the given associated JSON Schema. In any case, if it is invalid, it raises a
@@ -88,6 +88,24 @@ async def check_received_request_data_structure(received_data, json_schema):
         raise RequestDataError("The received request is invalid due to missing #serviceParams field within "
                                "the #serviceData section of the request message.")
     # The received JSON object is also validated against the associated JSON Schema
+    try:
+        jsonschema.validate(instance=received_data['serviceData']['serviceParams'],
+                            schema=json_schema)
+    except ValidationError as e:
+        raise RequestDataError("The received JSON data within the request message is invalid against the required "
+                               "JSON schema. Invalid part: {}. Reason: {}.".format(e.instance, e.message))
+
+async def check_received_request_data_structure(received_data, json_schema):
+    """
+    This method checks if the received data for a request is valid. So, the JSON object with the specific
+    data is validated against the given associated JSON Schema for FIPA-ACL-SMIA messages. In any case, if it is
+    invalid, it raises a RequestDataError exception.
+
+    Args:
+        received_data (dict): received data in form of a JSON object.
+        json_schema (dict): JSON Schema in form of a JSON object.
+    """
+    # The received JSON object is validated against the associated JSON Schema
     try:
         jsonschema.validate(instance=received_data['serviceData']['serviceParams'],
                             schema=json_schema)

@@ -59,7 +59,10 @@ class GUIAgentBehaviours:
                     msg_body_json = {'serviceID': data_json['serviceIDAIS'],
                                      'serviceType': data_json['serviceTypeAIS']}
                     if 'serviceParamsAIS' in data_json:
-                        msg_body_json.update({'serviceParams': json.loads(data_json['serviceParamsAIS'])})
+                        try:
+                            msg_body_json.update({'serviceParams': json.loads(data_json['serviceParamsAIS'])})
+                        except JSONDecodeError as e:
+                            msg_body_json.update({'serviceParams': data_json['serviceParamsAIS'].strip()})
                 case 'css-service':
                     msg_body_json = {'capabilityIRI': data_json['capabilityIRI']}
                     if 'skillIRI' in data_json:

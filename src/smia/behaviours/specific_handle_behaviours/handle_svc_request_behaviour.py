@@ -107,7 +107,7 @@ class HandleSvcRequestBehaviour(OneShotBehaviour):
         # AssetInterfacesDefinition submodel. This information is in serviceParams TODO (de momento en serviceParams, ya veremos mas adelante)
         try:
             # First, the received data is checked and validated
-            await inter_aas_interactions_utils.check_received_request_data_structure(
+            await inter_aas_interactions_utils.check_received_request_data_structure_old(
                 self.svc_req_data, ACLSMIAJSONSchemas.JSON_SCHEMA_ASSET_SERVICE_REQUEST)
             service_params = self.svc_req_data['serviceData']['serviceParams']
 
@@ -199,7 +199,7 @@ class HandleSvcRequestBehaviour(OneShotBehaviour):
         # requested element. This information is in serviceParams TODO (de momento en serviceParams, ya veremos mas adelante)
         try:
             # First, the received data is checked and validated
-            await inter_aas_interactions_utils.check_received_request_data_structure(
+            await inter_aas_interactions_utils.check_received_request_data_structure_old(
                 self.svc_req_data, ACLSMIAJSONSchemas.JSON_SCHEMA_SUBMODEL_SERVICE_REQUEST)
 
             # If the data is valid, the SubmodelElement is obtained from the AAS model. For this purpose, the
