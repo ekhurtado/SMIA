@@ -3,7 +3,7 @@ import logging
 
 from smia.logic import inter_aas_interactions_utils
 from smia.logic.exceptions import ServiceRequestExecutionError
-from smia.utilities.fipa_acl_info import FIPAACLInfo
+from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo
 from spade.behaviour import OneShotBehaviour
 
 from logic.acl_open_api_services import ACLOpenAPIServices
@@ -62,20 +62,25 @@ class HandleACLOpenAPIBehaviour(OneShotBehaviour):
             requested_infrastructure_svc = self.received_json_data['serviceID']
             if requested_infrastructure_svc not in ACLOpenAPIServices.ACLOpenAPIServicesMap:
                 # TODO MODIFICAR CON EL NUEVO METODO UTILS
-                await inter_aas_interactions_utils.send_response_msg(
-                    self, self.received_acl_msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE,
-                    response_body={'reason': 'ACL-OpenAPI infrastructure service not found',
-                                   'affectedElement': requested_infrastructure_svc, 'exceptionType': 'ServiceRequestExecutionError'})
+                raise ServiceRequestExecutionError(
+                    self.received_acl_msg.thread,'ACL-OpenAPI infrastructure service not found',
+                    ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE, self,
+                    affectedElement= requested_infrastructure_svc)
             # At this point the Infrastructure Service can be executed
             _logger.info("The AAS Infrastructure Service {} has been requested.".format(requested_infrastructure_svc))
             result = await self.myagent.acl_openapi_services.execute_agent_service_by_id(requested_infrastructure_svc,
                                                                                          **self.received_json_data['serviceParams'])  # TODO PENSAR DONDE IRAN LOS PARAMETROS
             _logger.info("The AAS Infrastructure Service {} has been successfully executed.".format(requested_infrastructure_svc))
-            await self.send_response_msg_to_sender(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM,
-                                                   {'result': result})  # TODO PENSAR COMO SERIA EL MENSAJE DE RESPUESTA VALIDA
-        except ServiceRequestExecutionError as svc_execution_error:
-            # TODO PROGRAMARLO
-            print("Usar este para responder aqui con un failure")
+            await inter_aas_interactions_utils.send_response_msg_from_received(
+                self, self.received_acl_msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM, result)
+        except (ServiceRequestExecutionError, KeyError) as svc_execution_error:
+            if isinstance(svc_execution_error, KeyError):
+                svc_execution_error = ServiceRequestExecutionError(
+                    self.received_acl_msg.thread, 'Failure during the execution of the Infrastructure Service. '
+                    'Reason: KeyError', ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE, self,
+                    affectedElement= requested_infrastructure_svc)
+            # The ServiceRequestExecutionError can handle directly the response to the sender with the Failure message
+            await svc_execution_error.handle_service_execution_error()
 
     async def handle_acl_openapi_query(self):
         """
@@ -83,15 +88,3 @@ class HandleACLOpenAPIBehaviour(OneShotBehaviour):
         """
         # TODO POR HACER
         pass
-
-    async def send_response_msg_to_sender(self, received_msg, performative, response_body=None):
-        """
-        This method creates and sends a FIPA-ACL message with the given serviceParams and performative.
-
-        Args:
-            performative (str): performative according to FIPA-ACL standard.
-            service_params (dict): JSON with the serviceParams to be sent in the message.
-        """
-        acl_msg = inter_aas_interactions_utils.create_acl_response_from_received_msg(received_msg, performative,
-                                                                                     response_body)
-        await self.send(acl_msg)
