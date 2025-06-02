@@ -107,7 +107,7 @@ async def create_acl_response_from_received_msg(received_msg, performative, resp
         if isinstance(response_body, dict):
             response_msg.body = json.dumps(response_body)
         else:
-            response_msg.body = response_body
+            response_msg.body = str(response_body)
     return response_msg
 
 
@@ -151,7 +151,7 @@ async def create_acl_smia_message(receiver, thread, performative, ontology, msg_
         if isinstance(msg_body, dict):
             acl_smia_msg.body = json.dumps(msg_body)
         else:
-            acl_smia_msg.body = msg_body
+            acl_smia_msg.body = str(msg_body)
     return acl_smia_msg
 
 async def acl_message_to_json(acl_message):
