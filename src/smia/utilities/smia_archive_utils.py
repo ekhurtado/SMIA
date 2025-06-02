@@ -7,7 +7,7 @@ import time
 from shutil import SameFileError
 
 from smia.utilities import properties_file_utils
-from smia.utilities.fipa_acl_info import ServiceTypes
+from smia.utilities.fipa_acl_info import ServiceTypes, ACLSMIAOntologyInfo
 from smia.utilities.smia_general_info import SMIAGeneralInfo
 from smia.utilities.general_utils import GeneralUtils
 
@@ -183,7 +183,7 @@ def copy_file_into_archive(source_file, dest_file):
 # ----------------------
 # Methods related to log
 # ----------------------
-def get_log_file_by_service_type(log_type, svc_type):
+def get_log_file_by_service_type_old(log_type, svc_type):
     """
     This method obtains the path to the log file associated to the type of the service.
     Args:
@@ -217,6 +217,40 @@ def get_log_file_by_service_type(log_type, svc_type):
             _logger.error("Service type not available.")
     return log_file_path
 
+def get_log_file_by_service_type(log_type, svc_type):
+    """
+    This method obtains the path to the log file associated to the type of the service.
+    Args:
+        log_type (str): the type of the log.
+        svc_type (str): type of the service.
+
+    Returns:
+        str: path to the log file
+    """
+    log_file_path = None
+    if log_type == 'services':
+        log_folder_path = SMIAGeneralInfo.SVC_LOG_FOLDER_PATH
+    elif log_type == 'errors':
+        log_folder_path = SMIAGeneralInfo.ERROR_LOG_FOLDER_PATH
+    else:
+        _logger.error("Log type not available.")
+        return None
+
+    match svc_type:
+        case ACLSMIAOntologyInfo.ACL_ONTOLOGY_AGENT_RELATED_SERVICE \
+             | ACLSMIAOntologyInfo.ACL_ONTOLOGY_ASSET_RELATED_SERVICE:
+            log_file_path = log_folder_path + '/' + SMIAGeneralInfo.ASSET_RELATED_SVC_LOG_FILENAME
+        case ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE:
+            log_file_path = log_folder_path + '/' + SMIAGeneralInfo.AAS_INFRASTRUCTURE_SVC_LOG_FILENAME
+        case ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_SERVICE:
+            log_file_path = log_folder_path + '/' + SMIAGeneralInfo.AAS_SERVICES_LOG_FILENAME
+        case ServiceTypes.SUBMODEL_SERVICE:
+            log_file_path = log_folder_path + '/' + SMIAGeneralInfo.SUBMODEL_SERVICES_LOG_FILENAME
+        case ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE:
+            log_file_path = log_folder_path + '/' + SMIAGeneralInfo.SUBMODEL_CSS_LOG_FILENAME
+        case _:
+            _logger.error("Service type not available.")
+    return log_file_path
 
 def save_completed_svc_log_info(started_timestamp, finished_timestamp, acl_info, result, svc_type):
     """
@@ -230,7 +264,7 @@ def save_completed_svc_log_info(started_timestamp, finished_timestamp, acl_info,
         svc_type (str): type of the service.
     """
     # First, the required paths are obtained
-    log_file_path = get_log_file_by_service_type('services', svc_type)
+    log_file_path = get_log_file_by_service_type_old('services', svc_type)
 
     # Then, the information object is built and added
     svc_log_info = {
@@ -281,7 +315,7 @@ def save_svc_error_log_info(occurrence_timestamp, acl_info, reason, svc_type):
         svc_type (str): type of the service.
     """
     # First, the required paths are obtained
-    log_file_path = get_log_file_by_service_type('errors', svc_type)
+    log_file_path = get_log_file_by_service_type_old('errors', svc_type)
 
     # Then, the information object is built and added
     svc_log_info = {
