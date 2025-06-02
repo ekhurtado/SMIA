@@ -60,11 +60,12 @@ class ServiceRequestExecutionError(Exception):
     been requested, this class also must response to the requester with a Failure of the execution.
     """
 
-    def __init__(self, thread, message, svc_type, behav_class):
+    def __init__(self, thread, message, svc_type, behav_class, affected_elem=None):
         self.thread = thread
         self.message = message
         self.svc_type = svc_type
         self.behav_class = behav_class
+        self.affected_element = affected_elem
 
     async def handle_service_execution_error_old(self):
         """
@@ -109,9 +110,12 @@ class ServiceRequestExecutionError(Exception):
         from smia.utilities import smia_archive_utils
         from smia.logic import inter_aas_interactions_utils
         if 'received_acl_msg' in self.behav_class:
+            response_body = {'reason': self.message, 'exceptionType': str(self.__class__.__name__)}
+            if self.affected_element is not None:
+                response_body.update({'affectedElement': self.affected_element})
             await inter_aas_interactions_utils.send_response_msg_from_received(
                 self.behav_class, self.behav_class.received_acl_msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE,
-                {'reason': self.message, 'exceptionType': str(self.__class__.__name__)})
+                response_body)
             _logger.info("Failure message sent to the requester related to the thread [{}].".format(self.thread))
 
             acl_info = await inter_aas_interactions_utils.acl_message_to_json(self.behav_class.received_acl_msg)
