@@ -1,11 +1,13 @@
 import json
 import logging
 
+from smia import GeneralUtils
 from smia.logic import inter_aas_interactions_utils
 from smia.logic.agent_services import AgentServices
+from smia.logic.exceptions import RequestDataError
 from spade.behaviour import CyclicBehaviour
 
-from smia.utilities.fipa_acl_info import FIPAACLInfo
+from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAJSONSchemas
 
 from behaviours.handle_acl_openapi_behaviour import HandleACLOpenAPIBehaviour
 from logic.acl_open_api_services import ACLOpenAPIServices
@@ -70,7 +72,9 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
         msg = await self.receive(
             timeout=10)  # Timeout set to 10 seconds so as not to continuously execute the behavior.
         if msg:
-            if not SMIAACLMessageInfo.SMIA_ACL_INFRASTRUCTURE_SERVICE_TEMPLATE.match(msg):
+            if not SMIAACLMessageInfo.SMIA_ISM_ACL_INFRASTRUCTURE_SERVICE_TEMPLATE.match(msg):
+                # If it does not match the SMIA ISM template, there is no need to parse the message as it is not for
+                # this behaviour.
                 _logger.warning("Invalid message received on SMIA ISM: ACL message with invalid template.")
                 return  # If it does not match the template, the ACL message is for SMIA ISM
 
@@ -79,23 +83,39 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
             _logger.aclinfo("         + Message received on SMIA ISM (ACLOpenAPIHandlingBehaviour) from {}".format(msg.sender))
             _logger.aclinfo("                 |___ Message received with content: {}".format(msg.body))
 
-            # The msg body will be parsed to a JSON object
+            # The message body will be converted to a JSON object and validated against the AAS Infrastructure Service
+            # schema
             msg_json_body = json.loads(msg.body)
+            try:
+                await inter_aas_interactions_utils.check_received_request_data_structure(
+                    msg_json_body, ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE)
+            except RequestDataError as cap_request_error:
+                # The added data are not valid, so a Refuse message to the requester must be sent
+                # TODO MODIFICAR LA RESPUESTA CON LA NUEVA ESTRUCTURA
+                acl_msg = inter_aas_interactions_utils.create_inter_smia_response_msg(
+                    receiver=GeneralUtils.get_sender_from_acl_msg(msg),
+                    thread=msg.thread,
+                    performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE,
+                    ontology=FIPAACLInfo.FIPA_ACL_ONTOLOGY_SVC_NEGOTIATION,
+                    service_id=msg_json_body['serviceID'],
+                    service_type=msg_json_body['serviceType'],
+                    service_params=json.dumps({'reason': cap_request_error.message})
+                )
+                await self.send(acl_msg)
+                _logger.warning("The sender [{}] has sent an message with thread [{}] that has invalid data, therefore "
+                                "the requester has been informed with a Refuse ACL message".format(
+                    GeneralUtils.get_sender_from_acl_msg(msg), msg.thread))
+                return  # The run method is terminated to restart checking for new messages.
 
+            # At this point, the received data for the AAS Infrastructure Service is valid, so the behaviour to manage
+            # this specific interaction can be triggered
             # TODO BORRAR (para pruebas con GUI Agent): {"serviceID": "serviceID", "serviceType": "InfrastructureService","SMIAInfrastructureService": "GetAssetIDsOfCapability", "serviceParams": {"capability_iri": "http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation"}}
+            _logger.aclinfo("The SMIA sender [{}], within thread [{}], needs a service related to OpenAPI "
+                            "infrastructures to be performed. A specific behavior will be triggered to handle this "
+                            "request..".format(GeneralUtils.get_sender_from_acl_msg(msg), msg.thread))
+            specific_handling_behav = HandleACLOpenAPIBehaviour(self.agent, received_acl_msg=msg)
+            self.myagent.add_behaviour(specific_handling_behav)
 
-            # Depending on the performative of the message, the agent will have to perform some actions or others
-            match msg.get_metadata('performative'):
-                case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST:
-                    _logger.aclinfo("The performative of the message is Request, so the SMIA sender needs a service "
-                                    "related to OpenAPI infrastructures to be performed. A specific behavior will be "
-                                    "triggered to handle this request..")
-                    svc_req_data = inter_aas_interactions_utils.create_svc_json_data_from_acl_msg(msg)
-                    specific_handling_behav = HandleACLOpenAPIBehaviour(self.agent, svc_req_data)
-                    self.myagent.add_behaviour(specific_handling_behav)
-                # TODO pensar mas performativas
-                case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM:
-                    _logger.aclinfo("The performative of the message is Request, so the SMIA sender wants to inform about something")
 
                 case _:
                     _logger.error("ACL performative type not available.")

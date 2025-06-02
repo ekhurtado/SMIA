@@ -14,7 +14,7 @@ _logger = logging.getLogger(__name__)
 def main():
     # First, the initial configuration must be executed
     smia.initial_self_configuration()
-    _logger.info("Initializing SMIA ISM (Infrastructure Gateway)...")
+    _logger.info("Initializing SMIA ISM (Infrastructure Services Manager)...")
 
     # The AAS model is obtained from the environmental variables
     aas_model_path = DockerUtils.get_aas_model_from_env_var()
