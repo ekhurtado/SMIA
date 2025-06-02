@@ -109,7 +109,7 @@ class ServiceRequestExecutionError(Exception):
         from smia import GeneralUtils
         from smia.utilities import smia_archive_utils
         from smia.logic import inter_aas_interactions_utils
-        if 'received_acl_msg' in self.behav_class:
+        if hasattr(self.behav_class, 'received_acl_msg'):
             response_body = {'reason': self.message, 'exceptionType': str(self.__class__.__name__)}
             if self.affected_element is not None:
                 response_body.update({'affectedElement': self.affected_element})

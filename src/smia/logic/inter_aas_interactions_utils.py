@@ -249,8 +249,7 @@ async def check_received_request_data_structure(received_data, json_schema):
     """
     # The received JSON object is validated against the associated JSON Schema
     try:
-        jsonschema.validate(instance=received_data['serviceData']['serviceParams'],
-                            schema=json_schema)
+        jsonschema.validate(instance=received_data, schema=json_schema)
     except ValidationError as e:
         raise RequestDataError("The received JSON data within the request message is invalid against the required "
                                "JSON schema. Invalid part: {}. Reason: {}.".format(e.instance, e.message))
