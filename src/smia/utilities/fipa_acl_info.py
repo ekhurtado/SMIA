@@ -1,8 +1,3 @@
-from smia.logic.exceptions import RequestDataError
-
-from smia.logic import inter_aas_interactions_utils
-
-
 class FIPAACLInfo:
     """
     This class contains the values related to FIPA-ACL standard.
