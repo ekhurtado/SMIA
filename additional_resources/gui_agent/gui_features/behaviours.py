@@ -1,6 +1,7 @@
 import calendar
 import json
 import time
+from json import JSONDecodeError
 from urllib.parse import parse_qs
 
 from spade.behaviour import OneShotBehaviour, CyclicBehaviour
@@ -35,7 +36,12 @@ class GUIAgentBehaviours:
             match data_json['ontology']:
                 case 'asset-related-service' | 'agent-related-service':
                     # TODO recoger los atributos para este caso
-                    msg_body_json = {'serviceRef': json.loads(data_json['serviceRefARS'])}
+                    try:
+                        msg_body_json = {'serviceRef': json.loads(data_json['serviceRefARS'])}
+                    except JSONDecodeError as e:
+                        # ModelReference can also be added as string
+                        # If [] has been added with separation, it must be removed
+                        msg_body_json = {'serviceRef': data_json['serviceRefARS'].replace('] [', '][').strip()}
                     if 'serviceParamsARS' in data_json:
                         msg_body_json.update({'serviceParams': json.loads(data_json['serviceParamsARS'])})
                 case 'aas-service':
@@ -43,7 +49,10 @@ class GUIAgentBehaviours:
                     msg_body_json = {'serviceID': data_json['serviceIDAS'],
                                      'serviceType': data_json['serviceTypeAS']}
                     if 'serviceParamsAS' in data_json:
-                        msg_body_json.update({'serviceParams': json.loads(data_json['serviceParamsAS'])})
+                        try:
+                            msg_body_json.update({'serviceParams': json.loads(data_json['serviceParamsAS'])})
+                        except JSONDecodeError as e:
+                            msg_body_json.update({'serviceParams': data_json['serviceParamsAS'].replace('] [', '][').strip()})
 
                 case 'aas-infrastructure-service':
                     # TODO recoger los atributos para este caso

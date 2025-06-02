@@ -216,20 +216,7 @@ class ACLSMIAJSONSchemas:
                 },
                 "then": {
                     "properties": {
-                        "serviceParams": {
-                            "oneOf": [
-                                {
-                                    "type": "object",
-                                    "required": ["ModelReference"],
-                                    "properties": {"ModelReference": JSON_SCHEMA_AAS_MODEL_REFERENCE},
-                                },
-                                {
-                                    "type": "object",
-                                    "required": ["ExternalReference"],
-                                    "properties": {"ExternalReference": {"type": "string"}},
-                                }
-                            ]
-                        }
+                        "serviceParams": JSON_SCHEMA_AAS_MODEL_REFERENCE
                     }
                 }
             },
