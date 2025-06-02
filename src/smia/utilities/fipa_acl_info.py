@@ -1,7 +1,19 @@
+from smia.logic.exceptions import RequestDataError
+
+from smia.logic import inter_aas_interactions_utils
+
+
 class FIPAACLInfo:
     """
     This class contains the values related to FIPA-ACL standard.
     """
+
+    # FIPA-ACL attribute values
+    FIPA_ACL_PERFORMATIVE_ATTRIB = 'performative'
+    FIPA_ACL_ONTOLOGY_ATTRIB = 'ontology'
+    FIPA_ACL_PROTOCOL_ATTRIB = 'protocol'
+    FIPA_ACL_ENCODING_ATTRIB = 'encoding'
+    FIPA_ACL_LANGUAGE_ATTRIB = 'language'
 
     # Performative values
     FIPA_ACL_PERFORMATIVE_CFP = 'cfp'
@@ -37,6 +49,10 @@ class FIPAACLInfo:
     FIPA_ACL_ONTOLOGY_CAPABILITY_CHECKING = 'CapabilityChecking'
     FIPA_ACL_ONTOLOGY_CAPABILITY_RESPONSE = 'CapabilityResponse'
     FIPA_ACL_ONTOLOGY_SVC_NEGOTIATION = 'Negotiation'
+
+    # Default values in SMIA approach for some attributes
+    FIPA_ACL_DEFAULT_ENCODING = 'application/json'
+    FIPA_ACL_DEFAULT_LANGUAGE = 'smia-language'
 
 class ACLSMIAOntologyInfo:
     """

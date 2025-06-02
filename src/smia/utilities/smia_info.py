@@ -52,6 +52,13 @@ class SMIAInteractionInfo:
                                  NEG_STANDARD_ACL_TEMPLATE_INFORM)
 
 
+class SMIAInfrastructureInfo:
+
+    # Identifier of the SMIA ISM (Infrastructure Services Manager)
+    SMIA_ISM_ID = 'smia-ism'
+
+
+
 class AssetInterfacesInfo:
     """This class contains the information related to Asset Interfaces submodel (AssetInterfacesDescription submodel of
     IDTA)."""

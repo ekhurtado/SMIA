@@ -4,6 +4,7 @@ import logging
 
 import jsonschema
 from jsonschema.exceptions import ValidationError
+from smia.utilities.fipa_acl_info import FIPAACLInfo
 from spade.message import Message
 
 from smia.logic.exceptions import RequestDataError
@@ -69,6 +70,119 @@ def create_inter_smia_response_msg(receiver, thread, performative, ontology, ser
         request_msg_body_json['serviceData']['serviceParams'] = service_params
     request_msg.body = json.dumps(request_msg_body_json)
     return request_msg
+
+def create_acl_response_from_received_msg(received_msg, performative, response_body=None):
+    """
+    This method creates an Inter SMIA interaction response object from a received ACL message. Thus, some of the
+    required data will be obtained from the received message (receiver, thread, ontology, protocol, encoding and
+    language).
+
+    Args:
+        received_msg (spade.message.Message): the received ACL message.
+        performative (str): the performative of the ACL message.
+        response_body: the body of the ACL response message.
+
+    Returns:
+        spade.message.Message: SPADE message object FIPA-ACL-compliant.
+    """
+
+    # The response message is built with the data from the received message, adding the desired performative
+    response_msg = Message(to=GeneralUtils.get_sender_from_acl_msg(received_msg), thread=received_msg.thread)
+    response_msg.set_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB, performative)
+    response_msg.set_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB,
+                              received_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB))
+    if received_msg.get_metadata(FIPAACLInfo.FIPA_ACL_PROTOCOL_ATTRIB) is not None:
+        response_msg.set_metadata(FIPAACLInfo.FIPA_ACL_PROTOCOL_ATTRIB,
+                                  received_msg.get_metadata(FIPAACLInfo.FIPA_ACL_PROTOCOL_ATTRIB))
+    if received_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ENCODING_ATTRIB) is not None:
+        response_msg.set_metadata(FIPAACLInfo.FIPA_ACL_ENCODING_ATTRIB,
+                                  received_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ENCODING_ATTRIB))
+    if received_msg.get_metadata(FIPAACLInfo.FIPA_ACL_LANGUAGE_ATTRIB) is not None:
+        response_msg.set_metadata(FIPAACLInfo.FIPA_ACL_LANGUAGE_ATTRIB,
+                                  received_msg.get_metadata(FIPAACLInfo.FIPA_ACL_LANGUAGE_ATTRIB))
+
+    if response_body is not None:
+        response_msg.body = response_body
+    return response_msg
+
+
+def create_acl_smia_message(receiver, thread, performative, ontology, msg_body=None, protocol=None, encoding=None,
+                            language=None):
+    """
+    This method creates a FIPA-ACL-SMIA message for an Inter SMIA interaction. If optional attributes are set, they will
+     be added to the message.
+
+    Args:
+        receiver (str): the JID of the receiver of the ACL message from which the service is requested.
+        thread (str): the thread of the ACL message.
+        performative (str): the performative of the ACL message.
+        ontology (str): the ontology of the ACL message.
+        msg_body: the vody of the ACL message.
+        protocol (str): the protocol of the ACL message.
+        encoding (str): the encoding of the ACL message.
+        language (str): the language of the ACL message.
+
+    Returns:
+        spade.message.Message: SPADE message object FIPA-ACL-SMIA-compliant.
+    """
+
+    # The response message is built with the data from the received message, adding the desired performative
+    acl_smia_msg = Message(to=receiver, thread=thread)
+    acl_smia_msg.set_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB, performative)
+    acl_smia_msg.set_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB, ontology)
+    # Optional attributes are added if they are set
+    if protocol is not None:
+        acl_smia_msg.set_metadata(FIPAACLInfo.FIPA_ACL_PROTOCOL_ATTRIB, protocol)
+    if encoding is not None:
+        acl_smia_msg.set_metadata(FIPAACLInfo.FIPA_ACL_ENCODING_ATTRIB, encoding)
+    elif encoding is None:
+        acl_smia_msg.set_metadata(FIPAACLInfo.FIPA_ACL_ENCODING_ATTRIB, FIPAACLInfo.FIPA_ACL_DEFAULT_ENCODING)
+    if language is not None:
+        acl_smia_msg.set_metadata(FIPAACLInfo.FIPA_ACL_LANGUAGE_ATTRIB, language)
+    elif encoding is None:
+        acl_smia_msg.set_metadata(FIPAACLInfo.FIPA_ACL_LANGUAGE_ATTRIB, FIPAACLInfo.FIPA_ACL_DEFAULT_LANGUAGE)
+
+    if msg_body is not None:
+        acl_smia_msg.body = msg_body
+    return acl_smia_msg
+
+
+# Methods related with the body of ACL-SMIA messages
+# --------------------------------------------------
+async def generate_json_from_schema(schema: dict, **kwargs) -> dict:
+    """
+    This method generates a valid JSON from a predefined JSON Schema.
+
+    Args:
+        schema (dict): JSON schema object.
+        **kwargs: attributes along with their values to build the JSON.
+
+    Returns:
+        dict: valid JSON object regarding the given schema.
+    """
+    required_fields = schema.get("required", [])
+    properties = schema.get("properties", {})
+    json_object = {}
+
+    # Mandatory fields
+    for field in required_fields:
+        if field not in kwargs:
+            raise ValueError(f"Missing required field: {field}")
+        json_object[field] = kwargs[field]
+
+    # Optional fields
+    for field in properties:
+        if field not in json_object and field in kwargs:
+            json_object[field] = kwargs[field]
+
+    # Validate final message
+    try:
+        await check_received_request_data_structure(json_object, schema)
+    except RequestDataError as e:
+        _logger.warning('A JSON object cannot be created using the schema. Check the failed code.')
+        return None
+
+    return json_object
 
 async def check_received_request_data_structure_old(received_data, json_schema):
     """
