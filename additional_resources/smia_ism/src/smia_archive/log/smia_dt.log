@@ -3662,3 +3662,369 @@ TypeError: expected str, bytes or os.PathLike object, not NoneType
 2025-06-02 17:31:50,086 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
 2025-06-02 17:31:50,458 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
 2025-06-02 17:31:50,458 [gcis1] [INFO] client shutting down (on request) line:975
+2025-06-02 17:41:10,414 [__main__] [INFO] Initializing SMIA ISM (Infrastructure Services Manager)... line:17
+2025-06-02 17:41:10,414 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:303
+2025-06-02 17:41:10,418 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-02 17:41:10,419 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-02 17:41:10,423 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-02 17:41:10,424 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/SMIA_ISM_model.aasx file is already in SMIA archive. line:180
+2025-06-02 17:41:10,424 [smia] [INFO] AAS model SMIA_ISM_model.aasx copied to the SMIA Archive. line:91
+2025-06-02 17:41:10,443 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ACLOpenAPIHandlingBehaviour line:43
+2025-06-02 17:41:13,303 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-06-02 17:41:14,505 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/689146144289131225815631114466 line:935
+2025-06-02 17:41:14,797 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB42ODkxNDYxNDQyODkxMzEyMjU4MTU2MzExMTQ0NjZtAAAACP8zwC1z/1+4' line:2209
+2025-06-02 17:41:15,401 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-06-02 17:41:15,401 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:97
+2025-06-02 17:41:15,402 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:117
+2025-06-02 17:41:15,403 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-06-02 17:41:15,403 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-02 17:41:15,403 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:30
+2025-06-02 17:41:15,423 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-02 17:41:15,432 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:77
+2025-06-02 17:41:15,432 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [InfrastructureGateway] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:89
+2025-06-02 17:41:15,432 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-02 17:41:15,439 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-02 17:41:16,287 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-06-02 17:41:16,477 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-06-02 17:41:16,477 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-06-02 17:41:17,460 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['ACLOpenAPIHandlingCapability']
+	- Analyzed capability constraints: []
+	- Analyzed skills: ['ACLOpenAPIHandlingBehaviour']
+	- Analyzed skill interfaces: []
+	- Analyzed skill parameters: []
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-06-02 17:41:17,460 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-06-02 17:41:17,460 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-06-02 17:41:17,462 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:49
+2025-06-02 17:41:17,462 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-06-02 17:41:17,462 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-02 17:41:17,462 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-02 17:41:17,464 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:82
+2025-06-02 17:41:17,465 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:39
+2025-06-02 17:41:17,465 [behaviours.acl_openapi_handling_behaviour] [INFO] ACLOpenAPIHandlingBehaviour starting... line:46
+2025-06-02 17:41:17,465 [behaviours.acl_openapi_handling_behaviour] [INFO] Successfully loaded all Infrastructure Services with their associated execution methods. line:52
+2025-06-02 17:41:23,171 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]          + Message received on SMIA ISM (ACLOpenAPIHandlingBehaviour) from gui_agent@xmpp.jp/725079292494559991615631104386 line:83
+2025-06-02 17:41:23,171 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"serviceID": "GetSMIAInstanceIDByAssetID", "serviceType": "DiscoveryService", "serviceParams": "https://punchingmachine/asset/9311_6192_5052_8467"} line:84
+2025-06-02 17:41:23,198 [behaviours.acl_openapi_handling_behaviour] [ACLINFO] The SMIA sender [gui_agent@xmpp.jp], within thread [prueba-acl-smia-msg], needs a service related to OpenAPI infrastructures to be performed. A specific behavior will be triggered to handle this request.. line:107
+2025-06-02 17:41:23,199 [behaviours.handle_acl_openapi_behaviour] [INFO] HandleCapabilityBehaviour starting... line:42
+2025-06-02 17:41:23,199 [behaviours.handle_acl_openapi_behaviour] [INFO] The AAS Infrastructure Service GetSMIAInstanceIDByAssetID has been requested. line:73
+2025-06-02 17:41:25,256 [utilities.acl_open_api_utils] [ERROR] ERROR: Connection error with http://192.168.186.129:8090/api/v3/smiaInstances line:56
+2025-06-02 17:41:25,256 [smia.logic.exceptions] [ERROR] Failure during the execution of the Infrastructure Service. Reason: ERROR: No SMIA instance is registered. line:103
+2025-06-02 17:41:25,256 [smia.logic.exceptions] [INFO] Due to an incorrect execution of the service related to the thread [prueba-acl-smia-msg], the requester shall be informed with a Failure message. line:105
+2025-06-02 17:41:25,558 [smia.logic.exceptions] [INFO] Failure message sent to the requester related to the thread [prueba-acl-smia-msg]. line:119
+2025-06-02 17:41:25,560 [smia.utilities.smia_archive_utils] [INFO] Saved new completed service information in the log. line:333
+2025-06-02 17:41:25,560 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleACLOpenAPIBehaviour with exit code: 10 line:154
+2025-06-02 17:41:25,561 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleACLOpenAPIBehaviour with exit code: None line:154
+2025-06-02 17:41:27,467 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:41:35,252 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:41:37,460 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:41:45,247 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:41:47,466 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:41:55,246 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:41:57,462 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:42:00,251 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-06-02 17:42:00,251 [gcis1] [INFO] client shutting down (on request) line:975
+2025-06-02 17:42:00,651 [gcis1.StanzaStream] [INFO] stopping SM stream line:2473
+2025-06-02 17:42:00,651 [gcis1] [INFO] stopping stream line:989
+2025-06-02 17:42:00,651 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-02 17:42:00,651 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-02 17:42:00,652 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:82
+2025-06-02 17:42:00,653 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:39
+2025-06-02 17:42:00,653 [behaviours.acl_openapi_handling_behaviour] [INFO] ACLOpenAPIHandlingBehaviour starting... line:46
+2025-06-02 17:42:00,653 [behaviours.acl_openapi_handling_behaviour] [INFO] Successfully loaded all Infrastructure Services with their associated execution methods. line:52
+2025-06-02 17:42:05,630 [__main__] [INFO] Initializing SMIA ISM (Infrastructure Services Manager)... line:17
+2025-06-02 17:42:05,630 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:303
+2025-06-02 17:42:05,640 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-02 17:42:05,641 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-02 17:42:05,647 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-02 17:42:05,652 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/SMIA_ISM_model.aasx file is already in SMIA archive. line:180
+2025-06-02 17:42:05,652 [smia] [INFO] AAS model SMIA_ISM_model.aasx copied to the SMIA Archive. line:91
+2025-06-02 17:42:05,683 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ACLOpenAPIHandlingBehaviour line:43
+2025-06-02 17:42:08,557 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-06-02 17:42:09,862 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/81732119725561817993226410340 line:935
+2025-06-02 17:42:10,186 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB04MTczMjExOTcyNTU2MTgxNzk5MzIyNjQxMDM0MG0AAAAIEmVDqztyeII=' line:2209
+2025-06-02 17:42:10,841 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-06-02 17:42:10,842 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:97
+2025-06-02 17:42:10,843 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:117
+2025-06-02 17:42:10,843 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-06-02 17:42:10,843 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-02 17:42:10,844 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:30
+2025-06-02 17:42:10,870 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-02 17:42:10,894 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:77
+2025-06-02 17:42:10,895 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [InfrastructureGateway] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:89
+2025-06-02 17:42:10,897 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-02 17:42:10,907 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-02 17:42:11,772 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-06-02 17:42:11,961 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-06-02 17:42:11,962 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-06-02 17:42:12,961 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['ACLOpenAPIHandlingCapability']
+	- Analyzed capability constraints: []
+	- Analyzed skills: ['ACLOpenAPIHandlingBehaviour']
+	- Analyzed skill interfaces: []
+	- Analyzed skill parameters: []
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-06-02 17:42:12,961 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-06-02 17:42:12,963 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-06-02 17:42:12,964 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:49
+2025-06-02 17:42:12,964 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-06-02 17:42:12,965 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-02 17:42:12,965 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-02 17:42:12,966 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:82
+2025-06-02 17:42:12,966 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:39
+2025-06-02 17:42:12,967 [behaviours.acl_openapi_handling_behaviour] [INFO] ACLOpenAPIHandlingBehaviour starting... line:46
+2025-06-02 17:42:12,967 [behaviours.acl_openapi_handling_behaviour] [INFO] Successfully loaded all Infrastructure Services with their associated execution methods. line:52
+2025-06-02 17:42:22,972 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:42:22,973 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:42:32,965 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:42:32,966 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:42:42,966 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:42:42,967 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:42:49,522 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]          + Message received on SMIA ISM (ACLOpenAPIHandlingBehaviour) from gui_agent@xmpp.jp/725079292494559991615631104386 line:83
+2025-06-02 17:42:49,522 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"serviceID": "GetSMIAInstanceIDByAssetID", "serviceType": "DiscoveryService", "serviceParams": "https://punchingmachine/asset/9311_6192_5052_8467"} line:84
+2025-06-02 17:42:49,605 [behaviours.acl_openapi_handling_behaviour] [ACLINFO] The SMIA sender [gui_agent@xmpp.jp], within thread [prueba-acl-smia-msg], needs a service related to OpenAPI infrastructures to be performed. A specific behavior will be triggered to handle this request.. line:107
+2025-06-02 17:42:49,606 [behaviours.handle_acl_openapi_behaviour] [INFO] HandleCapabilityBehaviour starting... line:42
+2025-06-02 17:42:49,609 [behaviours.handle_acl_openapi_behaviour] [INFO] The AAS Infrastructure Service GetSMIAInstanceIDByAssetID has been requested. line:73
+2025-06-02 17:42:55,636 [utilities.acl_open_api_utils] [ERROR] ERROR: Connection error with http://192.168.186.129:8090/api/v3/smiaInstances line:56
+2025-06-02 17:42:58,607 [smia.logic.exceptions] [ERROR] Failure during the execution of the Infrastructure Service. Reason: ERROR: No SMIA instance is registered. line:103
+2025-06-02 17:42:59,493 [smia.logic.exceptions] [INFO] Due to an incorrect execution of the service related to the thread [prueba-acl-smia-msg], the requester shall be informed with a Failure message. line:105
+2025-06-02 17:43:03,807 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:43:18,584 [smia.logic.exceptions] [ERROR] Failure during the execution of the Infrastructure Service. Reason: ERROR: No SMIA instance is registered. line:103
+2025-06-02 17:43:18,585 [smia.logic.exceptions] [INFO] Due to an incorrect execution of the service related to the thread [prueba-acl-smia-msg], the requester shall be informed with a Failure message. line:105
+2025-06-02 17:43:21,665 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:43:21,666 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:43:21,995 [smia.logic.exceptions] [INFO] Failure message sent to the requester related to the thread [prueba-acl-smia-msg]. line:119
+2025-06-02 17:43:56,222 [smia.utilities.smia_archive_utils] [INFO] Saved new completed service information in the log. line:333
+2025-06-02 17:43:56,222 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleACLOpenAPIBehaviour with exit code: 10 line:154
+2025-06-02 17:43:56,225 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleACLOpenAPIBehaviour with exit code: None line:154
+2025-06-02 17:43:56,226 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:43:56,226 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:44:06,220 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:44:06,221 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:44:16,210 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:44:16,212 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:44:26,209 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:44:26,210 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:44:36,210 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:44:36,211 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:44:46,210 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:44:46,211 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:44:56,210 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:44:56,211 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:45:06,210 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:45:06,211 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:45:16,210 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:45:16,212 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:45:26,210 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:45:26,210 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:45:36,210 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:45:36,211 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:45:46,210 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:45:46,211 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:45:56,211 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:45:56,212 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:46:06,211 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:46:06,213 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:46:16,209 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:46:16,210 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:46:26,209 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:46:26,210 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:46:36,209 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:46:36,211 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:46:40,119 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]          + Message received on SMIA ISM (ACLOpenAPIHandlingBehaviour) from gui_agent@xmpp.jp/725079292494559991615631104386 line:83
+2025-06-02 17:46:40,119 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"serviceID": "GetSMIAInstanceIDByAssetID", "serviceType": "DiscoveryService", "serviceParams": "https://indexedline/asset/2384_6192_5052_9914"} line:84
+2025-06-02 17:46:40,223 [behaviours.acl_openapi_handling_behaviour] [ACLINFO] The SMIA sender [gui_agent@xmpp.jp], within thread [prueba-acl-smia-msg], needs a service related to OpenAPI infrastructures to be performed. A specific behavior will be triggered to handle this request.. line:107
+2025-06-02 17:46:40,225 [behaviours.handle_acl_openapi_behaviour] [INFO] HandleCapabilityBehaviour starting... line:42
+2025-06-02 17:46:40,228 [behaviours.handle_acl_openapi_behaviour] [INFO] The AAS Infrastructure Service GetSMIAInstanceIDByAssetID has been requested. line:73
+2025-06-02 17:47:00,751 [spade.behaviour] [ERROR] Exception running behaviour OneShotBehaviour/HandleACLOpenAPIBehaviour: type object 'ServiceRequestExecutionError' has no attribute 'ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE' line:291
+2025-06-02 17:47:00,753 [spade.behaviour] [ERROR] Traceback (most recent call last):
+  File "C:\Users\ekait\OneDrive - UPV EHU\Tesis doctoral\TesisEkaitzHurtado\CodeRepositories\SMIA\additional_resources\smia_ism\src\smia_ism\behaviours\handle_acl_openapi_behaviour.py", line 90, in handle_acl_openapi_request
+    raise ServiceRequestExecutionError(self.received_acl_msg.thread, 'Failure during the execution of the '
+smia.logic.exceptions.ServiceRequestExecutionError: ('prueba-acl-smia-msg', 'Failure during the execution of the Infrastructure Service. Reason: ERROR: SMIA instance for asset identifier [https://indexedline/asset/2384_6192_5052_9914] not found.', 'aas-infrastructure-service', <behaviours.handle_acl_openapi_behaviour.HandleACLOpenAPIBehaviour object at 0x0000018A24A390C0>)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\spade\behaviour.py", line 285, in _step
+    await self._run()
+  File "C:\Python310\lib\site-packages\spade\behaviour.py", line 274, in _run
+    await self.run()
+  File "C:\Users\ekait\OneDrive - UPV EHU\Tesis doctoral\TesisEkaitzHurtado\CodeRepositories\SMIA\additional_resources\smia_ism\src\smia_ism\behaviours\handle_acl_openapi_behaviour.py", line 51, in run
+    await self.handle_acl_openapi_request()
+  File "C:\Users\ekait\OneDrive - UPV EHU\Tesis doctoral\TesisEkaitzHurtado\CodeRepositories\SMIA\additional_resources\smia_ism\src\smia_ism\behaviours\handle_acl_openapi_behaviour.py", line 92, in handle_acl_openapi_request
+    ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE, self,
+AttributeError: type object 'ServiceRequestExecutionError' has no attribute 'ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE'
+ line:296
+2025-06-02 17:47:00,753 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleACLOpenAPIBehaviour with exit code: type object 'ServiceRequestExecutionError' has no attribute 'ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE' line:154
+2025-06-02 17:47:00,753 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleACLOpenAPIBehaviour with exit code: None line:154
+2025-06-02 17:47:00,755 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:47:10,740 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:47:10,741 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:47:20,741 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:47:20,742 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:47:30,742 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:47:30,743 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:47:40,740 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:47:40,741 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:47:47,071 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]          + Message received on SMIA ISM (ACLOpenAPIHandlingBehaviour) from gui_agent@xmpp.jp/725079292494559991615631104386 line:83
+2025-06-02 17:47:47,072 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"serviceID": "GetAssetIDsOfCapability", "serviceType": "DiscoveryService", "serviceParams": "http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation"} line:84
+2025-06-02 17:47:47,163 [behaviours.acl_openapi_handling_behaviour] [ACLINFO] The SMIA sender [gui_agent@xmpp.jp], within thread [prueba-acl-smia-msg], needs a service related to OpenAPI infrastructures to be performed. A specific behavior will be triggered to handle this request.. line:107
+2025-06-02 17:47:47,164 [behaviours.handle_acl_openapi_behaviour] [INFO] HandleCapabilityBehaviour starting... line:42
+2025-06-02 17:47:47,164 [behaviours.handle_acl_openapi_behaviour] [INFO] The AAS Infrastructure Service GetAssetIDsOfCapability has been requested. line:73
+2025-06-02 17:47:59,359 [behaviours.handle_acl_openapi_behaviour] [INFO] The AAS Infrastructure Service GetAssetIDsOfCapability has been successfully executed. line:86
+2025-06-02 17:48:01,373 [spade.behaviour] [ERROR] Exception running behaviour OneShotBehaviour/HandleACLOpenAPIBehaviour: type object 'TypeError' has no attribute 'ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE' line:291
+2025-06-02 17:48:01,381 [spade.behaviour] [ERROR] Traceback (most recent call last):
+  File "C:\Users\ekait\OneDrive - UPV EHU\Tesis doctoral\TesisEkaitzHurtado\CodeRepositories\SMIA\additional_resources\smia_ism\src\smia_ism\behaviours\handle_acl_openapi_behaviour.py", line 87, in handle_acl_openapi_request
+    await inter_aas_interactions_utils.send_response_msg_from_received(
+  File "C:\Python310\lib\site-packages\smia\logic\inter_aas_interactions_utils.py", line 269, in send_response_msg_from_received
+    response_msg = await create_acl_response_from_received_msg(received_msg, performative, response_body)
+  File "C:\Python310\lib\site-packages\smia\logic\inter_aas_interactions_utils.py", line 110, in create_acl_response_from_received_msg
+    response_msg.body = response_body
+  File "C:\Python310\lib\site-packages\spade\message.py", line 137, in body
+    raise TypeError("'body' MUST be a string")
+TypeError: 'body' MUST be a string
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\spade\behaviour.py", line 285, in _step
+    await self._run()
+  File "C:\Python310\lib\site-packages\spade\behaviour.py", line 274, in _run
+    await self.run()
+  File "C:\Users\ekait\OneDrive - UPV EHU\Tesis doctoral\TesisEkaitzHurtado\CodeRepositories\SMIA\additional_resources\smia_ism\src\smia_ism\behaviours\handle_acl_openapi_behaviour.py", line 51, in run
+    await self.handle_acl_openapi_request()
+  File "C:\Users\ekait\OneDrive - UPV EHU\Tesis doctoral\TesisEkaitzHurtado\CodeRepositories\SMIA\additional_resources\smia_ism\src\smia_ism\behaviours\handle_acl_openapi_behaviour.py", line 92, in handle_acl_openapi_request
+    ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE, self,
+AttributeError: type object 'TypeError' has no attribute 'ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE'
+ line:296
+2025-06-02 17:48:01,381 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleACLOpenAPIBehaviour with exit code: type object 'TypeError' has no attribute 'ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE' line:154
+2025-06-02 17:48:01,382 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleACLOpenAPIBehaviour with exit code: None line:154
+2025-06-02 17:48:01,383 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:48:11,366 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:48:11,367 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:48:21,365 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:48:21,366 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:48:27,952 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]          + Message received on SMIA ISM (ACLOpenAPIHandlingBehaviour) from gui_agent@xmpp.jp/725079292494559991615631104386 line:83
+2025-06-02 17:48:27,952 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"serviceID": "GetAssetIDsOfCapability", "serviceType": "DiscoveryService", "serviceParams": "http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation"} line:84
+2025-06-02 17:48:28,022 [behaviours.acl_openapi_handling_behaviour] [ACLINFO] The SMIA sender [gui_agent@xmpp.jp], within thread [prueba-acl-smia-msg], needs a service related to OpenAPI infrastructures to be performed. A specific behavior will be triggered to handle this request.. line:107
+2025-06-02 17:48:28,022 [behaviours.handle_acl_openapi_behaviour] [INFO] HandleCapabilityBehaviour starting... line:42
+2025-06-02 17:48:28,023 [behaviours.handle_acl_openapi_behaviour] [INFO] The AAS Infrastructure Service GetAssetIDsOfCapability has been requested. line:73
+2025-06-02 17:48:32,815 [behaviours.handle_acl_openapi_behaviour] [INFO] The AAS Infrastructure Service GetAssetIDsOfCapability has been successfully executed. line:86
+2025-06-02 17:49:16,877 [spade.behaviour] [ERROR] Exception running behaviour OneShotBehaviour/HandleACLOpenAPIBehaviour: type object 'TypeError' has no attribute 'ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE' line:291
+2025-06-02 17:49:16,879 [spade.behaviour] [ERROR] Traceback (most recent call last):
+  File "C:\Users\ekait\OneDrive - UPV EHU\Tesis doctoral\TesisEkaitzHurtado\CodeRepositories\SMIA\additional_resources\smia_ism\src\smia_ism\behaviours\handle_acl_openapi_behaviour.py", line 87, in handle_acl_openapi_request
+    await inter_aas_interactions_utils.send_response_msg_from_received(
+  File "C:\Python310\lib\site-packages\smia\logic\inter_aas_interactions_utils.py", line 269, in send_response_msg_from_received
+    response_msg = await create_acl_response_from_received_msg(received_msg, performative, response_body)
+  File "C:\Python310\lib\site-packages\smia\logic\inter_aas_interactions_utils.py", line 110, in create_acl_response_from_received_msg
+    response_msg.body = response_body
+  File "C:\Python310\lib\site-packages\spade\message.py", line 137, in body
+    raise TypeError("'body' MUST be a string")
+TypeError: 'body' MUST be a string
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\spade\behaviour.py", line 285, in _step
+    await self._run()
+  File "C:\Python310\lib\site-packages\spade\behaviour.py", line 274, in _run
+    await self.run()
+  File "C:\Users\ekait\OneDrive - UPV EHU\Tesis doctoral\TesisEkaitzHurtado\CodeRepositories\SMIA\additional_resources\smia_ism\src\smia_ism\behaviours\handle_acl_openapi_behaviour.py", line 51, in run
+    await self.handle_acl_openapi_request()
+  File "C:\Users\ekait\OneDrive - UPV EHU\Tesis doctoral\TesisEkaitzHurtado\CodeRepositories\SMIA\additional_resources\smia_ism\src\smia_ism\behaviours\handle_acl_openapi_behaviour.py", line 92, in handle_acl_openapi_request
+    ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE, self,
+AttributeError: type object 'TypeError' has no attribute 'ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE'
+ line:296
+2025-06-02 17:49:16,879 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleACLOpenAPIBehaviour with exit code: type object 'TypeError' has no attribute 'ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE' line:154
+2025-06-02 17:49:16,879 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleACLOpenAPIBehaviour with exit code: None line:154
+2025-06-02 17:49:16,881 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:49:23,691 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-06-02 17:49:31,190 [__main__] [INFO] Initializing SMIA ISM (Infrastructure Services Manager)... line:17
+2025-06-02 17:49:31,191 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:303
+2025-06-02 17:49:31,198 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-02 17:49:31,198 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-02 17:49:31,214 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-02 17:49:31,217 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/SMIA_ISM_model.aasx file is already in SMIA archive. line:180
+2025-06-02 17:49:31,217 [smia] [INFO] AAS model SMIA_ISM_model.aasx copied to the SMIA Archive. line:91
+2025-06-02 17:49:31,281 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ACLOpenAPIHandlingBehaviour line:43
+2025-06-02 17:49:34,400 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-06-02 17:49:35,698 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/1786640250947356515315631628034 line:935
+2025-06-02 17:49:36,018 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB8xNzg2NjQwMjUwOTQ3MzU2NTE1MzE1NjMxNjI4MDM0bQAAAAg56qrqISz2uQ==' line:2209
+2025-06-02 17:49:36,696 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-06-02 17:49:36,697 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:97
+2025-06-02 17:49:36,698 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:117
+2025-06-02 17:49:36,700 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-06-02 17:49:36,701 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-02 17:49:36,701 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:30
+2025-06-02 17:49:36,761 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-02 17:49:36,792 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:77
+2025-06-02 17:49:36,793 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [InfrastructureGateway] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:89
+2025-06-02 17:49:36,794 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-02 17:49:36,804 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-02 17:49:37,661 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-06-02 17:49:37,857 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-06-02 17:49:37,858 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-06-02 17:49:38,833 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['ACLOpenAPIHandlingCapability']
+	- Analyzed capability constraints: []
+	- Analyzed skills: ['ACLOpenAPIHandlingBehaviour']
+	- Analyzed skill interfaces: []
+	- Analyzed skill parameters: []
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-06-02 17:49:38,834 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-06-02 17:49:38,834 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-06-02 17:49:38,835 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:49
+2025-06-02 17:49:38,835 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-06-02 17:49:38,836 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-02 17:49:38,836 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-02 17:49:38,837 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:82
+2025-06-02 17:49:38,837 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:39
+2025-06-02 17:49:38,837 [behaviours.acl_openapi_handling_behaviour] [INFO] ACLOpenAPIHandlingBehaviour starting... line:46
+2025-06-02 17:49:38,838 [behaviours.acl_openapi_handling_behaviour] [INFO] Successfully loaded all Infrastructure Services with their associated execution methods. line:52
+2025-06-02 17:49:45,057 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]          + Message received on SMIA ISM (ACLOpenAPIHandlingBehaviour) from gui_agent@xmpp.jp/725079292494559991615631104386 line:83
+2025-06-02 17:49:45,058 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"serviceID": "GetAssetIDsOfCapability", "serviceType": "DiscoveryService", "serviceParams": "http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation"} line:84
+2025-06-02 17:49:45,109 [behaviours.acl_openapi_handling_behaviour] [ACLINFO] The SMIA sender [gui_agent@xmpp.jp], within thread [prueba-acl-smia-msg], needs a service related to OpenAPI infrastructures to be performed. A specific behavior will be triggered to handle this request.. line:107
+2025-06-02 17:49:45,110 [behaviours.handle_acl_openapi_behaviour] [INFO] HandleCapabilityBehaviour starting... line:42
+2025-06-02 17:49:45,112 [behaviours.handle_acl_openapi_behaviour] [INFO] The AAS Infrastructure Service GetAssetIDsOfCapability has been requested. line:73
+2025-06-02 17:49:48,308 [behaviours.handle_acl_openapi_behaviour] [INFO] The AAS Infrastructure Service GetAssetIDsOfCapability has been successfully executed. line:86
+2025-06-02 17:50:17,205 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:50:17,527 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleACLOpenAPIBehaviour with exit code: None line:154
+2025-06-02 17:50:27,194 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:50:27,195 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:50:37,194 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:50:37,195 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:50:47,194 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:50:47,195 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:50:57,194 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:50:57,196 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:51:07,194 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:51:07,195 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:51:17,194 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:51:17,195 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:51:27,194 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:51:27,196 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:51:37,195 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:51:37,195 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:51:47,194 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:51:47,196 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:51:57,194 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:51:57,195 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:52:07,194 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:52:07,195 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:52:17,195 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:52:17,195 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:52:27,194 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:52:27,195 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:52:37,194 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-02 17:52:37,197 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:114
+2025-06-02 17:52:41,816 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-06-02 17:52:41,817 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-02 17:52:41,818 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-02 17:52:41,821 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:82
+2025-06-02 17:52:41,823 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:39
+2025-06-02 17:52:41,824 [behaviours.acl_openapi_handling_behaviour] [INFO] ACLOpenAPIHandlingBehaviour starting... line:46
+2025-06-02 17:52:41,826 [behaviours.acl_openapi_handling_behaviour] [INFO] Successfully loaded all Infrastructure Services with their associated execution methods. line:52
