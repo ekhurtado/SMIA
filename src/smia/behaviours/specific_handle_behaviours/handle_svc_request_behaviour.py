@@ -164,7 +164,7 @@ class HandleSvcRequestBehaviour(OneShotBehaviour):
                                                                  f"The error [{svc_request_error.error_type}] has appeared during the asset "
                                                                  f"connection. Reason: {svc_request_error.reason}.",
                                                                  self.svc_req_data['serviceType'], self)
-            await svc_request_error.handle_service_execution_error()
+            await svc_request_error.handle_service_execution_error_old()
             return  # killing a behaviour does not cancel its current run loop
 
     async def handle_aas_services_request(self):
@@ -241,7 +241,7 @@ class HandleSvcRequestBehaviour(OneShotBehaviour):
                                                                  "{}. Reason: {}".format(svc_request_error.message,
                                                                                          svc_request_error.reason),
                                                                  self.svc_req_data['serviceType'], self)
-            await svc_request_error.handle_service_execution_error()
+            await svc_request_error.handle_service_execution_error_old()
             return  # killing a behaviour does not cancel its current run loop
 
     async def send_response_msg_to_sender(self, performative, service_params):

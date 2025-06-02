@@ -35,6 +35,8 @@ def create_svc_json_data_from_acl_msg(acl_msg):
     svc_req_data_json.update(json.loads(acl_msg.body))
     return svc_req_data_json
 
+# Methods related to the ACL-SMIA messages
+# ----------------------------------------
 def create_inter_smia_response_msg(receiver, thread, performative, ontology, service_id=None, service_type=None,
                                    service_params=None):
     """
@@ -71,7 +73,7 @@ def create_inter_smia_response_msg(receiver, thread, performative, ontology, ser
     request_msg.body = json.dumps(request_msg_body_json)
     return request_msg
 
-def create_acl_response_from_received_msg(received_msg, performative, response_body=None):
+async def create_acl_response_from_received_msg(received_msg, performative, response_body=None):
     """
     This method creates an Inter SMIA interaction response object from a received ACL message. Thus, some of the
     required data will be obtained from the received message (receiver, thread, ontology, protocol, encoding and
@@ -102,11 +104,14 @@ def create_acl_response_from_received_msg(received_msg, performative, response_b
                                   received_msg.get_metadata(FIPAACLInfo.FIPA_ACL_LANGUAGE_ATTRIB))
 
     if response_body is not None:
-        response_msg.body = response_body
+        if isinstance(response_body, dict):
+            response_msg.body = json.dumps(response_body)
+        else:
+            response_msg.body = response_body
     return response_msg
 
 
-def create_acl_smia_message(receiver, thread, performative, ontology, msg_body=None, protocol=None, encoding=None,
+async def create_acl_smia_message(receiver, thread, performative, ontology, msg_body=None, protocol=None, encoding=None,
                             language=None):
     """
     This method creates a FIPA-ACL-SMIA message for an Inter SMIA interaction. If optional attributes are set, they will
@@ -143,12 +148,35 @@ def create_acl_smia_message(receiver, thread, performative, ontology, msg_body=N
         acl_smia_msg.set_metadata(FIPAACLInfo.FIPA_ACL_LANGUAGE_ATTRIB, FIPAACLInfo.FIPA_ACL_DEFAULT_LANGUAGE)
 
     if msg_body is not None:
-        acl_smia_msg.body = msg_body
+        if isinstance(msg_body, dict):
+            acl_smia_msg.body = json.dumps(msg_body)
+        else:
+            acl_smia_msg.body = msg_body
     return acl_smia_msg
 
+async def acl_message_to_json(acl_message):
+    """
+    This method converts a FIPA-ACL-SMIA message to JSON object.
+    Args:
+        acl_message (spade.message.Message): SPADE message object FIPA-ACL-SMIA-compliant.
 
-# Methods related with the body of ACL-SMIA messages
-# --------------------------------------------------
+    Returns:
+        dict: JSON object with all the information of the ACL message.
+    """
+    return {
+        'sender': GeneralUtils.get_sender_from_acl_msg(acl_message),
+        'receiver': str(acl_message.to),
+        'thread': acl_message.thread,
+        FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB: acl_message.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB),
+        FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB: acl_message.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB),
+        FIPAACLInfo.FIPA_ACL_PROTOCOL_ATTRIB: acl_message.get_metadata(FIPAACLInfo.FIPA_ACL_PROTOCOL_ATTRIB),
+        FIPAACLInfo.FIPA_ACL_ENCODING_ATTRIB: acl_message.get_metadata(FIPAACLInfo.FIPA_ACL_ENCODING_ATTRIB),
+        FIPAACLInfo.FIPA_ACL_LANGUAGE_ATTRIB: acl_message.get_metadata(FIPAACLInfo.FIPA_ACL_LANGUAGE_ATTRIB),
+        'body': json.loads(acl_message.body),
+    }
+
+# Methods related to the body of ACL-SMIA messages
+# ------------------------------------------------
 async def generate_json_from_schema(schema: dict, **kwargs) -> dict:
     """
     This method generates a valid JSON from a predefined JSON Schema.
@@ -226,3 +254,18 @@ async def check_received_request_data_structure(received_data, json_schema):
     except ValidationError as e:
         raise RequestDataError("The received JSON data within the request message is invalid against the required "
                                "JSON schema. Invalid part: {}. Reason: {}.".format(e.instance, e.message))
+
+# Methods related to SMIA instances interactions
+# ----------------------------------------------
+async def send_response_msg_from_received(agent_behav, received_msg, performative, response_body=None):
+    """
+    This method sends a response message from a received one, adding the desired data: performative and body.
+
+    Args:
+        agent_behav (AgentBehavior): Agent behaviour object.
+        received_msg (spade.message.Message): the received ACL message.
+        performative (str): the performative of the ACL message.
+        response_body: the body of the ACL response message.
+    """
+    response_msg = await create_acl_response_from_received_msg(received_msg, performative, response_body)
+    await agent_behav.send(response_msg)

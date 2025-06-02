@@ -66,7 +66,7 @@ class ServiceRequestExecutionError(Exception):
         self.svc_type = svc_type
         self.behav_class = behav_class
 
-    async def handle_service_execution_error(self):
+    async def handle_service_execution_error_old(self):
         """
         This method handles the error during an execution of a service, sending the Failure message to the requester.
         """
@@ -89,6 +89,39 @@ class ServiceRequestExecutionError(Exception):
             acl_info = self.behav_class.svc_req_data
         else:
             acl_info = {'thread': self.thread}
+        smia_archive_utils.save_svc_error_log_info(GeneralUtils.get_current_timestamp(), acl_info, self.message,
+                                                   self.svc_type)
+
+        # The behaviour for the execution of the service must be killed
+        self.behav_class.kill(exit_code=10)
+
+    async def handle_service_execution_error(self):
+        """
+        This method handles the error during an execution of a service, sending the Failure message to the requester.
+        """
+        _logger.error(f"{self.message}")
+
+        _logger.info("Due to an incorrect execution of the service related to the thread [{}], the requester shall be "
+                     "informed with a Failure message.".format(self.thread))
+
+        # Local imports to avoid circular import error
+        from smia import GeneralUtils
+        from smia.utilities import smia_archive_utils
+        from smia.logic import inter_aas_interactions_utils
+        if 'received_acl_msg' in self.behav_class:
+            await inter_aas_interactions_utils.send_response_msg_from_received(
+                self.behav_class, self.behav_class.received_acl_msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE,
+                {'reason': self.message, 'exceptionType': str(self.__class__.__name__)})
+            _logger.info("Failure message sent to the requester related to the thread [{}].".format(self.thread))
+
+            acl_info = await inter_aas_interactions_utils.acl_message_to_json(self.behav_class.received_acl_msg)
+        else:
+            _logger.warning("A ServiceRequestExecutionError exception has been raised from a HandlingBehaviour that is "
+                            "not valid for this management. Reason: It does not have the 'received_acl_msg' attribute "
+                            "to store the received ACL message.")
+            acl_info = {'thread': self.thread, 'behavClass': self.behav_class}
+
+        # The information about the error is also saved in the log
         smia_archive_utils.save_svc_error_log_info(GeneralUtils.get_current_timestamp(), acl_info, self.message,
                                                    self.svc_type)
 
