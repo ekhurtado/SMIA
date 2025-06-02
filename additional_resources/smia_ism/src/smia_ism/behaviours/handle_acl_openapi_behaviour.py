@@ -44,7 +44,7 @@ class HandleACLOpenAPIBehaviour(OneShotBehaviour):
         This method implements the logic of the behaviour.
         """
 
-        match self.received_acl_msg.get_metadata('ontology'):
+        match self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB):
             case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST:
                 await self.handle_acl_openapi_request()
             case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_IF | FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_REF:
