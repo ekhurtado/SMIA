@@ -315,7 +315,7 @@ def save_svc_error_log_info(occurrence_timestamp, acl_info, reason, svc_type):
         svc_type (str): type of the service.
     """
     # First, the required paths are obtained
-    log_file_path = get_log_file_by_service_type_old('errors', svc_type)
+    log_file_path = get_log_file_by_service_type('errors', svc_type)
 
     # Then, the information object is built and added
     svc_log_info = {
