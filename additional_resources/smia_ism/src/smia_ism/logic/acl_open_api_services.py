@@ -40,6 +40,6 @@ class ACLOpenAPIServices:
 
 
     ACLOpenAPIServicesMap = {
-        'GetSMIAInstanceByAssetId': get_smia_instance_by_asset_id,
+        'GetSMIAInstanceIDByAssetID': get_smia_instance_by_asset_id,
         'GetAssetIDsOfCapability': get_assets_ids_of_capability,
     }  #: This object maps the service identifiers with its associated execution methods

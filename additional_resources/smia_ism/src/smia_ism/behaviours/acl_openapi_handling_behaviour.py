@@ -4,7 +4,7 @@ import logging
 from smia import GeneralUtils
 from smia.logic import inter_aas_interactions_utils
 from smia.logic.agent_services import AgentServices
-from smia.logic.exceptions import RequestDataError
+from smia.logic.exceptions import RequestDataError, ServiceRequestExecutionError
 from spade.behaviour import CyclicBehaviour
 
 from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAJSONSchemas
@@ -93,11 +93,9 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
             except RequestDataError as cap_request_error:
                 # The added data are not valid, so a Refuse message to the requester must be sent
                 # TODO MODIFICAR LA RESPUESTA CON LA NUEVA ESTRUCTURA
-                acl_msg = inter_aas_interactions_utils.create_acl_response_from_received_msg(msg,
-                    performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REFUSE,
-                    response_body={'reason': cap_request_error.message}
-                )
-                await self.send(acl_msg)
+                svc_execution_error = ServiceRequestExecutionError(msg.thread, cap_request_error.message,
+                    msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB), self)
+                await svc_execution_error.handle_service_execution_error()
                 _logger.warning("The sender [{}] has sent an message with thread [{}] that has invalid data, therefore "
                                 "the requester has been informed with a Refuse ACL message".format(
                     GeneralUtils.get_sender_from_acl_msg(msg), msg.thread))

@@ -74,11 +74,12 @@ class HandleACLOpenAPIBehaviour(OneShotBehaviour):
             _logger.info("The AAS Infrastructure Service {} has been successfully executed.".format(requested_infrastructure_svc))
             await inter_aas_interactions_utils.send_response_msg_from_received(
                 self, self.received_acl_msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM, result)
-        except (ServiceRequestExecutionError, KeyError) as svc_execution_error:
-            if isinstance(svc_execution_error, KeyError):
+        except (ServiceRequestExecutionError, KeyError, TypeError) as svc_execution_error:
+            if isinstance(svc_execution_error, KeyError) or isinstance(svc_execution_error, TypeError):
                 svc_execution_error = ServiceRequestExecutionError(
                     self.received_acl_msg.thread, 'Failure during the execution of the Infrastructure Service. '
-                    'Reason: KeyError', ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE, self,
+                    'Reason ({}): {}'.format(type(svc_execution_error).__name__, str(svc_execution_error)),
+                    ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE, self,
                     affected_elem=requested_infrastructure_svc)
             # The ServiceRequestExecutionError can handle directly the response to the sender with the Failure message
             await svc_execution_error.handle_service_execution_error()
