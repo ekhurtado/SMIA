@@ -34,7 +34,7 @@ def main():
     # # TODO BORRAR (para pruebas)
     # smia_jid = "gcis1@xmpp.jp"
     # smia_psswd = "gcis1234"
-    smia.load_aas_model('../smia_archive/config/aas/SMIA_ISM_model.aasx')
+    # smia.load_aas_model('../smia_archive/config/aas/SMIA_InfrastructureServicesManager.aasx')
 
     # Create the agent object
     smia_extensible_agent = ExtensibleSMIAAgent(smia_jid, smia_psswd)

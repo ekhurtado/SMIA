@@ -6,7 +6,7 @@ services:
     image: ekhurtado/smia-tools:latest-smia-ism
     container_name: smia-ism
     environment:
-      - AAS_MODEL_NAME=SMIA_ISM_model.aasx
+      - AAS_MODEL_NAME=SMIA_InfrastructureServicesManager.aasx
       - AGENT_ID=smia-ism@ejabberd
       - AGENT_PSSWD=gcis1234
     depends_on:
