@@ -6,7 +6,7 @@ from spade.behaviour import CyclicBehaviour
 from smia.behaviours.specific_handle_behaviours.handle_capability_behaviour import HandleCapabilityBehaviour
 from smia.behaviours.specific_handle_behaviours.handle_svc_request_behaviour import HandleSvcRequestBehaviour
 from smia.behaviours.specific_handle_behaviours.handle_svc_response_behaviour import HandleSvcResponseBehaviour
-from smia.logic import inter_aas_interactions_utils
+from smia.logic import inter_smia_interactions_utils
 from smia.utilities.fipa_acl_info import FIPAACLInfo
 from smia.utilities.general_utils import GeneralUtils
 
@@ -67,14 +67,14 @@ class ACLHandlingBehaviour(CyclicBehaviour):
                             (msg.get_metadata('ontology') == FIPAACLInfo.FIPA_ACL_ONTOLOGY_CAPABILITY_CHECKING)):
                         _logger.aclinfo("The agent has received a request related to Capability-Skill model")
                         # The behaviour to handle this specific capability will be added to the agent
-                        svc_req_data = inter_aas_interactions_utils.create_svc_json_data_from_acl_msg(msg)
+                        svc_req_data = inter_smia_interactions_utils.create_svc_json_data_from_acl_msg(msg)
                         capability_handling_behav = HandleCapabilityBehaviour(self.agent, svc_req_data)
                         self.myagent.add_behaviour(capability_handling_behav)
 
                     elif msg.get_metadata('ontology') == FIPAACLInfo.FIPA_ACL_ONTOLOGY_SVC_REQUEST:
                         _logger.aclinfo("The agent has received a request to perform a service")
                         # The behaviour to handle this specific capability will be added to the agent
-                        svc_req_data = inter_aas_interactions_utils.create_svc_json_data_from_acl_msg(msg)
+                        svc_req_data = inter_smia_interactions_utils.create_svc_json_data_from_acl_msg(msg)
                         svc_req_handling_behav = HandleSvcRequestBehaviour(self.agent, svc_req_data)
                         self.myagent.add_behaviour(svc_req_handling_behav)
                     else:
@@ -90,7 +90,7 @@ class ACLHandlingBehaviour(CyclicBehaviour):
 
                             # As it is a response to a previous request, a new HandleSvcResponseBehaviour to handle this service
                             # response will be added to the agent
-                            svc_resp_data = inter_aas_interactions_utils.create_svc_json_data_from_acl_msg(msg)
+                            svc_resp_data = inter_smia_interactions_utils.create_svc_json_data_from_acl_msg(msg)
                             svc_resp_handling_behav = HandleSvcResponseBehaviour(self.agent,
                                                                                  'Inter AAS interaction',
                                                                                  svc_resp_data)
@@ -104,7 +104,7 @@ class ACLHandlingBehaviour(CyclicBehaviour):
                     # if service_category == 'capabilityChecking':
                     if msg.get_metadata('ontology') == FIPAACLInfo.FIPA_ACL_ONTOLOGY_CAPABILITY_CHECKING:
                         _logger.info("The DT has been asked to check if it has a given capability.")
-                        svc_req_data = inter_aas_interactions_utils.create_svc_json_data_from_acl_msg(msg)
+                        svc_req_data = inter_smia_interactions_utils.create_svc_json_data_from_acl_msg(msg)
                         capability_handling_behav = HandleCapabilityBehaviour(self.agent, svc_req_data)
                         self.myagent.add_behaviour(capability_handling_behav)
                 case _:

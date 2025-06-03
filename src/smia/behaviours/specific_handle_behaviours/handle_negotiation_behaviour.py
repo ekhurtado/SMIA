@@ -5,7 +5,7 @@ from spade.behaviour import CyclicBehaviour
 
 from smia import GeneralUtils
 from smia.css_ontology.css_ontology_utils import CapabilitySkillOntologyUtils
-from smia.logic import negotiation_utils, inter_aas_interactions_utils
+from smia.logic import negotiation_utils, inter_smia_interactions_utils
 from smia.logic.exceptions import CapabilityRequestExecutionError, AssetConnectionError
 from smia.utilities import smia_archive_utils
 from smia.utilities.fipa_acl_info import FIPAACLInfo, ServiceTypes
@@ -211,7 +211,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
             performative (str): performative according to FIPA-ACL standard.
             service_params (dict): JSON with the serviceParams to be sent in the message.
         """
-        acl_msg = inter_aas_interactions_utils.create_inter_smia_response_msg(
+        acl_msg = inter_smia_interactions_utils.create_inter_smia_response_msg(
             receiver=self.neg_requester_jid,
             thread=self.thread,
             performative=performative,

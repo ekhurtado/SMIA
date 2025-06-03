@@ -5,7 +5,7 @@ import basyx.aas.model
 from spade.behaviour import OneShotBehaviour
 
 from smia import GeneralUtils
-from smia.logic import inter_aas_interactions_utils
+from smia.logic import inter_smia_interactions_utils
 from smia.logic.exceptions import CapabilityRequestExecutionError, CapabilityCheckingError, RequestDataError, \
     AssetConnectionError, OntologyReadingError, AASModelReadingError
 from smia.css_ontology.css_ontology_utils import CapabilitySkillACLInfo
@@ -192,7 +192,7 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
             performative (str): performative according to FIPA-ACL standard.
             service_params (dict): JSON with the serviceParams to be sent in the message.
         """
-        acl_msg = inter_aas_interactions_utils.create_inter_smia_response_msg(
+        acl_msg = inter_smia_interactions_utils.create_inter_smia_response_msg(
             receiver=self.svc_req_data['sender'],
             thread=self.svc_req_data['thread'],
             performative=performative,
@@ -213,7 +213,7 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
         #  ejecutaría la capacidad con una skill aleatoria). Lo que si se va a comprobar es que si se añaden datos
         #  opcionales, sean validos (p.e. que los datos añadidos estén conformes a la ontologia CSS)
         # First, the structure and attributes of the received data are checked and validated
-        await inter_aas_interactions_utils.check_received_request_data_structure_old(
+        await inter_smia_interactions_utils.check_received_request_data_structure_old(
             self.svc_req_data, ACLSMIAJSONSchemas.JSON_SCHEMA_CAPABILITY_REQUEST)
         received_cap_data = self.svc_req_data['serviceData']['serviceParams']
         # if CapabilitySkillACLInfo.REQUIRED_CAPABILITY_NAME not in received_cap_data:

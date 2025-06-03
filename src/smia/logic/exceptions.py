@@ -108,17 +108,17 @@ class ServiceRequestExecutionError(Exception):
         # Local imports to avoid circular import error
         from smia import GeneralUtils
         from smia.utilities import smia_archive_utils
-        from smia.logic import inter_aas_interactions_utils
+        from smia.logic import inter_smia_interactions_utils
         if hasattr(self.behav_class, 'received_acl_msg'):
             response_body = {'reason': self.message, 'exceptionType': str(self.__class__.__name__)}
             if self.affected_element is not None:
                 response_body.update({'affectedElement': self.affected_element})
-            await inter_aas_interactions_utils.send_response_msg_from_received(
+            await inter_smia_interactions_utils.send_response_msg_from_received(
                 self.behav_class, self.behav_class.received_acl_msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE,
                 response_body)
             _logger.info("Failure message sent to the requester related to the thread [{}].".format(self.thread))
 
-            acl_info = await inter_aas_interactions_utils.acl_message_to_json(self.behav_class.received_acl_msg)
+            acl_info = await inter_smia_interactions_utils.acl_message_to_json(self.behav_class.received_acl_msg)
         else:
             _logger.warning("A ServiceRequestExecutionError exception has been raised from a HandlingBehaviour that is "
                             "not valid for this management. Reason: It does not have the 'received_acl_msg' attribute "

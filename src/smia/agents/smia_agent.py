@@ -7,6 +7,7 @@ import logging
 
 from smia.aas_model.extended_aas_model import ExtendedAASModel
 from smia.css_ontology.capability_skill_ontology import CapabilitySkillOntology
+from smia.logic import acl_smia_messages_utils
 from smia.logic.agent_services import AgentServices
 from smia.logic.exceptions import AASModelReadingError
 from smia.states.state_running import StateRunning
@@ -90,6 +91,7 @@ class SMIAAgent(Agent):
         self.lock = asyncio.Lock()
 
     async def setup(self):
+        a = await acl_smia_messages_utils.create_random_thread(self)
         """
         This method performs the common setup of all types of :term:`SMIAs <SMIA>`. It defines the Finite State Machine
         (FSM) of the general SMIA Agent.

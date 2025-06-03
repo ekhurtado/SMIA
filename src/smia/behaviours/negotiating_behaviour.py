@@ -6,7 +6,7 @@ from spade.behaviour import CyclicBehaviour
 from smia.behaviours.specific_handle_behaviours.handle_negotiation_behaviour import HandleNegotiationBehaviour
 from smia.behaviours.specific_handle_behaviours.handle_svc_response_behaviour import HandleSvcResponseBehaviour
 from smia.css_ontology.css_ontology_utils import CapabilitySkillACLInfo, CapabilitySkillOntologyUtils
-from smia.logic import negotiation_utils, inter_aas_interactions_utils
+from smia.logic import negotiation_utils, inter_smia_interactions_utils, acl_smia_messages_utils
 from smia.logic.exceptions import RequestDataError
 from smia.utilities import smia_archive_utils
 from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAJSONSchemas, ServiceTypes
@@ -70,12 +70,12 @@ class NegotiatingBehaviour(CyclicBehaviour):
                     # Since the negotiation is an agent capability, it will be checked the validity of the received data
                     cap_req_data = None
                     try:
-                        cap_req_data = inter_aas_interactions_utils.create_svc_json_data_from_acl_msg(msg)
+                        cap_req_data = inter_smia_interactions_utils.create_svc_json_data_from_acl_msg(msg)
                         await self.check_received_capability_request_data(cap_req_data)
                     except RequestDataError as cap_request_error:
                         # The data are not valid, so the requester must be informed.
-                        acl_msg = inter_aas_interactions_utils.create_inter_smia_response_msg(
-                            receiver=GeneralUtils.get_sender_from_acl_msg(msg),
+                        acl_msg = inter_smia_interactions_utils.create_inter_smia_response_msg(
+                            receiver=acl_smia_messages_utils.get_sender_from_acl_msg(msg),
                             thread=msg.thread,
                             performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE,
                             ontology=FIPAACLInfo.FIPA_ACL_ONTOLOGY_SVC_NEGOTIATION,   # TODO pensar si definir un NegRequest y NegResponse
@@ -90,7 +90,7 @@ class NegotiatingBehaviour(CyclicBehaviour):
 
                     # First, some useful information is obtained from the msg
                     targets_list = cap_req_data['serviceData']['serviceParams']['targets'].split(',')
-                    neg_requester_jid = GeneralUtils.get_sender_from_acl_msg(msg)
+                    neg_requester_jid = acl_smia_messages_utils.get_sender_from_acl_msg(msg)
                     neg_criteria = cap_req_data['serviceData']['serviceParams'][CapabilitySkillACLInfo.REQUIRED_SKILL_NAME]
                     if len(targets_list) == 1:
                         # There is only one target available (therefore, it is the only one, so it is the winner)
@@ -114,7 +114,7 @@ class NegotiatingBehaviour(CyclicBehaviour):
                                           'winner': 'True'}
                         smia_archive_utils.save_completed_svc_log_info(
                             GeneralUtils.get_current_timestamp(), GeneralUtils.get_current_timestamp(),
-                            inter_aas_interactions_utils.create_svc_json_data_from_acl_msg(msg), execution_info,
+                            inter_smia_interactions_utils.create_svc_json_data_from_acl_msg(msg), execution_info,
                             ServiceTypes.CSS_RELATED_SERVICE)
 
                         # Finally, the data is stored in the SMIA
@@ -140,7 +140,7 @@ class NegotiatingBehaviour(CyclicBehaviour):
                         # messages but also only with the thread of that specific thread
                         handle_neg_template = SMIAInteractionInfo.NEG_STANDARD_ACL_TEMPLATE_PROPOSE
                         handle_neg_template.thread = msg.thread
-                        neg_req_data = inter_aas_interactions_utils.create_svc_json_data_from_acl_msg(msg)
+                        neg_req_data = inter_smia_interactions_utils.create_svc_json_data_from_acl_msg(msg)
                         handle_neg_behav = HandleNegotiationBehaviour(self.agent, behaviour_info, neg_req_data)
                         self.myagent.add_behaviour(handle_neg_behav, handle_neg_template)
 
@@ -153,7 +153,7 @@ class NegotiatingBehaviour(CyclicBehaviour):
                         # TODO BORRAR (enfoque antiguo): pensar como gestionar las respuestas de
                         # As the result of a negotiation is a response to a previous request, a new
                         # HandleSvcResponseBehaviour to handle this service response will be added to the agent
-                        svc_resp_data = inter_aas_interactions_utils.create_svc_json_data_from_acl_msg(msg)
+                        svc_resp_data = inter_smia_interactions_utils.create_svc_json_data_from_acl_msg(msg)
                         svc_resp_handling_behav = HandleSvcResponseBehaviour(self.agent,
                                                                              'Inter AAS interaction',
                                                                              svc_resp_data)
@@ -179,7 +179,7 @@ class NegotiatingBehaviour(CyclicBehaviour):
             cap_req_data: (dict): all the information about the agent capability request
         """
         # First, the structure and attributes of the received data are checked and validated
-        await inter_aas_interactions_utils.check_received_request_data_structure_old(
+        await inter_smia_interactions_utils.check_received_request_data_structure_old(
             cap_req_data, ACLSMIAJSONSchemas.JSON_SCHEMA_CAPABILITY_REQUEST)
         received_cap_data = cap_req_data['serviceData']['serviceParams']
         cap_name = received_cap_data[CapabilitySkillACLInfo.REQUIRED_CAPABILITY_NAME]
