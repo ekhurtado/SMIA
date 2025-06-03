@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 
 from smia import GeneralUtils
 from smia.logic import inter_aas_interactions_utils
@@ -10,6 +11,7 @@ from spade.behaviour import CyclicBehaviour
 from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAJSONSchemas
 
 from behaviours.handle_acl_openapi_behaviour import HandleACLOpenAPIBehaviour
+from external_infrastructures.smia_kb_infrastructure import SMIAKBInfrastructure
 from logic.acl_open_api_services import ACLOpenAPIServices
 from utilities.smia_acl_message_info import SMIAACLMessageInfo
 
@@ -48,8 +50,16 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
         # Let's register all Infrastructure Services of SMIA ISM in relation with ACL-OpenAPI
         for service_id, service_method in ACLOpenAPIServices.ACLOpenAPIServicesMap.items():
             await self.myagent.acl_openapi_services.save_agent_service(service_id, service_method)
-
         _logger.info("Successfully loaded all Infrastructure Services with their associated execution methods.")
+
+        # The OpenAPI connectivity information also need to be configured (for now only through environmental variables)
+        if os.environ.get('SMIA_KB_IP') is not None:
+            SMIAKBInfrastructure.set_ip_address(os.environ.get('SMIA_KB_IP'))
+        if os.environ.get('SMIA_KB_HOST') is not None:
+            SMIAKBInfrastructure.set_ip_address_host(os.environ.get('SMIA_KB_HOST'))
+        if os.environ.get('SMIA_KB_PORT') is not None:
+            SMIAKBInfrastructure.set_port(int(os.environ.get('SMIA_KB_PORT')))
+
         # TODO TEST
         # try:
         #     params = {'asset_id': 'http://example.com/ids/asset001'}

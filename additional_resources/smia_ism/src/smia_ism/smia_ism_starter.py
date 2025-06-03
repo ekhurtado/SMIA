@@ -6,6 +6,7 @@ from smia.agents.extensible_smia_agent import ExtensibleSMIAAgent
 from smia.utilities.general_utils import DockerUtils
 
 from behaviours.acl_openapi_handling_behaviour import ACLOpenAPIHandlingBehaviour
+from utilities import general_utils
 
 _logger = logging.getLogger(__name__)
 
@@ -15,6 +16,9 @@ def main():
     # First, the initial configuration must be executed
     smia.initial_self_configuration()
     _logger.info("Initializing SMIA ISM (Infrastructure Services Manager)...")
+
+    # The main banner of SMIA will be replaced for the SMIA ISM banner
+    smia.utilities.general_utils.GeneralUtils.print_smia_banner = general_utils.print_smia_ism_banner
 
     # The AAS model is obtained from the environmental variables
     aas_model_path = DockerUtils.get_aas_model_from_env_var()
@@ -27,9 +31,9 @@ def main():
     smia_jid = os.environ.get('AGENT_ID')
     smia_psswd = os.environ.get('AGENT_PASSWD')
 
-    # TODO BORRAR (para pruebas)
-    smia_jid = "gcis1@xmpp.jp"
-    smia_psswd = "gcis1234"
+    # # TODO BORRAR (para pruebas)
+    # smia_jid = "gcis1@xmpp.jp"
+    # smia_psswd = "gcis1234"
     smia.load_aas_model('../smia_archive/config/aas/SMIA_ISM_model.aasx')
 
     # Create the agent object
