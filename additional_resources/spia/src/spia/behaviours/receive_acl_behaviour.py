@@ -1,7 +1,6 @@
-import ast
-import json
 import logging
 
+from smia import CriticalError
 from smia.logic import acl_smia_messages_utils
 from smia.utilities.fipa_acl_info import FIPAACLInfo
 from spade.behaviour import CyclicBehaviour
@@ -58,7 +57,8 @@ class ReceiveACLBehaviour(CyclicBehaviour):
                                     FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE):
                                 _logger.error("SPIA has received a Failure for the thread [{}], so it cannot continue. "
                                               "Reason: {}".format(thread, msg_parsed_body['reason']))
-                                break
+                                raise CriticalError('SPIA cannot continue due to a received FAILURE ACL message. '
+                                                    'Reason: {}'.format(msg_parsed_body['reason']))
                             if (msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB) ==
                                     FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM):
                                 # In this case the content is valid

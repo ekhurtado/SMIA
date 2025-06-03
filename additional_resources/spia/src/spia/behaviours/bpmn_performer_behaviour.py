@@ -1,13 +1,11 @@
 import asyncio
 import logging
-import random
-import string
 
 from SpiffWorkflow.bpmn.parser import BpmnParser
 from SpiffWorkflow.bpmn.specs.defaults import ServiceTask
 from smia import CriticalError
 from smia.logic import inter_smia_interactions_utils, acl_smia_messages_utils
-from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo
+from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo, ACLSMIAJSONSchemas
 from spade.behaviour import OneShotBehaviour
 
 from utilities.smia_bpmn_info import SMIABPMNInfo
@@ -99,10 +97,9 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                 if spec_instance.smia_asset is not None:
                     # In this case the asset has been specified so it will need to request an AAS Infrastructure Service
                     # to get the SMIA identifier associated to this asset identifier
-                    _logger.info("Requesting an AAS Infrastructure Service to obtain the SMIA instance identifier for "
-                                 "asset [{}].".format(spec_instance.smia_asset))
+                    _logger.info("Obtaining the SMIA instance identifier for asset "
+                                 "[{}].".format(spec_instance.smia_asset))
                     spec_instance.smia_instance = await self.get_smia_instance_id_by_asset_id(spec_instance.smia_asset)
-                    # TODO HACERLO (usar los metodos de ACL del final del behaviour)
 
     async def execute_workflow(self):
         """
@@ -126,11 +123,15 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
             current_bpmn_elem: BPMN element object.
         """
         # Before executing the BPMN element it is necessary to check if some additional tasks need to be done
-        if isinstance(current_bpmn_elem, ServiceTask) and len(current_bpmn_elem.smia_additional_tasks) > 0:
-            await self.execute_additional_tasks_of_bpmn_element(current_bpmn_elem)
-        _logger.info("Executing BPMN element {}".format(current_bpmn_elem.bpmn_name))
-        # TODO
-        print("TODO")
+        if isinstance(current_bpmn_elem, ServiceTask):
+            # Only ServiceTasks can be executed by SPIA
+            if len(current_bpmn_elem.smia_additional_tasks) > 0:
+                await self.execute_additional_tasks_of_bpmn_element(current_bpmn_elem)
+            _logger.info("Executing BPMN element {}".format(current_bpmn_elem.bpmn_name))
+
+            result = await self.execute_acl_rp_css_protocol(current_bpmn_elem)
+            # TODO PROBARLO Y ANALIZARLA EL MENSAJE DE RESPUESTA PARA VER SI HA FALLADO ALGO
+            # print("TODO")
 
     async def execute_additional_tasks_of_bpmn_element(self, bpmn_element):
         """
@@ -151,7 +152,9 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                                  "the CNP protocol.".format(bpmn_element.smia_capability))
                     # TODO COMPROBARLO AQUI
                     smia_instance_candidates = await self.get_smia_instances_id_by_capability(bpmn_element.smia_capability)
-                    await self.execute_acl_cnp_protocol(smia_instance_candidates)
+                    bpmn_element.smia_instance = await self.execute_acl_cnp_protocol(smia_instance_candidates, bpmn_element)
+                    # With the winner SMIA instance, it can be obtained the associated asset ID
+                    bpmn_element.smia_asset = await self.get_asset_id_by_smia_instance_id(bpmn_element.smia_instance)
                     # TODO: FALTA POR HACER (Habria que solicitar todos los IDs de las instancias SMIA de esta capacidad y enviarles un mensaje ACL a todos ellos)
 
             if task == SMIABPMNInfo.TASK_REQUEST_DATA_TO_PREVIOUS:
@@ -169,11 +172,15 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                         # It cannot request to the following element because it needs to perform a distributed CNP
                         # protocol to obtain the asset and SMIA identifiers
                         smia_instance_candidates = await self.get_smia_instances_id_by_capability(
-                            bpmn_element.smia_capability)
-                        await self.execute_acl_cnp_protocol(smia_instance_candidates)
+                            following_element.smia_capability)
+                        following_element.smia_instance = await self.execute_acl_cnp_protocol(smia_instance_candidates,
+                                                                                         following_element)
+                        # With the winner SMIA instance, it can be obtained the associated asset ID
+                        following_element.smia_asset = await self.get_asset_id_by_smia_instance_id(
+                            following_element.smia_instance)
                         # When it has obtained the winner of the CNP protocol, it need to be added to the BPMN element
-                        following_element.smia_asset = 'winner of CNP'  # TODO MODIFICAR ESTA MANUALMENTE
-                        following_element.smia_instance = 'winner of CNP'  # TODO MODIFICAR ESTA MANUALMENTE
+                        # following_element.smia_asset = 'winner of CNP'  # TODO MODIFICAR ESTA MANUALMENTE
+                        # following_element.smia_instance = 'winner of CNP'  # TODO MODIFICAR ESTA MANUALMENTE
 
                     # Now the following element is specified, so the data can be requested
                     _logger.info("A data need to be requested to the SMIA instance {}".format(following_element.smia_instance))
@@ -226,7 +233,7 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
             f"gcis1@{await acl_smia_messages_utils.get_xmpp_server_from_jid(self.myagent)}",   # TODO BORRAR
             # f"smia-ism@{await acl_smia_messages_utils.get_xmpp_server_from_jid(self.myagent)}",   # TODO SE PODRIA HACER UN METODO EN SMIA PARA RECOGER EL XMPP SERVER
             await acl_smia_messages_utils.create_random_thread(self.myagent), FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST,
-            ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE, msg_body=msg_body)
+            ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE, protocol='fipa-request', msg_body=msg_body)
 
     async def get_smia_instance_id_by_asset_id(self, asset_id):
         """
@@ -239,8 +246,33 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
             str: identifier of the associated SMIA instance.
         """
         # In order to obtain the data, an AAS Infrastructure Service need to be requested to SMIA ISM
-        request_acl_msg = await self.create_acl_message_to_smia_ism(
-            {'serviceID': 'GetSMIAInstanceIDByAssetID', 'serviceType': 'DiscoveryService', 'serviceParams': asset_id})
+        request_acl_msg = await self.create_acl_message_to_smia_ism(await acl_smia_messages_utils.
+            generate_json_from_schema(ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE,
+            serviceID='GetSMIAInstanceIDByAssetID', serviceType='DiscoveryService', serviceParams=asset_id))
+        _logger.aclinfo("FIPA-RP with an AAS Infrastructure Service initiated with SMIA ISM to obtain the SMIA instance"
+                        " identifier for asset {}".format(asset_id))
+        await self.send_acl_and_wait(request_acl_msg)
+        # When the data has been received, it will be obtained from the global dictionary and will be returned
+        return self.acl_messages_responses[request_acl_msg.thread]
+
+    async def get_asset_id_by_smia_instance_id(self, smia_instance_id):
+        """
+        This method gets the asset identifier associated to a given SMIA instance.
+
+        Args:
+            smia_instance_id (str): identifier of the SMIA instance
+
+        Returns:
+            str: identifier of the associated asset.
+        """
+        # TODO FALTA PROBARLO (y desarrollarlo en SMIA ISM)
+        # In order to obtain the data, an AAS Infrastructure Service need to be requested to SMIA ISM
+        request_acl_msg = await self.create_acl_message_to_smia_ism(await acl_smia_messages_utils.
+                                                                    generate_json_from_schema(
+            ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE,
+            serviceID='GetAssetIDBySMIAInstanceID', serviceType='DiscoveryService', serviceParams=smia_instance_id))
+        _logger.aclinfo("FIPA-RP with an AAS Infrastructure Service initiated with SMIA ISM to obtain the asset "
+                        "identifier for the SMIA instance {}".format(smia_instance_id))
         await self.send_acl_and_wait(request_acl_msg)
         # When the data has been received, it will be obtained from the global dictionary and will be returned
         return self.acl_messages_responses[request_acl_msg.thread]
@@ -256,8 +288,11 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
             list: identifiers of the associated SMIA instances.
         """
         # First, it will obtain all the asset identifiers associated to the given capability
-        request_assets_acl_msg = await self.create_acl_message_to_smia_ism({'serviceID': 'GetAllAssetIDByCapability',
-             'serviceType': 'DiscoveryService', 'serviceParams': capability_iri})
+        request_assets_acl_msg = await self.create_acl_message_to_smia_ism(await acl_smia_messages_utils.
+            generate_json_from_schema(ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE,
+            serviceID='GetAllAssetIDByCapability', serviceType='DiscoveryService', serviceParams=capability_iri))
+        _logger.aclinfo("FIPA-RP with an AAS Infrastructure Service initiated with SMIA ISM to obtain the all the "
+                        "assets associated to the capability {}".format(capability_iri))
         await self.send_acl_and_wait(request_assets_acl_msg)
         # When the assets have been received, it will be obtained from the global dictionary
         assets_id_list = self.acl_messages_responses[request_assets_acl_msg.thread]
@@ -269,8 +304,8 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
             if smia_instance_id is None:
                 # In this case it must be requested to the SMIA ISM, in order to obtain from the SMIA KB
                 request_smia_id_acl_msg = await self.create_acl_message_to_smia_ism(
-                    {'serviceID': 'GetAllAssetIDByCapability', 'serviceType': 'DiscoveryService',
-                     'serviceParams': capability_iri})
+                    {'serviceID': 'GetSMIAInstanceIDByAssetID', 'serviceType': 'DiscoveryService',
+                     'serviceParams': asset_id})
                 await self.send_acl_and_wait(request_smia_id_acl_msg)
                 # When the data have been received it is added to the list
                 smia_instance_id = self.acl_messages_responses[request_smia_id_acl_msg.thread]
@@ -290,36 +325,72 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
         Returns:
             object: returns the queried AAS element content.
         """
-        # TODO falta por hacer
-        pass
+        query_acl_msg = await inter_smia_interactions_utils.create_acl_smia_message(
+            smia_instance_id, await acl_smia_messages_utils.create_random_thread(self.myagent),
+            FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_REF, ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_SERVICE,
+            protocol='fipa-query', msg_body=await acl_smia_messages_utils.generate_json_from_schema(
+                ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_SERVICE, serviceID='GetAssetIDBySMIAInstanceID',
+                serviceType='DiscoveryService', serviceParams=smia_instance_id))
+        _logger.aclinfo("FIPA-QP initiated with {} to obtain the AAS element {}".format(smia_instance_id, requested_aas_ref))
+        await self.send_acl_and_wait(query_acl_msg)
+        # When the data has been received, it will be obtained from the global dictionary and will be returned
+        return self.acl_messages_responses[query_acl_msg.thread]
 
-    async def execute_acl_cnp_protocol(self, smia_instance_ids):
+    async def execute_acl_cnp_protocol(self, smia_instance_ids, bpmn_element):
         """
         This method executes the FIPA-ACL CNP interaction protocol (Contract Net Protocol), to obtain the best option among several.
 
         Args:
             smia_instance_ids (list): list with all the identifiers of SMIA instances to be the participants of the protocol.
+            bpmn_element: BPMN element.
 
         Returns:
             str, str: returns the asset identifier and the SMIA instance identifier of the best option.
         """
-        # TODO falta por hacer
-        pass
+        # TODO falta por probar
+        # The FIPA-CNP message will be sent with CFP performative and same thread for all receivers
+        cfp_thread = await acl_smia_messages_utils.create_random_thread(self.myagent)
+        for smia_instance_id in smia_instance_ids:
+            cfp_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
+                smia_instance_id, cfp_thread, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_CFP,
+                ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE, protocol='fipa-contract-net', # TODO AÑADIR LOS PROTOCOLOS EN SMIA
+                msg_body=await acl_smia_messages_utils.generate_json_from_schema(
+                    ACLSMIAJSONSchemas.JSON_SCHEMA_CSS_SERVICE, capabilityIRI=bpmn_element.smia_capability,
+                    skillIRI=bpmn_element.smia_skill, constraints=bpmn_element.smia_constraints,
+                    skillParams=bpmn_element.smia_skill_parameters, negCriterion='NegotiateBasedOnRAM',
+                    negRequester=str(self.myagent.jid), negTargets=smia_instance_ids))
+            await self.send(cfp_acl_message)
+        _logger.aclinfo("FIPA-CNP initiated with SMIA candidates {} to perform capability {}".format(
+            smia_instance_ids, bpmn_element.smia_capability))
+        # When all messages have been sent, it will wait to the winner response
+        self.acl_messages_responses[cfp_thread] = None
+        await self.acl_request_event.wait()
+        self.acl_request_event.clear()
 
-    async def execute_acl_rp_css_protocol(self, smia_instance_id, capability, skill, constraints=None, skill_parameters=None):
+        return self.acl_messages_responses[cfp_thread]
+
+
+    async def execute_acl_rp_css_protocol(self, bpmn_element):
         """
         This method executes the FIPA-ACL RP interaction protocol (Request Protocol), to request the execution of
         an CSS-based capability.
 
         Args:
-            smia_instance_id (str): identifier of SMIA instance to be the requested.
-            capability (str): IRI of the capability to be requested
-            skill (str): IRI of the skill to be requested
-            constraints (list): IRIs of the constraints with their values
-            skill_parameters (list): IRIs of the skill_parameters with their values
+            bpmn_element: BPMN element.
 
         Returns:
             object: returns the response content.
         """
-        # TODO falta por hacer
-        pass
+        # TODO FALTA PROBARLO
+        request_css_acl_msg = await inter_smia_interactions_utils.create_acl_smia_message(
+            bpmn_element.smia_instance, await acl_smia_messages_utils.create_random_thread(self.myagent),
+            FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST, ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE,
+            protocol='fipa-request', msg_body=await acl_smia_messages_utils.generate_json_from_schema(
+                ACLSMIAJSONSchemas.JSON_SCHEMA_CSS_SERVICE, capabilityIRI=bpmn_element.smia_capability,
+                skillIRI=bpmn_element.smia_skill, constraints=bpmn_element.smia_constraints,
+                skillParams=bpmn_element.smia_skill_parameters))
+        _logger.aclinfo("FIPA-RP initiated to request CSS execution: SMIA [{}] -> capability "
+                     "[{}]".format(bpmn_element.smia_instance, bpmn_element.smia_capability))
+        await self.send_acl_and_wait(request_css_acl_msg)
+        # When the data has been received, it will be obtained from the global dictionary and will be returned
+        return self.acl_messages_responses[request_css_acl_msg.thread]
