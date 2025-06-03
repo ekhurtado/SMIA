@@ -78,6 +78,15 @@ class SMIAKBInfrastructure:
         """
         return f"{cls.get_capability_url(capability_iri)}/assets"
 
+    @classmethod
+    def get_smia_instance_url(cls, instance_id):
+        """
+        This method returns the URL to obtain the information of a specific Capability within SMIA KB in JSON format.
+        The Capability identifier must be added Base64-URL-encoded.
+        """
+        return (f"{cls._SMIA_KB_HOST_IP_ADDRESS}:{cls._SMIA_KB_HOST_PORT}{cls.SMIA_KB_OPEN_API_VERSION}"
+                f"/smiaInstances/{instance_id}")
+
 
     # @classmethod
     # def get_submodel_json_url_by_id(cls, submodel_id):

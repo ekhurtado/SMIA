@@ -26,6 +26,18 @@ class ACLOpenAPIServices:
         return "ERROR: SMIA instance for asset identifier [{}] not found.".format(asset_id)
 
     @staticmethod
+    def get_asset_id_by_smia_instance(smia_instance_id):
+        if smia_instance_id is None:
+            return "ERROR: The SMIA instance identifier cannot be null."
+        # First, all the registered SMIA instances are obtained
+        smia_kb_smia_instance_url = SMIAKBInfrastructure.get_smia_instance_url(smia_instance_id)
+        smia_instance_json = send_openapi_http_get_request(smia_kb_smia_instance_url)
+        if smia_instance_json is None:  # TODO Analizar que devuelve cuando no hay instancias o cuando hay error
+            return "ERROR: No SMIA instance is registered."
+        # Then, the associated SMIA instance is obtained
+        return smia_instance_json['asset']['id']
+
+    @staticmethod
     def get_assets_ids_of_capability(capability_iri):
         if capability_iri is None:
             return "ERROR: The capability IRI identifier cannot be null."
@@ -41,5 +53,6 @@ class ACLOpenAPIServices:
 
     ACLOpenAPIServicesMap = {
         'GetSMIAInstanceIDByAssetID': get_smia_instance_by_asset_id,
+        'GetAssetIDBySMIAInstanceID': get_asset_id_by_smia_instance,
         'GetAllAssetIDByCapability': get_assets_ids_of_capability,
     }  #: This object maps the service identifiers with its associated execution methods

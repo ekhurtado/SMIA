@@ -61,8 +61,8 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
 
         # TODO TEST
         # try:
-        #     params = {'asset_id': 'http://example.com/ids/asset001'}
-        #     result = await self.myagent.acl_openapi_services.execute_agent_service_by_id('GetSMIAInstanceByAssetId',
+        #     params = {'smia_instance_id': 'agentInstance002'}
+        #     result = await self.myagent.acl_openapi_services.execute_agent_service_by_id('GetAssetIDBySMIAInstanceID',
         #                                                                                  **params)
         #     params = {'capability_iri': 'http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation'}
         #     result = await self.myagent.acl_openapi_services.execute_agent_service_by_id('GetAssetIDsOfCapability',
