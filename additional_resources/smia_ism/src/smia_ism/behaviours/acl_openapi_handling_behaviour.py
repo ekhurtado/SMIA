@@ -3,7 +3,7 @@ import logging
 import os
 
 from smia import GeneralUtils
-from smia.logic import inter_aas_interactions_utils
+from smia.logic import inter_smia_interactions_utils
 from smia.logic.agent_services import AgentServices
 from smia.logic.exceptions import RequestDataError, ServiceRequestExecutionError
 from spade.behaviour import CyclicBehaviour
@@ -97,7 +97,7 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
             # schema
             msg_json_body = json.loads(msg.body)
             try:
-                await inter_aas_interactions_utils.check_received_request_data_structure(
+                await inter_smia_interactions_utils.check_received_request_data_structure(
                     msg_json_body, ACLSMIAJSONSchemas.JSON_SCHEMA_ACL_SMIA_ONTOLOGIES_MAP.get(
                         msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB)))
             except RequestDataError as cap_request_error:

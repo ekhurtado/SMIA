@@ -1,7 +1,7 @@
 import json
 import logging
 
-from smia.logic import inter_aas_interactions_utils
+from smia.logic import inter_smia_interactions_utils
 from smia.logic.exceptions import ServiceRequestExecutionError
 from smia.logic.services_utils import AgentServiceUtils
 from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo
@@ -83,7 +83,7 @@ class HandleACLOpenAPIBehaviour(OneShotBehaviour):
                                                                                          **svc_params)  # TODO PENSAR DONDE IRAN LOS PARAMETROS
             if 'ERROR' not in result:
                 _logger.info("The AAS Infrastructure Service {} has been successfully executed.".format(requested_infrastructure_svc))
-                await inter_aas_interactions_utils.send_response_msg_from_received(
+                await inter_smia_interactions_utils.send_response_msg_from_received(
                     self, self.received_acl_msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM, result)
             else:
                 raise ServiceRequestExecutionError(self.received_acl_msg.thread, 'Failure during the execution of the '
