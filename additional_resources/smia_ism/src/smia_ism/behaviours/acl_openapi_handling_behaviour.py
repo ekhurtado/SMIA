@@ -2,8 +2,7 @@ import json
 import logging
 import os
 
-from smia import GeneralUtils
-from smia.logic import inter_smia_interactions_utils
+from smia.logic import inter_smia_interactions_utils, acl_smia_messages_utils
 from smia.logic.agent_services import AgentServices
 from smia.logic.exceptions import RequestDataError, ServiceRequestExecutionError
 from spade.behaviour import CyclicBehaviour
@@ -108,7 +107,7 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
                 await svc_execution_error.handle_service_execution_error()
                 _logger.warning("The sender [{}] has sent an message with thread [{}] that has invalid data, therefore "
                                 "the requester has been informed with a Refuse ACL message".format(
-                    GeneralUtils.get_sender_from_acl_msg(msg), msg.thread))
+                    acl_smia_messages_utils.get_sender_from_acl_msg(msg), msg.thread))
                 return  # The run method is terminated to restart checking for new messages.
 
             # At this point, the received data for the AAS Infrastructure Service is valid, so the behaviour to manage
@@ -116,7 +115,7 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
             # TODO BORRAR (para pruebas con GUI Agent): {"serviceID": "serviceID", "serviceType": "InfrastructureService","SMIAInfrastructureService": "GetAssetIDsOfCapability", "serviceParams": {"capability_iri": "http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation"}}
             _logger.aclinfo("The SMIA sender [{}], within thread [{}], needs a service related to OpenAPI "
                             "infrastructures to be performed. A specific behavior will be triggered to handle this "
-                            "request..".format(GeneralUtils.get_sender_from_acl_msg(msg), msg.thread))
+                            "request..".format(acl_smia_messages_utils.get_sender_from_acl_msg(msg), msg.thread))
             specific_handling_behav = HandleACLOpenAPIBehaviour(self.agent, received_acl_msg=msg)
             self.myagent.add_behaviour(specific_handling_behav)
 
