@@ -1,9 +1,13 @@
 import asyncio
 import logging
+import random
+import string
 
 from SpiffWorkflow.bpmn.parser import BpmnParser
 from SpiffWorkflow.bpmn.specs.defaults import ServiceTask
 from smia import CriticalError
+from smia.logic import inter_aas_interactions_utils
+from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo
 from spade.behaviour import OneShotBehaviour
 
 from utilities.smia_bpmn_info import SMIABPMNInfo
@@ -97,6 +101,7 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                     # to get the SMIA identifier associated to this asset identifier
                     _logger.info("Requesting an AAS Infrastructure Service to obtain the SMIA instance identifier for "
                                  "asset [{}].".format(spec_instance.smia_asset))
+                    spec_instance.smia_instance = await self.get_smia_instance_id_by_asset_id(spec_instance.smia_asset)
                     # TODO HACERLO (usar los metodos de ACL del final del behaviour)
 
     async def execute_workflow(self):
@@ -185,10 +190,61 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
 
     # Methods related to interactions with other SMIA instances
     # ---------------------------------------------------------
+    @staticmethod
+    async def create_random_thread():
+        # TODO PENSARLO AÑADIRLO EN SMIA TAMBIEN
+        """
+        This method creates a value for the thread of a SPADE-ACL message, using the agent identifier and random string.
+
+        Returns:
+            str: thread value
+        """
+        return f"speia-{''.join(random.choices(string.ascii_letters + string.digits, k=4)).lower()}"
+
+    async def send_acl_and_wait(self, acl_msg):
+        """
+        This method sends an ACL message and waits to the response.
+
+        Args:
+            acl_msg (spade.message.Message): the SPADE message object to be sent.
+        """
+        await self.send(acl_msg)
+        # To warn that it is waiting for a value for a given thread, the thread will be added to the response object
+        # with a null value
+        self.acl_messages_responses[acl_msg.thread] = None
+        # Now the behaviour will wait until the response message arrive to the Receiver Behaviour and unlocks the Event
+        await self.acl_request_event.wait()
+        # If the behaviour continues from this line, it means that the response has arrived, so the Event is cleared
+        self.acl_request_event.clear()
+        # The response content will be available in the 'acl_messages_responses' of the behaviour
+        return self.acl_messages_responses[acl_msg.thread]
+
     # TODO PENSAR SI LLEVARLOS A utilities (que simplemente generen el mensaje ACL y despues desde aqui se hace el 'send')
     async def get_smia_instance_id_by_asset_id(self, asset_id):
-        # TODO falta por hacer
-        pass
+        """
+        This method gets the SMIA instance identifier associated to a given asset ID.
+
+        Args:
+            asset_id (str): identifier of the asset
+
+        Returns:
+            str: identifier of the associated SMIA instance.
+        """
+        try:
+            # In order to obtain the data, an AAS Infrastructure Service need to be requested to SMIA ISM
+            acl_msg_thread = await BPMNPerformerBehaviour.create_random_thread()
+            request_acl_msg = await inter_aas_interactions_utils.create_acl_smia_message(
+                f"gcis1@{str(self.myagent.jid).split('@')[1]}",   # TODO BORRAR
+                # f"smia-ism@{str(self.myagent.jid).split('@')[1]}",   # TODO SE PODRIA HACER UN METODO EN SMIA PARA RECOGER EL XMPP SERVER
+                acl_msg_thread, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST,
+                ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE,
+                msg_body={'serviceID': 'GetSMIAInstanceIDByAssetID', 'serviceType': 'DiscoveryService',
+                          'serviceParams': asset_id})
+            await self.send_acl_and_wait(request_acl_msg)
+
+
+        except Exception as e:
+            print(e)
 
     async def get_smia_instances_id_by_capability(self, capability):
         # TODO falta por hacer

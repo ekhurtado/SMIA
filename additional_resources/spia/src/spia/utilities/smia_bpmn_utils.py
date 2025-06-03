@@ -108,13 +108,14 @@ class SMIABPMNUtils:
                     if spec_instance.smia_asset is None:
                         # An asset has not been specified, so this task need to request a distributed CNP protocol
                         additional_tasks.append(SMIABPMNInfo.TASK_REQUEST_DISTRIBUTED_CNP)
-                    elif spec_instance.smia_asset is not None:
-
-                        print(
-                            "\t\t Since an asset has been specified, it will be requested for its associated SMIA instance to the SMIA KB.")
-                        print("\t\t ...")
-                        spec_instance.smia_instance = 'smiainstance' + spec_instance.bpmn_name  # TODO BORRAR (se ha hecho manualmente)
-                        print("\t\t SMIA instance: {}".format(spec_instance.smia_instance))
+                    # TODO: recoger el ID de instancia del activo se hace en un metodo del BPMN performer
+                    # elif spec_instance.smia_asset is not None:
+                    #
+                    #     print(
+                    #         "\t\t Since an asset has been specified, it will be requested for its associated SMIA instance to the SMIA KB.")
+                    #     print("\t\t ...")
+                    #     spec_instance.smia_instance = 'smiainstance' + spec_instance.bpmn_name  # TODO BORRAR (se ha hecho manualmente)
+                    #     print("\t\t SMIA instance: {}".format(spec_instance.smia_instance))
                     if spec_instance.smia_request_to_previous is not None:
                         # This ServiceTask needs a data from the previous ServiceTask of the flow
                         additional_tasks.append(SMIABPMNInfo.TASK_REQUEST_DATA_TO_PREVIOUS)

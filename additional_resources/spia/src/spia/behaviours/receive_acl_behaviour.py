@@ -1,5 +1,8 @@
+import ast
+import json
 import logging
 
+from smia.utilities.fipa_acl_info import FIPAACLInfo
 from spade.behaviour import CyclicBehaviour
 
 _logger = logging.getLogger(__name__)
@@ -42,3 +45,52 @@ class ReceiveACLBehaviour(CyclicBehaviour):
             # This method will receive all ACL messages to the SPIA, so it will check if some of them are responses to
             # previous SPIA requests to unlock the associated BPMNPerformerBehaviour
             print("Analyzing ACL message... Checking if it is a response from previous SPIA message... Unlocking SPIA...")
+            # Let's check if the BPMN performer behaviour is waiting for a response
+            for behaviour in self.myagent.behaviours:
+                if str(behaviour.__class__.__name__) == 'BPMNPerformerBehaviour':
+                    for thread, content in behaviour.acl_messages_responses.items():
+                        if thread == msg.thread and content is None:
+                            # In this case, the behaviour is waiting for the content
+                            _logger.info("The BPMNPerformerBehaviour is waiting for a content that has arrived.")
+                            msg_parsed_body = await ReceiveACLBehaviour.get_parsed_body_from_acl_msg(msg)
+                            if (msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB) ==
+                                    FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE):
+                                _logger.error("SPIA has received a Failure for the thread [{}], so it cannot continue. "
+                                              "Reason: {}".format(thread, msg_parsed_body['reason']))
+                                break
+                            if (msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB) ==
+                                    FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM):
+                                # In this case the content is valid
+                                behaviour.acl_messages_responses[thread] = msg_parsed_body
+                                # Now the behaviour can be unlocked
+                                behaviour.acl_request_event.set()
+                                _logger.info("BPMNPerformerBehaviour unlocked and added the response content data.")
+        else:
+            _logger.info("         - No message received within 10 seconds on SPIA (ReceiveACLBehaviour)")
+
+
+    @staticmethod
+    async def get_parsed_body_from_acl_msg(acl_msg):
+        """
+        This method gets the body of a ACL message and returns parsed.
+
+        Args:
+            acl_msg (spade.message.Message): the ACL message object.
+
+        Returns:
+            parsed body of the ACL message.
+        """
+        # TODO PENSARLO SI LLEVARLO A SMIA
+        # Let's try with JSON
+        try:
+
+            return json.loads(acl_msg.body)
+        except (json.JSONDecodeError, TypeError):
+            pass
+        # Now let's try Python literal evaluation, to safely evaluate Python literals (list, tuple, int, etc.))
+        try:
+            return ast.literal_eval(acl_msg.body)
+        except (ValueError, SyntaxError):
+            pass
+
+        return acl_msg.body
