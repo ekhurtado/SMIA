@@ -318,6 +318,7 @@ class ACLSMIAJSONSchemas:
                 "type": "array",
                 "items": {"type": "string"}
             },
+            "negRequester": {"type": "string"},
             "negValue": {
                 "type": "number",   # It is a float number between 0 and 1
                 "minimum": 0.0,

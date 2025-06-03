@@ -100,12 +100,14 @@ async def generate_json_from_schema(schema: dict, **kwargs) -> dict:
     # Mandatory fields
     for field in required_fields:
         if field not in kwargs:
-            raise ValueError(f"Missing required field: {field}")
+            raise ValueError(f"Missing required parameter: {field}")
+        if kwargs[field] is None:
+            raise ValueError(f"Missing required value for parameter: {field}")
         json_object[field] = kwargs[field]
 
     # Optional fields
     for field in properties:
-        if field not in json_object and field in kwargs:
+        if field not in json_object and field in kwargs and kwargs[field] is not None:
             json_object[field] = kwargs[field]
 
     # Validate final message
