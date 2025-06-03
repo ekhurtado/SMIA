@@ -1,7 +1,6 @@
 import json
 import logging
 
-from art.data.fonts3 import awa_dic
 from smia.logic import inter_aas_interactions_utils
 from smia.logic.exceptions import ServiceRequestExecutionError
 from smia.logic.services_utils import AgentServiceUtils
