@@ -188,6 +188,14 @@ class SMIABPMNUtils:
         return None
 
     @staticmethod
+    def get_bpmn_element_smia_instance_by_asset_id(process_parser, asset_id):
+        for current_name, current_elem in process_parser.get_spec().task_specs.items():
+            if hasattr(current_elem, 'smia_asset') and hasattr(current_elem, 'smia_instance'):
+                if current_elem.smia_asset == asset_id:
+                    return current_elem.smia_instance
+        return None
+
+    @staticmethod
     def update_bpmn_element_with_requested_data(bpmn_element, requested_element, data_value):
         attribute_to_update = None
         match requested_element['elementType']:

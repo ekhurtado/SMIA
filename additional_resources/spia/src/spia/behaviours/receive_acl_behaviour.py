@@ -2,6 +2,7 @@ import ast
 import json
 import logging
 
+from smia.logic import acl_smia_messages_utils
 from smia.utilities.fipa_acl_info import FIPAACLInfo
 from spade.behaviour import CyclicBehaviour
 
@@ -52,7 +53,7 @@ class ReceiveACLBehaviour(CyclicBehaviour):
                         if thread == msg.thread and content is None:
                             # In this case, the behaviour is waiting for the content
                             _logger.info("The BPMNPerformerBehaviour is waiting for a content that has arrived.")
-                            msg_parsed_body = await ReceiveACLBehaviour.get_parsed_body_from_acl_msg(msg)
+                            msg_parsed_body = await acl_smia_messages_utils.get_parsed_body_from_acl_msg(msg)
                             if (msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB) ==
                                     FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE):
                                 _logger.error("SPIA has received a Failure for the thread [{}], so it cannot continue. "
@@ -67,30 +68,3 @@ class ReceiveACLBehaviour(CyclicBehaviour):
                                 _logger.info("BPMNPerformerBehaviour unlocked and added the response content data.")
         else:
             _logger.info("         - No message received within 10 seconds on SPIA (ReceiveACLBehaviour)")
-
-
-    @staticmethod
-    async def get_parsed_body_from_acl_msg(acl_msg):
-        """
-        This method gets the body of a ACL message and returns parsed.
-
-        Args:
-            acl_msg (spade.message.Message): the ACL message object.
-
-        Returns:
-            parsed body of the ACL message.
-        """
-        # TODO PENSARLO SI LLEVARLO A SMIA
-        # Let's try with JSON
-        try:
-
-            return json.loads(acl_msg.body)
-        except (json.JSONDecodeError, TypeError):
-            pass
-        # Now let's try Python literal evaluation, to safely evaluate Python literals (list, tuple, int, etc.))
-        try:
-            return ast.literal_eval(acl_msg.body)
-        except (ValueError, SyntaxError):
-            pass
-
-        return acl_msg.body
