@@ -50,16 +50,9 @@ class SMIAKBInfrastructure:
         except (ValueError, TypeError):
             raise ValueError(f"ERROR: Port must be a valid integer, got {port}")
 
-    # --------------------------------------
-    # Methods to create URLs for the SMIA KB
-    # --------------------------------------
-    @classmethod
-    def get_smia_instances_url(cls):
-        """
-        This method returns the URL to obtain all the registered SMIA instances in the SMIA KB.
-        """
-        return f"{cls._SMIA_KB_HOST_IP_ADDRESS}:{cls._SMIA_KB_HOST_PORT}{cls.SMIA_KB_OPEN_API_VERSION}/smiaInstances"
-
+    # ------------------------------------------------------------
+    # Methods to create URLs for the Capability API of the SMIA KB
+    # ------------------------------------------------------------
     @classmethod
     def get_capability_url(cls, capability_iri):
         """
@@ -77,6 +70,16 @@ class SMIAKBInfrastructure:
         The Capability identifier must be added Base64-URL-encoded.
         """
         return f"{cls.get_capability_url(capability_iri)}/assets"
+
+    # ------------------------------------------------------
+    # Methods to create URLs for the SMIA API of the SMIA KB
+    # ------------------------------------------------------
+    @classmethod
+    def get_smia_instances_url(cls):
+        """
+        This method returns the URL to obtain all the registered SMIA instances in the SMIA KB.
+        """
+        return f"{cls._SMIA_KB_HOST_IP_ADDRESS}:{cls._SMIA_KB_HOST_PORT}{cls.SMIA_KB_OPEN_API_VERSION}/smiaInstances"
 
     @classmethod
     def get_smia_instance_url(cls, instance_id):

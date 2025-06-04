@@ -1,7 +1,9 @@
 import logging
 
+from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
+
 from external_infrastructures.smia_kb_infrastructure import SMIAKBInfrastructure
-from utilities.acl_open_api_utils import send_openapi_http_get_request
+from utilities.acl_open_api_utils import send_openapi_http_get_request, send_openapi_http_post_request
 
 _logger = logging.getLogger(__name__)
 
@@ -10,6 +12,27 @@ class ACLOpenAPIServices:
     This class implements the logic of all the ACL-OpenAPI services.
     """
 
+    # --------------------------------
+    # Infrastructure registry services
+    # --------------------------------
+    @staticmethod
+    def register_smia_instance(id, asset, aasID, status, startedTimeStamp, smiaVersion):
+        """
+        This method registers the smia instance in the SMIA KB.
+        """
+        if id is None or asset is None:
+            return "ERROR: The SMIA or asset identifier cannot be null."
+        smia_kb_instances_url = SMIAKBInfrastructure.get_smia_instances_url()
+        # The body JSON is built with the parameters names and values of the method (id, asset...)
+        body_json = {arg_name: arg_value for arg_name, arg_value in locals().items()}
+        smia_instances_json = send_openapi_http_post_request(smia_kb_instances_url, body=body_json)
+        if smia_instances_json is None:
+            return "ERROR: Cannot register SMIA instance (SMIA KB has returned null body)."
+        return {'status': 'success'}
+
+    # ---------------------------------
+    # Infrastructure discovery services
+    # ---------------------------------
     @staticmethod
     def get_smia_instance_by_asset_id(asset_id):
         if asset_id is None:
@@ -52,7 +75,10 @@ class ACLOpenAPIServices:
 
 
     ACLOpenAPIServicesMap = {
-        'GetSMIAInstanceIDByAssetID': get_smia_instance_by_asset_id,
-        'GetAssetIDBySMIAInstanceID': get_asset_id_by_smia_instance,
-        'GetAllAssetIDByCapability': get_assets_ids_of_capability,
+        # Registry Services
+        AASRelatedServicesInfo.AAS_INFRASTRUCTURE_REGISTRY_SERVICE_REGISTER_SMIA: register_smia_instance,
+        # Discovery Services
+        AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_SMIA_BY_ASSET: get_smia_instance_by_asset_id,
+        AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_ASSET_BY_SMIA: get_asset_id_by_smia_instance,
+        AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_ALL_ASSET_BY_CAPABILITY: get_assets_ids_of_capability,
     }  #: This object maps the service identifiers with its associated execution methods

@@ -28,7 +28,7 @@ def decode_base64_url_in_string(content_base64_url_string):
 
 
 # HTTP METHODS
-    # ------------
+# ------------
 def send_openapi_http_get_request(url, headers = None, timeout: int = 5):
     """
     This method sends an HTTP GET request to the AAS Repository and obtains the response JSON.
@@ -46,6 +46,38 @@ def send_openapi_http_get_request(url, headers = None, timeout: int = 5):
                 return content_json['result']   # In OpenAPI data can be returned in this field
             else:
                 return content_json
+        except json.JSONDecodeError:
+            print(f"WARNING: Response claimed to be JSON but couldn't be parsed: {response.text[:100]}...")
+
+    except requests.exceptions.ConnectTimeout:
+        _logger.error("ERROR: Connection timeout with {}".format(url))
+
+    except requests.exceptions.ConnectionError:
+        _logger.error("ERROR: Connection error with {}".format(url))
+
+    except Exception as e:
+        _logger.error("ERROR: Unexpected error with {}".format(url))
+
+    return None
+
+def send_openapi_http_post_request(url, headers = None, body = None, timeout: int = 5):
+    """
+    This method sends an HTTP GET request to the AAS Repository and obtains the response JSON.
+    """
+    if headers is None:
+        # If headers are not set, the JSON headers are used
+        headers = OPEN_API_JSON_HEADERS
+    try:
+        if isinstance(body, dict):
+            response = requests.post(url, headers=headers, json=body, timeout=timeout)
+        else:
+            response = requests.post(url, headers=headers, data=body, timeout=timeout)
+
+        # Try to parse JSON content
+        try:
+            content_json = response.json()
+            # In OpenAPI data can be returned in 'result' field
+            return content_json['result']  if 'result' in content_json else content_json
         except json.JSONDecodeError:
             print(f"WARNING: Response claimed to be JSON but couldn't be parsed: {response.text[:100]}...")
 
