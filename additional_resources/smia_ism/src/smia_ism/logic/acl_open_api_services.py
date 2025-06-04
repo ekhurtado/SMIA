@@ -16,7 +16,7 @@ class ACLOpenAPIServices:
     # Infrastructure registry services
     # --------------------------------
     @staticmethod
-    def register_smia_instance(id, asset, aasID, status, startedTimeStamp, smiaVersion):
+    def register_smia_instance(id, asset: dict, aasID, status, startedTimeStamp, smiaVersion):
         """
         This method registers the smia instance in the SMIA KB.
         """
