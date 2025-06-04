@@ -5,6 +5,8 @@ import os
 import time
 from datetime import datetime
 
+from smia.utilities.fipa_acl_info import FIPAACLInfo
+
 import smia
 from spade.message import Message
 from spade.template import Template
@@ -119,20 +121,25 @@ class GeneralUtils:
         properties_file_utils.set_aas_general_property('model.serialization', file_ext)
 
     @staticmethod
-    def create_acl_template(performative, ontology):
+    def create_acl_template(performative=None, ontology=None, protocol=None):
         """
         This method creates a template aligned with FIPA-ACL standard.
 
         Args:
             performative(str): The performative of the template.
             ontology(str): The ontology of the template.
+            protocol (str): The protocol of the template.
 
         Returns:
             spade.template.Template: a SPADE template object.
         """
         custom_template = Template()
-        custom_template.set_metadata('performative', performative)
-        custom_template.set_metadata('ontology', ontology)
+        if performative is not None:
+            custom_template.set_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB, performative)
+        if ontology is not None:
+            custom_template.set_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB, ontology)
+        if protocol is not None:
+            custom_template.set_metadata(FIPAACLInfo.FIPA_ACL_PROTOCOL_ATTRIB, protocol)
         return custom_template
 
     @staticmethod

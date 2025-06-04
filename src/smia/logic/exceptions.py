@@ -81,12 +81,12 @@ class ServiceRequestExecutionError(Exception):
         _logger.info("Failure message sent to the requester related to the thread [{}].".format(self.thread))
 
         # The information about the error is also saved in the log
-        from smia.behaviours.specific_handle_behaviours.handle_svc_request_behaviour import HandleSvcRequestBehaviour
+        from smia.behaviours.specific_handle_behaviours.handle_aas_related_svc_behaviour import HandleAASRelatedSvcBehaviour
         from smia.behaviours.specific_handle_behaviours.handle_capability_behaviour import HandleCapabilityBehaviour
         from smia import GeneralUtils  # Local imports to avoid circular import error
         from smia.utilities import smia_archive_utils
 
-        if isinstance(self.behav_class, (HandleSvcRequestBehaviour, HandleCapabilityBehaviour)):
+        if isinstance(self.behav_class, (HandleAASRelatedSvcBehaviour, HandleCapabilityBehaviour)):
             acl_info = self.behav_class.svc_req_data
         else:
             acl_info = {'thread': self.thread}
@@ -159,13 +159,13 @@ class CapabilityRequestExecutionError(Exception):
         _logger.info("Failure message sent to the requester of the capability [{}].".format(self.cap_name))
 
         # The information about the error is also saved in the log
-        from smia.behaviours.specific_handle_behaviours.handle_svc_request_behaviour import HandleSvcRequestBehaviour
+        from smia.behaviours.specific_handle_behaviours.handle_aas_related_svc_behaviour import HandleAASRelatedSvcBehaviour
         from smia.behaviours.specific_handle_behaviours.handle_capability_behaviour import HandleCapabilityBehaviour
         from smia.behaviours.specific_handle_behaviours.handle_negotiation_behaviour import HandleNegotiationBehaviour
         from smia.utilities import smia_archive_utils
         from smia import GeneralUtils  # Local imports to avoid circular import error
 
-        if isinstance(self.behav_class, (HandleSvcRequestBehaviour, HandleCapabilityBehaviour,
+        if isinstance(self.behav_class, (HandleAASRelatedSvcBehaviour, HandleCapabilityBehaviour,
                                          HandleNegotiationBehaviour)):
             acl_info = self.behav_class.svc_req_data
         else:

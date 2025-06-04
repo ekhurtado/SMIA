@@ -28,10 +28,23 @@ class SMIAInteractionInfo:
         performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_IF,
         ontology=FIPAACLInfo.FIPA_ACL_ONTOLOGY_CAPABILITY_CHECKING)
     # The template for the service requests is the combination of the different possibilities
+    ACL_INDIVIDUAL_INTERACTIONS_ACL_TEMPLATE = (
+        # TODO PENSAR SI REALMENTE ES NECESARIO UN TEMPLATE PARA EL 'acl_handling' (ya comprueba los mensajes recibidos)
+        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST),
+        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_REF),
+        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_IF),
+        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM),
+        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE),
+        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REFUSE),
+        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_NOT_UNDERSTOOD),
+    )
+
+    # TODO ANTIGUO TEMPLATE
     SVC_STANDARD_ACL_TEMPLATE = (SVC_STANDARD_ACL_TEMPLATE_CFP | SVC_STANDARD_ACL_TEMPLATE_INFORM
                                  | SVC_STANDARD_ACL_TEMPLATE_REQUEST | SVC_STANDARD_ACL_TEMPLATE_QUERY_IF
                                  | CAP_STANDARD_ACL_TEMPLATE_REQUEST | CAP_STANDARD_ACL_TEMPLATE_QUERY_IF  # TODO OJO, estos son los dos las capacidades
                                  )
+
 
     # Object of the standard template for service requests through ACL messages
     # -------------------------------------------------------------------------
@@ -48,6 +61,10 @@ class SMIAInteractionInfo:
         performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM,
         ontology=FIPAACLInfo.FIPA_ACL_ONTOLOGY_SVC_NEGOTIATION)
     # The template for the negotiations is the combination of the different possibilities
+    ACL_CNP_INTERACTIONS_ACL_TEMPLATE = GeneralUtils.create_acl_template(
+        performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_CFP, protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL)
+
+    # TODO ANTIGUO TEMPLATE
     NEG_STANDARD_ACL_TEMPLATE = (NEG_STANDARD_ACL_TEMPLATE_CFP | NEG_STANDARD_ACL_TEMPLATE_FAILURE |
                                  NEG_STANDARD_ACL_TEMPLATE_INFORM)
 

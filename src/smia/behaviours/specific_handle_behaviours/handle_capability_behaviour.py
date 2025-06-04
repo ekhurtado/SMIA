@@ -21,13 +21,13 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
     This class implements the behaviour that handles a request related to the capabilities of the Digital Twin.
     """
 
-    def __init__(self, agent_object, svc_req_data):
+    def __init__(self, agent_object, received_acl_msg):
         """
         The constructor method is rewritten to add the object of the agent.
 
         Args:
             agent_object (spade.Agent): the SPADE agent object of the SMIA agent.
-            svc_req_data (dict): all the information about the service request
+            received_acl_msg (spade.message.Message): the received ACL-SMIA message object
         """
 
         # The constructor of the inherited class is executed.
@@ -35,7 +35,7 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
 
         # The SPADE agent object is stored as a variable of the behaviour class
         self.myagent = agent_object
-        self.svc_req_data = svc_req_data
+        self.received_acl_msg = received_acl_msg    # TODO DEJARLO PARA EL NUEVO ENFOQUE
 
         self.requested_timestamp = GeneralUtils.get_current_timestamp()
 

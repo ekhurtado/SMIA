@@ -29,7 +29,8 @@ class StateRunning(State):
 
         # On the one hand, a behaviour is required to handle ACL messages
         acl_handling_behav = ACLHandlingBehaviour(self.agent)
-        self.agent.add_behaviour(acl_handling_behav, SMIAInteractionInfo.SVC_STANDARD_ACL_TEMPLATE)
+        self.agent.add_behaviour(acl_handling_behav, SMIAInteractionInfo.ACL_INDIVIDUAL_INTERACTIONS_ACL_TEMPLATE)
+        # self.agent.add_behaviour(acl_handling_behav, SMIAInteractionInfo.SVC_STANDARD_ACL_TEMPLATE)   # TODO ANTIGUO ENFOQUE
 
         # On the other hand, a behaviour is required to handle interaction messages
         # TODO revisar, ya que en el nuevo enfoque no hay AAS Core
@@ -70,7 +71,8 @@ class StateRunning(State):
                     # The negotiation behaviour has to be added to the agent
                     _logger.info("This SMIA has negotiation capability.")
                     negotiation_behav = NegotiatingBehaviour(self.agent)
-                    self.agent.add_behaviour(negotiation_behav, SMIAInteractionInfo.NEG_STANDARD_ACL_TEMPLATE)
+                    self.agent.add_behaviour(negotiation_behav, SMIAInteractionInfo.ACL_CNP_INTERACTIONS_ACL_TEMPLATE)
+                    # self.agent.add_behaviour(negotiation_behav, SMIAInteractionInfo.NEG_STANDARD_ACL_TEMPLATE)   # TODO ANTIGUO ENFOQUE
                     behaviours_instances.append(negotiation_behav)
                 elif capability_instance.name == 'OtherAgentCapability':
                     # TODO pensarlo

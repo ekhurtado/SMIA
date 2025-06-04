@@ -1,13 +1,15 @@
 import json
 import logging
+from json import JSONDecodeError
 
+from smia.logic.exceptions import RequestDataError, ServiceRequestExecutionError
 from spade.behaviour import CyclicBehaviour
 
 from smia.behaviours.specific_handle_behaviours.handle_capability_behaviour import HandleCapabilityBehaviour
-from smia.behaviours.specific_handle_behaviours.handle_svc_request_behaviour import HandleSvcRequestBehaviour
+from smia.behaviours.specific_handle_behaviours.handle_aas_related_svc_behaviour import HandleAASRelatedSvcBehaviour
 from smia.behaviours.specific_handle_behaviours.handle_svc_response_behaviour import HandleSvcResponseBehaviour
-from smia.logic import inter_smia_interactions_utils
-from smia.utilities.fipa_acl_info import FIPAACLInfo
+from smia.logic import inter_smia_interactions_utils, acl_smia_messages_utils
+from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAJSONSchemas, ACLSMIAOntologyInfo
 from smia.utilities.general_utils import GeneralUtils
 
 _logger = logging.getLogger(__name__)
@@ -51,9 +53,48 @@ class ACLHandlingBehaviour(CyclicBehaviour):
             _logger.aclinfo("         + Message received on SMIA (ACLHandlingBehaviour) from {}".format(msg.sender))
             _logger.aclinfo("                 |___ Message received with content: {}".format(msg.body))
 
-            # The msg body will be parsed to a JSON object
-            msg_json_body = json.loads(msg.body)
+            # If the ontology value is not within the valid values in the SMIA approach, a 'not understood' ACL message
+            # is returned.
+            if (msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB) not in
+                ACLSMIAJSONSchemas.JSON_SCHEMA_ACL_SMIA_ONTOLOGIES_MAP.keys()):
+                await inter_smia_interactions_utils.send_response_msg_from_received(
+                    self, msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_NOT_UNDERSTOOD)
+                return  # The run method is terminated to restart checking for new messages
 
+            # First, the message body will be checked against the associated ontology JSON Schema
+            try:
+                # The msg body will be parsed to a JSON object
+                msg_json_body = json.loads(msg.body)
+
+                await inter_smia_interactions_utils.check_received_request_data_structure(
+                    msg_json_body, ACLSMIAJSONSchemas.JSON_SCHEMA_ACL_SMIA_ONTOLOGIES_MAP.get(
+                        msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB)))
+            except (RequestDataError, JSONDecodeError) as cap_request_error:
+                # The added data are not valid, so a Refuse message to the requester must be sent
+                if isinstance(cap_request_error, JSONDecodeError):
+                    cap_request_error.message = f"JSON error: {str(cap_request_error)}"
+                svc_execution_error = ServiceRequestExecutionError(msg.thread, cap_request_error.message,
+                                                                   msg.get_metadata(
+                                                                       FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB), self)
+                await svc_execution_error.handle_service_execution_error()
+                _logger.warning("The sender [{}] has sent an message with thread [{}] that has invalid data, therefore "
+                                "it has been informed with a Refuse ACL message".format(
+                    acl_smia_messages_utils.get_sender_from_acl_msg(msg), msg.thread))
+                return  # The run method is terminated to restart checking for new messages
+
+            # Depending on the message ontology, the associated specific behavior will be added to the agent to handle
+            # the required actions
+            specific_handling_behaviour = None
+            match msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB):
+                case ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE:
+                    specific_handling_behaviour = HandleCapabilityBehaviour(self.myagent, received_acl_msg=msg)
+                case _:
+                    specific_handling_behaviour = HandleAASRelatedSvcBehaviour(self.myagent, received_acl_msg=msg)
+            self.myagent.add_behaviour(specific_handling_behaviour)
+            _logger.info("Specific behaviour added to the agent to handle the message with thread [{}].".format(
+                msg.thread))
+
+            # TODO ELIMINAR, ES CODIGO DEL ENFOQUE ANTIGUO
             # Depending on the performative of the message, the agent will have to perform some actions or others
             match msg.get_metadata('performative'):
                 case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST:
@@ -75,7 +116,7 @@ class ACLHandlingBehaviour(CyclicBehaviour):
                         _logger.aclinfo("The agent has received a request to perform a service")
                         # The behaviour to handle this specific capability will be added to the agent
                         svc_req_data = inter_smia_interactions_utils.create_svc_json_data_from_acl_msg(msg)
-                        svc_req_handling_behav = HandleSvcRequestBehaviour(self.agent, svc_req_data)
+                        svc_req_handling_behav = HandleAASRelatedSvcBehaviour(self.agent, svc_req_data)
                         self.myagent.add_behaviour(svc_req_handling_behav)
                     else:
                         # TODO Parte del enfoque antiguo
