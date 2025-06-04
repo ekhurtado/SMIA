@@ -92,6 +92,60 @@ class ExtendedAASModel:
                             "".format(aas_smia_instance_name.value, smia_agent.jid.localpart))
         # TODO Add more checks
 
+    # ----------------------
+    # Methods related to AAS
+    # ----------------------
+    async def get_aas_attribute_value(self, attrib):
+        """
+        This method gets the value of a specific attribute of the AssetInformation of the associated AAS to the SMIA
+        instance.
+
+        Args:
+            attrib (str): name of the attribute.
+
+        Returns:
+            obj: value of the attribute
+        """
+        if attrib is None:
+            _logger.warning("Warning: trying to obtain a None attribute from the AssetInformation of the AAS")
+            return None
+        for aas_object in self.aas_model_object_store:
+            if isinstance(aas_object, basyx.aas.model.AssetAdministrationShell):
+                if hasattr(aas_object, attrib):
+                    return getattr(aas_object, attrib)
+        _logger.warning("Warning: the attribute does not exist in the AssetInformation of the AAS")
+        return None
+
+    # -----------------------------------
+    # Methods related to AssetInformation
+    # -----------------------------------
+    async def get_asset_information_attribute_value(self, attrib):
+        """
+        This method gets the value of a specific attribute of the AssetInformation of the associated AAS to the SMIA
+        instance.
+
+        Args:
+            attrib (str): name of the attribute.
+
+        Returns:
+            obj: value of the attribute
+        """
+        if attrib is None:
+            _logger.warning("Warning: trying to obtain a None attribute from the AssetInformation of the AAS")
+            return None
+        for aas_object in self.aas_model_object_store:
+            if isinstance(aas_object, basyx.aas.model.AssetAdministrationShell):
+                if attrib == 'asset_id':
+                    return aas_object.asset_information.get_asset_id()  # The extended method is used
+                elif attrib == 'asset_kind' and hasattr(aas_object.asset_information, attrib):
+                    return getattr(aas_object.asset_information, attrib).name if \
+                        getattr(aas_object.asset_information, attrib).name is not None else None
+                elif hasattr(aas_object.asset_information, attrib):
+                    return getattr(aas_object.asset_information, attrib)
+
+        _logger.warning("Warning: the attribute does not exist in the AssetInformation of the AAS")
+        return None
+
 
     # -------------------------------------------
     # Methods related to capability skills object

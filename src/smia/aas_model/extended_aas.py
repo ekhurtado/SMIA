@@ -26,6 +26,19 @@ class ExtendedAssetInformation:
         print("\tglobalAssetId: {}".format(self.global_asset_id))
         print("\tdefaultThumbnail: {}".format(self.default_thumbnail))
 
+    def get_asset_id(self):
+        """
+        This method gets the asset identifier: if 'global_asset_id' is set, it is returned. If not, it checks if
+        'specific_asset_id' has been added, and returns if true. Returns None if both are empty.
+
+        Returns:
+
+        """
+        if self.global_asset_id is not None:
+            return self.global_asset_id
+        elif self.specific_asset_id is not None:
+            return self.specific_asset_id[0].value if self.specific_asset_id[0].value is not None else None
+        return None
 
 class ExtendedGeneralMethods:
 

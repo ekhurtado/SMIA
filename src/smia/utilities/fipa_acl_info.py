@@ -20,6 +20,13 @@ class FIPAACLInfo:
     FIPA_ACL_PERFORMATIVE_QUERY_REF = 'query-ref'
     FIPA_ACL_PERFORMATIVE_REFUSE = 'refuse'
     FIPA_ACL_PERFORMATIVE_NOT_UNDERSTOOD = 'not-understood'
+    FIPA_ACL_PERFORMATIVE_ACCEPT_PROPOSAL = 'accept-proposal'
+    FIPA_ACL_PERFORMATIVE_REJECT_PROPOSAL = 'reject-proposal'
+
+    # Protocol values
+    FIPA_ACL_REQUEST_PROTOCOL = 'fipa-request'
+    FIPA_ACL_CONTRACT_NET_PROTOCOL = 'fipa-contract-net'
+    FIPA_ACL_QUERY_PROTOCOL = 'fipa-query'
 
     # TODO borrar: Antiguos nombres (se han actualizado a los formatos definidos en FIPA (en minuscula))
     # FIPA_ACL_PERFORMATIVE_CFP = 'CallForProposal'

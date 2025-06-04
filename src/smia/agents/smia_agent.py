@@ -91,7 +91,6 @@ class SMIAAgent(Agent):
         self.lock = asyncio.Lock()
 
     async def setup(self):
-        a = await acl_smia_messages_utils.create_random_thread(self)
         """
         This method performs the common setup of all types of :term:`SMIAs <SMIA>`. It defines the Finite State Machine
         (FSM) of the general SMIA Agent.
