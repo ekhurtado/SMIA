@@ -27,11 +27,12 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
     targets_processed = set()  #: targets that their values have been processed
     neg_value_event = None
 
-    def __init__(self, agent_object, negotiation_info, neg_req_data):
+    def __init__(self, agent_object, received_acl_msg, negotiation_info, neg_req_data):
         """
         The constructor method is rewritten to add the object of the agent
         Args:
             agent_object (spade.Agent): the SPADE agent object of the SMIA agent.
+            received_acl_msg (spade.message.Message): the received ACL-SMIA message object
             negotiation_info (dict): all the required information to perform the negotiation.
             neg_req_data (dict): all the information related to the FIPA-ACL negotiation request.
         """
@@ -41,6 +42,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
 
         # The SPADE agent object is stored as a variable of the behaviour class
         self.myagent = agent_object
+
+        self.received_acl_msg = received_acl_msg  # TODO DEJARLO PARA EL NUEVO ENFOQUE
 
         self.thread = negotiation_info['thread']
         self.neg_requester_jid = negotiation_info['neg_requester_jid']

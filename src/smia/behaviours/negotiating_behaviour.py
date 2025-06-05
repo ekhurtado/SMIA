@@ -1,5 +1,6 @@
 import json
 import logging
+from json import JSONDecodeError
 
 from spade.behaviour import CyclicBehaviour
 
@@ -7,7 +8,7 @@ from smia.behaviours.specific_handle_behaviours.handle_negotiation_behaviour imp
 from smia.behaviours.specific_handle_behaviours.handle_svc_response_behaviour import HandleSvcResponseBehaviour
 from smia.css_ontology.css_ontology_utils import CapabilitySkillACLInfo, CapabilitySkillOntologyUtils
 from smia.logic import negotiation_utils, inter_smia_interactions_utils, acl_smia_messages_utils
-from smia.logic.exceptions import RequestDataError
+from smia.logic.exceptions import RequestDataError, ServiceRequestExecutionError
 from smia.utilities import smia_archive_utils
 from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAJSONSchemas, ServiceTypes
 from smia.utilities.smia_info import SMIAInteractionInfo
@@ -54,6 +55,48 @@ class NegotiatingBehaviour(CyclicBehaviour):
             _logger.aclinfo("         + Message received on SMIA (NegotiatingBehaviour) from {}".format(msg.sender))
             _logger.aclinfo("                 |___ Message received with content: {}".format(msg.body))
 
+            # If the ontology value is not within the valid values in the SMIA approach, a 'not understood' ACL message
+            # is returned.
+            if (msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB) not in
+                    ACLSMIAJSONSchemas.JSON_SCHEMA_ACL_SMIA_ONTOLOGIES_MAP.keys()):
+                await inter_smia_interactions_utils.send_response_msg_from_received(
+                    self, msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_NOT_UNDERSTOOD)
+                return  # The run method is terminated to restart checking for new messages
+
+            # First, the message body will be checked against the associated ontology JSON Schema
+            try:
+                # The msg body will be parsed to a JSON object
+                msg_json_body = json.loads(msg.body)
+
+                await inter_smia_interactions_utils.check_received_request_data_structure(
+                    msg_json_body, ACLSMIAJSONSchemas.JSON_SCHEMA_ACL_SMIA_ONTOLOGIES_MAP.get(
+                        msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB)))
+            except (RequestDataError, JSONDecodeError) as cap_request_error:
+                # The added data are not valid, so a Refuse message to the requester must be sent
+                if isinstance(cap_request_error, JSONDecodeError):
+                    cap_request_error.message = f"JSON error: {str(cap_request_error)}"
+                svc_execution_error = ServiceRequestExecutionError(msg.thread, cap_request_error.message,
+                                                                   msg.get_metadata(
+                                                                       FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB), self)
+                await svc_execution_error.handle_service_execution_error()
+                _logger.warning(
+                    "The sender [{}] has request a FIPA-CNP protocol with thread [{}] that has invalid data, therefore "
+                    "it has been informed with a Refuse ACL message".format(
+                        acl_smia_messages_utils.get_sender_from_acl_msg(msg), msg.thread))
+                return  # The run method is terminated to restart checking for new messages
+
+            # When the received message has been analyzed, it will add the behaviour to handle this specific request of
+            # FIPA-CNP protocol
+            # TODO DENTRO HAY QUE AÑADIR en el metodo 'on_start' QUE, SI ES EL UNICO TARGET, RESPONDA DIRECTAMENTE QUE
+            #  ES EL GANADOR (ese codigo en el enfoque antiguo se hace aqui)
+            handle_neg_behav = HandleNegotiationBehaviour(self.agent, received_acl_msg=msg)
+            # The behaviour is added with an ACL template to only receive 'propose' messages with the thread of the
+            # received message
+            self.myagent.add_behaviour(handle_neg_behav, GeneralUtils.create_acl_template(
+                performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_PROPOSE, thread=msg.thread))
+
+
+            # TODO BORRAR, ES CODIGO DEL ENFOQUE ANTIGUO
             # The msg body will be parsed to a JSON object
             msg_json_body = json.loads(msg.body)
 

@@ -146,6 +146,7 @@ class ACLSMIAJSONSchemas:
 
     # Common schemas
     # --------------
+    AAS_MODEL_REFERENCE_STRING_PATTERN = "^(\\[[^\\[\\],]+,[^\\[\\],]+\\])+$"
     JSON_SCHEMA_AAS_MODEL_REFERENCE = {
         "oneOf": [
             {
@@ -167,7 +168,7 @@ class ACLSMIAJSONSchemas:
             },
             {
                 "type": "string",
-                "pattern": "^(\\[[^\\[\\],]+,[^\\[\\],]+\\])+$",
+                "pattern": AAS_MODEL_REFERENCE_STRING_PATTERN,
                 "description": "ModelReference format for strings: [type,value][type,value]..."
             }
         ]

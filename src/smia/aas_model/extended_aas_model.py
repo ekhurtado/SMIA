@@ -1,8 +1,9 @@
 import asyncio
 import logging
 import basyx.aas.model.submodel
+from basyx.aas.model import UnexpectedTypeError
 from basyx.aas.util import traversal
-from smia.aas_model.aas_model_utils import AASModelInfo
+from smia.aas_model.aas_model_utils import AASModelInfo, AASModelUtils
 
 from smia.logic.exceptions import CapabilityCheckingError, AASModelReadingError, OntologyReadingError
 from smia.css_ontology.css_ontology_utils import CapabilitySkillOntologyUtils, CapabilitySkillACLInfo, \
@@ -95,6 +96,18 @@ class ExtendedAASModel:
     # ----------------------
     # Methods related to AAS
     # ----------------------
+    async def get_aas_object(self):
+        """
+        This method gets the stored AAS object.
+
+        Returns:
+            basyx.aas.model.AssetAdministrationShell: AAS object
+        """
+        for aas_object in self.aas_model_object_store:
+            if isinstance(aas_object, basyx.aas.model.AssetAdministrationShell):
+                return aas_object
+        return None
+
     async def get_aas_attribute_value(self, attrib):
         """
         This method gets the value of a specific attribute of the AssetInformation of the associated AAS to the SMIA
@@ -109,8 +122,8 @@ class ExtendedAASModel:
         if attrib is None:
             _logger.warning("Warning: trying to obtain a None attribute from the AssetInformation of the AAS")
             return None
-        for aas_object in self.aas_model_object_store:
-            if isinstance(aas_object, basyx.aas.model.AssetAdministrationShell):
+        aas_object = await self.get_aas_object()
+        if aas_object is not None:
                 if hasattr(aas_object, attrib):
                     return getattr(aas_object, attrib)
         _logger.warning("Warning: the attribute does not exist in the AssetInformation of the AAS")
@@ -133,8 +146,8 @@ class ExtendedAASModel:
         if attrib is None:
             _logger.warning("Warning: trying to obtain a None attribute from the AssetInformation of the AAS")
             return None
-        for aas_object in self.aas_model_object_store:
-            if isinstance(aas_object, basyx.aas.model.AssetAdministrationShell):
+        aas_object = await self.get_aas_object()
+        if aas_object is not None:
                 if attrib == 'asset_id':
                     return aas_object.asset_information.get_asset_id()  # The extended method is used
                 elif attrib == 'asset_kind' and hasattr(aas_object.asset_information, attrib):
@@ -231,7 +244,7 @@ class ExtendedAASModel:
                     return self.aas_model_object_store.get_identifiable(key.value)
             elif isinstance(reference, basyx.aas.model.ModelReference):
                 return reference.resolve(self.aas_model_object_store)
-        except KeyError as e:
+        except (KeyError, UnexpectedTypeError) as e:
             _logger.error(e)
             raise AASModelReadingError("The object within the AAS model with reference {} does not "
                                        "exist".format(reference), sme_class=None, reason='AASModelObjectNotExist')

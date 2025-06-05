@@ -41,7 +41,6 @@ class AgentServiceUtils:
             }
             return params_details
 
-
     @staticmethod
     async def get_adapted_service_parameters(service_method, **kwargs):
         """
@@ -81,6 +80,30 @@ class AgentServiceUtils:
             else:
                 raise ValueError(f"Parameter {param_name} not found in method {service_method}.")
         return adapted_params
+
+    @staticmethod
+    async def adapt_received_service_parameters(service_method, received_service_params):
+        """
+        This method adapts the received parameters values to the required of the service execution method.
+
+        Args:
+            service_method (method): method of the agent service.
+            received_service_params: received service parameters
+
+        Returns:
+            obj: adapted service parameters
+        """
+        required_svc_params = await AgentServiceUtils.get_agent_service_parameters(service_method)
+        if len(required_svc_params) == 0:
+            return {}
+        if len(required_svc_params) > 1:
+            # If there are more than one service parameter, it is adapted with the specific method
+            return await AgentServiceUtils.get_adapted_service_parameters(
+                service_method, **received_service_params)
+        else:
+            # If there is only one parameter, the data will be received without the parameter name, so it is obtained
+            # and added
+            return {next(iter(required_svc_params)): received_service_params}
 
     @staticmethod
     async def safe_execute_agent_service(service_method, **kwargs):

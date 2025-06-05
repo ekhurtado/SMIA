@@ -1,10 +1,12 @@
 import logging
+import re
 from os import path
 
 import basyx
 from basyx.aas import model
 from basyx.aas.adapter import aasx
 from basyx.aas.util import traversal
+from smia.utilities.fipa_acl_info import ACLSMIAJSONSchemas
 
 from smia.logic.exceptions import CriticalError, AASModelReadingError
 from smia.utilities import properties_file_utils
@@ -128,6 +130,13 @@ class AASModelUtils:
             basyx.aas.model.KeyTypes: object of the KeyType defined in BaSyx.
         """
         try:
+            if not bool(re.fullmatch(r'[A-Z_]+', key_type_string)):
+                # If it is not in Basyx Key Types format, it needs to be transformed
+                # First, insert underscore before uppercase letters that follow lowercase letters or digits
+                key_type_string = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', key_type_string)
+                # Also, insert underscore before uppercase letters followed by other uppercase letters and convert all
+                # to uppercase
+                key_type_string = re.sub('([a-z0-9])([A-Z])', r'\1_\2', key_type_string).upper()
             return getattr(basyx.aas.model.KeyTypes, key_type_string)
         except AttributeError as e:
             _logger.error(e)
@@ -149,6 +158,26 @@ class AASModelUtils:
             if key_type_class == key_type:
                 return model_class
         return None
+
+    @staticmethod
+    async def aas_model_reference_string_to_dict(model_reference_string):
+        """
+        This method transforms a given AAS model reference from string into the proper dict format for the BaSyx SDK.
+        The string need to follow a specific pattern, defined within ACL-SMIA message schemas.
+
+        Args:
+            model_reference_string (str): string of the AAS model reference following the pattern defined within ACL-SMIA message schemas.
+
+        Returns:
+            dict: ModelReference in dict format for the BaSyx SDK.
+        """
+        model_ref_pattern = re.compile(ACLSMIAJSONSchemas.AAS_MODEL_REFERENCE_STRING_PATTERN)
+        if model_ref_pattern.match(model_reference_string) is None:
+            _logger.warning("The ModelReference [{}] does not have a valid string format.".format(model_reference_string))
+        model_ref_extraction_pattern = re.compile('\[([^\[\],]+),([^\[\],]+)\]')
+        return [{'type': aas_type.strip(), 'value': aas_id.strip()} for aas_type, aas_id in
+                model_ref_extraction_pattern.findall(model_reference_string)]
+
 
     @staticmethod
     async def create_aas_reference_object(reference_type, keys_dict=None, external_ref=None):

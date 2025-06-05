@@ -1,6 +1,11 @@
 import json
 import logging
 
+from basyx.aas.adapter.json import AASToJsonEncoder
+
+from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
+
+from smia.logic.services_utils import AgentServiceUtils
 from spade.behaviour import OneShotBehaviour
 
 from smia import GeneralUtils
@@ -9,7 +14,7 @@ from smia.logic import inter_smia_interactions_utils
 from smia.logic.exceptions import RequestDataError, ServiceRequestExecutionError, AASModelReadingError, \
     AssetConnectionError
 from smia.utilities import smia_archive_utils
-from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAJSONSchemas, ServiceTypes
+from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAJSONSchemas, ServiceTypes, ACLSMIAOntologyInfo
 from smia.utilities.smia_info import AssetInterfacesInfo
 
 _logger = logging.getLogger(__name__)
@@ -42,6 +47,7 @@ class HandleAASRelatedSvcBehaviour(OneShotBehaviour):
         # The SPADE agent object is stored as a variable of the behaviour class
         self.myagent = agent_object
         self.received_acl_msg = received_acl_msg    # TODO DEJARLO PARA EL NUEVO ENFOQUE
+        self.received_body_json = json.loads(received_acl_msg.body)
 
         self.requested_timestamp = GeneralUtils.get_current_timestamp()
 
@@ -49,24 +55,242 @@ class HandleAASRelatedSvcBehaviour(OneShotBehaviour):
         """
         This method implements the initialization process of this behaviour.
         """
-        _logger.info("HandleSvcRequestBehaviour starting...")
+        _logger.info("HandleAASRelatedSvcBehaviour starting to handle the service related to the message with thread"
+                     " [{}]...".format(self.received_acl_msg.thread))
 
     async def run(self):
         """
         This method implements the logic of the behaviour.
         """
+        # Depending on the type of service, the associated method will be launched
+        match self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB):
+            case (ACLSMIAOntologyInfo.ACL_ONTOLOGY_ASSET_RELATED_SERVICE |
+                  ACLSMIAOntologyInfo.ACL_ONTOLOGY_AGENT_RELATED_SERVICE):
+                await self.handle_asset_agent_related_service()
+            case ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_SERVICE:
+                await self.handle_aas_service()
+            case ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE:
+                await self.handle_aas_infrastructure_service()
 
-        # First, the performative of the request is obtained
-        # TODO NUEVO ENFOQUE (usando performative)
-        match self.svc_req_data['performative']:
-            case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST:  # TODO actualizar dentro de todo el codigo los usos de performativas y ontologias de FIPA-ACL
-                await self.handle_request()
-            case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_IF:
-                await self.handle_query_if()
-            # TODO PensarOtros
+        _logger.info("Management of the AAS-related service with thread {} finished.".format(self.received_acl_msg))
+
+        # TODO BORRAR ENFOQUE ANTIGUO
+        # # First, the performative of the request is obtained
+        # match self.svc_req_data['performative']:
+        #     case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST:  # TODO actualizar dentro de todo el codigo los usos de performativas y ontologias de FIPA-ACL
+        #         await self.handle_request()
+        #     case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_IF:
+        #         await self.handle_query_if()
+        #     # TODO PensarOtros
+        #     case _:
+        #         _logger.error("Performative not available for service management.")
+
+    # -------------------------------------
+    # Asset-/agent-related services methods
+    # -------------------------------------
+    async def handle_asset_agent_related_service(self):
+        """
+        This method implements the logic to handle the asset- or agent-related type services.
+        """
+        try:
+            match self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB):
+                case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST:
+                    result = await self.handle_asset_agent_related_svc_request()
+                case _:
+                    unsupported_performative_msg = ("Cannot handle the asset-/agent-related service of the ACL "
+                                                    "interaction with thread [{}] because the performative [{}] is not"
+                                                    " yet supported.".format(
+                        self.received_acl_msg.thread,
+                        self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB)))
+                    _logger.warning(unsupported_performative_msg)
+                    raise RequestDataError(unsupported_performative_msg)
+
+            # When the service is successfully performed the result will be sent to the requester
+            await inter_smia_interactions_utils.send_response_msg_from_received(
+                    self, self.received_acl_msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM, response_body=result)
+
+            # The information will be stored in the log
+            # TODO MODIFICAR ESTO CON LAS NUEVAS ESTRUCTURAS DE MENSAJES JSON
+            smia_archive_utils.save_completed_svc_log_info(self.requested_timestamp,
+                                                           GeneralUtils.get_current_timestamp(),
+                                                           self.svc_req_data,
+                                                           str(result),
+                                                           self.svc_req_data['serviceType'])
+        except (RequestDataError, ServiceRequestExecutionError,
+                AASModelReadingError, AssetConnectionError) as svc_request_error:
+
+            if isinstance(svc_request_error, RequestDataError):
+                svc_request_error = ServiceRequestExecutionError(
+                    self.received_acl_msg.thread, svc_request_error.message,
+                    self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB), self)
+            if isinstance(svc_request_error, AASModelReadingError):
+                svc_request_error = ServiceRequestExecutionError(
+                    self.received_acl_msg.thread, "{}. Reason:  {}".format(svc_request_error.message,
+                                                                           svc_request_error.reason),
+                    self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB), self)
+            if isinstance(svc_request_error, AssetConnectionError):
+                svc_request_error = ServiceRequestExecutionError(
+                    self.received_acl_msg.thread,f"The error [{svc_request_error.error_type}] has appeared "
+                                                 f"during the asset connection. Reason: {svc_request_error.reason}.",
+                    self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB), self)
+
+            await svc_request_error.handle_service_execution_error()
+            return  # killing a behaviour does not cancel its current run loop
+
+    async def handle_asset_agent_related_svc_request(self):
+        """
+        This method handles an Asset Related Service request. These services are part of I4.0 Application Component
+        (application relevant).
+        """
+        # The asset/agent related service will be executed using a ModelReference to the related SubmodelElement related
+        # with the execution method (in case of agent service) or element within AssetInterfacesSubmodel (in case of
+        # asset service).
+
+        # Since at this point the received data is valid, the AAS Reference object need to be created
+        if isinstance(self.received_body_json['serviceRef'], str):
+            self.received_body_json['serviceRef'] = await AASModelUtils.aas_model_reference_string_to_dict(
+                self.received_body_json['serviceRef'])
+        aas_asset_agent_service_ref = await AASModelUtils.create_aas_reference_object(
+            'ModelReference', self.received_body_json['serviceRef'])
+        aas_asset_agent_service_elem = await self.myagent.aas_model.get_object_by_reference(aas_asset_agent_service_ref)
+
+        # If serviceParams is not defined in the JSON body is added None value to avoid errors
+        if 'serviceParams' not in self.received_body_json:
+            self.received_body_json['serviceParams'] = None
+
+        # The asset connection class can be used to know the type of the service and it is also required to execute the
+        # asset related service. It is obtained from the AAS asset service Reference object
+        aas_asset_interface_ref = aas_asset_agent_service_elem.get_parent_ref_by_semantic_id(
+            AssetInterfacesInfo.SEMANTICID_INTERFACE)
+        if aas_asset_interface_ref is None:
+            # In this case it is an agent-related service
+            adapted_svc_params = await AgentServiceUtils.adapt_received_service_parameters(
+                await self.myagent.agent_services.get_agent_service_by_id(aas_asset_agent_service_elem.id_short),
+                self.received_body_json['serviceParams'])
+            _logger.info(f"Executing agent service [{aas_asset_agent_service_elem.id_short}] "
+                              f"within agent-related service of thread [{self.received_acl_msg.thread}]...")
+            agent_service_execution_result = await self.myagent.agent_services.execute_agent_service_by_id(
+                aas_asset_agent_service_elem.id_short, **adapted_svc_params)
+            _logger.info(f"Successfully executed agent service [{aas_asset_agent_service_elem.id_short}] "
+                              f"within agent-related service of thread [{self.received_acl_msg.thread}]...")
+            return agent_service_execution_result
+        else:
+            # TODO PROBARLO (aunque deberia funcionar)
+            asset_connection_class = await self.myagent.get_asset_connection_class_by_ref(
+                aas_asset_interface_ref)
+
+            # With all necessary information obtained, the asset related service can be executed
+            _logger.assetinfo(f"Executing asset service [{aas_asset_agent_service_elem.id_short}] "
+                              f"within asset-related service of thread [{self.received_acl_msg.thread}]...")
+            asset_service_execution_result = await asset_connection_class.execute_asset_service(
+                interaction_metadata=aas_asset_agent_service_elem,
+                service_input_data=self.received_body_json['serviceParams'])
+            _logger.assetinfo(f"Executing asset service [{aas_asset_agent_service_elem.id_short}] "
+                              f"within asset-related service of thread [{self.received_acl_msg.thread}]...")
+            return asset_service_execution_result
+
+    # --------------------
+    # AAS services methods
+    # --------------------
+    async def handle_aas_service(self):
+        """
+        This method implements the logic to handle the AAS type services.
+        """
+        try:
+            match self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB):
+                case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_REF:
+                    result = await self.handle_aas_svc_query_ref()
+                case _:
+                    unsupported_performative_msg = ("Cannot handle the asset-/agent-related service of the ACL "
+                                                    "interaction with thread [{}] because the performative [{}] is not"
+                                                    " yet supported.".format(
+                        self.received_acl_msg.thread,
+                        self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB)))
+                    _logger.warning(unsupported_performative_msg)
+                    raise RequestDataError(unsupported_performative_msg)
+
+            # When the service is successfully performed the result will be sent to the requester
+            await inter_smia_interactions_utils.send_response_msg_from_received(
+                self, self.received_acl_msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM, response_body=result)
+
+            # The information will be stored in the log
+            # TODO MODIFICAR ESTO CON LAS NUEVAS ESTRUCTURAS DE MENSAJES JSON
+            smia_archive_utils.save_completed_svc_log_info(self.requested_timestamp,
+                                                           GeneralUtils.get_current_timestamp(),
+                                                           self.received_acl_msg,
+                                                           str(result),
+                                                           self.received_body_json['serviceType'])
+        except (RequestDataError, ServiceRequestExecutionError, AASModelReadingError) as svc_request_error:
+            if isinstance(svc_request_error, RequestDataError):
+                svc_request_error = ServiceRequestExecutionError(self.received_acl_msg.thread,
+                                                                 svc_request_error.message,
+                                                                 self.received_body_json['serviceType'], self)
+            if isinstance(svc_request_error, AASModelReadingError):
+                svc_request_error = ServiceRequestExecutionError(self.received_acl_msg.thread,
+                                                                 "{}. Reason: {}".format(svc_request_error.message,
+                                                                                         svc_request_error.reason),
+                                                                 self.received_body_json['serviceType'], self)
+            await svc_request_error.handle_service_execution_error_old()
+            return  # killing a behaviour does not cancel its current run loop
+
+    async def handle_aas_svc_query_ref(self):
+        """
+        This method implements the logic to handle the Query-Ref performatives of AAS type services.
+        """
+        match self.received_body_json['serviceType']:
+            case AASRelatedServicesInfo.AAS_SERVICE_TYPE_DISCOVERY:
+                return await self.handle_aas_discovery_svc()
             case _:
-                _logger.error("Performative not available for service management.")
+                unsupported_service_type = ("Cannot handle the AAS service of the ACL interaction with thread [{}] "
+                                            "because the service type [{}] is not yet supported.".format(
+                    self.received_acl_msg.thread, self.received_body_json['serviceType']))
+                _logger.warning(unsupported_service_type)
+                raise RequestDataError(unsupported_service_type)
 
+    async def handle_aas_discovery_svc(self):
+        """
+        This method implements the logic to handle the AAS type services of Discovery ServiceTypes.
+        """
+        match self.received_body_json['serviceID']:
+            case (AASRelatedServicesInfo.AAS_DISCOVERY_SERVICE_GET_SM_BY_REF |
+                  AASRelatedServicesInfo.AAS_DISCOVERY_SERVICE_GET_SM_VALUE_BY_REF):
+
+                if isinstance(self.received_body_json['serviceParams'], str):
+                    self.received_body_json['serviceParams'] = await AASModelUtils.aas_model_reference_string_to_dict(
+                        self.received_body_json['serviceParams'])
+                aas_object_ref = await AASModelUtils.create_aas_reference_object(
+                    'ModelReference', self.received_body_json['serviceParams'])
+
+                # When the appropriate Reference object is created, the requested SubmodelElement can be obtained
+                requested_sme = await self.myagent.aas_model.get_object_by_reference(aas_object_ref)
+
+                # When the AAS object has been obtained, the result is returned in JSON format
+                if self.received_body_json['serviceID'] == AASRelatedServicesInfo.AAS_DISCOVERY_SERVICE_GET_SM_BY_REF:
+                    return json.dumps(requested_sme, cls=AASToJsonEncoder)
+                else:
+                    if not hasattr(requested_sme, 'value'):
+                        raise RequestDataError(f"The SubmodelElement queried with the reference ["
+                                               f"{self.received_body_json['serviceParams']}] has not value, so it cannot"
+                                               f" be returned")
+                    if not isinstance(requested_sme.value, str):
+                        return json.dumps(requested_sme.value, cls=AASToJsonEncoder)
+                    return str(requested_sme.value)
+            case AASRelatedServicesInfo.AAS_DISCOVERY_SERVICE_GET_AAS_INFO:
+                #TODO
+                pass
+            case AASRelatedServicesInfo.AAS_DISCOVERY_SERVICE_GET_SM_BY_ID:
+                # TODO
+                pass
+            case _:
+                unsupported_service_id = ("Cannot handle the AAS service of the ACL interaction with thread [{}] "
+                                            "because the discovery service id [{}] is not yet supported.".format(
+                    self.received_acl_msg.thread, self.received_body_json['serviceID']))
+                _logger.warning(unsupported_service_id)
+                raise RequestDataError(unsupported_service_id)
+
+
+    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    # TODO BORRAR ENFOQUE ANTIGUO
     # ------------------------------------------
     # Methods to handle of all types of services
     # ------------------------------------------
@@ -78,7 +302,7 @@ class HandleAASRelatedSvcBehaviour(OneShotBehaviour):
         match self.svc_req_data['serviceType']:
             case ServiceTypes.ASSET_RELATED_SERVICE:
                 # await self.handle_asset_related_svc()   # TODO
-                await self.handle_asset_related_service_request()
+                await self.handle_asset_agent_related_svc_request()
             case ServiceTypes.AAS_INFRASTRUCTURE_SERVICE:
                 await self.handle_aas_infrastructure_svc_request()  # TODO
             case ServiceTypes.AAS_SERVICE:
@@ -97,76 +321,6 @@ class HandleAASRelatedSvcBehaviour(OneShotBehaviour):
     # -----------------------------------
     # Methods to handle specific services
     # -----------------------------------
-    async def handle_asset_related_service_request(self):
-        """
-        This method handles an Asset Related Service request. These services are part of I4.0 Application Component
-        (application relevant).
-        """
-        # TODO In this case, AssetRelatedService and AssetService are considered equivalent.
-        # The asset related service will be executed using a ModelReference to the related SubmodelElement within the
-        # AssetInterfacesDefinition submodel. This information is in serviceParams TODO (de momento en serviceParams, ya veremos mas adelante)
-        try:
-            # First, the received data is checked and validated
-            await inter_smia_interactions_utils.check_received_request_data_structure_old(
-                self.svc_req_data, ACLSMIAJSONSchemas.JSON_SCHEMA_ASSET_SERVICE_REQUEST)
-            service_params = self.svc_req_data['serviceData']['serviceParams']
-
-            # If the received data is valid, the AAS Reference object need to be created
-            aas_asset_service_ref = await AASModelUtils.create_aas_reference_object(
-                'ModelReference', service_params['ModelReference']['keys'])
-            aas_asset_service_elem = await self.myagent.aas_model.get_object_by_reference(aas_asset_service_ref)
-
-            # The asset connection class is also required to execute the asset related service. It is obtained from the
-            # AAS asset service Reference object
-            aas_asset_interface_ref = aas_asset_service_elem.get_parent_ref_by_semantic_id(
-                AssetInterfacesInfo.SEMANTICID_INTERFACE)
-            if aas_asset_service_elem is None:
-                raise ServiceRequestExecutionError(self.svc_req_data['thread'], "The added ModelReference is not "
-                                                                                " inside the AssetInterfacesDescription "
-                                                                                "submodel, so it is not an AssetService.",
-                                                   self.svc_req_data['serviceType'], self)
-            asset_connection_class = await self.myagent.get_asset_connection_class_by_ref(aas_asset_interface_ref)
-
-            # With all necessary information obtained, the asset related service can be executed
-            _logger.assetinfo("Executing skill of the capability through an asset service...")
-            received_input_data = None
-            if 'serviceParameterValues' in service_params:
-                received_input_data = service_params['serviceParameterValues']
-            asset_service_execution_result = await asset_connection_class.execute_asset_service(
-                interaction_metadata=aas_asset_service_elem,
-                service_input_data=received_input_data)
-            _logger.assetinfo("Skill of the capability successfully executed.")
-
-            # The result will be sent to the requester
-            await self.send_response_msg_to_sender(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM,
-                                                   {'result': asset_service_execution_result})
-            _logger.info("Management of the service with thread {} finished.".format(self.svc_req_data['thread']))
-
-            # The information will be stored in the log
-            smia_archive_utils.save_completed_svc_log_info(self.requested_timestamp,
-                                                           GeneralUtils.get_current_timestamp(),
-                                                           self.svc_req_data, str(asset_service_execution_result),
-                                                           self.svc_req_data['serviceType'])
-
-        except (RequestDataError, ServiceRequestExecutionError,
-                AASModelReadingError, AssetConnectionError) as svc_request_error:
-            if isinstance(svc_request_error, RequestDataError):
-                svc_request_error = ServiceRequestExecutionError(self.svc_req_data['thread'],
-                                                                 svc_request_error.message,
-                                                                 self.svc_req_data['serviceType'], self)
-            if isinstance(svc_request_error, AASModelReadingError):
-                svc_request_error = ServiceRequestExecutionError(self.svc_req_data['thread'], "{}. Reason: "
-                                                                                              "{}".format(
-                    svc_request_error.message,
-                    svc_request_error.reason), self.svc_req_data['serviceType'], self)
-            if isinstance(svc_request_error, AssetConnectionError):
-                svc_request_error = ServiceRequestExecutionError(self.svc_req_data['thread'],
-                                                                 f"The error [{svc_request_error.error_type}] has appeared during the asset "
-                                                                 f"connection. Reason: {svc_request_error.reason}.",
-                                                                 self.svc_req_data['serviceType'], self)
-            await svc_request_error.handle_service_execution_error_old()
-            return  # killing a behaviour does not cancel its current run loop
-
     async def handle_aas_services_request(self):
         """
         This method handles AAS Services. These services serve for the management of asset-related information through
@@ -190,59 +344,8 @@ class HandleAASRelatedSvcBehaviour(OneShotBehaviour):
         """
         _logger.info('AAS Infrastructure Service request: ' + str(self.svc_req_data))
 
-    async def handle_submodel_service_request(self):
-        """
-        This method handles a Submodel Service request. These services are part of I4.0 Application Component
-        (application relevant).
-        """
-        # The submodel service will be executed using a ModelReference or an ExternalReference, depending on the
-        # requested element. This information is in serviceParams TODO (de momento en serviceParams, ya veremos mas adelante)
-        try:
-            # First, the received data is checked and validated
-            await inter_smia_interactions_utils.check_received_request_data_structure_old(
-                self.svc_req_data, ACLSMIAJSONSchemas.JSON_SCHEMA_SUBMODEL_SERVICE_REQUEST)
 
-            # If the data is valid, the SubmodelElement is obtained from the AAS model. For this purpose, the
-            # appropriate BaSyx object must be created
-            ref_object = None
-            if 'ModelReference' in self.svc_req_data['serviceData']['serviceParams']:
-                ref_object = await AASModelUtils.create_aas_reference_object(
-                    'ModelReference',
-                    keys_dict=self.svc_req_data['serviceData']['serviceParams']['ModelReference']['keys'])
-            elif 'ExternalReference' in self.svc_req_data['serviceData']['serviceParams']:
-                ref_object = await AASModelUtils.create_aas_reference_object(
-                    'ExternalReference',
-                    external_ref=self.svc_req_data['serviceData']['serviceParams']['ExternalReference'])
 
-            # When the appropriate Reference object is created, the requested SubmodelElement can be obtained
-            requested_sme = await self.myagent.aas_model.get_object_by_reference(ref_object)
-
-            # When the AAS object has been obtained, the request is answered
-            # TODO de momento simplemente lo devolvemos en string (para mas adelante pensar si desarrollar un metodo que
-            #  devuelva toda la informacion)
-            sme_info = str(requested_sme)
-            await self.send_response_msg_to_sender(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM,
-                                                   {'requested_object': sme_info})
-            _logger.info("Management of the service with thread {} finished.".format(self.svc_req_data['thread']))
-
-            # The information will be stored in the log
-            smia_archive_utils.save_completed_svc_log_info(self.requested_timestamp,
-                                                           GeneralUtils.get_current_timestamp(),
-                                                           self.svc_req_data, str(sme_info),
-                                                           self.svc_req_data['serviceType'])
-
-        except (RequestDataError, ServiceRequestExecutionError, AASModelReadingError) as svc_request_error:
-            if isinstance(svc_request_error, RequestDataError):
-                svc_request_error = ServiceRequestExecutionError(self.svc_req_data['thread'],
-                                                                 svc_request_error.message,
-                                                                 self.svc_req_data['serviceType'], self)
-            if isinstance(svc_request_error, AASModelReadingError):
-                svc_request_error = ServiceRequestExecutionError(self.svc_req_data['thread'],
-                                                                 "{}. Reason: {}".format(svc_request_error.message,
-                                                                                         svc_request_error.reason),
-                                                                 self.svc_req_data['serviceType'], self)
-            await svc_request_error.handle_service_execution_error_old()
-            return  # killing a behaviour does not cancel its current run loop
 
     async def send_response_msg_to_sender(self, performative, service_params):
         """

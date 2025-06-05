@@ -30,13 +30,13 @@ class SMIAInteractionInfo:
     # The template for the service requests is the combination of the different possibilities
     ACL_INDIVIDUAL_INTERACTIONS_ACL_TEMPLATE = (
         # TODO PENSAR SI REALMENTE ES NECESARIO UN TEMPLATE PARA EL 'acl_handling' (ya comprueba los mensajes recibidos)
-        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST),
-        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_REF),
-        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_IF),
-        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM),
-        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE),
-        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REFUSE),
-        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_NOT_UNDERSTOOD),
+        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST) |
+        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_REF) |
+        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_IF) |
+        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM) |
+        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE) |
+        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REFUSE) |
+        GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_NOT_UNDERSTOOD)
     )
 
     # TODO ANTIGUO TEMPLATE

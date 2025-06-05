@@ -84,7 +84,6 @@ class ACLHandlingBehaviour(CyclicBehaviour):
 
             # Depending on the message ontology, the associated specific behavior will be added to the agent to handle
             # the required actions
-            specific_handling_behaviour = None
             match msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB):
                 case ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE:
                     specific_handling_behaviour = HandleCapabilityBehaviour(self.myagent, received_acl_msg=msg)
@@ -94,7 +93,7 @@ class ACLHandlingBehaviour(CyclicBehaviour):
             _logger.info("Specific behaviour added to the agent to handle the message with thread [{}].".format(
                 msg.thread))
 
-            # TODO ELIMINAR, ES CODIGO DEL ENFOQUE ANTIGUO
+            # TODO BORRAR, ES CODIGO DEL ENFOQUE ANTIGUO
             # Depending on the performative of the message, the agent will have to perform some actions or others
             match msg.get_metadata('performative'):
                 case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST:

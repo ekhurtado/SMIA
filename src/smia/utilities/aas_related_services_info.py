@@ -12,6 +12,7 @@ class AASRelatedServicesInfo:
 
     # AAS Discovery Services identifiers
     AAS_DISCOVERY_SERVICE_GET_SM_BY_REF = 'GetSubmodelElementByReference'
+    AAS_DISCOVERY_SERVICE_GET_SM_VALUE_BY_REF = 'GetSubmodelElementValueByReference'
     AAS_DISCOVERY_SERVICE_GET_AAS_INFO = 'GetAASInformationElement'
     AAS_DISCOVERY_SERVICE_GET_SM_BY_ID = 'GetSubmodelBySubmodelID'
     AAS_DISCOVERY_SERVICE_SET_SM_VALUE_BY_REF = 'SetSubmodelElementValueByReference'
