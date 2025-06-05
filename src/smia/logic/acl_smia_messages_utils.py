@@ -119,7 +119,7 @@ async def generate_json_from_schema(schema: dict, **kwargs) -> dict:
 
     return json_object
 
-async def get_parsed_body_from_acl_msg(acl_msg):
+def get_parsed_body_from_acl_msg(acl_msg):
     """
     This method gets the body of an ACL message and returns parsed.
 

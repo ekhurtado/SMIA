@@ -260,6 +260,14 @@ class CapabilitySkillACLInfo:
     between DTs in relation to Capability-Skill model.
     """
 
+    # Attribute keys for CSS Service ACL messages
+    ATTRIB_CAPABILITY_IRI = 'capabilityIRI'
+    ATTRIB_CAPABILITY_CONSTRAINTS = 'constraints'
+    ATTRIB_SKILL_IRI = 'skillIRI'
+    ATTRIB_SKILL_PARAMETERS = 'skillParams'
+    ATTRIB_SKILL_INTERFACE_IRI = 'skillInterfaceIRI'
+
+    # TODO ELIMINARLO (enfoque antiguo)
     # Required Capability information
     REQUIRED_CAPABILITY_NAME = 'capabilityName'
     REQUIRED_CAPABILITY_TYPE = 'capabilityType'
@@ -272,6 +280,5 @@ class CapabilitySkillACLInfo:
     REQUIRED_SKILL_INPUT_PARAMETERS = 'inputs'
     REQUIRED_SKILL_OUTPUT_PARAMETERS = 'outputs'
     REQUIRED_SKILL_INTERFACE_NAME = 'skillInterfaceName'
-    # TODO pensar si harian falta mas
 
 

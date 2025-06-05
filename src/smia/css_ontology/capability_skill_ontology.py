@@ -113,6 +113,21 @@ class CapabilitySkillOntology:
                 return instance_class
         return None
 
+    async def get_ontology_instance_by_iri(self, instance_iri):
+        """
+        This method returns an object instance within the ontology by its name.
+
+        Args:
+            instance_iri (str): IRI of the instance.
+
+        Returns:
+            ThingClass: class of the instance to be found (None if it is not found).
+        """
+        for instance_class in self.ontology.individuals():
+            if instance_class.iri == instance_iri:
+                return instance_class
+        return None
+
     async def get_ontology_instances_by_class_iri(self, class_iri):
         """
         This method gets all the instances within the ontology with a given class IRI.

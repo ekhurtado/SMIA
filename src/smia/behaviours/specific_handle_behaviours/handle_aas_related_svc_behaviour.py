@@ -10,7 +10,7 @@ from spade.behaviour import OneShotBehaviour
 
 from smia import GeneralUtils
 from smia.aas_model.aas_model_utils import AASModelUtils
-from smia.logic import inter_smia_interactions_utils
+from smia.logic import inter_smia_interactions_utils, acl_smia_messages_utils
 from smia.logic.exceptions import RequestDataError, ServiceRequestExecutionError, AASModelReadingError, \
     AssetConnectionError
 from smia.utilities import smia_archive_utils
@@ -46,8 +46,8 @@ class HandleAASRelatedSvcBehaviour(OneShotBehaviour):
 
         # The SPADE agent object is stored as a variable of the behaviour class
         self.myagent = agent_object
-        self.received_acl_msg = received_acl_msg    # TODO DEJARLO PARA EL NUEVO ENFOQUE
-        self.received_body_json = json.loads(received_acl_msg.body)
+        self.received_acl_msg = received_acl_msg
+        self.received_body_json = acl_smia_messages_utils.get_parsed_body_from_acl_msg(self.received_acl_msg)
 
         self.requested_timestamp = GeneralUtils.get_current_timestamp()
 
@@ -96,6 +96,10 @@ class HandleAASRelatedSvcBehaviour(OneShotBehaviour):
             match self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB):
                 case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST:
                     result = await self.handle_asset_agent_related_svc_request()
+                case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM:
+                    _logger.aclinfo(f"The SMIA has been informed about the asset-/agent-related service related to the "
+                                    f"thread [{self.received_acl_msg.thread}] with the content:{self.received_acl_msg.body}.")
+                    # TODO
                 case _:
                     unsupported_performative_msg = ("Cannot handle the asset-/agent-related service of the ACL "
                                                     "interaction with thread [{}] because the performative [{}] is not"
@@ -200,6 +204,10 @@ class HandleAASRelatedSvcBehaviour(OneShotBehaviour):
             match self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB):
                 case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_REF:
                     result = await self.handle_aas_svc_query_ref()
+                case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM:
+                    _logger.aclinfo(f"The SMIA has been informed about the AAS service related to the thread"
+                                    f" [{self.received_acl_msg.thread}] with the content:{self.received_acl_msg.body}.")
+                    # TODO
                 case _:
                     unsupported_performative_msg = ("Cannot handle the asset-/agent-related service of the ACL "
                                                     "interaction with thread [{}] because the performative [{}] is not"
@@ -288,6 +296,16 @@ class HandleAASRelatedSvcBehaviour(OneShotBehaviour):
                 _logger.warning(unsupported_service_id)
                 raise RequestDataError(unsupported_service_id)
 
+    # -----------------------------------
+    # AAS infrastructure services methods
+    # -----------------------------------
+    async def handle_aas_infrastructure_service(self):
+        """
+        This method implements the logic to handle the Infrastructure services of AAS type services.
+        """
+        # The AAS Infrastructure Services are offered by the platform (in SMIA approach by SMIA ISM), not by SMIA
+        # instances, so it will not realize any task
+        pass
 
     # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # TODO BORRAR ENFOQUE ANTIGUO

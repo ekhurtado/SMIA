@@ -5,7 +5,7 @@ import basyx.aas.model
 from spade.behaviour import OneShotBehaviour
 
 from smia import GeneralUtils
-from smia.logic import inter_smia_interactions_utils
+from smia.logic import inter_smia_interactions_utils, acl_smia_messages_utils
 from smia.logic.exceptions import CapabilityRequestExecutionError, CapabilityCheckingError, RequestDataError, \
     AssetConnectionError, OntologyReadingError, AASModelReadingError
 from smia.css_ontology.css_ontology_utils import CapabilitySkillACLInfo
@@ -35,7 +35,8 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
 
         # The SPADE agent object is stored as a variable of the behaviour class
         self.myagent = agent_object
-        self.received_acl_msg = received_acl_msg    # TODO DEJARLO PARA EL NUEVO ENFOQUE
+        self.received_acl_msg = received_acl_msg
+        self.received_body_json = acl_smia_messages_utils.get_parsed_body_from_acl_msg(self.received_acl_msg)
 
         self.requested_timestamp = GeneralUtils.get_current_timestamp()
 
@@ -43,7 +44,8 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
         """
         This method implements the initialization process of this behaviour.
         """
-        _logger.info("HandleCapabilityBehaviour starting...")
+        _logger.info("HandleCapabilityBehaviour starting to handle the CSS service to the message with thread"
+                     " [{}]...".format(self.received_acl_msg.thread))
 
     async def run(self):
         """
@@ -51,23 +53,26 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
         """
 
         # First, the performative of request is obtained and, depending on it, different actions will be taken
-        match self.svc_req_data['performative']:
-            case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST:  # TODO actualizar dentro de todo el codigo los usos de performativas y ontologias de FIPA-ACL
-                await self.handle_request()
+        match self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB):
+            case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST:
+                await self.handle_css_request()
             case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_IF:
-                await self.handle_query_if()
+                await self.handle_css_query_if()
             case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM:
-                await self.handle_inform()
-            case "PensarOtro":  # TODO
-                pass
+                await self.handle_css_inform()
+            # TODO pensar mas tipos
             case _:
-                _logger.error("Performative not available for capability management.")
+                _logger.error(f"Performative not available for CSS management for thread "
+                              f"[{self.received_acl_msg.thread}].")
+                await inter_smia_interactions_utils.send_response_msg_from_received(
+                    self, self.received_acl_msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_NOT_UNDERSTOOD,
+                    response_body='Performative not available for CSS management in this SMIA')
         self.exit_code = 0
 
     # ------------------------------------------
     # Methods to handle of all types of services
     # ------------------------------------------
-    async def handle_request(self):
+    async def handle_css_request(self):
         """
         This method handle capability requests to the DT.
         """
@@ -129,7 +134,7 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
             await cap_request_error.handle_capability_execution_error()
             return  # killing a behaviour does not cancel its current run loop
 
-    async def handle_query_if(self):
+    async def handle_css_query_if(self):
         """
         This method handle Query-If requests for the Capability. This request is received when the DT is asked about
         information related to a capability.
@@ -169,7 +174,7 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
             await cap_checking_error.handle_capability_checking_error()
             return  # killing a behaviour does not cancel its current run loop
 
-    async def handle_inform(self):
+    async def handle_css_inform(self):
         """
         This method handles AAS Services. These services serve for the management of asset-related information through
         a set of infrastructure services provided by the AAS itself. These include Submodel Registry Services (to list
@@ -179,7 +184,9 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
         control) and Exposure and Discovery Services (to search for submodels or asset related services).
 
         """
-        _logger.info('CSS-related INFORM performative message: ' + str(self.svc_req_data))
+        _logger.aclinfo(f"The SMIA has been informed about the CSS service related to the thread "
+                        f"[{self.received_acl_msg.thread}] with the content:{self.received_acl_msg.body}.")
+        # TODO
 
 
     # Internal logic methods
@@ -208,72 +215,72 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
         This method checks whether the data received contains the necessary information to be able to execute
         the capability. If an error occurs, it throws a CapabilityDataError exception.
         """
-        # TODO con el nuevo enfoque solo es necesario añadir la capacidad. Las demas son opcionales (skill, interfaz...)
-        #  Esto se debe a que una capacidad puede solicitarse sin definir skills (si ninguna tiene parametros, SMIA
-        #  ejecutaría la capacidad con una skill aleatoria). Lo que si se va a comprobar es que si se añaden datos
-        #  opcionales, sean validos (p.e. que los datos añadidos estén conformes a la ontologia CSS)
-        # First, the structure and attributes of the received data are checked and validated
-        await inter_smia_interactions_utils.check_received_request_data_structure_old(
-            self.svc_req_data, ACLSMIAJSONSchemas.JSON_SCHEMA_CAPABILITY_REQUEST)
-        received_cap_data = self.svc_req_data['serviceData']['serviceParams']
-        # if CapabilitySkillACLInfo.REQUIRED_CAPABILITY_NAME not in received_cap_data:
-        #     raise RequestDataError("The received capability data is invalid due to missing #{} field in request "
-        #                               "message.".format(CapabilitySkillACLInfo.REQUIRED_CAPABILITY_NAME))
-        # else:
-        cap_name = received_cap_data[CapabilitySkillACLInfo.REQUIRED_CAPABILITY_NAME]
-        cap_ontology_instance = await self.myagent.css_ontology.get_ontology_instance_by_name(cap_name)
+        cap_iri = self.received_body_json[CapabilitySkillACLInfo.ATTRIB_CAPABILITY_IRI]
+        cap_ontology_instance = await self.myagent.css_ontology.get_ontology_instance_by_iri(cap_iri)
         if cap_ontology_instance is None:
-            raise RequestDataError("The capability {} does not an instance defined in the ontology of this "
-                                   "DT".format(cap_name))
-        if CapabilitySkillACLInfo.REQUIRED_SKILL_NAME in received_cap_data:
-            skill_name = received_cap_data[CapabilitySkillACLInfo.REQUIRED_SKILL_NAME]
-            result, skill_instance = cap_ontology_instance.check_and_get_related_instance_by_instance_name(skill_name)
+            raise RequestDataError(f"The capability {cap_iri} does not exist in the ontology of this SMIA instance.")
+        if CapabilitySkillACLInfo.ATTRIB_SKILL_IRI in self.received_body_json:
+            skill_iri = self.received_body_json[CapabilitySkillACLInfo.ATTRIB_SKILL_IRI]
+            skill_ontology_instance = await self.myagent.css_ontology.get_ontology_instance_by_iri(skill_iri)
+            if skill_ontology_instance is None:
+                raise RequestDataError(f"The given skill {skill_iri} does not exist in the ontology of this SMIA "
+                                       f"instance.")
+            result, skill_instance = cap_ontology_instance.check_and_get_related_instance_by_instance_name(
+                skill_ontology_instance.name)
             if result is False:
                 raise RequestDataError("The capability {} and skill {} are not linked in the ontology of this "
-                                       "DT, or the skill does not have an instance"
-                                       ".".format(cap_name, skill_name))
-            if skill_instance.get_associated_skill_parameter_instances() is not None:
+                                       "SMIA instance, or the skill does not have an instance"
+                                       ".".format(cap_iri, skill_iri))
+            if skill_ontology_instance.get_associated_skill_parameter_instances() is not None:
                 # It is checked that the necessary parameter data have been added (in this case only the input
                 # parameters will be necessary).
-                skill_params = skill_instance.get_associated_skill_parameter_instances()
+                skill_params = skill_ontology_instance.get_associated_skill_parameter_instances()
                 for param in skill_params:
                     if param.is_skill_parameter_type(['INPUT', 'INOUTPUT']):
                         # If there is a parameter of type INPUT or INOUTPUT the value of the parameter need to be
                         # specified in the request message
-                        if CapabilitySkillACLInfo.REQUIRED_SKILL_PARAMETERS_VALUES not in received_cap_data:
+                        if CapabilitySkillACLInfo.ATTRIB_SKILL_PARAMETERS not in self.received_body_json:
                             raise RequestDataError("The received request is invalid due to missing #{} field in the "
                                                    "request message because the requested skill need value for an input"
                                                    " parameter ({}).".format(
-                                CapabilitySkillACLInfo.REQUIRED_SKILL_PARAMETERS_VALUES, param.name))
-                        if param.name not in received_cap_data[CapabilitySkillACLInfo.REQUIRED_SKILL_PARAMETERS_VALUES].keys():
+                                CapabilitySkillACLInfo.ATTRIB_SKILL_PARAMETERS, param.name))
+                        if (param.iri not in self.received_body_json[CapabilitySkillACLInfo.ATTRIB_SKILL_PARAMETERS].
+                                keys()):
                             raise RequestDataError("The received request is invalid due to missing #{} field in the "
                                                    "request message because the requested skill need value for an input"
                                                    " parameter ({}).".format(
-                                CapabilitySkillACLInfo.REQUIRED_SKILL_PARAMETERS_VALUES, param.name))
-            if CapabilitySkillACLInfo.REQUIRED_SKILL_INTERFACE_NAME in received_cap_data:
+                                CapabilitySkillACLInfo.ATTRIB_SKILL_PARAMETERS, param.name))
+            if CapabilitySkillACLInfo.ATTRIB_SKILL_INTERFACE_IRI in self.received_body_json:
                 # Solo si se ha definido la skill se define la skill interface, sino no tiene significado
-                # TODO pensar la frase anterior. Realmente tiene significado o no? Si no se define la skill, podriamos
+                # TODO pensar la frase anterior. Realmente tiene sentido o no? Si no se define la skill, podriamos
                 #  definir una interfaz que queremos utilizar si o si? En ese caso, habria que buscar una skill con esa
                 #  interfaz para ejecutarla
-                skill_interface_name = received_cap_data[CapabilitySkillACLInfo.REQUIRED_SKILL_INTERFACE_NAME]
-                result, instance = skill_instance.check_and_get_related_instance_by_instance_name(skill_interface_name)
+                skill_interface_iri = self.received_body_json[CapabilitySkillACLInfo.ATTRIB_SKILL_INTERFACE_IRI]
+                skill_interface_ontology_instance = await self.myagent.css_ontology.get_ontology_instance_by_iri(
+                    skill_interface_iri)
+                if skill_ontology_instance is None:
+                    raise RequestDataError(f"The given skill interface {skill_interface_iri} does not exist in the "
+                                           f"ontology of this SMIA instance.")
+                result, instance = skill_ontology_instance.check_and_get_related_instance_by_instance_name(
+                    skill_interface_iri.name)
                 if result is False:
                     raise RequestDataError("The skill {} and skill interface {} are not linked in the ontology of "
-                                           "this DT, or the skill interface does not have an instance"
-                                           ".".format(skill_name, skill_interface_name))
+                                           "this SMIA instance, or the skill interface does not have an instance"
+                                           ".".format(skill_iri, skill_interface_iri))
         # The constraints of the given capability are also checked
         constraint_instances = cap_ontology_instance.get_associated_constraint_instances()
         if constraint_instances is not None:
-            if CapabilitySkillACLInfo.REQUIRED_CAPABILITY_CONSTRAINTS not in received_cap_data:
+            if CapabilitySkillACLInfo.ATTRIB_CAPABILITY_CONSTRAINTS not in self.received_body_json:
                 raise RequestDataError("The received request is invalid because the #{} field is missing in the "
                                        "request message, and the given capability {} has constraints defined.".format(
-                    CapabilitySkillACLInfo.REQUIRED_CAPABILITY_CONSTRAINTS, cap_name))
+                    CapabilitySkillACLInfo.ATTRIB_CAPABILITY_CONSTRAINTS, cap_iri))
             for constraint in constraint_instances:
-                if constraint.name not in received_cap_data[CapabilitySkillACLInfo.REQUIRED_CAPABILITY_CONSTRAINTS].keys():
+                if (constraint.iri not in self.received_body_json[CapabilitySkillACLInfo.ATTRIB_CAPABILITY_CONSTRAINTS]
+                        .keys()):
                     raise RequestDataError("The received request is invalid due to missing #{} field in the"
                                            "request message because the requested capability need value for this "
                                            "constraint ({}).".format(
-                        CapabilitySkillACLInfo.REQUIRED_CAPABILITY_CONSTRAINTS, constraint.name))
+                        CapabilitySkillACLInfo.ATTRIB_CAPABILITY_CONSTRAINTS, constraint.iri))
     async def check_received_skill_data(self, skill_elem):
         """
         This method checks whether the data received contains the necessary information in relation to the skill of the
