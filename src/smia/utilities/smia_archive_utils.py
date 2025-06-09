@@ -264,7 +264,7 @@ def save_completed_svc_log_info(started_timestamp, finished_timestamp, acl_info,
         svc_type (str): type of the service.
     """
     # First, the required paths are obtained
-    log_file_path = get_log_file_by_service_type_old('services', svc_type)
+    log_file_path = get_log_file_by_service_type('services', svc_type)
 
     # Then, the information object is built and added
     svc_log_info = {

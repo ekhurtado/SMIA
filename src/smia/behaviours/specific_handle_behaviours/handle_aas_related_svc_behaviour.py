@@ -72,7 +72,7 @@ class HandleAASRelatedSvcBehaviour(OneShotBehaviour):
             case ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE:
                 await self.handle_aas_infrastructure_service()
 
-        _logger.info("Management of the AAS-related service with thread {} finished.".format(self.received_acl_msg))
+        _logger.info("Management of the AAS-related service with thread {} finished.".format(self.received_acl_msg.thread))
 
         # TODO BORRAR ENFOQUE ANTIGUO
         # # First, the performative of the request is obtained
@@ -115,11 +115,10 @@ class HandleAASRelatedSvcBehaviour(OneShotBehaviour):
 
             # The information will be stored in the log
             # TODO MODIFICAR ESTO CON LAS NUEVAS ESTRUCTURAS DE MENSAJES JSON
-            smia_archive_utils.save_completed_svc_log_info(self.requested_timestamp,
-                                                           GeneralUtils.get_current_timestamp(),
-                                                           self.svc_req_data,
-                                                           str(result),
-                                                           self.svc_req_data['serviceType'])
+            smia_archive_utils.save_completed_svc_log_info(
+                self.requested_timestamp, GeneralUtils.get_current_timestamp(),
+                await inter_smia_interactions_utils.acl_message_to_json(self.received_acl_msg), str(result),
+                self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB))
         except (RequestDataError, ServiceRequestExecutionError,
                 AASModelReadingError, AssetConnectionError) as svc_request_error:
 
@@ -223,22 +222,21 @@ class HandleAASRelatedSvcBehaviour(OneShotBehaviour):
 
             # The information will be stored in the log
             # TODO MODIFICAR ESTO CON LAS NUEVAS ESTRUCTURAS DE MENSAJES JSON
-            smia_archive_utils.save_completed_svc_log_info(self.requested_timestamp,
-                                                           GeneralUtils.get_current_timestamp(),
-                                                           self.received_acl_msg,
-                                                           str(result),
-                                                           self.received_body_json['serviceType'])
+            smia_archive_utils.save_completed_svc_log_info(
+                self.requested_timestamp, GeneralUtils.get_current_timestamp(),
+                await inter_smia_interactions_utils.acl_message_to_json(self.received_acl_msg), str(result),
+                self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB))
         except (RequestDataError, ServiceRequestExecutionError, AASModelReadingError) as svc_request_error:
             if isinstance(svc_request_error, RequestDataError):
-                svc_request_error = ServiceRequestExecutionError(self.received_acl_msg.thread,
-                                                                 svc_request_error.message,
-                                                                 self.received_body_json['serviceType'], self)
+                svc_request_error = ServiceRequestExecutionError(
+                    self.received_acl_msg.thread, svc_request_error.message,
+                    self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB), self)
             if isinstance(svc_request_error, AASModelReadingError):
-                svc_request_error = ServiceRequestExecutionError(self.received_acl_msg.thread,
-                                                                 "{}. Reason: {}".format(svc_request_error.message,
-                                                                                         svc_request_error.reason),
-                                                                 self.received_body_json['serviceType'], self)
-            await svc_request_error.handle_service_execution_error_old()
+                svc_request_error = ServiceRequestExecutionError(
+                    self.received_acl_msg.thread, "{}. Reason: {}".format(svc_request_error.message,
+                                                                          svc_request_error.reason),
+                    self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB), self)
+            await svc_request_error.handle_service_execution_error()
             return  # killing a behaviour does not cancel its current run loop
 
     async def handle_aas_svc_query_ref(self):

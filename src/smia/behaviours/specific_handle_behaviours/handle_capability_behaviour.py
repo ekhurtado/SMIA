@@ -114,10 +114,10 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
             # The information will be stored in the log
             execution_info = {'capName': cap_name, 'capType': str(cap_ontology_instance.is_a),
                               'result': str(cap_execution_result), 'taskType': 'CapabilityRequest'}
-            smia_archive_utils.save_completed_svc_log_info(self.requested_timestamp,
-                                                           GeneralUtils.get_current_timestamp(),
-                                                           self.svc_req_data, execution_info,
-                                                           self.svc_req_data['serviceType'])
+            smia_archive_utils.save_completed_svc_log_info(
+                self.requested_timestamp, GeneralUtils.get_current_timestamp(),
+                await inter_smia_interactions_utils.acl_message_to_json(self.received_acl_msg), str(result),
+                self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB))
 
         except (RequestDataError, OntologyReadingError, CapabilityRequestExecutionError,
                 AASModelReadingError, AssetConnectionError) as cap_request_error:
@@ -163,10 +163,10 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
             # The information will be stored in the log
             execution_info = {'capName': cap_name, 'capType': str(cap_ontology_instance.is_a),
                               'result': str(result), 'reason': reason, 'taskType': 'CapabilityChecking'}
-            smia_archive_utils.save_completed_svc_log_info(self.requested_timestamp,
-                                                           GeneralUtils.get_current_timestamp(),
-                                                           self.svc_req_data, execution_info,
-                                                           self.svc_req_data['serviceType'])
+            smia_archive_utils.save_completed_svc_log_info(
+                self.requested_timestamp, GeneralUtils.get_current_timestamp(),
+                await inter_smia_interactions_utils.acl_message_to_json(self.received_acl_msg), str(result),
+                self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB))
 
         except (RequestDataError, AASModelReadingError) as cap_checking_error:
             if isinstance(cap_checking_error, RequestDataError):
