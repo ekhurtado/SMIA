@@ -201,6 +201,24 @@ class ExtendedThing(Thing):
                     return True, related_instance
         return False, None
 
+    def check_and_get_related_instance_by_iri(self, other_instance_iri):
+        """
+        This method checks if there is some Object Property defined that connects the self instance class with the given
+        instance class,i.e., if the instances are related within the ontology. If the relation is valid, it also
+        returns the related ThingClass.
+
+        Args:
+            other_instance_iri (str): IRI of the other instance class.
+
+        Returns:
+            bool, ThingClass: the result of the check, and if True, the class of the related instance
+        """
+        for prop in self.get_properties():
+            for related_instance in getattr(self, prop.name):
+                if other_instance_iri == related_instance.iri:
+                    return True, related_instance
+        return False, None
+
 
 class Capability(ExtendedThing):
     """

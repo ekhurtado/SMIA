@@ -87,7 +87,7 @@ class HTTPAssetConnection(AssetConnection):
 
         # Then, the data of the skill is added in the required field. To do that, the 'SkillParameterExposedThrough'
         # relationship should be obtained, which indicates where the parameter data should be added
-        if service_input_data is not None:
+        if service_input_data is not None and len(service_input_data) > 0:
             await self.add_asset_service_data(interaction_metadata, service_input_data)
 
         # At this point, the HTTP request is performed

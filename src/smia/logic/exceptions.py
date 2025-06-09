@@ -3,7 +3,7 @@ This file contains all the classes for handling errors in exceptions that may oc
 """
 import logging
 
-from smia.utilities.fipa_acl_info import FIPAACLInfo, ServiceTypes
+from smia.utilities.fipa_acl_info import FIPAACLInfo, ServiceTypes, ACLSMIAOntologyInfo
 
 _logger = logging.getLogger(__name__)
 
@@ -140,12 +140,14 @@ class CapabilityRequestExecutionError(Exception):
     been requested, this class also must response to the requester with a Failure of the capability execution.
     """
 
-    def __init__(self, cap_name, message, behav_class):
-        self.cap_name = cap_name  # TODO pensar si en lugar de nombre de capacidad añadir el thread de la conversacion (quizas es mas identificativo)
+    def __init__(self, thread, cap_name, message, behav_class, affected_elem=None):
+        self.thread = thread
+        self.cap_name = cap_name
         self.message = message
         self.behav_class = behav_class
+        self.affected_element = affected_elem
 
-    async def handle_capability_execution_error(self):
+    async def handle_capability_execution_error_old(self):
         """
         This method handles the error during an execution of a capability, sending the Failure message to the requester.
         """
@@ -172,6 +174,43 @@ class CapabilityRequestExecutionError(Exception):
             acl_info = {}
         smia_archive_utils.save_svc_error_log_info(GeneralUtils.get_current_timestamp(), acl_info, self.message,
                                                    ServiceTypes.CSS_RELATED_SERVICE)
+
+        # The behaviour for the execution of the capability must be killed
+        self.behav_class.kill(exit_code=10)
+
+    async def handle_capability_execution_error(self):
+        """
+        This method handles the error during an execution of a capability, sending the Failure message to the requester.
+        """
+        _logger.error(f"{self.message}")
+
+        _logger.info("Due to an incorrect execution of the capability [{}], the requester shall be informed with a "
+                     "Failure message.".format(self.cap_name))
+
+        # Local imports to avoid circular import error
+        from smia.utilities import smia_archive_utils
+        from smia.logic import inter_smia_interactions_utils
+        from smia import GeneralUtils
+
+        if hasattr(self.behav_class, 'received_acl_msg'):
+            response_body = {'reason': self.message, 'exceptionType': str(self.__class__.__name__)}
+            if self.affected_element is not None:
+                response_body.update({'affectedElement': self.affected_element})
+            await inter_smia_interactions_utils.send_response_msg_from_received(
+                self.behav_class, self.behav_class.received_acl_msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE,
+                response_body)
+            _logger.info("Failure message sent to the requester related to the thread [{}].".format(self.thread))
+
+            acl_info = await inter_smia_interactions_utils.acl_message_to_json(self.behav_class.received_acl_msg)
+        else:
+            _logger.warning("A CapabilityRequestExecutionError exception has been raised from a HandlingBehaviour that "
+                            "is not valid for this management. Reason: It does not have the 'received_acl_msg' "
+                            "attribute to store the received ACL message.")
+            acl_info = {'thread': self.thread, 'behavClass': self.behav_class}
+
+        # The information about the error is also saved in the log
+        smia_archive_utils.save_svc_error_log_info(GeneralUtils.get_current_timestamp(), acl_info, self.message,
+                                                   ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE)
 
         # The behaviour for the execution of the capability must be killed
         self.behav_class.kill(exit_code=10)

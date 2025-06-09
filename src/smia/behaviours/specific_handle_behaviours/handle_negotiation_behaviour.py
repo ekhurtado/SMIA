@@ -95,7 +95,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                                                                 f"[{cap_neg_error.error_type}] has appeared during the"
                                                                 f" asset connection. Reason: {cap_neg_error.reason}.", self)
 
-            await cap_neg_error.handle_capability_execution_error()
+            await cap_neg_error.handle_capability_execution_error_old()
             return  # killing a behaviour does not cancel its current run loop
 
 
