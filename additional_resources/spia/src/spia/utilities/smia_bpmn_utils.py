@@ -196,6 +196,22 @@ class SMIABPMNUtils:
         return None
 
     @staticmethod
+    def get_required_data_from_bpmn_element(bpmn_element, requested_element):
+        match requested_element['elementType']:
+            case 'SkillParameter':
+                attribute_to_get = 'smia_skill_parameters'
+            case 'Constraint':
+                attribute_to_get = 'smia_constraints'
+            case _:
+                # This case is not available
+                return
+
+        for param_name, param_value in getattr(bpmn_element, attribute_to_get).items():
+            if param_name == requested_element['attrib']:
+                return getattr(bpmn_element, attribute_to_get)[param_name]
+        return None
+
+    @staticmethod
     def update_bpmn_element_with_requested_data(bpmn_element, requested_element, data_value):
         attribute_to_update = None
         match requested_element['elementType']:
@@ -213,7 +229,7 @@ class SMIABPMNUtils:
                     "Hay que actualizar el [{}] desde el viejo valor [{}] con el nuevo [{}]".format(param_name,
                                                                                                     param_value,
                                                                                                     data_value))
-                bpmn_element.getattr(bpmn_element, attribute_to_update)[param_name] = data_value
+                getattr(bpmn_element, attribute_to_update)[param_name] = data_value
         return bpmn_element
 
     # Methods related to the BPMN SMIA attribute values format

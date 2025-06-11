@@ -49,6 +49,7 @@ class SPIAAASModelUtils:
                 file_name, file_extension = path.splitext(part_name)
                 if file_extension == '.bpmn':
                     bpmn_files_bytes.append(aasx_reader.reader.open_part(part_name).read())
+                    break
             else:
                 _logger.warning("No BPMN file exists within the AASX Package.")
             return bpmn_files_bytes

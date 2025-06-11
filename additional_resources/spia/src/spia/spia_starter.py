@@ -29,9 +29,9 @@ def main():
     smia_psswd = os.environ.get('AGENT_PASSWD')
 
     # TODO BORRAR (para pruebas)
-    smia_jid = "smia-pe@xmpp.jp"
-    smia_psswd = "gcis1234"
-    smia.load_aas_model('../smia_archive/config/aas/SPEIA_CeDRI_ScenarioA.aasx')
+    # smia_jid = "smia-pe@xmpp.jp"
+    # smia_psswd = "gcis1234"
+    # smia.load_aas_model('../smia_archive/config/aas/SPEIA_CeDRI_ScenarioA.aasx')
 
     # Create the agent object
     spia_agent = ExtensibleSMIAAgent(smia_jid, smia_psswd)

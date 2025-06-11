@@ -44,14 +44,16 @@ class ReceiveACLBehaviour(CyclicBehaviour):
         if msg:
             # This method will receive all ACL messages to the SPIA, so it will check if some of them are responses to
             # previous SPIA requests to unlock the associated BPMNPerformerBehaviour
-            print("Analyzing ACL message... Checking if it is a response from previous SPIA message... Unlocking SPIA...")
+            _logger.aclinfo("Analyzing ACL message... Checking if it is a response from previous SPIA message... "
+                            "Unlocking SPIA...")
             # Let's check if the BPMN performer behaviour is waiting for a response
             for behaviour in self.myagent.behaviours:
                 if str(behaviour.__class__.__name__) == 'BPMNPerformerBehaviour':
                     for thread, content in behaviour.acl_messages_responses.items():
                         if thread == msg.thread and content is None:
                             # In this case, the behaviour is waiting for the content
-                            _logger.info("The BPMNPerformerBehaviour is waiting for a content that has arrived.")
+                            _logger.aclinfo("BPMNPerformerBehaviour is waiting for a content [{}] that has arrived with"
+                                            " thread [{}] from [{}].".format(msg.body, msg.thread, msg.sender))
                             msg_parsed_body = acl_smia_messages_utils.get_parsed_body_from_acl_msg(msg)
                             if (msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB) ==
                                     FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE):

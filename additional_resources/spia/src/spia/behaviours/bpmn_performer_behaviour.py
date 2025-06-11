@@ -190,11 +190,14 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                         # following_element.smia_instance = 'winner of CNP'  # TODO MODIFICAR ESTA MANUALMENTE
 
                     # Now the following element is specified, so the data can be requested
-                    _logger.info("A data need to be requested to the SMIA instance {}".format(following_element.smia_instance))
-                    # TODO POR HACER: HABRIA QUE ENVIAR UN MENSAJE ACL
-                    datavalue = 'dataValue'  # TODO BORRAR ES UNA PRUEBA MANUAL
+                    _logger.info("The data {} need to be requested to the SMIA instance {} related to the following task "
+                                 "within the BPMN workflow.".format(following_request, following_element.smia_instance))
+                    required_data_ref = SMIABPMNUtils.get_required_data_from_bpmn_element(bpmn_element, following_request)
+                    required_data_value = await self.execute_acl_qp_aas_protocol(following_element.smia_instance,
+                        AASRelatedServicesInfo.AAS_DISCOVERY_SERVICE_GET_SM_VALUE_BY_REF, required_data_ref)
                     # When the data is obtained, it needs to be added to the BPMN element
-                    SMIABPMNUtils.update_bpmn_element_with_requested_data(bpmn_element, following_request, datavalue)
+                    SMIABPMNUtils.update_bpmn_element_with_requested_data(bpmn_element, following_request,
+                                                                          required_data_value)
 
             if task == SMIABPMNInfo.TASK_CHECK_TIMEOUT:
                 # TODO BORRAR: ESTO ES UNA PRUEBA MANUAL PARA QUE NO FALLE DE MOMENTO. Se podria realizar de la
@@ -322,13 +325,14 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
         return smia_instances_id_list
 
 
-    async def execute_acl_qp_aas_protocol(self, smia_instance_id, requested_aas_ref):
+    async def execute_acl_qp_aas_protocol(self, smia_instance_id, aas_service_id, requested_aas_ref):
         """
         This method executes the FIPA-ACL QP interaction protocol (Query Protocol), to query an AAS element to a given
         SMIA instance.
 
         Args:
             smia_instance_id (str): identifier of SMIA instance to be the requested.
+            aas_service_id (str): identifier of AAS service to be the requested.
             requested_aas_ref (str): reference of the AAS element to be queried.
 
         Returns:
@@ -339,9 +343,8 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
             FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_REF, ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_SERVICE,
             protocol='fipa-query', msg_body=await acl_smia_messages_utils.generate_json_from_schema(
                 ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_SERVICE,
-                serviceID=AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_ASSET_BY_SMIA,
-                serviceType=AASRelatedServicesInfo.AAS_SERVICE_TYPE_DISCOVERY,
-                serviceParams=smia_instance_id))
+                serviceID=aas_service_id, serviceType=AASRelatedServicesInfo.AAS_SERVICE_TYPE_DISCOVERY,
+                serviceParams=requested_aas_ref))
         _logger.aclinfo("FIPA-QP initiated with {} to obtain the AAS element {}".format(smia_instance_id, requested_aas_ref))
         await self.send_acl_and_wait(query_acl_msg)
         # When the data has been received, it will be obtained from the global dictionary and will be returned
