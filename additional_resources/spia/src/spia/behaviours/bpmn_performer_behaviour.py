@@ -112,6 +112,9 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
             # The BPMN element is performed and, when finished, the next one is obtained
             await self.execute_bpmn_element(current_elem)
             current_elem = SMIABPMNUtils.get_next_bpmn_element(self.process_parser, current_elem)
+
+            # A one-second wait will be added between the execution of each step
+            await asyncio.sleep(1)
         # When it is arrived to an EndEvent the current_elem is None, so the BPMN can finish
         _logger.info("BPMN workflow completed successfully.")
 

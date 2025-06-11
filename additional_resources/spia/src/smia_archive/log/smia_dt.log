@@ -5225,3 +5225,59 @@ AttributeError: 'NoneType' object has no attribute 'execute_acl_cnp_protocol'
 2025-06-03 18:00:50,648 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
 2025-06-03 18:00:56,293 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
 2025-06-03 18:00:56,295 [gcis2] [INFO] client shutting down (on request) line:975
+2025-06-11 11:08:32,610 [__main__] [INFO] Initializing SPIA ... line:18
+2025-06-11 11:08:32,610 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:286
+2025-06-11 11:08:32,617 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-11 11:08:32,618 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-11 11:08:32,624 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-11 11:08:32,626 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/SPEIA_CeDRI_ScenarioA.aasx file is already in SMIA archive. line:180
+2025-06-11 11:08:32,626 [smia] [INFO] AAS model SPEIA_CeDRI_ScenarioA.aasx copied to the SMIA Archive. line:91
+2025-06-11 11:08:32,660 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ReceiveACLBehaviour line:43
+2025-06-11 11:08:32,662 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/BPMNPerformerBehaviour line:43
+2025-06-11 11:08:35,642 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-06-11 11:08:36,798 [gcis2] [INFO] bound to jid: gcis2@xmpp.jp/1467002127103588705616418471618 line:935
+2025-06-11 11:08:37,085 [gcis2.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB8xNDY3MDAyMTI3MTAzNTg4NzA1NjE2NDE4NDcxNjE4bQAAAAgMPiOUJnhgiw==' line:2209
+2025-06-11 11:08:37,675 [spade.Agent] [INFO] Agent gcis2@xmpp.jp connected and authenticated. line:163
+2025-06-11 11:08:37,675 [smia.agents.smia_agent] [INFO] Setting up gcis2@xmpp.jp SMIA... line:98
+2025-06-11 11:08:37,675 [smia.agents.smia_agent] [INFO] gcis2@xmpp.jp setup finished correctly. line:118
+2025-06-11 11:08:37,676 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-06-11 11:08:37,676 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-11 11:08:37,676 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:38
+2025-06-11 11:08:37,712 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-11 11:08:37,724 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:77
+2025-06-11 11:08:37,724 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [Self-configurablePlanningExecutionIndustrialAgents] and the identifier used to start the agent [gcis2] do not match. This can result in errors during SMIA runtime. line:89
+2025-06-11 11:08:37,725 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-11 11:08:37,758 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-11 11:08:39,190 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-06-11 11:08:39,569 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-06-11 11:08:39,569 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-06-11 11:08:40,566 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['RequestNegotiationCapability', 'AutomatedPlanningCapability']
+	- Analyzed capability constraints: []
+	- Analyzed skills: ['RequestNegotiationBehaviour', 'AutomatedBPMNBehaviour']
+	- Analyzed skill interfaces: []
+	- Analyzed skill parameters: ['CeDRI_ScenarioA_BPMN_file']
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-06-11 11:08:40,566 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-06-11 11:08:40,567 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-06-11 11:08:40,583 [smia.states.state_booting] [INFO] Sending the infrastructure service request to SMIA ISM to register the SMIA instance in the SMIA KB. line:84
+2025-06-11 11:08:40,879 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:87
+2025-06-11 11:08:45,881 [smia.states.state_booting] [WARNING] The registry of the SMIA instance gcis2@xmpp.jp has not been completed. Check the SMIA ISM or the SMIA KB. line:100
+2025-06-11 11:08:45,882 [smia.states.state_booting] [INFO] gcis2@xmpp.jp agent has finished it Boot state. line:61
+2025-06-11 11:08:45,882 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-06-11 11:08:45,882 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-11 11:08:45,883 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-11 11:08:45,886 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:82
+2025-06-11 11:08:45,886 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:39
+2025-06-11 11:08:45,886 [behaviours.receive_acl_behaviour] [INFO] ReceiveACLBehaviour starting... line:34
+2025-06-11 11:08:45,886 [behaviours.bpmn_performer_behaviour] [INFO] BPMNPerformerBehaviour starting... line:52
+2025-06-11 11:08:45,886 [behaviours.bpmn_performer_behaviour] [INFO] Obtaining the BPMN file content... line:55
+2025-06-11 11:08:45,888 [utilities.spia_aas_model_utils] [WARNING] No BPMN file exists within the AASX Package. line:53
+2025-06-11 11:08:45,889 [behaviours.bpmn_performer_behaviour] [INFO] The BPMN file content for this SPIA obtained and stored. line:59
+2025-06-11 11:08:45,899 [utilities.smia_bpmn_utils] [INFO] All SMIA attributes values have been added to the process parser objects. line:59
+2025-06-11 11:08:45,899 [behaviours.bpmn_performer_behaviour] [INFO] Obtaining the SMIA instance identifier for asset [https://abb/industrialRobot/asset/5374_4192_5052_5532]. line:100
+2025-06-11 11:08:45,921 [behaviours.bpmn_performer_behaviour] [ACLINFO] FIPA-RP with an AAS Infrastructure Service initiated with SMIA ISM to obtain the SMIA instance identifier for asset https://abb/industrialRobot/asset/5374_4192_5052_5532 line:255
+2025-06-11 11:08:55,879 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:114
+2025-06-11 11:08:55,879 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SPIA (ReceiveACLBehaviour) line:70
+2025-06-11 11:09:04,198 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
