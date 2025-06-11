@@ -55,7 +55,8 @@ class StateBooting(State):
 
         # When all initialization tasks have been completed, the SMIA will try to register in the SMIA KB through an
         # infrastructure service provided by the SMIA ISM
-        await self.send_register_acl_message()
+        if acl_smia_messages_utils.get_agent_id_from_jid(self.agent.jid) != AASRelatedServicesInfo.SMIA_ISM_ID:
+            await self.send_register_acl_message()
 
         # Finished the Boot State the agent can move to the next state
         _logger.info(f"{self.agent.jid} agent has finished it Boot state.")
@@ -75,7 +76,8 @@ class StateBooting(State):
                               'status': 'Running', 'startedTimeStamp': GeneralUtils.get_current_timestamp(),
                               'smiaVersion': smia.__version__}
         register_acl_msg = await inter_smia_interactions_utils.create_acl_smia_message(
-            AASRelatedServicesInfo.SMIA_ISM_ID, await acl_smia_messages_utils.create_random_thread(self.agent),
+            'gcis1@xmpp.jp', await acl_smia_messages_utils.create_random_thread(self.agent),
+            # AASRelatedServicesInfo.SMIA_ISM_ID, await acl_smia_messages_utils.create_random_thread(self.agent),
             FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST, ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE,
             protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL, msg_body=await acl_smia_messages_utils.
             generate_json_from_schema(ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE, serviceID=
