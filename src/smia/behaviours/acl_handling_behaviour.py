@@ -61,26 +61,28 @@ class ACLHandlingBehaviour(CyclicBehaviour):
                     self, msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_NOT_UNDERSTOOD)
                 return  # The run method is terminated to restart checking for new messages
 
-            # First, the message body will be checked against the associated ontology JSON Schema
-            try:
-                # The msg body will be parsed to a JSON object
-                msg_json_body = json.loads(msg.body)
+            # First, the message body will be checked against the associated ontology JSON Schema (only if it is not an
+            # inform message, since this type of message can be strings)
+            if msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB) != FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM:
+                try:
+                    # The msg body will be parsed to a JSON object
+                    msg_json_body = json.loads(msg.body)
 
-                await inter_smia_interactions_utils.check_received_request_data_structure(
-                    msg_json_body, ACLSMIAJSONSchemas.JSON_SCHEMA_ACL_SMIA_ONTOLOGIES_MAP.get(
-                        msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB)))
-            except (RequestDataError, JSONDecodeError) as cap_request_error:
-                # The added data are not valid, so a Refuse message to the requester must be sent
-                if isinstance(cap_request_error, JSONDecodeError):
-                    cap_request_error.message = f"JSON error: {str(cap_request_error)}"
-                svc_execution_error = ServiceRequestExecutionError(msg.thread, cap_request_error.message,
-                                                                   msg.get_metadata(
-                                                                       FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB), self)
-                await svc_execution_error.handle_service_execution_error()
-                _logger.warning("The sender [{}] has sent an message with thread [{}] that has invalid data, therefore "
-                                "it has been informed with a Refuse ACL message".format(
-                    acl_smia_messages_utils.get_sender_from_acl_msg(msg), msg.thread))
-                return  # The run method is terminated to restart checking for new messages
+                    await inter_smia_interactions_utils.check_received_request_data_structure(
+                        msg_json_body, ACLSMIAJSONSchemas.JSON_SCHEMA_ACL_SMIA_ONTOLOGIES_MAP.get(
+                            msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB)))
+                except (RequestDataError, JSONDecodeError) as cap_request_error:
+                    # The added data are not valid, so a Refuse message to the requester must be sent
+                    if isinstance(cap_request_error, JSONDecodeError):
+                        cap_request_error.message = f"JSON error: {str(cap_request_error)}"
+                    svc_execution_error = ServiceRequestExecutionError(msg.thread, cap_request_error.message,
+                                                                       msg.get_metadata(
+                                                                           FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB), self)
+                    await svc_execution_error.handle_service_execution_error()
+                    _logger.warning("The sender [{}] has sent an message with thread [{}] that has invalid data, therefore "
+                                    "it has been informed with a Refuse ACL message".format(
+                        acl_smia_messages_utils.get_sender_from_acl_msg(msg), msg.thread))
+                    return  # The run method is terminated to restart checking for new messages
 
             # Depending on the message ontology, the associated specific behavior will be added to the agent to handle
             # the required actions
