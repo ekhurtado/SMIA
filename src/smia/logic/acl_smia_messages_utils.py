@@ -8,42 +8,42 @@ from smia.logic.inter_smia_interactions_utils import check_received_request_data
 
 # Methods related to agent JIDs
 # -----------------------------
-async def get_xmpp_server_from_jid(agent_object):
+async def get_xmpp_server_from_jid(agent_object_jid):
     """
     This method get the XMPP server from the JID of the agent.
 
     Args:
-        agent_object (spade.Agent): the SPADE agent object of the SMIA agent.
+        agent_object_jid: the JID object of the SMIA SPADE agent.
 
     Returns:
         str: XMPP server.
     """
     try:
-        return str(agent_object.jid.domain)
+        return str(agent_object_jid.domain)
     except AttributeError:
         pass
     try:
-        return str(agent_object.jid).split('@')[1]
+        return str(agent_object_jid).split('@')[1]
     except AttributeError:
         pass
     return None
 
-async def get_agent_id_from_jid(agent_object):
+async def get_agent_id_from_jid(agent_object_jid):
     """
     This method get the identifier of the agent from the JID of the agent.
 
     Args:
-        agent_object (spade.Agent): the SPADE agent object of the SMIA agent.
+        agent_object_jid: the JID object of the SMIA SPADE agent.
 
     Returns:
         str: XMPP server.
     """
     try:
-        return str(agent_object.jid.localpart)
+        return str(agent_object_jid.localpart)
     except AttributeError:
         pass
     try:
-        return str(agent_object.jid).split('@')[0]
+        return str(agent_object_jid).split('@')[0]
     except AttributeError:
         pass
     return None
@@ -77,7 +77,7 @@ async def create_random_thread(agent_object):
     Returns:
         str: thread value
     """
-    return (f"{await get_agent_id_from_jid(agent_object)}-"
+    return (f"{await get_agent_id_from_jid(agent_object.jid)}-"
             f"{''.join(random.choices(string.ascii_letters + string.digits, k=5)).lower()}")
 
 # Methods related to body of the ACL messages
