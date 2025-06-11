@@ -75,16 +75,18 @@ class StateBooting(State):
                               'aasID':await self.agent.aas_model.get_aas_attribute_value('id'),
                               'status': 'Running', 'startedTimeStamp': GeneralUtils.get_current_timestamp(),
                               'smiaVersion': smia.__version__}
+        smia_ism_jid = (f"{AASRelatedServicesInfo.SMIA_ISM_ID}@"
+                        f"{await acl_smia_messages_utils.get_xmpp_server_from_jid(self.agent.jid)}")
         register_acl_msg = await inter_smia_interactions_utils.create_acl_smia_message(
-            'gcis1@xmpp.jp', await acl_smia_messages_utils.create_random_thread(self.agent),
-            # AASRelatedServicesInfo.SMIA_ISM_ID, await acl_smia_messages_utils.create_random_thread(self.agent),
+            # 'gcis1@xmpp.jp', await acl_smia_messages_utils.create_random_thread(self.agent),
+            smia_ism_jid, await acl_smia_messages_utils.create_random_thread(self.agent),
             FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST, ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE,
             protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL, msg_body=await acl_smia_messages_utils.
             generate_json_from_schema(ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE, serviceID=
             AASRelatedServicesInfo.AAS_INFRASTRUCTURE_REGISTRY_SERVICE_REGISTER_SMIA, serviceType=
             AASRelatedServicesInfo.AAS_INFRASTRUCTURE_SERVICE_TYPE_REGISTRY, serviceParams= smia_instance_json))
-        _logger.info("Sending the infrastructure service request to SMIA ISM to register the SMIA instance in the SMIA "
-                     "KB.")
+        _logger.info("Sending the infrastructure service request to {} to register the SMIA instance in the SMIA "
+                     "KB.".format(smia_ism_jid))
         await self.send(register_acl_msg)
         _logger.info("Waiting for the confirmation of the registry in the SMIA KB...")
         msg = await self.receive(timeout=5)  # Timeout set to 5 seconds
