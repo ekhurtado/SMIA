@@ -52,7 +52,7 @@ class ReceiveACLBehaviour(CyclicBehaviour):
                         if thread == msg.thread and content is None:
                             # In this case, the behaviour is waiting for the content
                             _logger.info("The BPMNPerformerBehaviour is waiting for a content that has arrived.")
-                            msg_parsed_body = await acl_smia_messages_utils.get_parsed_body_from_acl_msg(msg)
+                            msg_parsed_body = acl_smia_messages_utils.get_parsed_body_from_acl_msg(msg)
                             if (msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB) ==
                                     FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE):
                                 _logger.error("SPIA has received a Failure for the thread [{}], so it cannot continue. "

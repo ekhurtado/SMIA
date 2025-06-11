@@ -5,6 +5,7 @@ from SpiffWorkflow.bpmn.parser import BpmnParser
 from SpiffWorkflow.bpmn.specs.defaults import ServiceTask
 from smia import CriticalError
 from smia.logic import inter_smia_interactions_utils, acl_smia_messages_utils
+from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
 from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo, ACLSMIAJSONSchemas
 from spade.behaviour import OneShotBehaviour
 
@@ -57,6 +58,9 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
         if self.bpmn_file_bytes is None:
             CriticalError("BPMN file not found, so the SPIA cannot start.")
         _logger.info("The BPMN file content for this SPIA obtained and stored.")
+
+        _logger.info("SPIA will wait 15 seconds for other instances to complete their initializations..")
+        await asyncio.sleep(15)
 
     async def run(self):
         """
@@ -233,8 +237,8 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
             spade.message.Message: SPADE-ACL-SMIA message object
         """
         return await inter_smia_interactions_utils.create_acl_smia_message(
-            f"gcis1@{await acl_smia_messages_utils.get_xmpp_server_from_jid(self.myagent)}",   # TODO BORRAR
-            # f"smia-ism@{await acl_smia_messages_utils.get_xmpp_server_from_jid(self.myagent)}",   # TODO SE PODRIA HACER UN METODO EN SMIA PARA RECOGER EL XMPP SERVER
+            f"{AASRelatedServicesInfo.SMIA_ISM_ID}@"
+            f"{await acl_smia_messages_utils.get_xmpp_server_from_jid(self.myagent.jid)}",   # .TODO SE PODRIA HACER UN METODO EN SMIA PARA RECOGER EL XMPP SERVER
             await acl_smia_messages_utils.create_random_thread(self.myagent), FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST,
             ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE, protocol='fipa-request', msg_body=msg_body)
 
@@ -293,7 +297,8 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
         # First, it will obtain all the asset identifiers associated to the given capability
         request_assets_acl_msg = await self.create_acl_message_to_smia_ism(await acl_smia_messages_utils.
             generate_json_from_schema(ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE,
-            serviceID='GetAllAssetIDByCapability', serviceType='DiscoveryService', serviceParams=capability_iri))
+            serviceID=AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_ALL_ASSET_BY_CAPABILITY,
+            serviceType=AASRelatedServicesInfo.AAS_SERVICE_TYPE_DISCOVERY, serviceParams=capability_iri))
         _logger.aclinfo("FIPA-RP with an AAS Infrastructure Service initiated with SMIA ISM to obtain the all the "
                         "assets associated to the capability {}".format(capability_iri))
         await self.send_acl_and_wait(request_assets_acl_msg)
@@ -307,7 +312,8 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
             if smia_instance_id is None:
                 # In this case it must be requested to the SMIA ISM, in order to obtain from the SMIA KB
                 request_smia_id_acl_msg = await self.create_acl_message_to_smia_ism(
-                    {'serviceID': 'GetSMIAInstanceIDByAssetID', 'serviceType': 'DiscoveryService',
+                    {'serviceID': AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_SMIA_BY_ASSET,
+                     'serviceType': AASRelatedServicesInfo.AAS_SERVICE_TYPE_DISCOVERY,
                      'serviceParams': asset_id})
                 await self.send_acl_and_wait(request_smia_id_acl_msg)
                 # When the data have been received it is added to the list
@@ -332,8 +338,10 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
             smia_instance_id, await acl_smia_messages_utils.create_random_thread(self.myagent),
             FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_REF, ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_SERVICE,
             protocol='fipa-query', msg_body=await acl_smia_messages_utils.generate_json_from_schema(
-                ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_SERVICE, serviceID='GetAssetIDBySMIAInstanceID',
-                serviceType='DiscoveryService', serviceParams=smia_instance_id))
+                ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_SERVICE,
+                serviceID=AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_ASSET_BY_SMIA,
+                serviceType=AASRelatedServicesInfo.AAS_SERVICE_TYPE_DISCOVERY,
+                serviceParams=smia_instance_id))
         _logger.aclinfo("FIPA-QP initiated with {} to obtain the AAS element {}".format(smia_instance_id, requested_aas_ref))
         await self.send_acl_and_wait(query_acl_msg)
         # When the data has been received, it will be obtained from the global dictionary and will be returned

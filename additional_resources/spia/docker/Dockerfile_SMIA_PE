@@ -1,0 +1,11 @@
+FROM ekhurtado/smia:latest-alpine-base
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY spia /smia_pe
+
+WORKDIR /smia_pe
+
+CMD ["python3", "-u", "spia_starter.py"]
+#CMD [ "tail", "-f", "/dev/null"]

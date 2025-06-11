@@ -1,0 +1,10 @@
+#version: "2"
+
+services:
+
+  smia-pe:
+    image: ekhurtado/smia-tools:latest-smia-pe
+    build:
+      context: .
+      dockerfile: Dockerfile_SMIA_PE
+    container_name: smia-pe
