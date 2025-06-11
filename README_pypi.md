@@ -1,6 +1,6 @@
 # Self-configurable Manufacturing Industrial Agents: SMIA 
 
-[![Python versions](https://img.shields.io/pypi/pyversions/smia.svg)](https://pypi.org/project/smia/) [![Docker badge](https://img.shields.io/docker/pulls/ekhurtado/smia.svg)](https://hub.docker.com/r/ekhurtado/smia/) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/ekhurtado/SMIA?sort=semver) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e87506fff1bb4a438c20e11bb7295f51)](https://app.codacy.com/gh/ekhurtado/SMIA/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) [![Documentation Status](https://readthedocs.org/projects/i4-0-smia/badge/?version=latest)](https://i4-0-smia.readthedocs.io/en/latest/)
+[![Python versions](https://img.shields.io/pypi/pyversions/smia.svg)](https://pypi.org/project/smia/) [![Docker badge](https://img.shields.io/docker/pulls/ekhurtado/smia.svg)](https://hub.docker.com/r/ekhurtado/smia/) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/ekhurtado/SMIA?sort=semver) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e87506fff1bb4a438c20e11bb7295f51)](https://app.codacy.com/gh/ekhurtado/SMIA/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) [![Documentation Status](https://readthedocs.org/projects/smia/badge/?version=latest)](https://smia.readthedocs.io/en/latest/)
 
 
 ![SMIA Logo](https://raw.githubusercontent.com/ekhurtado/SMIA/refs/heads/main/images/SMIA_logo_positive.png "SMIA main logo")
