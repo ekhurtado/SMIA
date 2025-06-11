@@ -55,7 +55,7 @@ class StateBooting(State):
 
         # When all initialization tasks have been completed, the SMIA will try to register in the SMIA KB through an
         # infrastructure service provided by the SMIA ISM
-        if acl_smia_messages_utils.get_agent_id_from_jid(self.agent.jid) != AASRelatedServicesInfo.SMIA_ISM_ID:
+        if await acl_smia_messages_utils.get_agent_id_from_jid(self.agent.jid) != AASRelatedServicesInfo.SMIA_ISM_ID:
             await self.send_register_acl_message()
 
         # Finished the Boot State the agent can move to the next state
