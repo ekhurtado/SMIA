@@ -322,6 +322,42 @@ class ExtendedAASModel:
                     if reference.value == sm_semantic_id:
                         return aas_object
 
+    async def get_submodel_by_template_id(self, template_id):
+        """
+        This method gets the Submodel object using its template identifier.
+
+        Args:
+            template_id (str): template identifier of the Submodel.
+
+        Returns:
+            basyx.aas.model.Submodel: Submodel in form of a Python object.
+        """
+        for aas_object in self.aas_model_object_store:
+            if isinstance(aas_object, basyx.aas.model.Submodel) and aas_object.administration is not None:
+                if aas_object.administration.template_id == template_id:
+                        return aas_object
+        return None
+
+    async def check_and_adapt_for_templates(self, reference_dict):
+        """
+        This method checks if the reference has any SubmodelElement model associated to any instance within the AAS
+        model of SMIA. If found, it adapts the received reference, modifying the template by its instance
+
+        Args:
+            reference_dict (dict): reference related to desired element in form of JSON
+
+        Returns:
+            dict: adapted reference object
+        """
+        for index, key in enumerate(reference_dict):
+            if await AASModelUtils.get_key_type_by_string(key['type']) == basyx.aas.model.KeyTypes.SUBMODEL:
+                submodel_instance_elem = await self.get_submodel_by_template_id(key['value'])
+                if submodel_instance_elem is not None:
+                    reference_dict[index]= {'type': key['type'], 'value': submodel_instance_elem.id}
+            # TODO PENSAR MAS TIPOS DE ELEMENTOS (para SubmodelElements habria que generar una referencia con los keys
+            #  pero solo hasta ese nivel: se podria usar para eso el index)
+        return reference_dict
+
     async def check_element_exist_in_namespaceset_by_id_short(self, namespaceset_elem, elem_id_short):
         """
         This method checks if an element exists in the NamespaceSet using its id_short.

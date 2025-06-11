@@ -209,6 +209,7 @@ class AASModelUtils:
         return ref_object
 
 
+
 class AASModelInfo:
     """This class contains the information related to AAS model."""
     SEMANTICID_SOFTWARE_NAMEPLATE_SUBMODEL = 'https://admin-shell.io/idta/SoftwareNameplate/1/0'

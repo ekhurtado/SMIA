@@ -264,8 +264,14 @@ class HandleAASRelatedSvcBehaviour(OneShotBehaviour):
                 if isinstance(self.received_body_json['serviceParams'], str):
                     self.received_body_json['serviceParams'] = await AASModelUtils.aas_model_reference_string_to_dict(
                         self.received_body_json['serviceParams'])
+
+                self.received_body_json['serviceParams'] = await self.myagent.aas_model.check_and_adapt_for_templates(
+                    self.received_body_json['serviceParams'])
+
                 aas_object_ref = await AASModelUtils.create_aas_reference_object(
                     'ModelReference', self.received_body_json['serviceParams'])
+
+
 
                 # When the appropriate Reference object is created, the requested SubmodelElement can be obtained
                 requested_sme = await self.myagent.aas_model.get_object_by_reference(aas_object_ref)
