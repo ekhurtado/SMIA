@@ -100,6 +100,7 @@ class HandleAASRelatedSvcBehaviour(OneShotBehaviour):
                     _logger.aclinfo(f"The SMIA has been informed about the asset-/agent-related service related to the "
                                     f"thread [{self.received_acl_msg.thread}] with the content:{self.received_acl_msg.body}.")
                     # TODO
+                    return
                 case _:
                     unsupported_performative_msg = ("Cannot handle the asset-/agent-related service of the ACL "
                                                     "interaction with thread [{}] because the performative [{}] is not"
@@ -207,6 +208,7 @@ class HandleAASRelatedSvcBehaviour(OneShotBehaviour):
                     _logger.aclinfo(f"The SMIA has been informed about the AAS service related to the thread"
                                     f" [{self.received_acl_msg.thread}] with the content:{self.received_acl_msg.body}.")
                     # TODO
+                    return
                 case _:
                     unsupported_performative_msg = ("Cannot handle the asset-/agent-related service of the ACL "
                                                     "interaction with thread [{}] because the performative [{}] is not"
