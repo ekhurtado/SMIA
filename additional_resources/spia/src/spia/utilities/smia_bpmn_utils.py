@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import re
 
@@ -257,3 +258,17 @@ class SMIABPMNUtils:
             except ValueError:
                 _logger.warning("The requested data in BPMN {} is not in a valid format.".format(requested_data_string))
         return requested_data_json_list
+
+
+    @staticmethod
+    async def perform_bpmn_timeout_check(agent_object, thread, timeout_value):
+        """
+        This method performs a timeout for an execution of a BPMN element. As the BPMNPerformerBehaviour will be waiting
+         for the response ACL message, in case of reaching the timeout value, it will check if the behaviour is still
+         waiting (ACL response has not received, so the BPMN element has not finished), and if true it will unlock the
+         BPMNPerformerBehaviour setting as response data ('ERROR: Timeout reached').
+        """
+        # Para usar este metodo habra que añadir esto justo antes de solicitar ejecutar la capacidad que tenga definido un timeout
+        # asyncio.create_task(SMIABPMNUtils.perform_bpmn_timeout_check())
+        await asyncio.sleep(timeout_value)
+        print("!!!!!!!!!!!!!!!!!!!!!! REACHED")

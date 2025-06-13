@@ -262,6 +262,7 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
             serviceID='GetSMIAInstanceIDByAssetID', serviceType='DiscoveryService', serviceParams=asset_id))
         _logger.aclinfo("FIPA-RP with an AAS Infrastructure Service initiated with SMIA ISM to obtain the SMIA instance"
                         " identifier for asset {}".format(asset_id))
+
         await self.send_acl_and_wait(request_acl_msg)
         # When the data has been received, it will be obtained from the global dictionary and will be returned
         return acl_smia_messages_utils.get_parsed_body_from_acl_msg(self.acl_messages_responses[request_acl_msg.thread])
