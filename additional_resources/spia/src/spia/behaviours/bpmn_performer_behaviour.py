@@ -263,7 +263,7 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                         " identifier for asset {}".format(asset_id))
         await self.send_acl_and_wait(request_acl_msg)
         # When the data has been received, it will be obtained from the global dictionary and will be returned
-        return self.acl_messages_responses[request_acl_msg.thread]
+        return acl_smia_messages_utils.get_parsed_body_from_acl_msg(self.acl_messages_responses[request_acl_msg.thread])
 
     async def get_asset_id_by_smia_instance_id(self, smia_instance_id):
         """
@@ -285,7 +285,7 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                         "identifier for the SMIA instance {}".format(smia_instance_id))
         await self.send_acl_and_wait(request_acl_msg)
         # When the data has been received, it will be obtained from the global dictionary and will be returned
-        return self.acl_messages_responses[request_acl_msg.thread]
+        return acl_smia_messages_utils.get_parsed_body_from_acl_msg(self.acl_messages_responses[request_acl_msg.thread])
 
     async def get_smia_instances_id_by_capability(self, capability_iri):
         """
@@ -306,7 +306,8 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                         "assets associated to the capability {}".format(capability_iri))
         await self.send_acl_and_wait(request_assets_acl_msg)
         # When the assets have been received, it will be obtained from the global dictionary
-        assets_id_list = self.acl_messages_responses[request_assets_acl_msg.thread]
+        assets_id_list = acl_smia_messages_utils.get_parsed_body_from_acl_msg(
+            self.acl_messages_responses[request_assets_acl_msg.thread])
         # For each asset, its associated SMIA instance ID will be obtained. It may have already been obtained, so check
         # whether the BPMN instances already have the value
         smia_instances_id_list = []
@@ -320,7 +321,8 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                      'serviceParams': asset_id})
                 await self.send_acl_and_wait(request_smia_id_acl_msg)
                 # When the data have been received it is added to the list
-                smia_instance_id = self.acl_messages_responses[request_smia_id_acl_msg.thread]
+                smia_instance_id = acl_smia_messages_utils.get_parsed_body_from_acl_msg(
+                    self.acl_messages_responses[request_smia_id_acl_msg.thread])
             smia_instances_id_list.append(smia_instance_id)
         return smia_instances_id_list
 
@@ -341,14 +343,14 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
         query_acl_msg = await inter_smia_interactions_utils.create_acl_smia_message(
             smia_instance_id, await acl_smia_messages_utils.create_random_thread(self.myagent),
             FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_REF, ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_SERVICE,
-            protocol='fipa-query', msg_body=await acl_smia_messages_utils.generate_json_from_schema(
+            protocol=FIPAACLInfo.FIPA_ACL_QUERY_PROTOCOL, msg_body=await acl_smia_messages_utils.generate_json_from_schema(
                 ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_SERVICE,
                 serviceID=aas_service_id, serviceType=AASRelatedServicesInfo.AAS_SERVICE_TYPE_DISCOVERY,
                 serviceParams=requested_aas_ref))
         _logger.aclinfo("FIPA-QP initiated with {} to obtain the AAS element {}".format(smia_instance_id, requested_aas_ref))
         await self.send_acl_and_wait(query_acl_msg)
         # When the data has been received, it will be obtained from the global dictionary and will be returned
-        return self.acl_messages_responses[query_acl_msg.thread]
+        return acl_smia_messages_utils.get_parsed_body_from_acl_msg(self.acl_messages_responses[query_acl_msg.thread])
 
     async def execute_acl_cnp_protocol(self, smia_instance_ids, bpmn_element):
         """
@@ -367,11 +369,12 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
         for smia_instance_id in smia_instance_ids:
             cfp_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
                 smia_instance_id, cfp_thread, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_CFP,
-                ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE, protocol='fipa-contract-net', # TODO AÑADIR LOS PROTOCOLOS EN SMIA
+                ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE, protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
                 msg_body=await acl_smia_messages_utils.generate_json_from_schema(
                     ACLSMIAJSONSchemas.JSON_SCHEMA_CSS_SERVICE, capabilityIRI=bpmn_element.smia_capability,
                     skillIRI=bpmn_element.smia_skill, constraints=bpmn_element.smia_constraints,
-                    skillParams=bpmn_element.smia_skill_parameters, negCriterion='NegotiateBasedOnRAM',
+                    skillParams=bpmn_element.smia_skill_parameters,
+                    negCriterion='http://www.w3id.org/hsu-aut/css#NegotiateBasedOnRAM',
                     negRequester=str(self.myagent.jid), negTargets=smia_instance_ids))
             await self.send(cfp_acl_message)
         _logger.aclinfo("FIPA-CNP initiated with SMIA candidates {} to perform capability {}".format(
@@ -381,7 +384,8 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
         await self.acl_request_event.wait()
         self.acl_request_event.clear()
 
-        return self.acl_messages_responses[cfp_thread]
+        # In this case, the sender of the message is the winner, so it will return its identifier
+        return acl_smia_messages_utils.get_sender_from_acl_msg(self.acl_messages_responses[cfp_thread])
 
 
     async def execute_acl_rp_css_protocol(self, bpmn_element):
@@ -395,11 +399,10 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
         Returns:
             object: returns the response content.
         """
-        # TODO FALTA PROBARLO
         request_css_acl_msg = await inter_smia_interactions_utils.create_acl_smia_message(
             bpmn_element.smia_instance, await acl_smia_messages_utils.create_random_thread(self.myagent),
             FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST, ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE,
-            protocol='fipa-request', msg_body=await acl_smia_messages_utils.generate_json_from_schema(
+            protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL, msg_body=await acl_smia_messages_utils.generate_json_from_schema(
                 ACLSMIAJSONSchemas.JSON_SCHEMA_CSS_SERVICE, capabilityIRI=bpmn_element.smia_capability,
                 skillIRI=bpmn_element.smia_skill, constraints=bpmn_element.smia_constraints,
                 skillParams=bpmn_element.smia_skill_parameters))
@@ -407,4 +410,5 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                      "[{}]".format(bpmn_element.smia_instance, bpmn_element.smia_capability))
         await self.send_acl_and_wait(request_css_acl_msg)
         # When the data has been received, it will be obtained from the global dictionary and will be returned
-        return self.acl_messages_responses[request_css_acl_msg.thread]
+        return acl_smia_messages_utils.get_parsed_body_from_acl_msg(
+            self.acl_messages_responses[request_css_acl_msg.thread])

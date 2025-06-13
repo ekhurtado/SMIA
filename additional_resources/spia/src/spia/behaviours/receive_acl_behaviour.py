@@ -64,7 +64,7 @@ class ReceiveACLBehaviour(CyclicBehaviour):
                             if (msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB) ==
                                     FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM):
                                 # In this case the content is valid
-                                behaviour.acl_messages_responses[thread] = msg_parsed_body
+                                behaviour.acl_messages_responses[thread] = msg
                                 # Now the behaviour can be unlocked
                                 behaviour.acl_request_event.set()
                                 _logger.info("BPMNPerformerBehaviour unlocked and added the response content data.")
