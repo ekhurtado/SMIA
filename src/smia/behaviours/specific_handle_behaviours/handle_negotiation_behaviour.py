@@ -84,7 +84,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 # Once the negotiation value is reached, the negotiation management can begin. The first step is to send the
                 # PROPOSE message with your own value to the other participants in the negotiation.
                 propose_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
-                    'None', await acl_smia_messages_utils.create_random_thread(self.myagent),
+                    'N/A', await acl_smia_messages_utils.create_random_thread(self.myagent),
                     FIPAACLInfo.FIPA_ACL_PERFORMATIVE_CFP,
                     self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB),
                     protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
@@ -144,9 +144,13 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 _logger.info("The SMIA has won the negotiation with thread [" + msg.thread + "]")
 
                 # As the winner, it will reply to the sender with the result of the negotiation
-                await inter_smia_interactions_utils.send_response_msg_from_received(
-                    self, self.received_acl_msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM,
-                    response_body={'winner': True})
+                inform_acl_msg = await inter_smia_interactions_utils.create_acl_smia_message(
+                    self.received_body_json['negRequester'], self.received_acl_msg.thread,
+                    FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM,
+                    self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB),
+                    protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
+                    msg_body={'winner': True})
+                await self.send(inform_acl_msg)
                 _logger.aclinfo("ACL response sent for the result of the negotiation request with thread ["
                                 + msg.thread + "]")
 
