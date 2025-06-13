@@ -55,160 +55,153 @@ class NegotiatingBehaviour(CyclicBehaviour):
             _logger.aclinfo("         + Message received on SMIA (NegotiatingBehaviour) from {}".format(msg.sender))
             _logger.aclinfo("                 |___ Message received with content: {}".format(msg.body))
 
-            # If the ontology value is not within the valid values in the SMIA approach, a 'not understood' ACL message
-            # is returned.
-            if (msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB) not in
-                    ACLSMIAJSONSchemas.JSON_SCHEMA_ACL_SMIA_ONTOLOGIES_MAP.keys()):
-                await inter_smia_interactions_utils.send_response_msg_from_received(
-                    self, msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_NOT_UNDERSTOOD)
-                return  # The run method is terminated to restart checking for new messages
+            # This behaviour only manages interactions related to negotiations (FIPA-CNP protocol)
 
-            # First, the message body will be checked against the associated ontology JSON Schema
-            try:
-                # The msg body will be parsed to a JSON object
-                msg_json_body = json.loads(msg.body)
+            # First, the message body will be checked against the associated ontology JSON Schema (only if it is not an
+            # inform message, since this type of message can be strings)
+            if msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB) != FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM:
+                try:
+                    # The msg body will be parsed to a JSON object
+                    msg_json_body = json.loads(msg.body)
 
-                await inter_smia_interactions_utils.check_received_request_data_structure(
-                    msg_json_body, ACLSMIAJSONSchemas.JSON_SCHEMA_ACL_SMIA_ONTOLOGIES_MAP.get(
-                        msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB)))
-            except (RequestDataError, JSONDecodeError) as cap_request_error:
-                # The added data are not valid, so a Refuse message to the requester must be sent
-                if isinstance(cap_request_error, JSONDecodeError):
-                    cap_request_error.message = f"JSON error: {str(cap_request_error)}"
-                svc_execution_error = ServiceRequestExecutionError(msg.thread, cap_request_error.message,
-                                                                   msg.get_metadata(
-                                                                       FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB), self)
-                await svc_execution_error.handle_service_execution_error()
-                _logger.warning(
-                    "The sender [{}] has request a FIPA-CNP protocol with thread [{}] that has invalid data, therefore "
-                    "it has been informed with a Refuse ACL message".format(
-                        acl_smia_messages_utils.get_sender_from_acl_msg(msg), msg.thread))
-                return  # The run method is terminated to restart checking for new messages
+                    await inter_smia_interactions_utils.check_received_request_data_structure(
+                        msg_json_body, ACLSMIAJSONSchemas.JSON_SCHEMA_ACL_SMIA_ONTOLOGIES_MAP.get(
+                            msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB)))
+                except (RequestDataError, JSONDecodeError) as cap_request_error:
+                    # The added data are not valid, so a Refuse message to the requester must be sent
+                    if isinstance(cap_request_error, JSONDecodeError):
+                        cap_request_error.message = f"JSON error: {str(cap_request_error)}"
+                    svc_execution_error = ServiceRequestExecutionError(msg.thread, cap_request_error.message,
+                                                                       msg.get_metadata(
+                                                                           FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB), self)
+                    await svc_execution_error.handle_service_execution_error()
+                    _logger.warning(
+                        "The sender [{}] has sent an message with thread [{}] that has invalid data, therefore "
+                        "it has been informed with a Refuse ACL message".format(
+                            acl_smia_messages_utils.get_sender_from_acl_msg(msg), msg.thread))
+                    return  # The run method is terminated to restart checking for new messages
 
-            # When the received message has been analyzed, it will add the behaviour to handle this specific request of
-            # FIPA-CNP protocol
-            # TODO DENTRO HAY QUE AÑADIR en el metodo 'on_start' QUE, SI ES EL UNICO TARGET, RESPONDA DIRECTAMENTE QUE
-            #  ES EL GANADOR (ese codigo en el enfoque antiguo se hace aqui)
-            handle_neg_behav = HandleNegotiationBehaviour(self.agent, received_acl_msg=msg)
-            # The behaviour is added with an ACL template to only receive 'propose' messages with the thread of the
-            # received message
-            self.myagent.add_behaviour(handle_neg_behav, GeneralUtils.create_acl_template(
-                performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_PROPOSE, thread=msg.thread))
+            # When the message content has been validated, the specific behavior will be added to the agent to handle
+            # the required actions within the FIPA-CNP protocol
+            specific_neg_handling_behaviour = HandleNegotiationBehaviour(self.agent, received_acl_msg=msg)
+            self.myagent.add_behaviour(specific_neg_handling_behaviour)
+            _logger.info("Specific behaviour added to the agent to handle the message with thread [{}].".format(
+                msg.thread))
 
 
-            # TODO BORRAR, ES CODIGO DEL ENFOQUE ANTIGUO
-            # The msg body will be parsed to a JSON object
-            msg_json_body = json.loads(msg.body)
-
-            # TODO quizas hay que comprobar que el thread no existe? Para hacer al igual que en la peticion de
-            #  servicios, utilizar el thread como identificador. Hay que pensarlo, ya que de este modo el thread
-            #  serviría para un unico servicio a un AAS
-
-            # Depending on the performative of the message, the agent will have to perform some actions or others
-            match msg.get_metadata('performative'):
-                case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_CFP:
-                    _logger.aclinfo("The agent has received a request to start a negotiation (CFP) with thread ["
-                                    + msg.thread + "]")
-
-                    # Since the negotiation is an agent capability, it will be checked the validity of the received data
-                    cap_req_data = None
-                    try:
-                        cap_req_data = inter_smia_interactions_utils.create_svc_json_data_from_acl_msg(msg)
-                        await self.check_received_capability_request_data(cap_req_data)
-                    except RequestDataError as cap_request_error:
-                        # The data are not valid, so the requester must be informed.
-                        acl_msg = inter_smia_interactions_utils.create_inter_smia_response_msg(
-                            receiver=acl_smia_messages_utils.get_sender_from_acl_msg(msg),
-                            thread=msg.thread,
-                            performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE,
-                            ontology=FIPAACLInfo.FIPA_ACL_ONTOLOGY_SVC_NEGOTIATION,   # TODO pensar si definir un NegRequest y NegResponse
-                            service_id=msg_json_body['serviceID'],
-                            service_type=msg_json_body['serviceType'],
-                            service_params=json.dumps({'reason': cap_request_error.message})
-                        )
-                        await self.send(acl_msg)
-                        _logger.warning("Capability request with thread [{}] has invalid data, therefore the requester"
-                                        " has been informed".format(msg.thread))
-                        return  # The run method is terminated to restart checking for new messages.
-
-                    # First, some useful information is obtained from the msg
-                    targets_list = cap_req_data['serviceData']['serviceParams']['targets'].split(',')
-                    neg_requester_jid = acl_smia_messages_utils.get_sender_from_acl_msg(msg)
-                    neg_criteria = cap_req_data['serviceData']['serviceParams'][CapabilitySkillACLInfo.REQUIRED_SKILL_NAME]
-                    if len(targets_list) == 1:
-                        # There is only one target available (therefore, it is the only one, so it is the winner)
-                        _logger.info("The SMIA has won the negotiation with thread [" + msg.thread + "]")
-
-                        # As the winner, it will reply to the sender with the result of the negotiation
-                        acl_response_msg = negotiation_utils.create_neg_response_msg(
-                            receiver=neg_requester_jid,
-                            thread=msg.thread,
-                            service_id=msg_json_body['serviceID'],
-                            service_type=msg_json_body['serviceType'],
-                            winner=str(self.myagent.jid))
-                        await self.send(acl_response_msg)
-                        _logger.aclinfo("ACL response sent for the result of the negotiation request with thread ["
-                                        + msg.thread + "]")
-
-                        # The information will be stored in the log
-                        execution_info = {'capName': 'Negotiation',
-                                          'capType': CapabilitySkillOntologyUtils.AGENT_CAPABILITY_TYPE,
-                                          'participants': str(self.myagent.jid), 'criteria': neg_criteria,
-                                          'winner': 'True'}
-                        smia_archive_utils.save_completed_svc_log_info(
-                            GeneralUtils.get_current_timestamp(), GeneralUtils.get_current_timestamp(),
-                            inter_smia_interactions_utils.create_svc_json_data_from_acl_msg(msg), execution_info,
-                            ServiceTypes.CSS_RELATED_SERVICE)
-
-                        # Finally, the data is stored in the SMIA
-                        # TODO pensar si esto es necesario (ya se almacena todo en el JSON del Archive)
-                        neg_data_json = negotiation_utils.create_neg_json_to_store(
-                            neg_requester_jid=neg_requester_jid,
-                            participants=msg_json_body['serviceData']['serviceParams']['targets'],
-                            neg_criteria=neg_criteria,
-                            is_winner=True)
-                        await self.myagent.save_negotiation_data(thread=msg.thread, neg_data=neg_data_json)
-
-                    else:
-                        # If there are more targets, a management behavior is added to the SMIA, which will be
-                        # in charge of this particular negotiation. To this end, some information has to be passed to
-                        # the behaviour
-                        behaviour_info = {
-                            'thread': msg.thread,
-                            'neg_requester_jid': neg_requester_jid,
-                            'targets': msg_json_body['serviceData']['serviceParams']['targets'],
-                            'neg_criteria': neg_criteria
-                        }
-                        # The FIPA-ACL template added to this behavior ensures that you will only receive PROPOSE
-                        # messages but also only with the thread of that specific thread
-                        handle_neg_template = SMIAInteractionInfo.NEG_STANDARD_ACL_TEMPLATE_PROPOSE
-                        handle_neg_template.thread = msg.thread
-                        neg_req_data = inter_smia_interactions_utils.create_svc_json_data_from_acl_msg(msg)
-                        handle_neg_behav = HandleNegotiationBehaviour(self.agent, behaviour_info, neg_req_data)
-                        self.myagent.add_behaviour(handle_neg_behav, handle_neg_template)
-
-                case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM:
-                    _logger.aclinfo("The agent has received an Inter AAS interaction message related to a negotiation:"
-                                    " Inform")
-                    if msg_json_body['serviceID'] == 'negotiationResult':
-                        _logger.aclinfo("The agent has received the result of the negotiation with thread ["+
-                                        msg.thread+"].")
-                        # TODO BORRAR (enfoque antiguo): pensar como gestionar las respuestas de
-                        # As the result of a negotiation is a response to a previous request, a new
-                        # HandleSvcResponseBehaviour to handle this service response will be added to the agent
-                        svc_resp_data = inter_smia_interactions_utils.create_svc_json_data_from_acl_msg(msg)
-                        svc_resp_handling_behav = HandleSvcResponseBehaviour(self.agent,
-                                                                             'Inter AAS interaction',
-                                                                             svc_resp_data)
-                        self.myagent.add_behaviour(svc_resp_handling_behav)
-                    else:
-                        _logger.warning('serviceID not available')
-
-                case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE:
-                    _logger.aclinfo("The agent has received a response in a negotiation: Failure")
-                    # TODO pensar como se deberian gestionar este tipo de mensajes en una negociacion
-                case _:
-                    _logger.error("ACL performative type not available.")
+            # # TODO BORRAR, ES CODIGO DEL ENFOQUE ANTIGUO
+            # # The msg body will be parsed to a JSON object
+            # msg_json_body = json.loads(msg.body)
+            #
+            # # TODO quizas hay que comprobar que el thread no existe? Para hacer al igual que en la peticion de
+            # #  servicios, utilizar el thread como identificador. Hay que pensarlo, ya que de este modo el thread
+            # #  serviría para un unico servicio a un AAS
+            #
+            # # Depending on the performative of the message, the agent will have to perform some actions or others
+            # match msg.get_metadata('performative'):
+            #     case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_CFP:
+            #         _logger.aclinfo("The agent has received a request to start a negotiation (CFP) with thread ["
+            #                         + msg.thread + "]")
+            #
+            #         # Since the negotiation is an agent capability, it will be checked the validity of the received data
+            #         cap_req_data = None
+            #         try:
+            #             cap_req_data = inter_smia_interactions_utils.create_svc_json_data_from_acl_msg(msg)
+            #             await self.check_received_capability_request_data(cap_req_data)
+            #         except RequestDataError as cap_request_error:
+            #             # The data are not valid, so the requester must be informed.
+            #             acl_msg = inter_smia_interactions_utils.create_inter_smia_response_msg(
+            #                 receiver=acl_smia_messages_utils.get_sender_from_acl_msg(msg),
+            #                 thread=msg.thread,
+            #                 performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE,
+            #                 ontology=FIPAACLInfo.FIPA_ACL_ONTOLOGY_SVC_NEGOTIATION,   # TODO pensar si definir un NegRequest y NegResponse
+            #                 service_id=msg_json_body['serviceID'],
+            #                 service_type=msg_json_body['serviceType'],
+            #                 service_params=json.dumps({'reason': cap_request_error.message})
+            #             )
+            #             await self.send(acl_msg)
+            #             _logger.warning("Capability request with thread [{}] has invalid data, therefore the requester"
+            #                             " has been informed".format(msg.thread))
+            #             return  # The run method is terminated to restart checking for new messages.
+            #
+            #         # First, some useful information is obtained from the msg
+            #         targets_list = cap_req_data['serviceData']['serviceParams']['targets'].split(',')
+            #         neg_requester_jid = acl_smia_messages_utils.get_sender_from_acl_msg(msg)
+            #         neg_criteria = cap_req_data['serviceData']['serviceParams'][CapabilitySkillACLInfo.REQUIRED_SKILL_NAME]
+            #         if len(targets_list) == 1:
+            #             # There is only one target available (therefore, it is the only one, so it is the winner)
+            #             _logger.info("The SMIA has won the negotiation with thread [" + msg.thread + "]")
+            #
+            #             # As the winner, it will reply to the sender with the result of the negotiation
+            #             acl_response_msg = negotiation_utils.create_neg_response_msg(
+            #                 receiver=neg_requester_jid,
+            #                 thread=msg.thread,
+            #                 service_id=msg_json_body['serviceID'],
+            #                 service_type=msg_json_body['serviceType'],
+            #                 winner=str(self.myagent.jid))
+            #             await self.send(acl_response_msg)
+            #             _logger.aclinfo("ACL response sent for the result of the negotiation request with thread ["
+            #                             + msg.thread + "]")
+            #
+            #             # The information will be stored in the log
+            #             execution_info = {'capName': 'Negotiation',
+            #                               'capType': CapabilitySkillOntologyUtils.AGENT_CAPABILITY_TYPE,
+            #                               'participants': str(self.myagent.jid), 'criteria': neg_criteria,
+            #                               'winner': 'True'}
+            #             smia_archive_utils.save_completed_svc_log_info(
+            #                 GeneralUtils.get_current_timestamp(), GeneralUtils.get_current_timestamp(),
+            #                 inter_smia_interactions_utils.create_svc_json_data_from_acl_msg(msg), execution_info,
+            #                 ServiceTypes.CSS_RELATED_SERVICE)
+            #
+            #             # Finally, the data is stored in the SMIA
+            #             # TODO pensar si esto es necesario (ya se almacena todo en el JSON del Archive)
+            #             neg_data_json = negotiation_utils.create_neg_json_to_store(
+            #                 neg_requester_jid=neg_requester_jid,
+            #                 participants=msg_json_body['serviceData']['serviceParams']['targets'],
+            #                 neg_criteria=neg_criteria,
+            #                 is_winner=True)
+            #             await self.myagent.save_negotiation_data(thread=msg.thread, neg_data=neg_data_json)
+            #
+            #         else:
+            #             # If there are more targets, a management behavior is added to the SMIA, which will be
+            #             # in charge of this particular negotiation. To this end, some information has to be passed to
+            #             # the behaviour
+            #             behaviour_info = {
+            #                 'thread': msg.thread,
+            #                 'neg_requester_jid': neg_requester_jid,
+            #                 'targets': msg_json_body['serviceData']['serviceParams']['targets'],
+            #                 'neg_criteria': neg_criteria
+            #             }
+            #             # The FIPA-ACL template added to this behavior ensures that you will only receive PROPOSE
+            #             # messages but also only with the thread of that specific thread
+            #             handle_neg_template = SMIAInteractionInfo.NEG_STANDARD_ACL_TEMPLATE_PROPOSE
+            #             handle_neg_template.thread = msg.thread
+            #             neg_req_data = inter_smia_interactions_utils.create_svc_json_data_from_acl_msg(msg)
+            #             handle_neg_behav = HandleNegotiationBehaviour(self.agent, behaviour_info, neg_req_data)
+            #             self.myagent.add_behaviour(handle_neg_behav, handle_neg_template)
+            #
+            #     case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM:
+            #         _logger.aclinfo("The agent has received an Inter AAS interaction message related to a negotiation:"
+            #                         " Inform")
+            #         if msg_json_body['serviceID'] == 'negotiationResult':
+            #             _logger.aclinfo("The agent has received the result of the negotiation with thread ["+
+            #                             msg.thread+"].")
+            #             # TODO BORRAR (enfoque antiguo): pensar como gestionar las respuestas de
+            #             # As the result of a negotiation is a response to a previous request, a new
+            #             # HandleSvcResponseBehaviour to handle this service response will be added to the agent
+            #             svc_resp_data = inter_smia_interactions_utils.create_svc_json_data_from_acl_msg(msg)
+            #             svc_resp_handling_behav = HandleSvcResponseBehaviour(self.agent,
+            #                                                                  'Inter AAS interaction',
+            #                                                                  svc_resp_data)
+            #             self.myagent.add_behaviour(svc_resp_handling_behav)
+            #         else:
+            #             _logger.warning('serviceID not available')
+            #
+            #     case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE:
+            #         _logger.aclinfo("The agent has received a response in a negotiation: Failure")
+            #         # TODO pensar como se deberian gestionar este tipo de mensajes en una negociacion
+            #     case _:
+            #         _logger.error("ACL performative type not available.")
         else:
             _logger.info("         - No message received within 10 seconds on SMIA (NegotiatingBehaviour)")
 

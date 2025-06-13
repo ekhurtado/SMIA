@@ -5,10 +5,10 @@ from spade.behaviour import CyclicBehaviour
 
 from smia import GeneralUtils
 from smia.css_ontology.css_ontology_utils import CapabilitySkillOntologyUtils
-from smia.logic import negotiation_utils, inter_smia_interactions_utils
+from smia.logic import negotiation_utils, inter_smia_interactions_utils, acl_smia_messages_utils
 from smia.logic.exceptions import CapabilityRequestExecutionError, AssetConnectionError
 from smia.utilities import smia_archive_utils
-from smia.utilities.fipa_acl_info import FIPAACLInfo, ServiceTypes
+from smia.utilities.fipa_acl_info import FIPAACLInfo, ServiceTypes, ACLSMIAOntologyInfo
 from smia.utilities.smia_info import AssetInterfacesInfo
 
 _logger = logging.getLogger(__name__)
@@ -22,19 +22,16 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
     thread = None  #: thread of the negotiation
     neg_requester_jid = None  #: JID of the SPADE agent that has requested the negotiation
     targets = None  #: targets of the negotiation
-    neg_criteria = None  #: criteria of the negotiation
     neg_value = None  #: value of the negotiation
     targets_processed = set()  #: targets that their values have been processed
     neg_value_event = None
 
-    def __init__(self, agent_object, received_acl_msg, negotiation_info, neg_req_data):
+    def __init__(self, agent_object, received_acl_msg):
         """
         The constructor method is rewritten to add the object of the agent
         Args:
             agent_object (spade.Agent): the SPADE agent object of the SMIA agent.
             received_acl_msg (spade.message.Message): the received ACL-SMIA message object
-            negotiation_info (dict): all the required information to perform the negotiation.
-            neg_req_data (dict): all the information related to the FIPA-ACL negotiation request.
         """
 
         # The constructor of the inherited class is executed.
@@ -43,23 +40,15 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         # The SPADE agent object is stored as a variable of the behaviour class
         self.myagent = agent_object
 
-        self.received_acl_msg = received_acl_msg  # TODO DEJARLO PARA EL NUEVO ENFOQUE
+        self.received_acl_msg = received_acl_msg
+        self.received_body_json = acl_smia_messages_utils.get_parsed_body_from_acl_msg(self.received_acl_msg)
 
-        self.thread = negotiation_info['thread']
-        self.neg_requester_jid = negotiation_info['neg_requester_jid']
-        self.targets = negotiation_info['targets']
-        self.neg_criteria = negotiation_info['neg_criteria']
+        # Negotiation-related variables are also initialized
         self.targets_processed = set()
-
+        self.neg_value = -1
         self.myagent.tie_break = True   # In case of equal value neg is set as tie-breaker TODO check these cases (which need to be tie-breaker?)
 
-        self.svc_req_data = neg_req_data
-
         self.requested_timestamp = GeneralUtils.get_current_timestamp()
-
-        # This event object will allow waiting for the negotiation value if it is necessary to request it from an
-        # external entity (such as the AAS Core)
-        # self.neg_value_event = asyncio.Event()
 
     async def on_start(self):
         """
@@ -67,36 +56,59 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         """
         _logger.info("HandleNegotiationBehaviour starting...")
 
-        try:
-            #  The value of the criterion must be obtained just before starting to manage the negotiation, so that at the
-            #  time of sending the PROPOSE and receiving that of the others it will be the same value. Therefore, if to
-            #  obtain the value you have to make an Intra AAS interaction request, the behaviour will not be able to start
-            #  managing the negotiation until you get the answer to that request (together with the requested value).
-            await self.get_neg_value_with_criteria()
+        # First, it will analyze whether it is the only participant in the negotiation, in which case it will be the
+        # direct winner
+        if len(self.received_body_json['negTargets']) == 1:
+            # There is only one target available (therefore, it is the only one, so it is the winner)
+            _logger.info("The SMIA has won the negotiation with thread [" + self.received_acl_msg.thread + "]")
+
+            # As the winner, it will reply to the sender with the result of the negotiation
+            await inter_smia_interactions_utils.send_response_msg_from_received(
+                self, self.received_acl_msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM, response_body={'winner': True})
+            _logger.aclinfo("ACL response sent for the result of the negotiation request with thread ["
+                            + self.received_acl_msg.thread + "]")
+
+            # The information will be stored in the log and the SMIA instance ends as the winner
+            await self.exit_negotiation(is_winner=True)
+
+        else:
+            # In this case, there are multiple participants, so it will execute the FIPA-SMIA-CNP protocol
+            try:
+                #  The value of the criterion must be obtained just before starting to manage the negotiation, so that at the
+                #  time of sending the PROPOSE and receiving that of the others it will be the same value. Therefore, if to
+                #  obtain the value you have to make an Intra AAS interaction request, the behaviour will not be able to start
+                #  managing the negotiation until you get the answer to that request (together with the requested value).
+                await self.get_neg_value_with_criteria()
 
 
-            # Once the negotiation value is reached, the negotiation management can begin. The first step is to send the
-            # PROPOSE message with your own value to the other participants in the negotiation.
-            acl_propose_msg = negotiation_utils.create_neg_propose_msg(thread=self.thread,
-                                                                       targets=self.targets,
-                                                                       neg_requester_jid=self.neg_requester_jid,
-                                                                       neg_criteria=self.neg_criteria,
-                                                                       neg_value=str(self.neg_value))
-            # This PROPOSE FIPA-ACL message is sent to all participants of the negotiation (except for this SMIA)
-            for jid_target in self.targets.split(','):
-                if jid_target != str(self.agent.jid):
-                    acl_propose_msg.to = jid_target
-                    await self.send(acl_propose_msg)
-                    _logger.aclinfo("ACL PROPOSE negotiation message sent to " + jid_target +
-                                    " on negotiation with thread [" + self.thread + "]")
-        except (CapabilityRequestExecutionError, AssetConnectionError) as cap_neg_error:
-            if isinstance(cap_neg_error, AssetConnectionError):
-                cap_neg_error = CapabilityRequestExecutionError('Negotiation', f"The error "
-                                                                f"[{cap_neg_error.error_type}] has appeared during the"
-                                                                f" asset connection. Reason: {cap_neg_error.reason}.", self)
+                # Once the negotiation value is reached, the negotiation management can begin. The first step is to send the
+                # PROPOSE message with your own value to the other participants in the negotiation.
+                propose_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
+                    'None', await acl_smia_messages_utils.create_random_thread(self.myagent),
+                    FIPAACLInfo.FIPA_ACL_PERFORMATIVE_CFP,
+                    self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB),
+                    protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
+                    msg_body={**self.received_body_json, **{'negValue': self.neg_value}})
+                # acl_propose_msg = negotiation_utils.create_neg_propose_msg(thread=self.thread,
+                #                                                            targets=self.targets,
+                #                                                            neg_requester_jid=self.neg_requester_jid,
+                #                                                            neg_criteria=self.neg_criteria,
+                #                                                            neg_value=str(self.neg_value))
+                # This PROPOSE FIPA-ACL message is sent to all participants of the negotiation (except for this SMIA)
+                for jid_target in self.received_body_json['negTargets']:
+                    if jid_target != str(self.agent.jid):
+                        propose_acl_message.to = jid_target
+                        await self.send(propose_acl_message)
+                        _logger.aclinfo("ACL PROPOSE negotiation message sent to " + jid_target +
+                                        " on negotiation with thread [" + self.thread + "]")
+            except (CapabilityRequestExecutionError, AssetConnectionError) as cap_neg_error:
+                if isinstance(cap_neg_error, AssetConnectionError):
+                    cap_neg_error = CapabilityRequestExecutionError('Negotiation', f"The error "
+                                                                    f"[{cap_neg_error.error_type}] has appeared during the"
+                                                                    f" asset connection. Reason: {cap_neg_error.reason}.", self)
 
-            await cap_neg_error.handle_capability_execution_error_old()
-            return  # killing a behaviour does not cancel its current run loop
+                await cap_neg_error.handle_capability_execution_error_old()
+                return  # killing a behaviour does not cancel its current run loop
 
 
     async def run(self):
@@ -105,8 +117,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         """
 
         # Wait for a message with the standard ACL template for negotiating to arrive.
-        msg = await self.receive(
-            timeout=10)  # Timeout set to 10 seconds so as not to continuously execute the behavior.
+        msg = await self.receive(timeout=10)  # Timeout set to 10s so as not to continuously execute the behavior
         if msg:
             # An ACL message has been received by the agent
             _logger.aclinfo("         + PROPOSE Message received on SMIA Agent (HandleNegotiationBehaviour "
@@ -114,11 +125,11 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
             _logger.aclinfo("                 |___ Message received with content: {}".format(msg.body))
 
             # The msg body will be parsed to a JSON object
-            msg_json_body = json.loads(msg.body)
+            propose_msg_body_json = acl_smia_messages_utils.get_parsed_body_from_acl_msg(msg)
 
             # The negotiation information is obtained from the message
             # criteria = msg_json_body['serviceData']['serviceParams']['criteria']
-            sender_agent_neg_value = msg_json_body['serviceData']['serviceParams']['neg_value']
+            sender_agent_neg_value = propose_msg_body_json['negValue']
 
             # The value of this SMIA and the received value are compared
             if float(sender_agent_neg_value) > self.neg_value:
@@ -131,15 +142,15 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 return  # killing a behaviour does not cancel its current run loop
             # The target is added as processed in the local object (as it is a Python 'set' object there is no problem
             # of duplicate agents)
-            self.targets_processed.add(str(msg.sender))
-            if len(self.targets_processed) == len(self.targets.split(',')) - 1:
+            self.targets_processed.add(acl_smia_messages_utils.get_sender_from_acl_msg(msg))
+            if len(self.targets_processed) == len(self.received_body_json['negTargets']) - 1:
                 # In this case all the values have already been received, so the value of this SMIA is the best
-                _logger.info("The AAS has won the negotiation with thread [" + msg.thread + "]")
+                _logger.info("The SMIA has won the negotiation with thread [" + msg.thread + "]")
 
                 # As the winner, it will reply to the sender with the result of the negotiation
-                await self.send_response_msg_to_sender(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM,
-                                                       {'winner': str(self.myagent.jid)})
-
+                await inter_smia_interactions_utils.send_response_msg_from_received(
+                    self, self.received_acl_msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM,
+                    response_body={'winner': True})
                 _logger.aclinfo("ACL response sent for the result of the negotiation request with thread ["
                                 + msg.thread + "]")
 
@@ -161,7 +172,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         # Since negotiation is a capability of the agent, it is necessary to analyze which skill has been defined. The
         # associated skill interface will be the one from which the value of negotiation can be obtained.
         # Thus, skill is the negotiation criterion for which the ontological instance will be obtained.
-        neg_skill_instance = await self.myagent.css_ontology.get_ontology_instance_by_name(self.neg_criteria)
+        neg_skill_instance = await self.myagent.css_ontology.get_ontology_instance_by_iri(
+            self.received_body_json['negCriterion'])
 
         # The related skill interface will be obtained
         skill_interface = list(neg_skill_instance.get_associated_skill_interface_instances())[0]
@@ -203,6 +215,10 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                                                       " the agent service {}.".format(self.thread,
                                                       aas_skill_interface_elem.id_short), self)
 
+        # Let's normalize the value between 0.0 and 1.0
+        if 1.0 < current_neg_value <= 100.0:
+            # Normalize within 0.0 and 100.0 range
+            current_neg_value = (current_neg_value - 0.0) / 100.0
         self.neg_value = current_neg_value
 
 
@@ -238,23 +254,21 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
 
         """
         if is_winner:
-            _logger.info("The AAS has finished the negotiation with thread [" + self.thread + "] as the winner")
+            _logger.info("The SMIA has finished the negotiation with thread [" + self.thread + "] as the winner")
         else:
-            _logger.info("The AAS has finished the negotiation with thread [" + self.thread + "] not as the winner")
+            _logger.info("The SMIA has finished the negotiation with thread [" + self.thread + "] not as the winner")
 
         # The negotiation information is stored in the global object of the SMIA
         neg_data_json = negotiation_utils.create_neg_json_to_store(neg_requester_jid=self.neg_requester_jid,
                                                                    participants=self.targets,
-                                                                   neg_criteria=self.neg_criteria,
+                                                                   neg_criteria=self.received_body_json['negCriterion'],
                                                                    is_winner=is_winner)
         await self.myagent.save_negotiation_data(thread=self.thread, neg_data=neg_data_json)
 
         # The information will be stored in the log
-        execution_info = {'capName': 'Negotiation', 'capType': CapabilitySkillOntologyUtils.AGENT_CAPABILITY_TYPE,
-                          'participants': self.targets, 'criteria': self.neg_criteria, 'winner': str(is_winner)}
         smia_archive_utils.save_completed_svc_log_info(self.requested_timestamp, GeneralUtils.get_current_timestamp(),
-                                                       self.svc_req_data, execution_info,
-                                                       ServiceTypes.CSS_RELATED_SERVICE)
+            await inter_smia_interactions_utils.acl_message_to_json(self.received_acl_msg),
+            self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB), ServiceTypes.CSS_RELATED_SERVICE)
 
         # In order to correctly complete the negotiation process, this behavior is removed from the agent.
         self.kill(exit_code=10)
