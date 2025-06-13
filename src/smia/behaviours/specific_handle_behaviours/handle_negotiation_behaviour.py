@@ -7,7 +7,7 @@ from smia import GeneralUtils
 from smia.logic import negotiation_utils, inter_smia_interactions_utils, acl_smia_messages_utils
 from smia.logic.exceptions import CapabilityRequestExecutionError, AssetConnectionError
 from smia.utilities import smia_archive_utils
-from smia.utilities.fipa_acl_info import FIPAACLInfo, ServiceTypes
+from smia.utilities.fipa_acl_info import FIPAACLInfo
 from smia.utilities.smia_info import AssetInterfacesInfo
 
 _logger = logging.getLogger(__name__)
@@ -252,8 +252,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
 
         # The information will be stored in the log
         smia_archive_utils.save_completed_svc_log_info(self.requested_timestamp, GeneralUtils.get_current_timestamp(),
-            await inter_smia_interactions_utils.acl_message_to_json(self.received_acl_msg),
-            self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB), ServiceTypes.CSS_RELATED_SERVICE)
+            await inter_smia_interactions_utils.acl_message_to_json(self.received_acl_msg), {'winnner': is_winner},
+            self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB))
 
         # In order to correctly complete the negotiation process, this behavior is removed from the agent.
         self.kill(exit_code=10)
