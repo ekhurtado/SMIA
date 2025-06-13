@@ -162,16 +162,19 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                     bpmn_element.smia_instance = await self.execute_acl_cnp_protocol(smia_instance_candidates, bpmn_element)
                     # With the winner SMIA instance, it can be obtained the associated asset ID
                     bpmn_element.smia_asset = await self.get_asset_id_by_smia_instance_id(bpmn_element.smia_instance)
-                    # TODO: FALTA POR HACER (Habria que solicitar todos los IDs de las instancias SMIA de esta capacidad y enviarles un mensaje ACL a todos ellos)
 
             if task == SMIABPMNInfo.TASK_REQUEST_DATA_TO_PREVIOUS:
                 for previous_request in bpmn_element.smia_request_to_previous:
                     previous_element = SMIABPMNUtils.get_previous_bpmn_element(self.process_parser, bpmn_element)
                     _logger.info("A data need to be requested to the SMIA instance {}".format(previous_element.smia_instance))
-                    # TODO POR HACER: HABRIA QUE ENVIAR UN MENSAJE ACL
-                    datavalue = 'dataValue' # TODO BORRAR ES UNA PRUEBA MANUAL
+                    required_data_ref = SMIABPMNUtils.get_required_data_from_bpmn_element(bpmn_element,
+                                                                                          previous_request)
+                    required_data_value = await self.execute_acl_qp_aas_protocol(previous_element.smia_instance,
+                                                                                 AASRelatedServicesInfo.AAS_DISCOVERY_SERVICE_GET_SM_VALUE_BY_REF,
+                                                                                 required_data_ref)
                     # When the data is obtained, it needs to be added to the BPMN element
-                    SMIABPMNUtils.update_bpmn_element_with_requested_data(bpmn_element, previous_request, datavalue)
+                    SMIABPMNUtils.update_bpmn_element_with_requested_data(bpmn_element, previous_request,
+                                                                          required_data_value)
             if task == SMIABPMNInfo.TASK_REQUEST_DATA_TO_FOLLOWING:
                 for following_request in bpmn_element.smia_request_to_following:
                     following_element = SMIABPMNUtils.get_next_bpmn_element(self.process_parser, bpmn_element)
@@ -185,9 +188,6 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                         # With the winner SMIA instance, it can be obtained the associated asset ID
                         following_element.smia_asset = await self.get_asset_id_by_smia_instance_id(
                             following_element.smia_instance)
-                        # When it has obtained the winner of the CNP protocol, it need to be added to the BPMN element
-                        # following_element.smia_asset = 'winner of CNP'  # TODO MODIFICAR ESTA MANUALMENTE
-                        # following_element.smia_instance = 'winner of CNP'  # TODO MODIFICAR ESTA MANUALMENTE
 
                     # Now the following element is specified, so the data can be requested
                     _logger.info("The data {} need to be requested to the SMIA instance {} related to the following task "
@@ -241,9 +241,10 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
         """
         return await inter_smia_interactions_utils.create_acl_smia_message(
             f"{AASRelatedServicesInfo.SMIA_ISM_ID}@"
-            f"{await acl_smia_messages_utils.get_xmpp_server_from_jid(self.myagent.jid)}",   # .TODO SE PODRIA HACER UN METODO EN SMIA PARA RECOGER EL XMPP SERVER
+            f"{await acl_smia_messages_utils.get_xmpp_server_from_jid(self.myagent.jid)}",
             await acl_smia_messages_utils.create_random_thread(self.myagent), FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST,
-            ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE, protocol='fipa-request', msg_body=msg_body)
+            ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE, protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL,
+            msg_body=msg_body)
 
     async def get_smia_instance_id_by_asset_id(self, asset_id):
         """
