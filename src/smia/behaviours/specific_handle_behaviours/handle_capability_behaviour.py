@@ -423,6 +423,11 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
             # input data can be obtained from the received message, since it has already been verified as containing
             # such data
             _logger.assetinfo("Executing skill of the capability through an asset service...")
+
+            # TODO BORRAR: PARA PRUEBAS CEDRI
+            if 'smia-pe' in self.received_acl_msg.thread:
+                return {'status': 'success', 'prueba': 'cedri'}
+
             skill_execution_result = await asset_connection_class.execute_asset_service(
                 interaction_metadata=aas_skill_interface_elem, service_input_data=received_skill_input_data)
             _logger.assetinfo("Skill of the capability successfully executed.")
