@@ -91,3 +91,22 @@ def send_openapi_http_post_request(url, headers = None, body = None, timeout: in
         _logger.error("ERROR: Unexpected error with {}".format(url))
 
     return None
+
+
+def check_and_get_response_error(response):
+    """
+    This method checks if the response is valid adn extracts the errors message if it is not valid.
+
+    Args:
+        response: response object
+
+    Returns:
+        str: '' if it is valid and "ERROR..." if it is not.
+    """
+    if response is None:  # TODO Analizar que devuelve cuando no hay instancias o cuando hay error
+        return "ERROR: The response is Null"
+    if isinstance(response, dict):
+        if 'code' in response and 'message' in response:
+            return f"ERROR with code {response['code']}: {response}."
+    # TODO Think and analyze more scenarios
+    return ''

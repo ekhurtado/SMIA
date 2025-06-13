@@ -3,7 +3,8 @@ import logging
 from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
 
 from external_infrastructures.smia_kb_infrastructure import SMIAKBInfrastructure
-from utilities.acl_open_api_utils import send_openapi_http_get_request, send_openapi_http_post_request
+from utilities.acl_open_api_utils import send_openapi_http_get_request, send_openapi_http_post_request, \
+    check_and_get_response_error
 
 _logger = logging.getLogger(__name__)
 
@@ -26,8 +27,8 @@ class ACLOpenAPIServices:
         # The body JSON is built with the parameters names and values of the method (id, asset...)
         body_json = {arg_name: arg_value for arg_name, arg_value in locals().items()}
         smia_instances_json = send_openapi_http_post_request(smia_kb_instances_url, body=body_json)
-        if smia_instances_json is None:
-            return "ERROR: Cannot register SMIA instance (SMIA KB has returned null body)."
+        if 'ERROR' in check_and_get_response_error(smia_instances_json):
+            return 'Cannot register SMIA instance. {}'.format(check_and_get_response_error(smia_instances_json))
         return {'status': 'success'}
 
     # ---------------------------------
@@ -40,8 +41,8 @@ class ACLOpenAPIServices:
         # First, all the registered SMIA instances are obtained
         smia_kb_instances_url = SMIAKBInfrastructure.get_smia_instances_url()
         smia_instances_json = send_openapi_http_get_request(smia_kb_instances_url)
-        if smia_instances_json is None:  # TODO Analizar que devuelve cuando no hay instancias o cuando hay error
-            return "ERROR: No SMIA instance is registered."
+        if 'ERROR' in check_and_get_response_error(smia_instances_json):
+            return 'Cannot obtain the SMIA instances. {}'.format(check_and_get_response_error(smia_instances_json))
         # Then, the associated SMIA instance is obtained
         for smia_instance in smia_instances_json:
             if smia_instance['asset']['id'] == asset_id:
@@ -55,8 +56,8 @@ class ACLOpenAPIServices:
         # First, all the registered SMIA instances are obtained
         smia_kb_smia_instance_url = SMIAKBInfrastructure.get_smia_instance_url(smia_instance_id)
         smia_instance_json = send_openapi_http_get_request(smia_kb_smia_instance_url)
-        if smia_instance_json is None:  # TODO Analizar que devuelve cuando no hay instancias o cuando hay error
-            return "ERROR: No SMIA instance is registered."
+        if 'ERROR' in check_and_get_response_error(smia_instance_json):
+            return 'Cannot obtain the assetIDs. {}'.format(check_and_get_response_error(smia_instance_json))
         # Then, the associated SMIA instance is obtained
         return smia_instance_json['asset']['id']
 
@@ -67,8 +68,8 @@ class ACLOpenAPIServices:
         # First, the capability with the given IRI is obtained
         smia_kb_capability_url = SMIAKBInfrastructure.get_assets_of_capability_url(capability_iri)
         assets_json = send_openapi_http_get_request(smia_kb_capability_url)
-        if assets_json is None:  # TODO Analizar que devuelve cuando no hay instancias o cuando hay error
-            return "ERROR: No SMIA instance is registered."
+        if 'ERROR' in check_and_get_response_error(assets_json):
+            return 'Cannot obtain the assetIDs. {}'.format(check_and_get_response_error(assets_json))
         assets_ids = [asset_data['id'] for asset_data in assets_json]
         return assets_ids
 
