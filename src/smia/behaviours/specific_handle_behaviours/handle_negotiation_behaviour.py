@@ -156,6 +156,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
 
                 # The negotiation can be terminated, in this case being the winner
                 await self.exit_negotiation(is_winner=True)
+                return
 
         else:
             _logger.info("         - No message received within 10 seconds on SMIA Agent (NegotiatingBehaviour)")
@@ -252,7 +253,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
 
         # The information will be stored in the log
         smia_archive_utils.save_completed_svc_log_info(self.requested_timestamp, GeneralUtils.get_current_timestamp(),
-            await inter_smia_interactions_utils.acl_message_to_json(self.received_acl_msg), {'winnner': is_winner},
+            await inter_smia_interactions_utils.acl_message_to_json(self.received_acl_msg), {'winner': is_winner},
             self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB))
 
         # In order to correctly complete the negotiation process, this behavior is removed from the agent.
