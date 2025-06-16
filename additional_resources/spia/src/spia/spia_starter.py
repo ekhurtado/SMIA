@@ -5,6 +5,7 @@ import smia
 from smia.agents.extensible_smia_agent import ExtensibleSMIAAgent
 from smia.utilities.general_utils import DockerUtils
 
+from behaviours.SPIAGUIBehaviour import SPIAGUIBehaviour
 from behaviours.bpmn_performer_behaviour import BPMNPerformerBehaviour
 from behaviours.receive_acl_behaviour import ReceiveACLBehaviour
 
@@ -29,9 +30,9 @@ def main():
     smia_psswd = os.environ.get('AGENT_PASSWD')
 
     # TODO BORRAR (para pruebas)
-    # smia_jid = "smia-pe@xmpp.jp"
-    # smia_psswd = "gcis1234"
-    # smia.load_aas_model('../smia_archive/config/aas/SPEIA_CeDRI_ScenarioA.aasx')
+    smia_jid = "smia-pe@xmpp.jp"
+    smia_psswd = "gcis1234"
+    smia.load_aas_model('../smia_archive/config/aas/SPEIA_CeDRI_ScenarioA.aasx')
 
     # Create the agent object
     spia_agent = ExtensibleSMIAAgent(smia_jid, smia_psswd)
@@ -43,6 +44,10 @@ def main():
     # The behaviour for executing the CSS-driven BPMN production plan is added
     bpmn_performer_behaviour = BPMNPerformerBehaviour(spia_agent)
     spia_agent.add_new_agent_capability(bpmn_performer_behaviour)
+
+    # The graphical web user interface is also added in order to manage the BPMN workflow
+    spia_gui_behaviour = SPIAGUIBehaviour()
+    spia_agent.add_new_agent_capability(spia_gui_behaviour)
 
     smia.run(spia_agent)
 
