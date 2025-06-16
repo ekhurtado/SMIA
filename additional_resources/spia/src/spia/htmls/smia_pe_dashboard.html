@@ -5,6 +5,9 @@
     <title>SMIA PE Dashboard</title>
     <!-- Include SPADE CSS links -->
     {% include 'htmls/templates/spade_html_css_links.html' %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/2.1.2/viz.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/2.1.2/full.render.js"></script>
+
     <style>
 
         .box-primary {
@@ -28,70 +31,6 @@
             padding: 5px 10px;
         }
 
-        .smia-loader-footer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            width: 100%;
-            padding: 20px;
-        }
-
-        .process-text {
-            position: absolute;
-            left: 10px;
-            padding-left: 20px;
-            font-style: italic;
-            font-size: 14px;
-            color: #555;
-        }
-
-        .process-gif {
-            margin: auto;
-        }
-
-        .load-button {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            padding: 5px 10px;
-            background-color: #28a745;
-            color: white;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            font-size: 18px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .load-button:hover {
-            background-color: #218838;
-        }
-
-        /*CSS for Capability-Skill table*/
-        .table-container {
-            margin: 20px 5px;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        /* Main table */
-        .table {
-            width: 100%;
-            margin-bottom: 20px;
-            border-collapse: collapse;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            margin-top: 10px;
-            table-layout: fixed;  /* Force consistent column sizing */
-        }
-
         .table th, .table td {
             padding: 8px;
             border: 1px solid #ddd;
@@ -112,80 +51,57 @@
             background-color: #f5f5f5;
         }
 
-        .options-container {
-            float: right;
+        #bpmn-graphviz-div {
+            padding: 5px;
+            max-width: 100%;
+            width: 100%;
+            text-align: center;
+        }
+
+        /*BPMN management buttons*/
+        .bpmn-buttons-div {
             display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            /*height: 150px; !* o el alto que necesites *!*/
+            max-width: 100%;
+            max-height: 100%;
             gap: 10px;
+            align-items: center;
         }
 
-        .expandable {
-            cursor: pointer; /* Make the cursor pointer for the expandable elements */
-        }
-
-        .expand-icon {
-            /*cursor: pointer;*/
-            color: #2d688a;
-            float: right;
-        }
-
-        .expand-icon:hover {
-            color: #3C8DBC;
-        }
-
-        .select-button {
-            background-color: #d16c18;
-            border: none;
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-            text-transform: uppercase;
-        }
-
-        .select-button:hover {
-            background-color: #8c4711;
-        }
-
-        .subtable {
-            display: none;
-            margin-left: 2px;
-            margin-top: 10px;
-        }
-
-        .subtable .capability-info {
-            width: 98%;
-            margin-bottom: 10px;
-            border-collapse: collapse;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            margin-left: 2px;
-        }
-
-        .request-checkbox {
-            float: right;
-        }
-
-        .request-div {
-            display: flex;
-            margin-top: 10px;
-            gap: 10px;
-        }
-
-        .request-button {
-            background-color: #3C8DBC;
+        .bpmn-continue-button, .bpmn-stop-button {
+            /*position: absolute;*/
+            right: 10px;
+            top: 50%;
+            padding: 10px 15px;
+            background-color: #28a745;
             color: white;
             font-weight: bold;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
-            font-size: 18px;
+            font-size: 24px;
             text-transform: uppercase;
-            padding: 5px 10px;
+            letter-spacing: 1px;
+            max-height: 100%;
+            max-width: 100%;
+            width: 60%;
+            text-align: center;
+            margin: 10px 30px;
         }
 
-        .request-button:hover {
-            background-color: #2d688a;
+        .bpmn-continue-button:hover {
+            background-color: #218838;
+        }
+
+        .bpmn-stop-button {
+            background-color: #e30000;
+        }
+
+        .bpmn-stop-button:hover {
+            background-color: #780000;
         }
 
     </style>
@@ -224,7 +140,7 @@
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
-                                <h4>All available SMIAs can be detected and analyzed.</h4>
+                                <h4>Information extracted from CSS-based BPMN workflow.</h4>
 
                                 <div class="row small-boxes-div">
                                     <div class="col-lg-3 col-xs-7">
@@ -232,9 +148,9 @@
                                         <div class="small-box bg-green">
                                         <!-- There are multiple colors: https://basscss.com/v7/docs/background-colors/ -->
                                             <div class="inner">
-                                                <h3>{{ agent.jid }}</h3>
+                                                <h3>{{ agent.bpmn_info.ServiceTasks }}</h3>
 <!--                                                <h3>0</h3>-->
-                                                <p>Detected AAS models</p>
+                                                <p>Detected ServiceTasks</p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fa fa-project-diagram"></i>
@@ -246,9 +162,9 @@
                                         <!-- small box -->
                                         <div class="small-box bg-aqua">
                                             <div class="inner">
-                                                <h3>{{ agent.jid }}</h3>
+                                                <h3>{{ agent.bpmn_info.ExclusiveGateways }}</h3>
 <!--                                                <h3>0</h3>-->
-                                                <p>Available SMIAs</p>
+                                                <p>Detected ExclusiveGateways</p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fas fa-code"></i>
@@ -260,9 +176,9 @@
                                         <!-- small box -->
                                         <div class="small-box bg-orange">
                                             <div class="inner">
-                                                <h3>{{ agent.jid }}</h3>
+                                                <h3>{{ agent.bpmn_info.Capabilities }}</h3>
 <!--                                                <h3>0</h3>-->
-                                                <p>Obtained capabilities</p>
+                                                <p>Detected Capabilities</p>
                                             </div>
                                             <div class="icon">
 <!--                                                <i class="fa fa-sign-out-alt"></i>-->
@@ -275,9 +191,9 @@
                                         <!-- small box -->
                                         <div class="small-box bg-yellow">
                                             <div class="inner">
-                                                <h3>{{ agent.jid }}</h3>
+                                                <h3>{{ agent.bpmn_info.Capabilities }}</h3>
 <!--                                                <h3>0</h3>-->
-                                                <p>Obtained skills</p>
+                                                <p>Detected Skills</p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fas fa-indent"></i>
@@ -287,13 +203,6 @@
                                     <!-- ./col -->
                                 </div>
                                 <!-- ./row -->
-
-                                <div class="smia-loader-footer">
-                                    <span class="hidden process-text"><em>Loading SMIAs...</em></span>
-<!--                                    <div id="loading"></div>-->
-                                    <img src="static/loading_line.gif" alt="Processing..." class="process-gif hidden">
-                                    <button type="button" id="loader-button" class="btn btn-primary load-button">Load</button>
-                                </div>
                             </div>
                             <!-- /.box-body -->
                         </div>
@@ -307,17 +216,20 @@
                     <div class="col-md-5 col-md-offset-1">
                         <div class="box box-warning">
                             <div class="box-header with-border">
-                                <h3 class="box-title">SMIA workflow status</h3>
+                                <h3 class="box-title">SMIA workflow</h3>
 
                                 <div class="box-tools pull-right">
-                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                            class="fa fa-minus"></i>
-                                    </button>
                                 </div>
                             </div>
                             <!-- /.box-header -->
-                            <div class="box-body">
-                                <p>TODO</p>
+                            <div class="box-body" id="bpmn-graphviz-div">
+                                <script>
+                                    var viz = new Viz();
+                                    viz.renderSVGElement("{{ agent.to_graphviz(agent)|safe }}")
+                                    .then(function(element) {
+                                      document.getElementById("bpmn-graphviz-div").appendChild(element);
+                                    });
+                                </script>
                             </div>
                             <!-- /.box-body -->
                         </div>
@@ -326,7 +238,7 @@
                     <div class="col-md-4 col-md-offset-1">
                         <div class="box box-primary">
                             <div class="box-header with-border">
-                                <h3 class="box-title">SMIA workflow management</h3>
+                                <h3 class="box-title">Workflow management</h3>
 
                                 <div class="box-tools pull-right">
                                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
@@ -336,7 +248,14 @@
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
-                                <p>TODO</p>
+
+                                <div class="bpmn-buttons-div">
+                                    <button type="button" id="bpmn-continue-button" class="btn btn-primary load-button bpmn-continue-button">Continue</button>
+
+                                    <button type="button" id="bpmn-stop-button" class="btn btn-primary load-button bpmn-stop-button">Stop</button>
+
+                                </div>
+
                             </div>
                             <!-- /.box-body -->
                         </div>

@@ -83,6 +83,9 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
         SMIABPMNUtils.add_smia_attributes_values(process_parser)
         self.process_parser = process_parser
 
+        # The complete process parser is also saved in the agent object
+        self.myagent.bpmn_process_parser = self.process_parser
+
         # To finalize the initialization of the BPMN file, the SMIA instances associated to the specified assets need
         # to be obtained
         await self.get_smia_instances_of_specified_assets()

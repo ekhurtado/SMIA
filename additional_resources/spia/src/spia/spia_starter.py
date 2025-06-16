@@ -5,7 +5,7 @@ import smia
 from smia.agents.extensible_smia_agent import ExtensibleSMIAAgent
 from smia.utilities.general_utils import DockerUtils
 
-from behaviours.SPIAGUIBehaviour import SPIAGUIBehaviour
+from behaviours.spia_gui_behaviour import SPIAGUIBehaviour
 from behaviours.bpmn_performer_behaviour import BPMNPerformerBehaviour
 from behaviours.receive_acl_behaviour import ReceiveACLBehaviour
 

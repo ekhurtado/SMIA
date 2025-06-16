@@ -6,14 +6,15 @@ import random
 import string
 
 import basyx
+from SpiffWorkflow.specs import StartTask
 from aiohttp import web
 from basyx.aas import model
 from basyx.aas.adapter import aasx
 
-from smia import SMIAGeneralInfo, GeneralUtils
-from smia.aas_model.aas_model_utils import AASModelInfo
-from smia.behaviours.init_aas_model_behaviour import InitAASModelBehaviour
-from smia.css_ontology.css_ontology_utils import CapabilitySkillOntologyInfo, CapabilitySkillOntologyUtils
+from SpiffWorkflow.bpmn.specs.defaults import ServiceTask, StartEvent
+from SpiffWorkflow.bpmn.specs.defaults import EndEvent, ExclusiveGateway
+
+from utilities.smia_bpmn_utils import SMIABPMNUtils
 
 _logger = logging.getLogger(__name__)
 
@@ -34,6 +35,14 @@ class GUIControllers:
         """
         return {"status": "OK"}
 
+    async def spia_gui_controller(self, request):
+        """
+        The controller during the request of SMIA PE Dashboard.
+        """
+        # The BPMN process parser is analyzed, in order to extract useful information
+        GUIFeatures.analyze_bpmn_workflow(self.myagent)
+
+        return {"status": "OK"}
 
 class GUIFeatures:
     """This class contains the methods related to SPADE web interface customization."""
@@ -92,3 +101,88 @@ class GUIFeatures:
         This method overrides the original SPADE method to use the Favicon as the avatar in SMIA SPADE web interface.
         """
         return '/favicon.ico'
+
+    @staticmethod
+    def to_graphviz(agent_object):
+        if agent_object.bpmn_graphviz_info == "digraph SMIA_PE_workflow { rankdir=LR; node [fixedsize=true];}":
+            graph = ("digraph SMIA_PE_workflow { node [shape=rectangle, fontsize=12, fontname=Helvetica]; "
+                     "ranksep=0.75; nodesep=0.5;")
+            additional_graph = ""
+            if hasattr(agent_object, 'bpmn_process_parser'):
+                process_parser = agent_object.bpmn_process_parser
+                current_elem = process_parser.get_spec().start
+                while current_elem is not None:
+                    if isinstance(current_elem, StartTask):
+                        current_elem = current_elem.outputs[0]
+                        continue
+                    if isinstance(current_elem, EndEvent):
+                        additional_graph += '{} [label={}, shape=ellipse]; '.format(
+                            current_elem.bpmn_id, SMIABPMNUtils.get_bpmn_display_name(current_elem))
+                        break
+                    origin = current_elem.bpmn_id
+                    origin = origin.replace(" ", "_")
+                    for output_elem in current_elem.outputs:
+                        dest = output_elem.bpmn_id
+                        # dest = SMIABPMNUtils.get_bpmn_display_name(output_elem)
+                        dest = dest.replace(" ", "_")
+                        graph += "{0} -> {1};".format(origin, dest)
+                    if SMIABPMNUtils.get_bpmn_display_name(current_elem) == 'Start':
+                        additional_graph += '{} [label={}, shape=ellipse]; '.format(
+                            origin, SMIABPMNUtils.get_bpmn_display_name(current_elem).replace(" ", "_"))
+                    if isinstance(current_elem, ExclusiveGateway):
+                        additional_graph += '{} [label={}, shape=diamond]; '.format(
+                            origin, SMIABPMNUtils.get_bpmn_display_name(current_elem).replace(" ", "_"))
+                        # The outputs of the exclusive are added at the same level
+                        additional_graph += ('{ rank=same; ' + '; '.join(out.bpmn_id for out in current_elem.outputs)
+                                             + '; }')
+                    else:
+                        additional_graph += '{} [label={}]; '.format(
+                            origin, SMIABPMNUtils.get_bpmn_display_name(current_elem).replace(" ", "_"))
+                    current_elem = current_elem.outputs[0]
+
+                graph += additional_graph
+                graph += "}"
+                return graph
+        else:
+            return agent_object.bpmn_graphviz_info
+
+    @staticmethod
+    def analyze_bpmn_workflow(agent_object):
+        """
+        This method analyzed the BPMN workflow and extracts all the information,
+        """
+
+        if not hasattr(agent_object, 'bpmn_process_parser'):
+            # In this case the BPMN behaviour has not yet started
+            return
+        process_parser = agent_object.bpmn_process_parser
+        if agent_object.bpmn_info['ServiceTasks'] != 0:
+            # In this case it has been already analyzed
+            # TODO PENSAR SI AQUI BUSCAR QUE SE ESTA EJECUTANDO
+            return
+        current_elem = process_parser.get_spec().start
+        while current_elem is not None:
+            # The BPMN element is performed and, when finished, the next one is obtained
+            GUIFeatures.analyze_bpmn_element(agent_object, current_elem)
+            if isinstance(current_elem, EndEvent):
+                current_elem = None
+                break
+            current_elem = current_elem.outputs[0]  # TODO CUIDADO, HAY QUE CAMBIARLO YA QUE EL EXCLUSIVE TIENE DOS
+
+        # When it is arrived to an EndEvent the current_elem is None, so the BPMN can finish
+        _logger.info("BPMN workflow analyzed successfully for HTML GUI.")
+
+    @staticmethod
+    def analyze_bpmn_element(agent_object, bpmn_element):
+        if isinstance(bpmn_element, ServiceTask):
+            agent_object.bpmn_info['ServiceTasks'] += 1
+            if bpmn_element.smia_capability is not None:
+                agent_object.bpmn_info['Capabilities'] += 1
+            if bpmn_element.smia_skill is not None:
+                agent_object.bpmn_info['Skills'] += 1
+            if bpmn_element.smia_asset is not None:
+                agent_object.bpmn_info['Assets'] += 1
+
+        if isinstance(bpmn_element, ExclusiveGateway):
+            agent_object.bpmn_info['ExclusiveGateways'] += 1
+

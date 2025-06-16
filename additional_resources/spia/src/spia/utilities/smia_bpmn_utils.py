@@ -2,7 +2,8 @@ import asyncio
 import logging
 import re
 
-from SpiffWorkflow.bpmn.specs.defaults import EndEvent, ExclusiveGateway
+from SpiffWorkflow.bpmn.specs.defaults import EndEvent, ExclusiveGateway, StartEvent
+from SpiffWorkflow.bpmn.specs.defaults import ServiceTask
 
 from utilities.smia_bpmn_info import SMIABPMNInfo
 
@@ -233,6 +234,22 @@ class SMIABPMNUtils:
                                                                                                     data_value))
                 getattr(bpmn_element, attribute_to_update)[param_name] = data_value
         return bpmn_element
+
+    @staticmethod
+    def get_bpmn_display_name(bpmn_element):
+        if isinstance(bpmn_element, ServiceTask):
+            if bpmn_element.smia_capability is not None:
+                # Let's get the name from the Capability IRI
+                return bpmn_element.smia_capability.split('#')[1]
+        if isinstance(bpmn_element, ExclusiveGateway):
+            if hasattr(bpmn_element, 'timeout_value') and bpmn_element.timeout_value != 0:
+                return f"Timeout {bpmn_element.timeout_value}s"
+        if isinstance(bpmn_element, StartEvent):
+            return "Start"
+        if isinstance(bpmn_element, EndEvent):
+            return "End"
+        return bpmn_element.bpmn_name
+
 
     # Methods related to the BPMN SMIA attribute values format
     # --------------------------------------------------------
