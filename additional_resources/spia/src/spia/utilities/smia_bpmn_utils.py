@@ -57,7 +57,7 @@ class SMIABPMNUtils:
         # Then, the attributes values of the Gateways are added
         SMIABPMNUtils.add_smia_gateways_attributes_values(process_parser)
 
-        _logger.info("All SMIA attributes values have been added to the process parser objects.")
+        _logger.assetinfo("All SMIA attributes values have been added to the process parser objects.")
 
 
     @staticmethod
@@ -145,6 +145,7 @@ class SMIABPMNUtils:
                         # This ExclusiveGateway needs to be checked with a timeout in the previous element
                         previous_element = SMIABPMNUtils.get_previous_bpmn_element(process_parser, spec_instance)
                         previous_element.smia_additional_tasks.append(SMIABPMNInfo.TASK_CHECK_TIMEOUT)
+                        previous_element.timeout_value = getattr(spec_instance, 'timeout_value')
 
     # Methods related to the BPMN workflow
     # ------------------------------------
@@ -261,14 +262,29 @@ class SMIABPMNUtils:
 
 
     @staticmethod
-    async def perform_bpmn_timeout_check(agent_object, thread, timeout_value):
+    async def perform_bpmn_timeout_check(agent_object, msg_thread, timeout_value):
         """
         This method performs a timeout for an execution of a BPMN element. As the BPMNPerformerBehaviour will be waiting
          for the response ACL message, in case of reaching the timeout value, it will check if the behaviour is still
          waiting (ACL response has not received, so the BPMN element has not finished), and if true it will unlock the
          BPMNPerformerBehaviour setting as response data ('ERROR: Timeout reached').
+
+         Args:
+             agent_object (spade.Agent): the SPADE agent object of the SMIA agent.
+             msg_thread (str): thread of the ACL message
+             timeout_value: value of the timeout to be check
         """
         # Para usar este metodo habra que añadir esto justo antes de solicitar ejecutar la capacidad que tenga definido un timeout
         # asyncio.create_task(SMIABPMNUtils.perform_bpmn_timeout_check())
-        await asyncio.sleep(timeout_value)
-        print("!!!!!!!!!!!!!!!!!!!!!! REACHED")
+        await asyncio.sleep(float(timeout_value))
+        for behaviour in agent_object.behaviours:
+                if str(behaviour.__class__.__name__) == 'BPMNPerformerBehaviour':
+                    for thread, content in behaviour.acl_messages_responses.items():
+                        if thread == msg_thread and content is None:
+                            # In this case the ACL response has not received, so the timeout has been reached before the
+                            # BPMN element has finished
+                            _logger.warning(f"Timeout reached of {timeout_value} seconds for ACL thread {msg_thread}")
+                            behaviour.acl_messages_responses[thread] = "ERROR: TIMEOUT REACHED"
+                            # The behaviour is also unlocked
+                            behaviour.acl_request_event.set()
+                            _logger.info("BPMNPerformerBehaviour unlocked by the timeout management method.")

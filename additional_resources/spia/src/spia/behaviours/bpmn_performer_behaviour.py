@@ -120,7 +120,7 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
             # A one-second wait will be added between the execution of each step
             await asyncio.sleep(1)
         # When it is arrived to an EndEvent the current_elem is None, so the BPMN can finish
-        _logger.info("BPMN workflow completed successfully.")
+        _logger.assetinfo("BPMN workflow completed successfully.")
 
     async def execute_bpmn_element(self, current_bpmn_elem):
         """
@@ -134,7 +134,8 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
             # Only ServiceTasks can be executed by SPIA
             if len(current_bpmn_elem.smia_additional_tasks) > 0:
                 await self.execute_additional_tasks_of_bpmn_element(current_bpmn_elem)
-            _logger.info("Executing BPMN element {}".format(current_bpmn_elem.bpmn_name))
+            _logger.assetinfo("Executing BPMN element {}".format(current_bpmn_elem.bpmn_name))
+            _logger.assetinfo("-----------------> ")
 
             result = await self.execute_acl_rp_css_protocol(current_bpmn_elem)
             # TODO PROBARLO Y ANALIZARLA EL MENSAJE DE RESPUESTA PARA VER SI HA FALLADO ALGO
@@ -155,7 +156,7 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                     # this instance
                     pass
                 else:
-                    _logger.info("The capability {} has no asset identifier specified, so it will be obtained through "
+                    _logger.assetinfo("The capability {} has no asset identifier specified, so it will be obtained through "
                                  "the CNP protocol.".format(bpmn_element.smia_capability))
                     # TODO COMPROBARLO AQUI
                     smia_instance_candidates = await self.get_smia_instances_id_by_capability(bpmn_element.smia_capability)
@@ -166,7 +167,7 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
             if task == SMIABPMNInfo.TASK_REQUEST_DATA_TO_PREVIOUS:
                 for previous_request in bpmn_element.smia_request_to_previous:
                     previous_element = SMIABPMNUtils.get_previous_bpmn_element(self.process_parser, bpmn_element)
-                    _logger.info("A data need to be requested to the SMIA instance {}".format(previous_element.smia_instance))
+                    _logger.assetinfo("A data need to be requested to the SMIA instance {}".format(previous_element.smia_instance))
                     required_data_ref = SMIABPMNUtils.get_required_data_from_bpmn_element(bpmn_element,
                                                                                           previous_request)
                     required_data_value = await self.execute_acl_qp_aas_protocol(previous_element.smia_instance,
@@ -190,7 +191,7 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                             following_element.smia_instance)
 
                     # Now the following element is specified, so the data can be requested
-                    _logger.info("The data {} need to be requested to the SMIA instance {} related to the following task "
+                    _logger.assetinfo("The data {} need to be requested to the SMIA instance {} related to the following task "
                                  "within the BPMN workflow.".format(following_request, following_element.smia_instance))
                     required_data_ref = SMIABPMNUtils.get_required_data_from_bpmn_element(bpmn_element, following_request)
                     required_data_value = await self.execute_acl_qp_aas_protocol(following_element.smia_instance,
@@ -200,14 +201,9 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                                                                           required_data_value)
 
             if task == SMIABPMNInfo.TASK_CHECK_TIMEOUT:
-                # TODO BORRAR: ESTO ES UNA PRUEBA MANUAL PARA QUE NO FALLE DE MOMENTO. Se podria realizar de la
-                #  siguiente forma: cuando se vaya a solicitar ejecutar la capacidad, se analizaría si tiene timeout.
-                #  Si lo tiene, se lanzaria una capacidad OneShot que ejecutará una cuenta atras y si llega,
-                #  desbloqueara este behaviour (estara esperando con un asyncio.Event) y eliminara de la cola de
-                #  mensajes ACL a la espera, añadiendo como resultado "TIMEOUT REACHED" (si se recibe la respuesta
-                #  ACL no se tendra en cuenta)
-                bpmn_element.smia_timeout_reached = True  # Ponerlo a False si se quiere establecer que no se ha cumplido el timeout
-
+                # At this point it is set as False. During the execution of the BPMN element will be set a True if the
+                # timeout is reached
+                bpmn_element.smia_timeout_reached = False
 
     # Methods related to interactions with other SMIA instances
     # ---------------------------------------------------------
@@ -410,7 +406,16 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                 skillParams=bpmn_element.smia_skill_parameters))
         _logger.aclinfo("FIPA-RP initiated to request CSS execution: SMIA [{}] -> capability "
                      "[{}]".format(bpmn_element.smia_instance, bpmn_element.smia_capability))
+        if SMIABPMNInfo.TASK_CHECK_TIMEOUT in bpmn_element.smia_additional_tasks:
+            # In this case, the method for managing the timeout need to be performed in parallel to the CSS request
+            asyncio.create_task(SMIABPMNUtils.perform_bpmn_timeout_check(self.myagent, request_css_acl_msg.thread,
+                                                                         bpmn_element.timeout_value))
         await self.send_acl_and_wait(request_css_acl_msg)
+        # It will be checked whether the timeout has been reached
+        if (isinstance(self.acl_messages_responses[request_css_acl_msg.thread], str) and
+                self.acl_messages_responses[request_css_acl_msg.thread] == 'ERROR: TIMEOUT REACHED'):
+            bpmn_element.smia_timeout_reached = True
+            return
         # When the data has been received, it will be obtained from the global dictionary and will be returned
         return acl_smia_messages_utils.get_parsed_body_from_acl_msg(
             self.acl_messages_responses[request_css_acl_msg.thread])
