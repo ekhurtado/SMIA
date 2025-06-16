@@ -85,7 +85,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 # PROPOSE message with your own value to the other participants in the negotiation.
                 propose_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
                     'N/A', await acl_smia_messages_utils.create_random_thread(self.myagent),
-                    FIPAACLInfo.FIPA_ACL_PERFORMATIVE_CFP,
+                    FIPAACLInfo.FIPA_ACL_PERFORMATIVE_PROPOSE,
                     self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB),
                     protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
                     msg_body={**self.received_body_json, **{'negValue': self.neg_value}})
