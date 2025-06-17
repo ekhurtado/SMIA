@@ -146,8 +146,13 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                 _logger.warning("BPMN execution is stopped via the GUI.")
             # A one-second wait will be added between the execution of each step
             await asyncio.sleep(1)
+
         # When it is arrived to an EndEvent the current_elem is None, so the BPMN can finish
         _logger.assetinfo("BPMN workflow completed successfully.")
+        # The information to be displayed in the GUI is also added
+        self.myagent.smia_pe_info['InteractionsDict'].append(
+            {'type': 'analysis', 'title': 'SMIA workflow successfully completed',
+             'message': 'All the steps of the SMIA-BPMN workflow have been performed.'})
 
     async def execute_bpmn_element(self, current_bpmn_elem):
         """

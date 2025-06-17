@@ -1,8 +1,0 @@
-graph "SMIA workflow" {
-	"http://www.w3id.org/upv-ehu/gcis/css-smia#Transportation"
-	"http://www.w3id.org/upv-ehu/gcis/css-smia#Punching"
-	"http://www.w3id.org/upv-ehu/gcis/css-smia#Transportation"
-	"http://www.w3id.org/upv-ehu/gcis/css-smia#DrillingAndMilling"
-	"Timeout of 10s"
-	"http://www.w3id.org/upv-ehu/gcis/css-smia#VisualInspection"
-}

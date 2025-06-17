@@ -4,6 +4,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY spia /smia_pe
+COPY spia/htmls /htmls
 
 WORKDIR /smia_pe
 

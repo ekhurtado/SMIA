@@ -63,8 +63,8 @@ class GUIControllers:
 
 class GUIFeatures:
     """This class contains the methods related to SPADE web interface customization."""
-    FAVICON_PATH = './htmls/static/SMIA_favicon.ico' # TODO BORRAR
-    # FAVICON_PATH = '/htmls/static/SMIA_favicon.ico'
+    # FAVICON_PATH = './htmls/static/SMIA_favicon.ico' # TODO BORRAR
+    FAVICON_PATH = '/htmls/static/SMIA_favicon.ico'
 
     @staticmethod
     async def add_new_menu_entry(agent, entry_name, entry_url, entry_icon):
@@ -133,42 +133,33 @@ class GUIFeatures:
                         current_elem = current_elem.outputs[0]
                         continue
                     if isinstance(current_elem, EndEvent):
-                        additional_graph += '{} [label={}, shape=ellipse]; '.format(
+                        additional_graph += '{} [label={}, shape=ellipse, style=filled, fillcolor=green]; '.format(
                             current_elem.bpmn_id, SMIABPMNUtils.get_bpmn_display_name(current_elem))
                         break
                     origin = current_elem.bpmn_id
                     origin = origin.replace(" ", "_")
                     for output_elem in current_elem.outputs:
                         dest = output_elem.bpmn_id
-                        # dest = SMIABPMNUtils.get_bpmn_display_name(output_elem)
                         dest = dest.replace(" ", "_")
                         graph += "{0} -> {1};".format(origin, dest)
 
                     # The options for each element are also added
                     additional_graph_options = ''
                     if SMIABPMNUtils.get_bpmn_display_name(current_elem) == 'Start':
-                        # additional_graph += '{} [label={}, shape=ellipse]; '.format(
-                        #     origin, SMIABPMNUtils.get_bpmn_display_name(current_elem).replace(" ", "_"))
                         additional_graph_options += 'label={}, shape=ellipse'.format(
                             SMIABPMNUtils.get_bpmn_display_name(current_elem).replace(" ", "_"))
 
                     elif isinstance(current_elem, ExclusiveGateway):
-                        # additional_graph += '{} [label={}, shape=diamond]; '.format(
-                        #     origin, SMIABPMNUtils.get_bpmn_display_name(current_elem).replace(" ", "_"))
                         additional_graph_options += 'label={}, shape=diamond'.format(
                             SMIABPMNUtils.get_bpmn_display_name(current_elem).replace(" ", "_"))
                         # The outputs of the exclusive are added at the same level
                         additional_graph += ('{ rank=same; ' + '; '.join(out.bpmn_id for out in current_elem.outputs)
                                              + '; }')
                     else:
-                        # additional_graph += '{} [label={}]; '.format(
-                        #     origin, SMIABPMNUtils.get_bpmn_display_name(current_elem).replace(" ", "_"))
                         additional_graph_options += 'label={}'.format(SMIABPMNUtils.
                                                               get_bpmn_display_name(current_elem).replace(" ", "_"))
 
                     if hasattr(current_elem, 'current_exec_elem') and current_elem.current_exec_elem:
-                        # additional_graph += '{} [label={}, style=filled, fillcolor=green, fontcolor=white]; '.format(
-                        #     origin, SMIABPMNUtils.get_bpmn_display_name(current_elem).replace(" ", "_"))
                         additional_graph_options += ', style=filled, fillcolor=green'
 
                     additional_graph += '{} [{}]; '.format(origin, additional_graph_options)

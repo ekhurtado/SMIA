@@ -1,7 +1,6 @@
 import logging
 from collections import OrderedDict
 
-import graphviz
 from spade.behaviour import OneShotBehaviour
 
 from utilities.gui_utils import GUIFeatures, GUIControllers
