@@ -46,7 +46,7 @@ class SPIAGUIBehaviour(OneShotBehaviour):
         # The new webpages need also to be added in the manu of the web interface
         # await GUIFeatures.add_new_menu_entry(self.agent,'System view', '/system_view', 'fa fa-eye')
         self.agent.web.add_menu_entry("SMIA PE Dashboard", "/smia_pe_dashboard", "fa fa-user-cog")
-        self.agent.web.add_menu_entry("SMIA PE Tracking", "/smia_pe_tracking", "fa fa-sign-in-alt")
+        self.agent.web.add_menu_entry("SMIA PE Tracking", "/smia_pe_tracking", "fas fa-terminal")
         _logger.info("Added new web pages to the web interface.")
 
         # Once all the configuration is done, the web interface is enabled in the SMIA SPADE agent

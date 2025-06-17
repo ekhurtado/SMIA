@@ -99,6 +99,7 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
             'Obtaining SMIA attributes from BPMN file ...', 'message': 'All CSS-related information has been obtained '
                                                                        'from the SMIA-BPMN workflow..'})
 
+        setattr(process_parser.get_spec().start.outputs[0], 'current_exec_elem', True)
         # To finalize the initialization of the BPMN file, the SMIA instances associated to the specified assets need
         # to be obtained
         await self.get_smia_instances_of_specified_assets()
@@ -128,7 +129,13 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
         # Let's start from the beginning
         current_elem = self.process_parser.get_spec().start
 
+        # The element is set as the current execution step
+        setattr(current_elem, 'current_exec_elem', True)
+
         while current_elem is not None:
+            # The element is set as the current execution step
+            setattr(current_elem, 'current_exec_elem', True)
+
             # It will only continue executing the workflow if the global variable is set for that (the user can stop
             # the execution through the GUI)
             if self.myagent.bpmn_execution_status:

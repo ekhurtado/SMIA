@@ -160,6 +160,9 @@ class SMIABPMNUtils:
     @staticmethod
     def get_next_bpmn_element(process_parser, current_elem):
 
+        # The element is remove as the current execution step
+        delattr(current_elem, 'current_exec_elem')
+
         if isinstance(current_elem, EndEvent):
             return None
         elif isinstance(current_elem, ExclusiveGateway):
