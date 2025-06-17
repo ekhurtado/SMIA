@@ -3,7 +3,7 @@ import logging
 
 from SpiffWorkflow.bpmn.parser import BpmnParser
 from SpiffWorkflow.bpmn.specs.defaults import ServiceTask
-from smia import CriticalError
+from smia import CriticalError, GeneralUtils
 from smia.logic import inter_smia_interactions_utils, acl_smia_messages_utils
 from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
 from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo, ACLSMIAJSONSchemas
@@ -51,6 +51,10 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
         This method implements the initialization process of this behaviour.
         """
         _logger.info("BPMNPerformerBehaviour starting...")
+
+        # The variable for execution information about the SPIA is initialized
+        self.myagent.smia_pe_info = {'Status': 'Starting', 'StartTime': GeneralUtils.get_current_date_time(),
+                                     'ISMInteractions': 0, 'Interactions': 0, 'InteractionsDict': []}
 
         # The BPMN file content is obtained in bytes
         _logger.info("Obtaining the BPMN file content...")
@@ -116,10 +120,14 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
         current_elem = self.process_parser.get_spec().start
 
         while current_elem is not None:
-            # The BPMN element is performed and, when finished, the next one is obtained
-            await self.execute_bpmn_element(current_elem)
-            current_elem = SMIABPMNUtils.get_next_bpmn_element(self.process_parser, current_elem)
-
+            # It will only continue executing the workflow if the global variable is set for that (the user can stop
+            # the execution through the GUI)
+            if self.myagent.bpmn_execution_status:
+                # The BPMN element is performed and, when finished, the next one is obtained
+                await self.execute_bpmn_element(current_elem)
+                current_elem = SMIABPMNUtils.get_next_bpmn_element(self.process_parser, current_elem)
+            else:
+                _logger.warning("BPMN execution is stopped via the GUI.")
             # A one-second wait will be added between the execution of each step
             await asyncio.sleep(1)
         # When it is arrived to an EndEvent the current_elem is None, so the BPMN can finish

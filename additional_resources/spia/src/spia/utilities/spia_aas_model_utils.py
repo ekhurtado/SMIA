@@ -32,7 +32,7 @@ class SPIAAASModelUtils:
                 return bpmn_files_within_aasx[0]
         else:
             # TODO in this case it would be necessary to request the content of the file to the AAS Repository: it is not developed yet
-            print("The AAS model is not an AASX package.")
+            _logger.info("The AAS model is not an AASX package.")
             return None
 
     @staticmethod
