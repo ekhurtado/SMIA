@@ -133,9 +133,8 @@ class GUIFeatures:
                         current_elem = current_elem.outputs[0]
                         continue
                     if isinstance(current_elem, EndEvent):
-                        additional_graph += '{} [label={}, shape=ellipse, style=filled, fillcolor=green]; '.format(
-                            current_elem.bpmn_id, SMIABPMNUtils.get_bpmn_display_name(current_elem))
-                        break
+                        current_elem.outputs = []
+
                     origin = current_elem.bpmn_id
                     origin = origin.replace(" ", "_")
                     for output_elem in current_elem.outputs:
@@ -145,7 +144,8 @@ class GUIFeatures:
 
                     # The options for each element are also added
                     additional_graph_options = ''
-                    if SMIABPMNUtils.get_bpmn_display_name(current_elem) == 'Start':
+                    if (SMIABPMNUtils.get_bpmn_display_name(current_elem) == 'Start' or
+                            isinstance(current_elem, EndEvent)):
                         additional_graph_options += 'label={}, shape=ellipse'.format(
                             SMIABPMNUtils.get_bpmn_display_name(current_elem).replace(" ", "_"))
 
@@ -163,7 +163,8 @@ class GUIFeatures:
                         additional_graph_options += ', style=filled, fillcolor=green'
 
                     additional_graph += '{} [{}]; '.format(origin, additional_graph_options)
-                    current_elem = current_elem.outputs[0]
+                    current_elem = next(iter(current_elem.outputs), None)
+                    # current_elem = current_elem.outputs[0]
 
                 graph += additional_graph
                 graph += "}"

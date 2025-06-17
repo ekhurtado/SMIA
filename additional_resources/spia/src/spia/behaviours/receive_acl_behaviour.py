@@ -54,6 +54,7 @@ class ReceiveACLBehaviour(CyclicBehaviour):
                             # In this case, the behaviour is waiting for the content
                             _logger.aclinfo("BPMNPerformerBehaviour is waiting for a content [{}] that has arrived with"
                                             " thread [{}] from [{}].".format(msg.body, msg.thread, msg.sender))
+                            self.myagent.smia_pe_info['ReceivedACLmsg'] += 1
                             msg_parsed_body = acl_smia_messages_utils.get_parsed_body_from_acl_msg(msg)
                             if (msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB) ==
                                     FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE):

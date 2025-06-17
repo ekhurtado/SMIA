@@ -160,32 +160,33 @@ class SMIABPMNUtils:
     @staticmethod
     def get_next_bpmn_element(process_parser, current_elem):
 
-        # The element is remove as the current execution step
-        if hasattr(current_elem, 'current_exec_elem'):
-            delattr(current_elem, 'current_exec_elem')
-
         if isinstance(current_elem, EndEvent):
             return None
-        elif isinstance(current_elem, ExclusiveGateway):
-            previous_element = SMIABPMNUtils.get_previous_bpmn_element(process_parser, current_elem)
-            for condition, following_element_id in current_elem.cond_task_specs:
-                if condition.args[0].lower() in ('yes', 'true', 't', '1') and previous_element.smia_timeout_reached:
-                    print(
-                        "The condition \"YES\" of the Timeout gateway has been met (so the timeout has been reached).")
-                    return SMIABPMNUtils.get_bpmn_element_by_id(process_parser, following_element_id)
-                if condition.args[0].lower() in ('no', 'false', 'f', '0') and not previous_element.smia_timeout_reached:
-                    print(
-                        "The condition \"NO\" of the Timeout gateway has been met (so the timeout has not been reached).")
-                    return SMIABPMNUtils.get_bpmn_element_by_id(process_parser, following_element_id)
-            return None
         else:
-            for bpmn_name, bpmn_elem in process_parser.get_spec().task_specs.items():
-                if bpmn_elem == current_elem.outputs[0]:
-                    # Como se trabajan con flujos simples siempre se escoge el primero de los siguientes outputs
-                    # TODO PENSAR SI SE QUIERE AÑADIR GESTION DE FLUJOS COMPLEJOS: habria que pensar una forma de manejar en
-                    #  paralelo multiples tasks. Por ejemplo, se podrian crear comportamientos SPADE de la misma forma que
-                    #  SMIA, usando la naturaleza asincrona para manejar en paralelo.
-                    return bpmn_elem
+            # The element is remove as the current execution step
+            if hasattr(current_elem, 'current_exec_elem'):
+                delattr(current_elem, 'current_exec_elem')
+
+            if isinstance(current_elem, ExclusiveGateway):
+                previous_element = SMIABPMNUtils.get_previous_bpmn_element(process_parser, current_elem)
+                for condition, following_element_id in current_elem.cond_task_specs:
+                    if condition.args[0].lower() in ('yes', 'true', 't', '1') and previous_element.smia_timeout_reached:
+                        print(
+                            "The condition \"YES\" of the Timeout gateway has been met (so the timeout has been reached).")
+                        return SMIABPMNUtils.get_bpmn_element_by_id(process_parser, following_element_id)
+                    if condition.args[0].lower() in ('no', 'false', 'f', '0') and not previous_element.smia_timeout_reached:
+                        print(
+                            "The condition \"NO\" of the Timeout gateway has been met (so the timeout has not been reached).")
+                        return SMIABPMNUtils.get_bpmn_element_by_id(process_parser, following_element_id)
+                return None
+            else:
+                for bpmn_name, bpmn_elem in process_parser.get_spec().task_specs.items():
+                    if bpmn_elem == current_elem.outputs[0]:
+                        # Como se trabajan con flujos simples siempre se escoge el primero de los siguientes outputs
+                        # TODO PENSAR SI SE QUIERE AÑADIR GESTION DE FLUJOS COMPLEJOS: habria que pensar una forma de manejar en
+                        #  paralelo multiples tasks. Por ejemplo, se podrian crear comportamientos SPADE de la misma forma que
+                        #  SMIA, usando la naturaleza asincrona para manejar en paralelo.
+                        return bpmn_elem
 
     @staticmethod
     def get_bpmn_element_by_id(process_parser, bpmn_element_id):

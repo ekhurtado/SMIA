@@ -54,7 +54,8 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
 
         # The variable for execution information about the SPIA is initialized
         self.myagent.smia_pe_info = {'Status': 'Starting', 'StartTime': GeneralUtils.get_current_date_time(),
-                                     'ISMInteractions': 0, 'Interactions': 0, 'InteractionsDict': []}
+                                     'ISMInteractions': 0, 'Interactions': 0, 'ReceivedACLmsg': 0,
+                                     'InteractionsDict': []}
 
         # The BPMN file content is obtained in bytes
         _logger.info("Obtaining the BPMN file content...")
@@ -144,6 +145,7 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                 current_elem = SMIABPMNUtils.get_next_bpmn_element(self.process_parser, current_elem)
             else:
                 _logger.warning("BPMN execution is stopped via the GUI.")
+
             # A one-second wait will be added between the execution of each step
             await asyncio.sleep(1)
 
@@ -295,6 +297,7 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
         self.myagent.smia_pe_info['InteractionsDict'].append({'type': 'acl_send', 'title':
             'Obtaining SMIA instance associated to a specific asset ...', 'message': 'The FIPA-RP protocol has been '
             'performed to SMIA ISM to obtain the SMIA instance for the asset {}'.format(asset_id)})
+        self.myagent.smia_pe_info['ISMInteractions'] += 1
 
         await self.send_acl_and_wait(request_acl_msg)
 
@@ -319,6 +322,14 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
             serviceID='GetAssetIDBySMIAInstanceID', serviceType='DiscoveryService', serviceParams=smia_instance_id))
         _logger.aclinfo("FIPA-RP with an AAS Infrastructure Service initiated with SMIA ISM to obtain the asset "
                         "identifier for the SMIA instance {}".format(smia_instance_id))
+
+        # The information to be displayed in the GUI is also added
+        self.myagent.smia_pe_info['InteractionsDict'].append({'type': 'acl_send', 'title':
+            'Obtaining asset identifier associated to a specific SMIA instance ...', 'message':
+            'The FIPA-RP protocol has been performed to SMIA ISM to obtain the asset identifier for the SMIA instance '
+            '{}'.format(smia_instance_id)})
+        self.myagent.smia_pe_info['ISMInteractions'] += 1
+
         await self.send_acl_and_wait(request_acl_msg)
         # When the data has been received, it will be obtained from the global dictionary and will be returned
         return acl_smia_messages_utils.get_parsed_body_from_acl_msg(self.acl_messages_responses[request_acl_msg.thread])
@@ -346,6 +357,7 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
             'Obtaining assets associated to a specific capability ...', 'message': 'The FIPA-RP protocol has been '
             'performed to SMIA ISM to obtain the assets identifiers associated to the capability with IRI {}'.format(
             capability_iri)})
+        self.myagent.smia_pe_info['ISMInteractions'] += 1
 
         await self.send_acl_and_wait(request_assets_acl_msg)
         # When the assets have been received, it will be obtained from the global dictionary
@@ -368,6 +380,7 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                     'Obtaining SMIA instance associated to a specific asset ...', 'message':
                     'The FIPA-RP protocol has been performed to SMIA ISM to obtain the SMIA instance associated to the '
                     'asset {}'.format(asset_id)})
+                self.myagent.smia_pe_info['ISMInteractions'] += 1
 
                 await self.send_acl_and_wait(request_smia_id_acl_msg)
                 # When the data have been received it is added to the list
@@ -404,6 +417,7 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
         self.myagent.smia_pe_info['InteractionsDict'].append({'type': 'acl_send', 'title':
             'Obtaining AAS information through FIPA-QP protocol ...', 'message': 'The FIPA-QP protocol has been '
             'performed to obtain the AAS information with reference {}'.format(requested_aas_ref)})
+        self.myagent.smia_pe_info['Interactions'] += 1
 
         await self.send_acl_and_wait(query_acl_msg)
         # When the data has been received, it will be obtained from the global dictionary and will be returned
@@ -440,6 +454,9 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                     negCriterion='http://www.w3id.org/hsu-aut/css#NegotiateBasedOnRAM',
                     negRequester=str(self.myagent.jid), negTargets=smia_instance_ids))
             await self.send(cfp_acl_message)
+
+            self.myagent.smia_pe_info['Interactions'] += 1
+
         _logger.aclinfo("FIPA-CNP initiated with SMIA candidates {} to perform capability {}".format(
             smia_instance_ids, bpmn_element.smia_capability))
         # When all messages have been sent, it will wait to the winner response
@@ -488,6 +505,7 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
             'Requesting a CSS-related execution through FIPA-RP protocol ...', 'message': 'The FIPA-QP protocol has been '
             'performed to request the execution of the capability with IRI {} to the SMIA instance {}'.format(
             bpmn_element.smia_capability, bpmn_element.smia_instance)})
+        self.myagent.smia_pe_info['Interactions'] += 1
 
         await self.send_acl_and_wait(request_css_acl_msg)
         # It will be checked whether the timeout has been reached
