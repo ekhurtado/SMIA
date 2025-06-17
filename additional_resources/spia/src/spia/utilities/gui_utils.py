@@ -35,14 +35,31 @@ class GUIControllers:
         """
         return {"status": "OK"}
 
-    async def spia_gui_controller(self, request):
+    async def spia_gui_get_controller(self, request):
         """
         The controller during the request of SMIA PE Dashboard.
         """
         # The BPMN process parser is analyzed, in order to extract useful information
         GUIFeatures.analyze_bpmn_workflow(self.myagent)
+        return {"status": "success"}
 
-        return {"status": "OK"}
+    async def spia_gui_post_controller(self, request):
+        """
+        The controller during the request of SMIA PE Dashboard.
+        """
+        data = await request.json()
+        bpmn_execution_change = data.get('BPMNExecutionChange', None)   # None if it is missing
+
+        if bpmn_execution_change is not None:
+            if bpmn_execution_change == 'Continue':
+                self.myagent.bpmn_execution_status = True
+            if bpmn_execution_change == 'Stop':
+                self.myagent.bpmn_execution_status = False
+
+        # TODO Think more buttons for SMIA PE
+        return {'status': 'success'}
+        # return web.json_response({'status': 'success'})
+        # return {"status": "success", "reason": "success reason"}
 
 class GUIFeatures:
     """This class contains the methods related to SPADE web interface customization."""

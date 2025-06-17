@@ -94,6 +94,7 @@
 
         .bpmn-continue-button:hover {
             background-color: #218838;
+            border-color: #218838;
         }
 
         .bpmn-stop-button {
@@ -102,6 +103,12 @@
 
         .bpmn-stop-button:hover {
             background-color: #780000;
+            border-color: #780000;
+        }
+
+        .bpmn-execution-status {
+            font-weight: lighter;
+            font-style: italic;
         }
 
     </style>
@@ -130,7 +137,7 @@
                     <div class="col-md-7 col-md-offset-2">
                         <div class="box box-success">
                             <div class="box-header with-border">
-                                <h3 class="box-title">BPMN CSS workflow information</h3>
+                                <h3 class="box-title">SMIA CSS workflow information</h3>
 
                                 <div class="box-tools pull-right">
                                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
@@ -167,7 +174,7 @@
                                                 <p>Detected ExclusiveGateways</p>
                                             </div>
                                             <div class="icon">
-                                                <i class="fas fa-code"></i>
+                                                <i class="fas fa-exclamation-triangle"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -219,6 +226,9 @@
                                 <h3 class="box-title">SMIA workflow</h3>
 
                                 <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i>
+                                    </button>
                                 </div>
                             </div>
                             <!-- /.box-header -->
@@ -254,6 +264,16 @@
 
                                     <button type="button" id="bpmn-stop-button" class="btn btn-primary load-button bpmn-stop-button">Stop</button>
 
+                                    <div class="bpmn-execution-status-div">
+                                        {% if agent.bpmn_execution_status == True %}
+                                            <i class="fas fa-play-circle fa-lg" style="color: #28a745;"></i>
+                                            <span class="bpmn-execution-status">SMIA workflow executing</span>
+                                        {% else %}
+                                            <i class="fas fa-pause-circle fa-lg" style="color: #e30000;"></i>
+                                            <span class="bpmn-execution-status">SMIA workflow stoped</span>
+                                        {% endif %}
+                                </div>
+
                                 </div>
 
                             </div>
@@ -281,6 +301,60 @@
 
     <script>
         // Here some JS code can be added
+        const continueButton = document.getElementById('bpmn-continue-button');
+        const stopButton = document.getElementById('bpmn-stop-button');
+
+        continueButton.addEventListener('click', async function(event) {
+
+            // Send data as JSON using fetch
+            let requestJSON = {'BPMNExecutionChange': 'Continue'};
+            try {
+                const response = await fetch('/smia_pe_dashboard', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestJSON)
+                });
+
+                const json = await response.json();
+                if (json.status !== 'success') {
+                    alert(`Failed to continue the SMIA PE workflow execution: ${json.reason}.`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to continue the SMIA PE workflow execution. Error: .' + error);
+            }
+
+            location.reload();  // The web page is reloaded
+        });
+
+        stopButton.addEventListener('click', async function(event) {
+
+            // Send data as JSON using fetch
+            const requestJSON = {'BPMNExecutionChange': 'Stop'};
+            try {
+                const response = await fetch('/smia_pe_dashboard', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestJSON)
+                });
+
+                const json = await response.json();
+                if (json.status === 'success') {
+                    alert(`Successfully stopped SMIA PE workflow execution.`);
+                } else {
+                    alert(`Failed to stop the SMIA PE workflow execution: ${json.reason}.`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to stop the SMIA PE workflow execution. Error: .' + error);
+            }
+
+            location.reload();  // The web page is reloaded
+        });
     </script>
 
 </body>
