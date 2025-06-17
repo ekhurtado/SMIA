@@ -59,6 +59,16 @@ class ReceiveACLBehaviour(CyclicBehaviour):
                                     FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE):
                                 _logger.error("SPIA has received a Failure for the thread [{}], so it cannot continue. "
                                               "Reason: {}".format(thread, msg_parsed_body['reason']))
+
+                                # The information to be displayed in the GUI is also added
+                                self.myagent.smia_pe_info['InteractionsDict'].append(
+                                    {'type': 'acl_recv', 'response_type':
+                                        msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB), 'title':
+                                        'FIPA-ACL failure response received ...', 'response_title':
+                                        'FIPA-ACL failure response received from {}'.format(
+                                            acl_smia_messages_utils.get_sender_from_acl_msg(msg)),
+                                     'response_msg': msg_parsed_body['reason']})
+
                                 raise CriticalError('SPIA cannot continue due to a received FAILURE ACL message. '
                                                     'Reason: {}'.format(msg_parsed_body['reason']))
                             if (msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB) ==
@@ -68,5 +78,12 @@ class ReceiveACLBehaviour(CyclicBehaviour):
                                 # Now the behaviour can be unlocked
                                 behaviour.acl_request_event.set()
                                 _logger.info("BPMNPerformerBehaviour unlocked and added the response content data.")
+
+                                # The information to be displayed in the GUI is also added
+                                self.myagent.smia_pe_info['InteractionsDict'].append({'type': 'acl_recv',
+                                    'response_type': msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB),
+                                    'title': 'FIPA-ACL response received ...', 'response_title': 'FIPA-ACL response '
+                                    'received from {}'.format(acl_smia_messages_utils.get_sender_from_acl_msg(msg)),
+                                    'response_msg': msg.body})
         else:
             _logger.info("         - No message received within 10 seconds on SPIA (ReceiveACLBehaviour)")
