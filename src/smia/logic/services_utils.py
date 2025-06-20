@@ -119,7 +119,7 @@ class AgentServiceUtils:
             result of the execution of the agent service.
         """
         if isinstance(service_method, staticmethod):
-            method_function = staticmethod.__func__
+            method_function = service_method.__func__
         else:
             method_function = service_method
 
