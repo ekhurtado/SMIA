@@ -39,5 +39,5 @@ class SMIAHIGUIBehaviour(OneShotBehaviour):
         _logger.info("Added new web pages to the web interface.")
 
         # Once all the configuration is done, the web interface is enabled in the SMIA SPADE agent
-        self.agent.web.start(hostname="0.0.0.0", port="20000")
+        self.agent.web.start(hostname="0.0.0.0", port="10000")
         _logger.info("Started SMIA HI SPADE web interface.")

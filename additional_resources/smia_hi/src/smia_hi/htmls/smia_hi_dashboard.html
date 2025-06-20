@@ -16,7 +16,7 @@
             margin-left: 10px;
         }
 
-        .inner h1, .inner h2, .inner h3 {
+        .inner h1, .inner h2, .inner h3, .inner h4 {
             /*Code to break lines long sentences in inner (used in small boxes)*/
             word-wrap: break-word;
             word-break: break-all;
@@ -49,6 +49,22 @@
             background-color: #f5f5f5;
         }
 
+        .info-box-text {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+
+        /* Progress Bar */
+        .progress {
+            margin: 20px auto;
+            height: 5px !important;
+        }
+
+        .progress-bar, .info-box .progress .progress-bar {
+            background-color: #00a65a !important;
+        }
+
 
 
     </style>
@@ -74,7 +90,7 @@
             <section class="content">
                 <!-- Row with information about the operator-->
                 <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
+                    <div class="col-md-6 col-md-offset-3">
                         <div class="box box-primary">
                             <div class="box-header with-border">
                                 <h3 class="box-title">SMIA HI operator information</h3>
@@ -87,22 +103,59 @@
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
-                                <h4>Information extracted from CSS-based BPMN workflow.</h4>
 
                                 <div class="row small-boxes-div">
-                                    <div class="col-lg-3 col-xs-7">
+                                    <div class="col-lg-4 col-xs-7">
                                         <!-- small box -->
-                                        <div class="small-box bg-green">
+                                        <div class="small-box bg-orange">
                                         <!-- There are multiple colors: https://basscss.com/v7/docs/background-colors/ -->
                                             <div class="inner">
-                                                <h3> pp </h3>
-<!--                                                <h3>0</h3>-->
-                                                <p>Detected ServiceTasks</p>
+                                                <h3> 2 </h3>
+<!--                                                TODO RECOGERLO DEL AGENTE-->
+                                                <p>Detected Capabilities</p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fa fa-project-diagram"></i>
                                             </div>
                                         </div>
+                                    </div>
+                                    <!-- ./col -->
+
+                                    <div class="col-lg-4 col-xs-7">
+                                        <!-- small box -->
+                                        <div class="small-box bg-aqua">
+                                        <!-- There are multiple colors: https://basscss.com/v7/docs/background-colors/ -->
+                                            <div class="inner">
+                                                <h3> 2 </h3>
+<!--                                                TODO RECOGERLO DEL AGENTE-->
+                                                <p>Detected Skills</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-project-diagram"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+
+                                    <div class="col-lg-4 col-xs-7">
+                                        <div class="info-box bg-gray">
+                                            <span class="info-box-icon"><i class="fas fa-tasks"></i></span>
+
+                                            <div class="info-box-content">
+                                                <div class="inner">
+                                                    <h4 class="info-box-text">Tasks</h4>
+                                                </div>
+
+                                                <div class="progress progress-sm active">
+                                                    <div class="progress-bar progress-bar-success progress-bar-striped active" style="width: 70%"></div>
+                                                </div>
+                                                <span class="progress-description">
+                                                    70% completed
+                                                </span>
+                                            </div>
+                                            <!-- /.info-box-content -->
+                                        </div>
+                                        <!-- /.info-box -->
                                     </div>
                                     <!-- ./col -->
                                 </div>
@@ -114,26 +167,6 @@
                     <!-- /.col -->
 
 
-                    <div class="col-md-3 col-sm-6 col-xs-12">
-                      <div class="info-box bg-green">
-                        <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
-
-                        <div class="info-box-content">
-                          <span class="info-box-text">Likes</span>
-                          <span class="info-box-number">41,410</span>
-
-                          <div class="progress">
-                            <div class="progress-bar progress-bar-success progress-bar-striped active" style="width: 70%"></div>
-                          </div>
-                              <span class="progress-description">
-                                70% Increase in 30 Days
-                              </span>
-                        </div>
-                        <!-- /.info-box-content -->
-                      </div>
-                      <!-- /.info-box -->
-                    </div>
-                    <!-- /.col -->
                 </div>
                 <!-- ./row -->
 
