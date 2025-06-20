@@ -118,7 +118,12 @@ class AgentServiceUtils:
         Returns:
             result of the execution of the agent service.
         """
-        if inspect.iscoroutinefunction(service_method):
+        if isinstance(service_method, staticmethod):
+            method_function = staticmethod.__func__
+        else:
+            method_function = service_method
+
+        if inspect.iscoroutinefunction(method_function):
             return await service_method(**kwargs)
         else:
             return service_method(**kwargs)
