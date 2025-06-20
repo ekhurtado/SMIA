@@ -1,6 +1,4 @@
 import logging
-import asyncio
-from types import coroutine
 
 _logger = logging.getLogger(__name__)
 
@@ -8,7 +6,6 @@ class SMIAHIAgentServices:
 
 
     @staticmethod
-    @coroutine
     async def human_transport_gui(Initial, Final):
         # TODO
         _logger.info("Running the transport service using the human through SPADE web GUI")
