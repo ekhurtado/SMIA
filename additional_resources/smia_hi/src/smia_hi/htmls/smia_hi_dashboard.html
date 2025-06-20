@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SMIA PE Dashboard</title>
+    <!-- Include SPADE CSS links -->
+    {% include 'htmls/templates/spade_html_css_links.html' %}
+
+    <style>
+
+        .box-primary {
+            padding-bottom: 5px;
+        }
+
+        .box-primary h2 {
+            margin-left: 10px;
+        }
+
+        .inner h1, .inner h2, .inner h3 {
+            /*Code to break lines long sentences in inner (used in small boxes)*/
+            word-wrap: break-word;
+            word-break: break-all;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+
+        /*Add your own CSS style code*/
+        .small-boxes-div {
+            padding: 5px 10px;
+        }
+
+        .table th, .table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+
+            word-wrap: break-word;
+            word-break: break-all;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+
+
+    </style>
+</head>
+<body class="sidebar-mini skin-blue" style="height: auto; min-height: 100%;">
+    <div class="wrapper" style="height: auto; min-height: 100%;">
+        <header class="main-header">
+            {% include 'htmls/templates/spade_html_header.html' %}
+        </header>
+        <aside class="main-sidebar">
+            {% include 'htmls/templates/spade_html_aside.html' %}
+        </aside>
+        <div class="content-wrapper" style="min-height: 960px;">
+            <section class="content-header">
+                <h1>SMIA Human Interface Dashboard</h1>
+                <ol class="breadcrumb">
+                    <li><a href="/spade"><i class="fa fa-dashboard"></i> Home</a></li>
+                    <li class="active">SMIA HI Dashboard</li>
+                </ol>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <!-- Row with information about the operator-->
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">SMIA HI operator information</h3>
+
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <h4>Information extracted from CSS-based BPMN workflow.</h4>
+
+                                <div class="row small-boxes-div">
+                                    <div class="col-lg-3 col-xs-7">
+                                        <!-- small box -->
+                                        <div class="small-box bg-green">
+                                        <!-- There are multiple colors: https://basscss.com/v7/docs/background-colors/ -->
+                                            <div class="inner">
+                                                <h3> pp </h3>
+<!--                                                <h3>0</h3>-->
+                                                <p>Detected ServiceTasks</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-project-diagram"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                </div>
+                                <!-- ./row -->
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                    </div>
+                    <!-- /.col -->
+
+
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                      <div class="info-box bg-green">
+                        <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
+
+                        <div class="info-box-content">
+                          <span class="info-box-text">Likes</span>
+                          <span class="info-box-number">41,410</span>
+
+                          <div class="progress">
+                            <div class="progress-bar progress-bar-success progress-bar-striped active" style="width: 70%"></div>
+                          </div>
+                              <span class="progress-description">
+                                70% Increase in 30 Days
+                              </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                      </div>
+                      <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- ./row -->
+
+                <!-- Row with received tasks for the operator-->
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="box box-warning">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">SMIA HI received tasks</h3>
+
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <h4>Information extracted from CSS-based BPMN workflow.</h4>
+
+                                <div class="row small-boxes-div">
+                                    <div class="col-lg-3 col-xs-7">
+                                        <!-- small box -->
+                                        <div class="small-box bg-green">
+                                        <!-- There are multiple colors: https://basscss.com/v7/docs/background-colors/ -->
+                                            <div class="inner">
+                                                <h3> pp </h3>
+<!--                                                <h3>0</h3>-->
+                                                <p>Detected ServiceTasks</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-project-diagram"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                </div>
+                                <!-- ./row -->
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- ./row -->
+
+                <!-- Row with completed tasks by the operator-->
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="box box-success">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">SMIA HI completed tasks</h3>
+
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <h4>Information extracted from CSS-based BPMN workflow.</h4>
+
+                                <div class="row small-boxes-div">
+                                    <div class="col-lg-3 col-xs-7">
+                                        <!-- small box -->
+                                        <div class="small-box bg-green">
+                                        <!-- There are multiple colors: https://basscss.com/v7/docs/background-colors/ -->
+                                            <div class="inner">
+                                                <h3> pp </h3>
+<!--                                                <h3>0</h3>-->
+                                                <p>Detected ServiceTasks</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-project-diagram"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                </div>
+                                <!-- ./row -->
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- ./row -->
+
+
+
+            </section>
+            <!-- /.content -->
+        </div>
+
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 0.2.4
+            </div>
+            <strong>Copyright © {% now 'local', '%Y' %} <a href="https://github.com/ekhurtado/SMIA" target="_blank">SMIA</a>.</strong>
+        </footer>
+
+    </div>
+    <!-- Include SPADE scripts -->
+    {% include 'htmls/templates/spade_html_scripts.html' %}
+
+    <script>
+        // Here some JS code can be added
+
+    </script>
+
+</body>
+</html>

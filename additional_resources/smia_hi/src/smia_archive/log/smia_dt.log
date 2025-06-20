@@ -1,0 +1,1130 @@
+2025-06-20 10:56:45,105 [__main__] [INFO] Initializing SMIA HI ... line:18
+2025-06-20 10:56:45,105 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:296
+2025-06-20 10:56:45,110 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 10:56:45,110 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-20 10:56:45,117 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ReceiveACLBehaviour line:43
+2025-06-20 10:56:45,117 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/SMIAHIGUIBehaviour line:43
+2025-06-20 10:56:45,164 [aioxmpp.node] [WARNING] connection failed: [Errno 11001] getaddrinfo failed line:251
+2025-06-20 10:56:45,164 [SPADE] [ERROR] Exception in the event loop: failed to connect to XMPP domain '#': multiple errors: [Errno 11001] getaddrinfo failed line:118
+2025-06-20 11:32:45,926 [__main__] [INFO] Initializing SMIA HI ... line:18
+2025-06-20 11:32:45,926 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:296
+2025-06-20 11:32:45,934 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 11:32:45,934 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-20 11:32:45,943 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 11:32:45,945 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/CeDRI_Operator_instance.aasx file is already in SMIA archive. line:180
+2025-06-20 11:32:45,945 [smia] [INFO] AAS model CeDRI_Operator_instance.aasx copied to the SMIA Archive. line:91
+2025-06-20 11:32:45,966 [smia.aas_model.aas_model_utils] [WARNING] The file with path /aasx/config/smia-initialization.properties does not find within the AASX Package. line:73
+2025-06-20 11:32:45,966 [smia] [WARNING] The AAS model does not contain the initialization configuration file. Make sure that it is not necessary. line:103
+2025-06-20 11:32:45,973 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ReceiveACLBehaviour line:43
+2025-06-20 11:32:45,973 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/SMIAHIGUIBehaviour line:43
+2025-06-20 11:33:01,337 [SPADE] [ERROR] Exception in the event loop:  line:118
+2025-06-20 11:34:05,095 [__main__] [INFO] Initializing SMIA HI ... line:18
+2025-06-20 11:34:05,095 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:296
+2025-06-20 11:34:05,100 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 11:34:05,100 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-20 11:34:05,105 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 11:34:05,107 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/CeDRI_Operator_instance.aasx file is already in SMIA archive. line:180
+2025-06-20 11:34:05,107 [smia] [INFO] AAS model CeDRI_Operator_instance.aasx copied to the SMIA Archive. line:91
+2025-06-20 11:34:05,125 [smia.aas_model.aas_model_utils] [WARNING] The file with path /aasx/config/smia-initialization.properties does not find within the AASX Package. line:73
+2025-06-20 11:34:05,125 [smia] [WARNING] The AAS model does not contain the initialization configuration file. Make sure that it is not necessary. line:103
+2025-06-20 11:34:05,132 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ReceiveACLBehaviour line:43
+2025-06-20 11:34:05,132 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/SMIAHIGUIBehaviour line:43
+2025-06-20 11:34:07,850 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-06-20 11:34:08,961 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/215599883565893316417205409442 line:935
+2025-06-20 11:34:09,237 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB4yMTU1OTk4ODM1NjU4OTMzMTY0MTcyMDU0MDk0NDJtAAAACBefb/mYs/Gj' line:2209
+2025-06-20 11:34:09,803 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-06-20 11:34:09,805 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:98
+2025-06-20 11:34:09,805 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:118
+2025-06-20 11:34:09,805 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-06-20 11:34:09,806 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-20 11:34:09,806 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:38
+2025-06-20 11:34:09,808 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 11:34:09,837 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 11:34:09,838 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-20 11:34:09,850 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:78
+2025-06-20 11:34:09,850 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [Self-configurableManufacturingIndustrialAgents] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:90
+2025-06-20 11:34:09,850 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-20 11:34:09,872 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-20 11:34:12,462 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-06-20 11:34:12,648 [smia.aas_model.extended_aas_model] [ERROR] 'Could not resolve identifier urn:ehu:gcis:cedri:submodel:cedri:capabilities:0:1' line:248
+2025-06-20 11:34:12,648 [smia.logic.exceptions] [ERROR] The object within the AAS model with reference ModelReference<Capability>(key=(Key(type=SUBMODEL, value=urn:ehu:gcis:cedri:submodel:cedri:capabilities:0:1), Key(type=CAPABILITY, value=MyCapability))) does not exist line:41
+2025-06-20 11:34:12,648 [smia.behaviours.init_aas_model_behaviour] [WARNING] Check the AAS Model None. Reason of the fail: AASModelObjectNotExist. line:277
+2025-06-20 11:34:12,833 [smia.aas_model.extended_aas_model] [ERROR] 'Could not resolve identifier urn:ehu:gcis:cedri:submodel:cedri:capabilities:0:1' line:248
+2025-06-20 11:34:12,833 [smia.logic.exceptions] [ERROR] The object within the AAS model with reference ModelReference<Capability>(key=(Key(type=SUBMODEL, value=urn:ehu:gcis:cedri:submodel:cedri:capabilities:0:1), Key(type=CAPABILITY, value=MyCapability))) does not exist line:41
+2025-06-20 11:34:12,833 [smia.behaviours.init_aas_model_behaviour] [WARNING] Check the AAS Model None. Reason of the fail: AASModelObjectNotExist. line:277
+2025-06-20 11:34:13,411 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-06-20 11:34:13,411 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-06-20 11:34:14,417 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['Transportation', 'VisualInspection']
+	- Analyzed capability constraints: ['PayloadWeight']
+	- Analyzed skills: ['HumanTransport', 'VisuallyInspect']
+	- Analyzed skill interfaces: ['HumanTransportGUI', 'VisuallyInspectGUI']
+	- Analyzed skill parameters: ['Initial', 'Final', 'Initial', 'Final']
+	- Analyzed asset connections: []
+	[91m- Errors found: ["RelationshipTransportationCapSkill (<class 'smia.aas_model.extended_submodel.ExtendedCapability'>,<class 'smia.aas_model.extended_submodel.ExtendedSkill'>)", "RelationshipVisualInspectionCapSkill (<class 'smia.aas_model.extended_submodel.ExtendedCapability'>,<class 'smia.aas_model.extended_submodel.ExtendedSkill'>)"][0m line:364
+2025-06-20 11:34:14,419 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-06-20 11:34:14,419 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-06-20 11:34:14,447 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register the SMIA instance in the SMIA KB. line:88
+2025-06-20 11:34:14,737 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:91
+2025-06-20 11:34:17,814 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-06-20 11:34:17,814 [gcis1] [INFO] client shutting down (on request) line:975
+2025-06-20 11:34:18,198 [gcis1.StanzaStream] [INFO] stopping SM stream line:2473
+2025-06-20 11:34:18,198 [gcis1] [INFO] stopping stream line:989
+2025-06-20 11:34:18,199 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-20 11:34:18,199 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:38
+2025-06-20 11:34:18,200 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 11:34:18,201 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-20 11:34:18,213 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:78
+2025-06-20 11:34:18,213 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [Self-configurableManufacturingIndustrialAgents] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:90
+2025-06-20 11:34:18,214 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-20 11:34:18,214 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-20 11:34:18,215 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-20 11:34:18,215 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:38
+2025-06-20 11:34:18,216 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 11:34:18,216 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-20 11:34:18,251 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:78
+2025-06-20 11:34:18,251 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [Self-configurableManufacturingIndustrialAgents] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:90
+2025-06-20 11:34:18,252 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-20 11:34:18,252 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-20 11:34:18,818 [spade.behaviour] [ERROR] Exception running behaviour OneShotBehaviour/InitAASModelBehaviour: <class 'abc.ExtendedCapabilityConstraint'> line:291
+2025-06-20 11:34:18,832 [spade.behaviour] [ERROR] Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\spade\behaviour.py", line 285, in _step
+    await self._run()
+  File "C:\Python310\lib\site-packages\spade\behaviour.py", line 274, in _run
+    await self.run()
+  File "C:\Python310\lib\site-packages\smia\behaviours\init_aas_model_behaviour.py", line 75, in run
+    await self.get_and_save_ontology_classes_information()
+  File "C:\Python310\lib\site-packages\smia\behaviours\init_aas_model_behaviour.py", line 103, in get_and_save_ontology_classes_information
+    await self.check_and_create_instances_by_iri(ontology_class_iri)
+  File "C:\Python310\lib\site-packages\smia\behaviours\init_aas_model_behaviour.py", line 145, in check_and_create_instances_by_iri
+    await self.convert_sme_class_to_extended_by_iri(submodel_elem, ontology_class_iri)
+  File "C:\Python310\lib\site-packages\smia\behaviours\init_aas_model_behaviour.py", line 232, in convert_sme_class_to_extended_by_iri
+    sme_elem.add_old_sme_class(current_class)
+  File "C:\Python310\lib\site-packages\smia\aas_model\extended_submodel.py", line 412, in add_old_sme_class
+    self.add_inheritance_of_extended_class()
+  File "C:\Python310\lib\site-packages\smia\aas_model\extended_submodel.py", line 420, in add_inheritance_of_extended_class
+    associated_extended_class = AASModelExtensionUtils.get_extension_classes_dict()[self.old_sme_class]
+KeyError: <class 'abc.ExtendedCapabilityConstraint'>
+ line:296
+2025-06-20 11:34:18,832 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: <class 'abc.ExtendedCapabilityConstraint'> line:154
+2025-06-20 11:34:18,832 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-06-20 11:34:18,841 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register the SMIA instance in the SMIA KB. line:88
+2025-06-20 11:34:18,842 [spade.behaviour] [ERROR] Exception running state FSMBehaviour/AASFSMBehaviour: client is not running line:577
+2025-06-20 11:34:18,842 [spade.behaviour] [INFO] Killing behavior FSMBehaviour/AASFSMBehaviour with exit code: client is not running line:154
+2025-06-20 11:34:18,842 [spade.behaviour] [INFO] FSM arrived to a final state (no transitions found). Killing FSM. line:604
+2025-06-20 11:34:18,842 [spade.behaviour] [INFO] Killing behavior FSMBehaviour/AASFSMBehaviour with exit code: None line:154
+2025-06-20 11:34:18,842 [spade.behaviour] [INFO] Killing behavior FSMBehaviour/AASFSMBehaviour with exit code: None line:154
+2025-06-20 11:34:18,874 [asyncio] [ERROR] Task was destroyed but it is pending!
+task: <Task pending name='Task-30' coro=<CyclicBehaviour._start() running at C:\Python310\lib\site-packages\spade\behaviour.py:140> wait_for=<Future pending cb=[Task.task_wakeup()]>> line:1758
+2025-06-20 11:36:10,772 [__main__] [INFO] Initializing SMIA HI ... line:18
+2025-06-20 11:36:10,772 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:296
+2025-06-20 11:36:10,785 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 11:36:10,785 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-20 11:36:10,792 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 11:36:10,794 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/CeDRI_Operator_instance.aasx file is already in SMIA archive. line:180
+2025-06-20 11:36:10,794 [smia] [INFO] AAS model CeDRI_Operator_instance.aasx copied to the SMIA Archive. line:91
+2025-06-20 11:36:10,823 [smia.aas_model.aas_model_utils] [WARNING] The file with path /aasx/config/smia-initialization.properties does not find within the AASX Package. line:73
+2025-06-20 11:36:10,823 [smia] [WARNING] The AAS model does not contain the initialization configuration file. Make sure that it is not necessary. line:103
+2025-06-20 11:36:10,831 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ReceiveACLBehaviour line:43
+2025-06-20 11:36:10,831 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/SMIAHIGUIBehaviour line:43
+2025-06-20 11:36:13,564 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-06-20 11:36:14,743 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/1382069863470493839817205547778 line:935
+2025-06-20 11:36:15,036 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB8xMzgyMDY5ODYzNDcwNDkzODM5ODE3MjA1NTQ3Nzc4bQAAAAjkbGWmI4WBPw==' line:2209
+2025-06-20 11:36:15,634 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-06-20 11:36:15,634 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:98
+2025-06-20 11:36:15,634 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:118
+2025-06-20 11:36:15,635 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-06-20 11:36:15,635 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-20 11:36:15,635 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:38
+2025-06-20 11:36:15,636 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 11:36:15,651 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 11:36:15,652 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-20 11:36:15,664 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:78
+2025-06-20 11:36:15,664 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [Self-configurableManufacturingIndustrialAgents] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:90
+2025-06-20 11:36:15,664 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-20 11:36:15,669 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-20 11:36:18,220 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-06-20 11:36:19,152 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-06-20 11:36:19,153 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-06-20 11:36:20,134 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['Transportation', 'VisualInspection']
+	- Analyzed capability constraints: ['PayloadWeight']
+	- Analyzed skills: ['HumanTransport', 'VisuallyInspect']
+	- Analyzed skill interfaces: ['HumanTransportGUI', 'VisuallyInspectGUI']
+	- Analyzed skill parameters: ['Initial', 'Final', 'Initial', 'Final']
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-06-20 11:36:20,134 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-06-20 11:36:20,134 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-06-20 11:36:20,152 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register the SMIA instance in the SMIA KB. line:88
+2025-06-20 11:36:20,450 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:91
+2025-06-20 11:36:22,667 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-06-20 11:36:22,667 [gcis1] [INFO] client shutting down (on request) line:975
+2025-06-20 11:40:18,385 [__main__] [INFO] Initializing SMIA HI ... line:18
+2025-06-20 11:40:18,385 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:296
+2025-06-20 11:40:18,392 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 11:40:18,392 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-20 11:40:18,398 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 11:40:18,400 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/CeDRI_Operator_instance.aasx file is already in SMIA archive. line:180
+2025-06-20 11:40:18,401 [smia] [INFO] AAS model CeDRI_Operator_instance.aasx copied to the SMIA Archive. line:91
+2025-06-20 11:40:18,418 [smia.aas_model.aas_model_utils] [WARNING] The file with path /aasx/config/smia-initialization.properties does not find within the AASX Package. line:73
+2025-06-20 11:40:18,418 [smia] [WARNING] The AAS model does not contain the initialization configuration file. Make sure that it is not necessary. line:103
+2025-06-20 11:40:18,424 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ReceiveACLBehaviour line:43
+2025-06-20 11:40:18,424 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/SMIAHIGUIBehaviour line:43
+2025-06-20 11:40:21,103 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-06-20 11:40:22,266 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/1138840931156029140417205813858 line:935
+2025-06-20 11:40:22,557 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB8xMTM4ODQwOTMxMTU2MDI5MTQwNDE3MjA1ODEzODU4bQAAAAhOn3As7z9gFA==' line:2209
+2025-06-20 11:40:23,156 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-06-20 11:40:23,157 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:98
+2025-06-20 11:40:23,157 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:118
+2025-06-20 11:40:23,158 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-06-20 11:40:23,158 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-20 11:40:23,158 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:38
+2025-06-20 11:40:23,159 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 11:40:23,173 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 11:40:23,175 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-20 11:40:23,191 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:78
+2025-06-20 11:40:23,191 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [Self-configurableManufacturingIndustrialAgents] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:90
+2025-06-20 11:40:23,192 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-20 11:40:23,202 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-20 11:40:25,758 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-06-20 11:40:26,704 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-06-20 11:40:26,705 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-06-20 11:40:27,704 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['Transportation', 'VisualInspection']
+	- Analyzed capability constraints: ['PayloadWeight']
+	- Analyzed skills: ['HumanTransport', 'VisuallyInspect']
+	- Analyzed skill interfaces: ['HumanTransportGUI', 'VisuallyInspectGUI']
+	- Analyzed skill parameters: ['Initial', 'Final', 'Initial', 'Final']
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-06-20 11:40:27,705 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-06-20 11:40:27,705 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-06-20 11:40:27,729 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register the SMIA instance in the SMIA KB. line:88
+2025-06-20 11:40:28,023 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:91
+2025-06-20 11:40:33,030 [smia.states.state_booting] [WARNING] The registry of the SMIA instance gcis1@xmpp.jp has not been completed. Check the SMIA ISM or the SMIA KB. line:104
+2025-06-20 11:40:33,030 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:62
+2025-06-20 11:40:33,030 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-06-20 11:40:33,031 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-20 11:40:33,031 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-20 11:40:33,032 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:84
+2025-06-20 11:40:33,032 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:41
+2025-06-20 11:40:33,032 [behaviours.receive_acl_behaviour] [INFO] ReceiveACLBehaviour starting... line:30
+2025-06-20 11:40:33,033 [behaviours.smia_hi_gui_behaviour] [INFO] SMIA SPADE web interface required resources initialized. line:23
+2025-06-20 11:40:33,033 [spade.behaviour] [ERROR] Exception running behaviour OneShotBehaviour/SMIAHIGUIBehaviour: '/htmls/static' does not exist line:291
+2025-06-20 11:40:33,048 [spade.behaviour] [ERROR] Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\aiohttp\web_urldispatcher.py", line 567, in __init__
+    directory = Path(directory).expanduser().resolve(strict=True)
+  File "C:\Python310\lib\pathlib.py", line 1077, in resolve
+    s = self._accessor.realpath(self, strict=strict)
+  File "C:\Python310\lib\ntpath.py", line 689, in realpath
+    path = _getfinalpathname(path)
+FileNotFoundError: [WinError 3] El sistema no puede encontrar la ruta especificada: '\\htmls\\static'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\spade\behaviour.py", line 285, in _step
+    await self._run()
+  File "C:\Python310\lib\site-packages\spade\behaviour.py", line 274, in _run
+    await self.run()
+  File "C:\Users\ekait\OneDrive - UPV EHU\Tesis doctoral\TesisEkaitzHurtado\CodeRepositories\SMIA\additional_resources\smia_hi\src\smia_hi\behaviours\smia_hi_gui_behaviour.py", line 26, in run
+    await GUIFeatures.add_custom_favicon(self.agent)
+  File "C:\Users\ekait\OneDrive - UPV EHU\Tesis doctoral\TesisEkaitzHurtado\CodeRepositories\SMIA\additional_resources\smia_hi\src\smia_hi\utilities\gui_utils.py", line 93, in add_custom_favicon
+    agent.web.app.router.add_static('/static/', path=favicon_folder_path)
+  File "C:\Python310\lib\site-packages\aiohttp\web_urldispatcher.py", line 1206, in add_static
+    resource = StaticResource(
+  File "C:\Python310\lib\site-packages\aiohttp\web_urldispatcher.py", line 569, in __init__
+    raise ValueError(f"'{directory}' does not exist") from error
+ValueError: '/htmls/static' does not exist
+ line:296
+2025-06-20 11:40:33,048 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/SMIAHIGUIBehaviour with exit code: '/htmls/static' does not exist line:154
+2025-06-20 11:40:33,048 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/SMIAHIGUIBehaviour with exit code: None line:154
+2025-06-20 11:40:35,715 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-06-20 11:40:35,715 [gcis1] [INFO] client shutting down (on request) line:975
+2025-06-20 11:40:46,839 [__main__] [INFO] Initializing SMIA HI ... line:18
+2025-06-20 11:40:46,840 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:296
+2025-06-20 11:40:46,855 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 11:40:46,855 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-20 11:40:46,866 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 11:40:46,868 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/CeDRI_Operator_instance.aasx file is already in SMIA archive. line:180
+2025-06-20 11:40:46,869 [smia] [INFO] AAS model CeDRI_Operator_instance.aasx copied to the SMIA Archive. line:91
+2025-06-20 11:40:46,886 [smia.aas_model.aas_model_utils] [WARNING] The file with path /aasx/config/smia-initialization.properties does not find within the AASX Package. line:73
+2025-06-20 11:40:46,886 [smia] [WARNING] The AAS model does not contain the initialization configuration file. Make sure that it is not necessary. line:103
+2025-06-20 11:40:46,893 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ReceiveACLBehaviour line:43
+2025-06-20 11:40:46,894 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/SMIAHIGUIBehaviour line:43
+2025-06-20 11:40:49,602 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-06-20 11:40:50,766 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/996306119534777441717205859138 line:935
+2025-06-20 11:40:51,056 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB45OTYzMDYxMTk1MzQ3Nzc0NDE3MTcyMDU4NTkxMzhtAAAACNjwoAPFivvt' line:2209
+2025-06-20 11:40:51,644 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-06-20 11:40:51,645 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:98
+2025-06-20 11:40:51,645 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:118
+2025-06-20 11:40:51,645 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-06-20 11:40:51,645 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-20 11:40:51,645 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:38
+2025-06-20 11:40:51,649 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 11:40:51,665 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 11:40:51,666 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-20 11:40:51,677 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:78
+2025-06-20 11:40:51,677 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [Self-configurableManufacturingIndustrialAgents] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:90
+2025-06-20 11:40:51,677 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-20 11:40:51,682 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-20 11:40:54,245 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-06-20 11:40:55,186 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-06-20 11:40:55,186 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-06-20 11:40:56,163 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['Transportation', 'VisualInspection']
+	- Analyzed capability constraints: ['PayloadWeight']
+	- Analyzed skills: ['HumanTransport', 'VisuallyInspect']
+	- Analyzed skill interfaces: ['HumanTransportGUI', 'VisuallyInspectGUI']
+	- Analyzed skill parameters: ['Initial', 'Final', 'Initial', 'Final']
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-06-20 11:40:56,163 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-06-20 11:40:56,163 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-06-20 11:40:56,177 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register the SMIA instance in the SMIA KB. line:88
+2025-06-20 11:40:56,472 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:91
+2025-06-20 11:41:01,494 [smia.states.state_booting] [WARNING] The registry of the SMIA instance gcis1@xmpp.jp has not been completed. Check the SMIA ISM or the SMIA KB. line:104
+2025-06-20 11:41:01,494 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:62
+2025-06-20 11:41:01,494 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-06-20 11:41:01,494 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-20 11:41:01,494 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-20 11:41:01,496 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:84
+2025-06-20 11:41:01,496 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:41
+2025-06-20 11:41:01,496 [behaviours.receive_acl_behaviour] [INFO] ReceiveACLBehaviour starting... line:30
+2025-06-20 11:41:01,497 [behaviours.smia_hi_gui_behaviour] [INFO] SMIA SPADE web interface required resources initialized. line:23
+2025-06-20 11:41:01,498 [behaviours.smia_hi_gui_behaviour] [INFO] Added SMIA Favicon to the web interface. line:27
+2025-06-20 11:41:01,498 [behaviours.smia_hi_gui_behaviour] [INFO] Added new web pages to the web interface. line:39
+2025-06-20 11:41:01,502 [behaviours.smia_hi_gui_behaviour] [INFO] Started SMIA HI SPADE web interface. line:43
+2025-06-20 11:41:01,503 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/SMIAHIGUIBehaviour with exit code: None line:154
+2025-06-20 11:41:01,503 [spade.Web] [INFO] Serving on http://0.0.0.0:10000/ line:39
+2025-06-20 11:41:11,266 [aiohttp.access] [INFO] 127.0.0.1 [20/Jun/2025:10:41:11 +0000] "GET /spade HTTP/1.1" 200 12789 "http://localhost:10000/aas_library" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0" line:211
+2025-06-20 11:41:11,488 [aiohttp.access] [INFO] 127.0.0.1 [20/Jun/2025:10:41:11 +0000] "GET /favicon.ico HTTP/1.1" 200 256 "http://localhost:10000/spade" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0" line:211
+2025-06-20 11:41:11,488 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 11:41:11,488 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 11:41:13,978 [aiohttp.access] [INFO] 127.0.0.1 [20/Jun/2025:10:41:13 +0000] "GET /smia_hi_dashboard HTTP/1.1" 200 17783 "http://localhost:10000/spade" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0" line:211
+2025-06-20 11:41:21,489 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 11:41:21,489 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 11:41:31,496 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 11:41:31,496 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 11:41:41,493 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 11:41:41,493 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 11:41:51,501 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 11:41:51,502 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 11:41:54,461 [aiohttp.access] [INFO] 127.0.0.1 [20/Jun/2025:10:41:54 +0000] "GET /spade HTTP/1.1" 200 12789 "http://localhost:10000/smia_hi_dashboard" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0" line:211
+2025-06-20 11:41:55,670 [aiohttp.access] [INFO] 127.0.0.1 [20/Jun/2025:10:41:55 +0000] "GET /smia_hi_dashboard HTTP/1.1" 200 17783 "http://localhost:10000/spade" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0" line:211
+2025-06-20 11:41:56,392 [aiohttp.access] [INFO] 127.0.0.1 [20/Jun/2025:10:41:56 +0000] "GET /spade HTTP/1.1" 200 12789 "http://localhost:10000/smia_hi_dashboard" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0" line:211
+2025-06-20 11:41:59,588 [aiohttp.access] [INFO] 127.0.0.1 [20/Jun/2025:10:41:59 +0000] "GET /smia_hi_dashboard HTTP/1.1" 200 17783 "http://localhost:10000/spade" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0" line:211
+2025-06-20 11:42:01,492 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 11:42:01,492 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 11:42:11,491 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 11:42:11,491 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 11:42:21,488 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 11:42:21,488 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 11:42:31,501 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 11:42:31,501 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 11:42:41,503 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 11:42:41,503 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 11:42:51,498 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 11:42:51,498 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 11:43:01,490 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 11:43:01,490 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 11:43:01,613 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-06-20 11:43:01,613 [gcis1] [INFO] client shutting down (on request) line:975
+2025-06-20 11:43:01,613 [gcis1.StanzaStream] [INFO] stopping SM stream line:2473
+2025-06-20 11:43:01,613 [gcis1] [INFO] stopping stream line:989
+2025-06-20 11:43:03,120 [__main__] [INFO] Initializing SMIA HI ... line:18
+2025-06-20 11:43:03,121 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:296
+2025-06-20 11:43:03,129 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 11:43:03,129 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-20 11:43:03,137 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 11:43:03,140 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/CeDRI_Operator_instance.aasx file is already in SMIA archive. line:180
+2025-06-20 11:43:03,140 [smia] [INFO] AAS model CeDRI_Operator_instance.aasx copied to the SMIA Archive. line:91
+2025-06-20 11:43:03,161 [smia.aas_model.aas_model_utils] [WARNING] The file with path /aasx/config/smia-initialization.properties does not find within the AASX Package. line:73
+2025-06-20 11:43:03,161 [smia] [WARNING] The AAS model does not contain the initialization configuration file. Make sure that it is not necessary. line:103
+2025-06-20 11:43:03,168 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ReceiveACLBehaviour line:43
+2025-06-20 11:43:03,169 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/SMIAHIGUIBehaviour line:43
+2025-06-20 11:43:05,853 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-06-20 11:43:07,021 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/339381393504938573017206017858 line:935
+2025-06-20 11:43:07,313 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB4zMzkzODEzOTM1MDQ5Mzg1NzMwMTcyMDYwMTc4NThtAAAACLD7QOlNCQe6' line:2209
+2025-06-20 11:43:07,907 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-06-20 11:43:07,907 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:98
+2025-06-20 11:43:07,907 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:118
+2025-06-20 11:43:07,907 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-06-20 11:43:07,908 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-20 11:43:07,908 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:38
+2025-06-20 11:43:07,909 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 11:43:07,922 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 11:43:07,924 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-20 11:43:07,935 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:78
+2025-06-20 11:43:07,935 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [Self-configurableManufacturingIndustrialAgents] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:90
+2025-06-20 11:43:07,936 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-20 11:43:07,942 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-20 11:43:10,515 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-06-20 11:43:11,448 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-06-20 11:43:11,448 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-06-20 11:43:12,456 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['Transportation', 'VisualInspection']
+	- Analyzed capability constraints: ['PayloadWeight']
+	- Analyzed skills: ['HumanTransport', 'VisuallyInspect']
+	- Analyzed skill interfaces: ['HumanTransportGUI', 'VisuallyInspectGUI']
+	- Analyzed skill parameters: ['Initial', 'Final', 'Initial', 'Final']
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-06-20 11:43:12,456 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-06-20 11:43:12,456 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-06-20 11:43:12,471 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register the SMIA instance in the SMIA KB. line:88
+2025-06-20 11:43:12,766 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:91
+2025-06-20 11:43:17,777 [smia.states.state_booting] [WARNING] The registry of the SMIA instance gcis1@xmpp.jp has not been completed. Check the SMIA ISM or the SMIA KB. line:104
+2025-06-20 11:43:17,777 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:62
+2025-06-20 11:43:17,777 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-06-20 11:43:17,777 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-20 11:43:17,777 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-20 11:43:17,779 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:84
+2025-06-20 11:43:17,779 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:41
+2025-06-20 11:43:17,779 [behaviours.receive_acl_behaviour] [INFO] ReceiveACLBehaviour starting... line:30
+2025-06-20 11:43:17,779 [behaviours.smia_hi_gui_behaviour] [INFO] SMIA SPADE web interface required resources initialized. line:23
+2025-06-20 11:43:17,780 [behaviours.smia_hi_gui_behaviour] [INFO] Added SMIA Favicon to the web interface. line:27
+2025-06-20 11:43:17,780 [behaviours.smia_hi_gui_behaviour] [INFO] Added new web pages to the web interface. line:39
+2025-06-20 11:43:17,781 [behaviours.smia_hi_gui_behaviour] [INFO] Started SMIA HI SPADE web interface. line:43
+2025-06-20 11:43:17,781 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/SMIAHIGUIBehaviour with exit code: None line:154
+2025-06-20 11:43:17,781 [spade.Web] [INFO] Serving on http://0.0.0.0:10000/ line:39
+2025-06-20 11:43:20,352 [aiohttp.access] [INFO] 127.0.0.1 [20/Jun/2025:10:43:20 +0000] "GET /smia_hi_dashboard HTTP/1.1" 200 17783 "http://localhost:10000/spade" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0" line:211
+2025-06-20 11:43:22,015 [aiohttp.access] [INFO] 127.0.0.1 [20/Jun/2025:10:43:22 +0000] "GET /smia_hi_dashboard HTTP/1.1" 200 17783 "http://localhost:10000/spade" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0" line:211
+2025-06-20 11:43:25,154 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-06-20 11:43:25,154 [gcis1] [INFO] client shutting down (on request) line:975
+2025-06-20 12:02:57,792 [__main__] [INFO] Initializing SMIA HI ... line:19
+2025-06-20 12:02:57,793 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:296
+2025-06-20 12:02:57,800 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:02:57,800 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-20 12:02:57,807 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:02:57,809 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/CeDRI_Operator_instance.aasx file is already in SMIA archive. line:180
+2025-06-20 12:02:57,809 [smia] [INFO] AAS model CeDRI_Operator_instance.aasx copied to the SMIA Archive. line:91
+2025-06-20 12:02:57,824 [smia.aas_model.aas_model_utils] [WARNING] The file with path /aasx/config/smia-initialization.properties does not find within the AASX Package. line:73
+2025-06-20 12:02:57,825 [smia] [WARNING] The AAS model does not contain the initialization configuration file. Make sure that it is not necessary. line:103
+2025-06-20 12:02:57,830 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ReceiveACLBehaviour line:43
+2025-06-20 12:02:57,830 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/SMIAHIGUIBehaviour line:43
+2025-06-20 12:02:57,832 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: HumanTransportGUI line:62
+2025-06-20 12:02:57,833 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: VisuallyInspectGUI line:62
+2025-06-20 12:03:00,629 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-06-20 12:03:01,771 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/633809299116132926717207168162 line:935
+2025-06-20 12:03:02,059 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB42MzM4MDkyOTkxMTYxMzI5MjY3MTcyMDcxNjgxNjJtAAAACKkQqS1/p5xj' line:2209
+2025-06-20 12:04:02,683 [__main__] [INFO] Initializing SMIA HI ... line:19
+2025-06-20 12:04:02,685 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:296
+2025-06-20 12:04:02,692 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:04:02,692 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-20 12:04:02,704 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:04:02,708 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/CeDRI_Operator_instance.aasx file is already in SMIA archive. line:180
+2025-06-20 12:04:02,708 [smia] [INFO] AAS model CeDRI_Operator_instance.aasx copied to the SMIA Archive. line:91
+2025-06-20 12:04:02,747 [smia.aas_model.aas_model_utils] [WARNING] The file with path /aasx/config/smia-initialization.properties does not find within the AASX Package. line:73
+2025-06-20 12:04:02,748 [smia] [WARNING] The AAS model does not contain the initialization configuration file. Make sure that it is not necessary. line:103
+2025-06-20 12:04:02,767 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ReceiveACLBehaviour line:43
+2025-06-20 12:04:02,767 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/SMIAHIGUIBehaviour line:43
+2025-06-20 12:04:02,768 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: HumanTransportGUI line:62
+2025-06-20 12:04:02,768 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: VisuallyInspectGUI line:62
+2025-06-20 12:04:05,514 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-06-20 12:04:06,678 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/14873592297321798492250265671 line:935
+2025-06-20 12:04:06,967 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB0xNDg3MzU5MjI5NzMyMTc5ODQ5MjI1MDI2NTY3MW0AAAAI2kxrLDPKe3o=' line:2209
+2025-06-20 12:04:07,563 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-06-20 12:04:07,564 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:98
+2025-06-20 12:04:07,566 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:118
+2025-06-20 12:04:07,567 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-06-20 12:04:07,568 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-20 12:04:07,568 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:38
+2025-06-20 12:04:07,570 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 12:04:07,602 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 12:04:07,604 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-20 12:04:07,626 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:78
+2025-06-20 12:04:07,626 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [Self-configurableManufacturingIndustrialAgents] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:90
+2025-06-20 12:04:07,632 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-20 12:04:07,654 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-20 12:04:10,256 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-06-20 12:04:11,206 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-06-20 12:04:11,206 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-06-20 12:04:12,215 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['Transportation', 'VisualInspection']
+	- Analyzed capability constraints: ['PayloadWeight']
+	- Analyzed skills: ['HumanTransport', 'VisuallyInspect']
+	- Analyzed skill interfaces: ['HumanTransportGUI', 'VisuallyInspectGUI']
+	- Analyzed skill parameters: ['Initial', 'Final', 'Initial', 'Final']
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-06-20 12:04:12,216 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-06-20 12:04:12,216 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-06-20 12:04:12,259 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register the SMIA instance in the SMIA KB. line:88
+2025-06-20 12:04:12,564 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:91
+2025-06-20 12:04:17,559 [smia.states.state_booting] [WARNING] The registry of the SMIA instance gcis1@xmpp.jp has not been completed. Check the SMIA ISM or the SMIA KB. line:104
+2025-06-20 12:04:17,559 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:62
+2025-06-20 12:04:17,559 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-06-20 12:04:17,559 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-20 12:04:17,560 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-20 12:04:17,561 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:84
+2025-06-20 12:04:17,561 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:41
+2025-06-20 12:04:17,562 [behaviours.receive_acl_behaviour] [INFO] ReceiveACLBehaviour starting... line:30
+2025-06-20 12:04:17,562 [behaviours.smia_hi_gui_behaviour] [INFO] SMIA SPADE web interface required resources initialized. line:23
+2025-06-20 12:04:17,563 [behaviours.smia_hi_gui_behaviour] [INFO] Added SMIA Favicon to the web interface. line:27
+2025-06-20 12:04:17,563 [behaviours.smia_hi_gui_behaviour] [INFO] Added new web pages to the web interface. line:39
+2025-06-20 12:04:17,567 [behaviours.smia_hi_gui_behaviour] [INFO] Started SMIA HI SPADE web interface. line:43
+2025-06-20 12:04:17,568 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/SMIAHIGUIBehaviour with exit code: None line:154
+2025-06-20 12:04:20,121 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-06-20 12:04:20,121 [gcis1] [INFO] client shutting down (on request) line:975
+2025-06-20 12:04:20,122 [asyncio] [ERROR] Task exception was never retrieved
+future: <Task finished name='Task-35' coro=<start_server_in_loop() done, defined at C:\Python310\lib\site-packages\spade\web.py:26> exception=OSError(10048, "error while attempting to bind on address ('0.0.0.0', 10000): solo se permite un uso de cada dirección de socket (protocolo/dirección de red/puerto)")> line:1758
+Traceback (most recent call last):
+  File "C:\Python310\lib\asyncio\tasks.py", line 232, in __step
+    result = coro.send(None)
+  File "C:\Python310\lib\site-packages\spade\web.py", line 38, in start_server_in_loop
+    await agent.web.server.start()
+  File "C:\Python310\lib\site-packages\aiohttp\web_runner.py", line 119, in start
+    self._server = await loop.create_server(
+  File "C:\Python310\lib\asyncio\base_events.py", line 1519, in create_server
+    raise OSError(err.errno, 'error while attempting '
+OSError: [Errno 10048] error while attempting to bind on address ('0.0.0.0', 10000): solo se permite un uso de cada dirección de socket (protocolo/dirección de red/puerto)
+2025-06-20 12:05:17,740 [__main__] [INFO] Initializing SMIA HI ... line:19
+2025-06-20 12:05:17,740 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:296
+2025-06-20 12:05:17,751 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:05:17,751 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-20 12:05:17,763 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:05:17,768 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/CeDRI_Operator_instance.aasx file is already in SMIA archive. line:180
+2025-06-20 12:05:17,769 [smia] [INFO] AAS model CeDRI_Operator_instance.aasx copied to the SMIA Archive. line:91
+2025-06-20 12:05:17,812 [smia.aas_model.aas_model_utils] [WARNING] The file with path /aasx/config/smia-initialization.properties does not find within the AASX Package. line:73
+2025-06-20 12:05:17,813 [smia] [WARNING] The AAS model does not contain the initialization configuration file. Make sure that it is not necessary. line:103
+2025-06-20 12:05:17,820 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ReceiveACLBehaviour line:43
+2025-06-20 12:05:17,822 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/SMIAHIGUIBehaviour line:43
+2025-06-20 12:05:17,822 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: HumanTransportGUI line:62
+2025-06-20 12:05:17,823 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: VisuallyInspectGUI line:62
+2025-06-20 12:05:20,553 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-06-20 12:05:21,729 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/1749419036488050379617207299746 line:935
+2025-06-20 12:05:22,022 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB8xNzQ5NDE5MDM2NDg4MDUwMzc5NjE3MjA3Mjk5NzQ2bQAAAAgWN1s5fGIpkw==' line:2209
+2025-06-20 12:05:22,628 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-06-20 12:05:22,628 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:98
+2025-06-20 12:05:22,629 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:118
+2025-06-20 12:05:22,629 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-06-20 12:05:22,630 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-20 12:05:22,630 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:38
+2025-06-20 12:05:22,631 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 12:05:22,649 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 12:05:22,652 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-20 12:05:22,681 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:78
+2025-06-20 12:05:22,682 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [Self-configurableManufacturingIndustrialAgents] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:90
+2025-06-20 12:05:22,684 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-20 12:05:22,696 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-20 12:05:25,267 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-06-20 12:05:26,198 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-06-20 12:05:26,199 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-06-20 12:05:27,192 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['Transportation', 'VisualInspection']
+	- Analyzed capability constraints: ['PayloadWeight']
+	- Analyzed skills: ['HumanTransport', 'VisuallyInspect']
+	- Analyzed skill interfaces: ['HumanTransportGUI', 'VisuallyInspectGUI']
+	- Analyzed skill parameters: ['Initial', 'Final', 'Initial', 'Final']
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-06-20 12:05:27,194 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-06-20 12:05:27,195 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-06-20 12:05:27,249 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register the SMIA instance in the SMIA KB. line:88
+2025-06-20 12:05:27,558 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:91
+2025-06-20 12:05:32,569 [smia.states.state_booting] [WARNING] The registry of the SMIA instance gcis1@xmpp.jp has not been completed. Check the SMIA ISM or the SMIA KB. line:104
+2025-06-20 12:05:32,570 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:62
+2025-06-20 12:05:32,570 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-06-20 12:05:32,571 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-20 12:05:32,571 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-20 12:05:32,573 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:84
+2025-06-20 12:05:32,575 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:41
+2025-06-20 12:05:32,575 [behaviours.receive_acl_behaviour] [INFO] ReceiveACLBehaviour starting... line:30
+2025-06-20 12:05:32,576 [behaviours.smia_hi_gui_behaviour] [INFO] SMIA SPADE web interface required resources initialized. line:23
+2025-06-20 12:05:32,577 [behaviours.smia_hi_gui_behaviour] [INFO] Added SMIA Favicon to the web interface. line:27
+2025-06-20 12:05:32,578 [behaviours.smia_hi_gui_behaviour] [INFO] Added new web pages to the web interface. line:39
+2025-06-20 12:05:32,586 [behaviours.smia_hi_gui_behaviour] [INFO] Started SMIA HI SPADE web interface. line:43
+2025-06-20 12:05:32,587 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/SMIAHIGUIBehaviour with exit code: None line:154
+2025-06-20 12:05:32,587 [spade.Web] [INFO] Serving on http://0.0.0.0:20000/ line:39
+2025-06-20 12:05:42,577 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:05:42,577 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:05:52,578 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:05:52,579 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:06:02,577 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:06:02,578 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:06:12,579 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:06:12,579 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:06:22,576 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:06:22,577 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:06:32,581 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:06:32,582 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:06:42,593 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:06:42,595 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:06:52,597 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:06:52,599 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:07:02,598 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:07:02,599 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:07:12,591 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:07:12,591 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:07:21,695 [aiohttp.access] [INFO] 127.0.0.1 [20/Jun/2025:11:07:21 +0000] "GET /spade HTTP/1.1" 200 12789 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0" line:211
+2025-06-20 12:07:21,772 [aiohttp.access] [INFO] 127.0.0.1 [20/Jun/2025:11:07:21 +0000] "GET /favicon.ico HTTP/1.1" 200 256 "http://localhost:20000/spade" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0" line:211
+2025-06-20 12:07:22,584 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:07:22,584 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:07:23,911 [aiohttp.access] [INFO] 127.0.0.1 [20/Jun/2025:11:07:23 +0000] "GET /smia_hi_dashboard HTTP/1.1" 200 17783 "http://localhost:20000/spade" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0" line:211
+2025-06-20 12:07:32,592 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:07:32,593 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:07:34,181 [smia.behaviours.acl_handling_behaviour] [ACLINFO]          + Message received on SMIA (ACLHandlingBehaviour) from gui_agent@xmpp.jp/816466927255326417207171618 line:53
+2025-06-20 12:07:34,181 [smia.behaviours.acl_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"capabilityIRI": "http://www.w3id.org/upv-ehu/gcis/css-smia#Transportation", "skillIRI": "http://www.w3id.org/hsu-aut/css#HumanTransport", "constraints": {"http://www.w3id.org/hsu-aut/css#PayloadWeight": "2"}, "skillParams": {"http://www.w3id.org/hsu-aut/css#Initial": "PA", "http://www.w3id.org/hsu-aut/css#Final": "PB"}} line:54
+2025-06-20 12:07:34,204 [smia.behaviours.acl_handling_behaviour] [INFO] Specific behaviour added to the agent to handle the message with thread [prueba-acl-smia-msg]. line:95
+2025-06-20 12:07:34,205 [behaviours.receive_acl_behaviour] [ACLINFO] Analyzing ACL message... Checking if it is a message for SMIA HI ...  line:42
+2025-06-20 12:07:34,205 [smia.behaviours.specific_handle_behaviours.handle_capability_behaviour] [INFO] HandleCapabilityBehaviour starting to handle the CSS service to the message with thread [prueba-acl-smia-msg]... line:48
+2025-06-20 12:07:34,207 [smia.aas_model.extended_submodel] [INFO] The Capability Constraint ExtendedCapabilityConstraint[urn:ehu:gcis:cedri:submodel:capabilityconstraints:0:1#operator001 / PayloadWeight] has been checked with data (2), resulting in True line:511
+2025-06-20 12:08:04,975 [spade.behaviour] [ERROR] Exception running behaviour OneShotBehaviour/HandleCapabilityBehaviour: CapabilityRequestExecutionError.__init__() missing 1 required positional argument: 'behav_class' line:291
+2025-06-20 12:08:04,992 [spade.behaviour] [ERROR] Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\smia\behaviours\specific_handle_behaviours\handle_capability_behaviour.py", line 442, in execute_capability
+    skill_execution_result = await self.myagent.agent_services.execute_agent_service_by_id(
+  File "C:\Python310\lib\site-packages\smia\logic\agent_services.py", line 85, in execute_agent_service_by_id
+    adapted_params = await AgentServiceUtils.get_adapted_service_parameters(service_method, **kwargs)
+  File "C:\Python310\lib\site-packages\smia\logic\services_utils.py", line 81, in get_adapted_service_parameters
+    raise ValueError(f"Parameter {param_name} not found in method {service_method}.")
+ValueError: Parameter Initial not found in method <staticmethod(<function SMIAHIAgentServices.human_transport_gui at 0x0000025011583EB0>)>.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\spade\behaviour.py", line 285, in _step
+    await self._run()
+  File "C:\Python310\lib\site-packages\spade\behaviour.py", line 274, in _run
+    await self.run()
+  File "C:\Python310\lib\site-packages\smia\behaviours\specific_handle_behaviours\handle_capability_behaviour.py", line 59, in run
+    await self.handle_css_request()
+  File "C:\Python310\lib\site-packages\smia\behaviours\specific_handle_behaviours\handle_capability_behaviour.py", line 104, in handle_css_request
+    cap_execution_result = await self.execute_capability(cap_ontology_instance, skill_ontology_instance,
+  File "C:\Python310\lib\site-packages\smia\behaviours\specific_handle_behaviours\handle_capability_behaviour.py", line 445, in execute_capability
+    raise CapabilityRequestExecutionError(cap_instance.name, "The requested capability {} cannot be "
+TypeError: CapabilityRequestExecutionError.__init__() missing 1 required positional argument: 'behav_class'
+ line:296
+2025-06-20 12:08:04,992 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleCapabilityBehaviour with exit code: CapabilityRequestExecutionError.__init__() missing 1 required positional argument: 'behav_class' line:154
+2025-06-20 12:08:04,993 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleCapabilityBehaviour with exit code: None line:154
+2025-06-20 12:08:09,348 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-06-20 12:08:14,990 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:08:19,343 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:08:25,002 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:08:29,341 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:08:48,439 [__main__] [INFO] Initializing SMIA HI ... line:19
+2025-06-20 12:08:48,439 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:296
+2025-06-20 12:08:48,448 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:08:48,448 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-20 12:08:48,454 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:08:48,456 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/CeDRI_Operator_instance.aasx file is already in SMIA archive. line:180
+2025-06-20 12:08:48,457 [smia] [INFO] AAS model CeDRI_Operator_instance.aasx copied to the SMIA Archive. line:91
+2025-06-20 12:08:48,491 [smia.aas_model.aas_model_utils] [WARNING] The file with path /aasx/config/smia-initialization.properties does not find within the AASX Package. line:73
+2025-06-20 12:08:48,491 [smia] [WARNING] The AAS model does not contain the initialization configuration file. Make sure that it is not necessary. line:103
+2025-06-20 12:08:48,499 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ReceiveACLBehaviour line:43
+2025-06-20 12:08:48,500 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/SMIAHIGUIBehaviour line:43
+2025-06-20 12:08:48,500 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: HumanTransportGUI line:62
+2025-06-20 12:08:48,500 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: VisuallyInspectGUI line:62
+2025-06-20 12:08:51,293 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-06-20 12:08:52,479 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/1308495963215619891417207506338 line:935
+2025-06-20 12:08:52,774 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB8xMzA4NDk1OTYzMjE1NjE5ODkxNDE3MjA3NTA2MzM4bQAAAAiipUpN7RB9lg==' line:2209
+2025-06-20 12:08:53,399 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-06-20 12:08:53,400 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:98
+2025-06-20 12:08:53,402 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:118
+2025-06-20 12:08:53,405 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-06-20 12:08:53,406 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-20 12:08:53,407 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:38
+2025-06-20 12:08:53,411 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 12:08:53,446 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 12:08:53,451 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-20 12:08:53,510 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:78
+2025-06-20 12:08:53,510 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [Self-configurableManufacturingIndustrialAgents] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:90
+2025-06-20 12:08:53,516 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-20 12:08:53,528 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-20 12:08:56,094 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-06-20 12:08:57,043 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-06-20 12:08:57,044 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-06-20 12:08:58,038 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['Transportation', 'VisualInspection']
+	- Analyzed capability constraints: ['PayloadWeight']
+	- Analyzed skills: ['HumanTransport', 'VisuallyInspect']
+	- Analyzed skill interfaces: ['HumanTransportGUI', 'VisuallyInspectGUI']
+	- Analyzed skill parameters: ['Initial', 'Final', 'Initial', 'Final']
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-06-20 12:08:58,039 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-06-20 12:08:58,039 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-06-20 12:08:58,087 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register the SMIA instance in the SMIA KB. line:88
+2025-06-20 12:08:58,406 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:91
+2025-06-20 12:09:03,410 [smia.states.state_booting] [WARNING] The registry of the SMIA instance gcis1@xmpp.jp has not been completed. Check the SMIA ISM or the SMIA KB. line:104
+2025-06-20 12:09:03,410 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:62
+2025-06-20 12:09:03,411 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-06-20 12:09:03,411 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-20 12:09:03,411 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-20 12:09:03,412 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:84
+2025-06-20 12:09:03,413 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:41
+2025-06-20 12:09:03,413 [behaviours.receive_acl_behaviour] [INFO] ReceiveACLBehaviour starting... line:30
+2025-06-20 12:09:03,413 [behaviours.smia_hi_gui_behaviour] [INFO] SMIA SPADE web interface required resources initialized. line:23
+2025-06-20 12:09:03,414 [behaviours.smia_hi_gui_behaviour] [INFO] Added SMIA Favicon to the web interface. line:27
+2025-06-20 12:09:03,414 [behaviours.smia_hi_gui_behaviour] [INFO] Added new web pages to the web interface. line:39
+2025-06-20 12:09:03,417 [behaviours.smia_hi_gui_behaviour] [INFO] Started SMIA HI SPADE web interface. line:43
+2025-06-20 12:09:03,418 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/SMIAHIGUIBehaviour with exit code: None line:154
+2025-06-20 12:09:03,418 [spade.Web] [INFO] Serving on http://0.0.0.0:20000/ line:39
+2025-06-20 12:09:12,425 [smia.behaviours.acl_handling_behaviour] [ACLINFO]          + Message received on SMIA (ACLHandlingBehaviour) from gui_agent@xmpp.jp/816466927255326417207171618 line:53
+2025-06-20 12:09:12,425 [smia.behaviours.acl_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"capabilityIRI": "http://www.w3id.org/upv-ehu/gcis/css-smia#Transportation", "skillIRI": "http://www.w3id.org/hsu-aut/css#HumanTransport", "constraints": {"http://www.w3id.org/hsu-aut/css#PayloadWeight": "2"}, "skillParams": {"http://www.w3id.org/hsu-aut/css#Initial": "PA", "http://www.w3id.org/hsu-aut/css#Final": "PB"}} line:54
+2025-06-20 12:09:12,448 [smia.behaviours.acl_handling_behaviour] [INFO] Specific behaviour added to the agent to handle the message with thread [prueba-acl-smia-msg]. line:95
+2025-06-20 12:09:12,449 [behaviours.receive_acl_behaviour] [ACLINFO] Analyzing ACL message... Checking if it is a message for SMIA HI ...  line:42
+2025-06-20 12:09:12,449 [smia.behaviours.specific_handle_behaviours.handle_capability_behaviour] [INFO] HandleCapabilityBehaviour starting to handle the CSS service to the message with thread [prueba-acl-smia-msg]... line:48
+2025-06-20 12:09:12,451 [smia.aas_model.extended_submodel] [INFO] The Capability Constraint ExtendedCapabilityConstraint[urn:ehu:gcis:cedri:submodel:capabilityconstraints:0:1#operator001 / PayloadWeight] has been checked with data (2), resulting in True line:511
+2025-06-20 12:10:13,368 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-06-20 12:10:35,790 [__main__] [INFO] Initializing SMIA HI ... line:19
+2025-06-20 12:10:35,791 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:296
+2025-06-20 12:10:35,798 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:10:35,798 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-20 12:10:35,804 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:10:35,806 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/CeDRI_Operator_instance.aasx file is already in SMIA archive. line:180
+2025-06-20 12:10:35,806 [smia] [INFO] AAS model CeDRI_Operator_instance.aasx copied to the SMIA Archive. line:91
+2025-06-20 12:10:35,834 [smia.aas_model.aas_model_utils] [WARNING] The file with path /aasx/config/smia-initialization.properties does not find within the AASX Package. line:73
+2025-06-20 12:10:35,834 [smia] [WARNING] The AAS model does not contain the initialization configuration file. Make sure that it is not necessary. line:103
+2025-06-20 12:10:35,849 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ReceiveACLBehaviour line:43
+2025-06-20 12:10:35,849 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/SMIAHIGUIBehaviour line:43
+2025-06-20 12:10:35,850 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: HumanTransportGUI line:62
+2025-06-20 12:10:35,851 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: VisuallyInspectGUI line:62
+2025-06-20 12:10:38,678 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-06-20 12:10:39,872 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/1579976587426097856810738903971 line:935
+2025-06-20 12:10:40,169 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB8xNTc5OTc2NTg3NDI2MDk3ODU2ODEwNzM4OTAzOTcxbQAAAAi7xQ3yK/vttA==' line:2209
+2025-06-20 12:10:40,792 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-06-20 12:10:40,792 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:98
+2025-06-20 12:10:40,793 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:118
+2025-06-20 12:10:40,794 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-06-20 12:10:40,794 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-20 12:10:40,794 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:38
+2025-06-20 12:10:40,795 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 12:10:40,811 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 12:10:40,814 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-20 12:10:40,848 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:78
+2025-06-20 12:10:40,848 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [Self-configurableManufacturingIndustrialAgents] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:90
+2025-06-20 12:10:40,851 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-20 12:10:40,860 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-20 12:10:43,494 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-06-20 12:10:44,455 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-06-20 12:10:44,455 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-06-20 12:10:45,447 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['Transportation', 'VisualInspection']
+	- Analyzed capability constraints: ['PayloadWeight']
+	- Analyzed skills: ['HumanTransport', 'VisuallyInspect']
+	- Analyzed skill interfaces: ['HumanTransportGUI', 'VisuallyInspectGUI']
+	- Analyzed skill parameters: ['Initial', 'Final', 'Initial', 'Final']
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-06-20 12:10:45,447 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-06-20 12:10:45,448 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-06-20 12:10:45,491 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register the SMIA instance in the SMIA KB. line:88
+2025-06-20 12:10:45,799 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:91
+2025-06-20 12:10:50,806 [smia.states.state_booting] [WARNING] The registry of the SMIA instance gcis1@xmpp.jp has not been completed. Check the SMIA ISM or the SMIA KB. line:104
+2025-06-20 12:10:50,806 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:62
+2025-06-20 12:10:50,806 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-06-20 12:10:50,808 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-20 12:10:50,808 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-20 12:10:50,810 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:84
+2025-06-20 12:10:50,811 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:41
+2025-06-20 12:10:50,811 [behaviours.receive_acl_behaviour] [INFO] ReceiveACLBehaviour starting... line:30
+2025-06-20 12:10:50,812 [behaviours.smia_hi_gui_behaviour] [INFO] SMIA SPADE web interface required resources initialized. line:23
+2025-06-20 12:10:50,812 [behaviours.smia_hi_gui_behaviour] [INFO] Added SMIA Favicon to the web interface. line:27
+2025-06-20 12:10:50,813 [behaviours.smia_hi_gui_behaviour] [INFO] Added new web pages to the web interface. line:39
+2025-06-20 12:10:50,817 [behaviours.smia_hi_gui_behaviour] [INFO] Started SMIA HI SPADE web interface. line:43
+2025-06-20 12:10:50,817 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/SMIAHIGUIBehaviour with exit code: None line:154
+2025-06-20 12:10:50,818 [spade.Web] [INFO] Serving on http://0.0.0.0:20000/ line:39
+2025-06-20 12:11:00,793 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:11:00,794 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:11:10,788 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:11:10,789 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:11:11,171 [smia.behaviours.acl_handling_behaviour] [ACLINFO]          + Message received on SMIA (ACLHandlingBehaviour) from gui_agent@xmpp.jp/816466927255326417207171618 line:53
+2025-06-20 12:11:11,172 [smia.behaviours.acl_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"capabilityIRI": "http://www.w3id.org/upv-ehu/gcis/css-smia#Transportation", "skillIRI": "http://www.w3id.org/hsu-aut/css#HumanTransport", "constraints": {"http://www.w3id.org/hsu-aut/css#PayloadWeight": "2"}, "skillParams": {"http://www.w3id.org/hsu-aut/css#Initial": "PA", "http://www.w3id.org/hsu-aut/css#Final": "PB"}} line:54
+2025-06-20 12:11:11,207 [smia.behaviours.acl_handling_behaviour] [INFO] Specific behaviour added to the agent to handle the message with thread [prueba-acl-smia-msg]. line:95
+2025-06-20 12:11:11,208 [behaviours.receive_acl_behaviour] [ACLINFO] Analyzing ACL message... Checking if it is a message for SMIA HI ...  line:42
+2025-06-20 12:11:11,208 [smia.behaviours.specific_handle_behaviours.handle_capability_behaviour] [INFO] HandleCapabilityBehaviour starting to handle the CSS service to the message with thread [prueba-acl-smia-msg]... line:48
+2025-06-20 12:11:11,209 [smia.aas_model.extended_submodel] [INFO] The Capability Constraint ExtendedCapabilityConstraint[urn:ehu:gcis:cedri:submodel:capabilityconstraints:0:1#operator001 / PayloadWeight] has been checked with data (2), resulting in True line:511
+2025-06-20 12:12:07,552 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-06-20 12:12:07,553 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-20 12:12:07,553 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-20 12:12:07,555 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:84
+2025-06-20 12:12:07,557 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:41
+2025-06-20 12:12:07,557 [behaviours.receive_acl_behaviour] [INFO] ReceiveACLBehaviour starting... line:30
+2025-06-20 12:12:07,557 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/SMIAHIGUIBehaviour with exit code: None line:154
+2025-06-20 12:12:12,800 [__main__] [INFO] Initializing SMIA HI ... line:19
+2025-06-20 12:12:12,801 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:296
+2025-06-20 12:12:12,809 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:12:12,810 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-20 12:12:12,816 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:12:12,818 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/CeDRI_Operator_instance.aasx file is already in SMIA archive. line:180
+2025-06-20 12:12:12,818 [smia] [INFO] AAS model CeDRI_Operator_instance.aasx copied to the SMIA Archive. line:91
+2025-06-20 12:12:12,851 [smia.aas_model.aas_model_utils] [WARNING] The file with path /aasx/config/smia-initialization.properties does not find within the AASX Package. line:73
+2025-06-20 12:12:12,851 [smia] [WARNING] The AAS model does not contain the initialization configuration file. Make sure that it is not necessary. line:103
+2025-06-20 12:12:12,862 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ReceiveACLBehaviour line:43
+2025-06-20 12:12:12,862 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/SMIAHIGUIBehaviour line:43
+2025-06-20 12:12:12,862 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: HumanTransportGUI line:62
+2025-06-20 12:12:12,862 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: VisuallyInspectGUI line:62
+2025-06-20 12:12:15,660 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-06-20 12:12:16,843 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/1705205013356391152317207687714 line:935
+2025-06-20 12:12:17,140 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB8xNzA1MjA1MDEzMzU2MzkxMTUyMzE3MjA3Njg3NzE0bQAAAAgtmqc4Xs+lbw==' line:2209
+2025-06-20 12:12:17,762 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-06-20 12:12:17,763 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:98
+2025-06-20 12:12:17,764 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:118
+2025-06-20 12:12:17,765 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-06-20 12:12:17,766 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-20 12:12:17,766 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:38
+2025-06-20 12:12:17,769 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 12:12:17,784 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 12:12:17,787 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-20 12:12:17,812 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:78
+2025-06-20 12:12:17,812 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [Self-configurableManufacturingIndustrialAgents] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:90
+2025-06-20 12:12:17,816 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-20 12:12:17,826 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-20 12:12:20,416 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-06-20 12:12:21,356 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-06-20 12:12:21,357 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-06-20 12:12:22,341 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['Transportation', 'VisualInspection']
+	- Analyzed capability constraints: ['PayloadWeight']
+	- Analyzed skills: ['HumanTransport', 'VisuallyInspect']
+	- Analyzed skill interfaces: ['HumanTransportGUI', 'VisuallyInspectGUI']
+	- Analyzed skill parameters: ['Initial', 'Final', 'Initial', 'Final']
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-06-20 12:12:22,342 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-06-20 12:12:22,343 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-06-20 12:12:22,399 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register the SMIA instance in the SMIA KB. line:88
+2025-06-20 12:12:22,719 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:91
+2025-06-20 12:12:27,724 [smia.states.state_booting] [WARNING] The registry of the SMIA instance gcis1@xmpp.jp has not been completed. Check the SMIA ISM or the SMIA KB. line:104
+2025-06-20 12:12:27,726 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:62
+2025-06-20 12:12:27,727 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-06-20 12:12:27,728 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-20 12:12:27,728 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-20 12:12:27,731 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:84
+2025-06-20 12:12:27,734 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:41
+2025-06-20 12:12:27,734 [behaviours.receive_acl_behaviour] [INFO] ReceiveACLBehaviour starting... line:30
+2025-06-20 12:12:27,735 [behaviours.smia_hi_gui_behaviour] [INFO] SMIA SPADE web interface required resources initialized. line:23
+2025-06-20 12:12:27,737 [behaviours.smia_hi_gui_behaviour] [INFO] Added SMIA Favicon to the web interface. line:27
+2025-06-20 12:12:27,737 [behaviours.smia_hi_gui_behaviour] [INFO] Added new web pages to the web interface. line:39
+2025-06-20 12:12:27,744 [behaviours.smia_hi_gui_behaviour] [INFO] Started SMIA HI SPADE web interface. line:43
+2025-06-20 12:12:27,745 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/SMIAHIGUIBehaviour with exit code: None line:154
+2025-06-20 12:12:27,746 [spade.Web] [INFO] Serving on http://0.0.0.0:20000/ line:39
+2025-06-20 12:12:37,718 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:12:37,718 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:12:39,733 [smia.behaviours.acl_handling_behaviour] [ACLINFO]          + Message received on SMIA (ACLHandlingBehaviour) from gui_agent@xmpp.jp/816466927255326417207171618 line:53
+2025-06-20 12:12:39,733 [smia.behaviours.acl_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"capabilityIRI": "http://www.w3id.org/upv-ehu/gcis/css-smia#Transportation", "skillIRI": "http://www.w3id.org/hsu-aut/css#HumanTransport", "constraints": {"http://www.w3id.org/hsu-aut/css#PayloadWeight": "2"}, "skillParams": {"http://www.w3id.org/hsu-aut/css#Initial": "PA", "http://www.w3id.org/hsu-aut/css#Final": "PB"}} line:54
+2025-06-20 12:12:39,783 [smia.behaviours.acl_handling_behaviour] [INFO] Specific behaviour added to the agent to handle the message with thread [prueba-acl-smia-msg]. line:95
+2025-06-20 12:12:39,784 [behaviours.receive_acl_behaviour] [ACLINFO] Analyzing ACL message... Checking if it is a message for SMIA HI ...  line:42
+2025-06-20 12:12:39,784 [smia.behaviours.specific_handle_behaviours.handle_capability_behaviour] [INFO] HandleCapabilityBehaviour starting to handle the CSS service to the message with thread [prueba-acl-smia-msg]... line:48
+2025-06-20 12:12:39,785 [smia.aas_model.extended_submodel] [INFO] The Capability Constraint ExtendedCapabilityConstraint[urn:ehu:gcis:cedri:submodel:capabilityconstraints:0:1#operator001 / PayloadWeight] has been checked with data (2), resulting in True line:511
+2025-06-20 12:14:14,620 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-06-20 12:14:14,626 [asyncio] [ERROR] Fatal read error on STARTTLS transport
+protocol: <aioxmpp.protocol.XMLStream object at 0x000001AEF29840A0>
+transport: <aioopenssl.STARTTLSTransport object at 0x000001AEF297AD00> line:1758
+Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\aioopenssl\__init__.py", line 493, in _read_ready
+    data = self._sock.recv(self.MAX_SIZE)
+  File "C:\Python310\lib\site-packages\OpenSSL\SSL.py", line 2067, in recv
+    self._raise_ssl_error(self._ssl, result)
+  File "C:\Python310\lib\site-packages\OpenSSL\SSL.py", line 1838, in _raise_ssl_error
+    raise SysCallError(-1, "Unexpected EOF")
+OpenSSL.SSL.SysCallError: (-1, 'Unexpected EOF')
+2025-06-20 12:14:14,640 [gcis1] [ERROR] stream failed: (-1, 'Unexpected EOF') line:972
+2025-06-20 12:14:14,641 [gcis1] [INFO] stopping stream line:989
+2025-06-20 12:14:14,641 [gcis1] [INFO] connection error: (SysCallError) (-1, 'Unexpected EOF') line:1017
+2025-06-20 12:16:15,944 [__main__] [INFO] Initializing SMIA HI ... line:19
+2025-06-20 12:16:15,944 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:296
+2025-06-20 12:16:15,953 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:16:15,954 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-20 12:16:15,963 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:16:15,967 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/CeDRI_Operator_instance.aasx file is already in SMIA archive. line:180
+2025-06-20 12:16:15,967 [smia] [INFO] AAS model CeDRI_Operator_instance.aasx copied to the SMIA Archive. line:91
+2025-06-20 12:16:16,002 [smia.aas_model.aas_model_utils] [WARNING] The file with path /aasx/config/smia-initialization.properties does not find within the AASX Package. line:73
+2025-06-20 12:16:16,003 [smia] [WARNING] The AAS model does not contain the initialization configuration file. Make sure that it is not necessary. line:103
+2025-06-20 12:16:16,017 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ReceiveACLBehaviour line:43
+2025-06-20 12:16:16,017 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/SMIAHIGUIBehaviour line:43
+2025-06-20 12:16:16,018 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: HumanTransportGUI line:62
+2025-06-20 12:16:16,019 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: VisuallyInspectGUI line:62
+2025-06-20 12:16:18,810 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-06-20 12:16:19,961 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/95848329413099242717207911298 line:935
+2025-06-20 12:16:20,247 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB05NTg0ODMyOTQxMzA5OTI0MjcxNzIwNzkxMTI5OG0AAAAIVHzebkBvkIc=' line:2209
+2025-06-20 12:16:20,839 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-06-20 12:16:20,839 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:98
+2025-06-20 12:16:20,840 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:118
+2025-06-20 12:16:20,842 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-06-20 12:16:20,842 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-20 12:16:20,842 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:38
+2025-06-20 12:16:20,845 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 12:16:20,863 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 12:16:20,865 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-20 12:16:20,888 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:78
+2025-06-20 12:16:20,888 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [Self-configurableManufacturingIndustrialAgents] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:90
+2025-06-20 12:16:20,892 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-20 12:16:20,901 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-20 12:16:23,507 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-06-20 12:16:24,446 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-06-20 12:16:24,446 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-06-20 12:16:25,450 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['Transportation', 'VisualInspection']
+	- Analyzed capability constraints: ['PayloadWeight']
+	- Analyzed skills: ['HumanTransport', 'VisuallyInspect']
+	- Analyzed skill interfaces: ['HumanTransportGUI', 'VisuallyInspectGUI']
+	- Analyzed skill parameters: ['Initial', 'Final', 'Initial', 'Final']
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-06-20 12:16:25,450 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-06-20 12:16:25,451 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-06-20 12:16:25,490 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register the SMIA instance in the SMIA KB. line:88
+2025-06-20 12:16:25,792 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:91
+2025-06-20 12:16:30,805 [smia.states.state_booting] [WARNING] The registry of the SMIA instance gcis1@xmpp.jp has not been completed. Check the SMIA ISM or the SMIA KB. line:104
+2025-06-20 12:16:30,805 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:62
+2025-06-20 12:16:30,805 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-06-20 12:16:30,806 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-20 12:16:30,806 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-20 12:16:30,807 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:84
+2025-06-20 12:16:30,808 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:41
+2025-06-20 12:16:30,808 [behaviours.receive_acl_behaviour] [INFO] ReceiveACLBehaviour starting... line:30
+2025-06-20 12:16:30,808 [behaviours.smia_hi_gui_behaviour] [INFO] SMIA SPADE web interface required resources initialized. line:23
+2025-06-20 12:16:30,809 [behaviours.smia_hi_gui_behaviour] [INFO] Added SMIA Favicon to the web interface. line:27
+2025-06-20 12:16:30,811 [behaviours.smia_hi_gui_behaviour] [INFO] Added new web pages to the web interface. line:39
+2025-06-20 12:16:30,813 [behaviours.smia_hi_gui_behaviour] [INFO] Started SMIA HI SPADE web interface. line:43
+2025-06-20 12:16:30,814 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/SMIAHIGUIBehaviour with exit code: None line:154
+2025-06-20 12:16:30,815 [spade.Web] [INFO] Serving on http://0.0.0.0:20000/ line:39
+2025-06-20 12:16:33,692 [smia.behaviours.acl_handling_behaviour] [ACLINFO]          + Message received on SMIA (ACLHandlingBehaviour) from gui_agent@xmpp.jp/816466927255326417207171618 line:53
+2025-06-20 12:16:33,692 [smia.behaviours.acl_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"capabilityIRI": "http://www.w3id.org/upv-ehu/gcis/css-smia#Transportation", "skillIRI": "http://www.w3id.org/hsu-aut/css#HumanTransport", "constraints": {"http://www.w3id.org/hsu-aut/css#PayloadWeight": "2"}, "skillParams": {"http://www.w3id.org/hsu-aut/css#Initial": "PA", "http://www.w3id.org/hsu-aut/css#Final": "PB"}} line:54
+2025-06-20 12:16:33,722 [smia.behaviours.acl_handling_behaviour] [INFO] Specific behaviour added to the agent to handle the message with thread [prueba-acl-smia-msg]. line:95
+2025-06-20 12:16:33,723 [behaviours.receive_acl_behaviour] [ACLINFO] Analyzing ACL message... Checking if it is a message for SMIA HI ...  line:42
+2025-06-20 12:16:33,723 [smia.behaviours.specific_handle_behaviours.handle_capability_behaviour] [INFO] HandleCapabilityBehaviour starting to handle the CSS service to the message with thread [prueba-acl-smia-msg]... line:48
+2025-06-20 12:16:33,725 [smia.aas_model.extended_submodel] [INFO] The Capability Constraint ExtendedCapabilityConstraint[urn:ehu:gcis:cedri:submodel:capabilityconstraints:0:1#operator001 / PayloadWeight] has been checked with data (2), resulting in True line:511
+2025-06-20 12:19:15,522 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-06-20 12:19:15,523 [gcis1] [INFO] client shutting down (on request) line:975
+2025-06-20 12:19:15,525 [aioxmpp.callbacks] [ERROR] listener attached to signal raised line:536
+Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\aioxmpp\callbacks.py", line 534, in fire
+    keep = wrapper(args, kwargs)
+  File "C:\Python310\lib\site-packages\aioxmpp\callbacks.py", line 468, in _strong_wrapper
+    return not f(*args, **kwargs)
+  File "C:\Python310\lib\site-packages\aioxmpp\stream.py", line 1799, in _xmlstream_soft_limit_tripped
+    xmlstream.send_xso(req)
+  File "C:\Python310\lib\site-packages\aioxmpp\protocol.py", line 729, in send_xso
+    self._require_connection()
+  File "C:\Python310\lib\site-packages\aioxmpp\protocol.py", line 428, in _require_connection
+    raise ConnectionError("xmlstream not connected")
+ConnectionError: xmlstream not connected
+2025-06-20 12:19:15,537 [gcis1] [WARNING] something is odd: failure future is already done ... line:813
+2025-06-20 12:19:15,537 [gcis1] [INFO] stopping stream line:989
+2025-06-20 12:19:15,537 [gcis1] [INFO] connection error: (ConnectionError) connection timeout (dead time hard limit exceeded) line:1017
+2025-06-20 12:19:18,587 [__main__] [INFO] Initializing SMIA HI ... line:19
+2025-06-20 12:19:18,587 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:296
+2025-06-20 12:19:18,597 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:19:18,597 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-20 12:19:18,610 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:19:18,612 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/CeDRI_Operator_instance.aasx file is already in SMIA archive. line:180
+2025-06-20 12:19:18,613 [smia] [INFO] AAS model CeDRI_Operator_instance.aasx copied to the SMIA Archive. line:91
+2025-06-20 12:19:18,640 [smia.aas_model.aas_model_utils] [WARNING] The file with path /aasx/config/smia-initialization.properties does not find within the AASX Package. line:73
+2025-06-20 12:19:18,640 [smia] [WARNING] The AAS model does not contain the initialization configuration file. Make sure that it is not necessary. line:103
+2025-06-20 12:19:18,648 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ReceiveACLBehaviour line:43
+2025-06-20 12:19:18,649 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/SMIAHIGUIBehaviour line:43
+2025-06-20 12:19:18,649 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: HumanTransportGUI line:62
+2025-06-20 12:19:18,649 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: VisuallyInspectGUI line:62
+2025-06-20 12:19:21,300 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-06-20 12:19:22,413 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/79633743146494526733557793540 line:935
+2025-06-20 12:19:22,690 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB03OTYzMzc0MzE0NjQ5NDUyNjczMzU1Nzc5MzU0MG0AAAAIf+uIdPMI1hg=' line:2209
+2025-06-20 12:19:23,266 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-06-20 12:19:23,267 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:98
+2025-06-20 12:19:23,267 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:118
+2025-06-20 12:19:23,268 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-06-20 12:19:23,268 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-20 12:19:23,268 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:38
+2025-06-20 12:19:23,270 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 12:19:23,289 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 12:19:23,292 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-20 12:19:23,319 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:78
+2025-06-20 12:19:23,319 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [Self-configurableManufacturingIndustrialAgents] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:90
+2025-06-20 12:19:23,321 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-20 12:19:23,330 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-20 12:19:25,914 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-06-20 12:19:26,867 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-06-20 12:19:26,868 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-06-20 12:19:27,876 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['Transportation', 'VisualInspection']
+	- Analyzed capability constraints: ['PayloadWeight']
+	- Analyzed skills: ['HumanTransport', 'VisuallyInspect']
+	- Analyzed skill interfaces: ['HumanTransportGUI', 'VisuallyInspectGUI']
+	- Analyzed skill parameters: ['Initial', 'Final', 'Initial', 'Final']
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-06-20 12:19:27,877 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-06-20 12:19:27,878 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-06-20 12:19:27,923 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register the SMIA instance in the SMIA KB. line:88
+2025-06-20 12:19:28,218 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:91
+2025-06-20 12:19:33,221 [smia.states.state_booting] [WARNING] The registry of the SMIA instance gcis1@xmpp.jp has not been completed. Check the SMIA ISM or the SMIA KB. line:104
+2025-06-20 12:19:33,221 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:62
+2025-06-20 12:19:33,221 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-06-20 12:19:33,223 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-20 12:19:33,223 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-20 12:19:33,224 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:84
+2025-06-20 12:19:33,225 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:41
+2025-06-20 12:19:33,226 [behaviours.receive_acl_behaviour] [INFO] ReceiveACLBehaviour starting... line:30
+2025-06-20 12:19:33,226 [behaviours.smia_hi_gui_behaviour] [INFO] SMIA SPADE web interface required resources initialized. line:23
+2025-06-20 12:19:33,227 [behaviours.smia_hi_gui_behaviour] [INFO] Added SMIA Favicon to the web interface. line:27
+2025-06-20 12:19:33,228 [behaviours.smia_hi_gui_behaviour] [INFO] Added new web pages to the web interface. line:39
+2025-06-20 12:19:33,234 [behaviours.smia_hi_gui_behaviour] [INFO] Started SMIA HI SPADE web interface. line:43
+2025-06-20 12:19:33,235 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/SMIAHIGUIBehaviour with exit code: None line:154
+2025-06-20 12:19:33,236 [spade.Web] [INFO] Serving on http://0.0.0.0:20000/ line:39
+2025-06-20 12:19:43,218 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:19:43,218 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:19:53,214 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:19:53,215 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:19:59,882 [smia.behaviours.acl_handling_behaviour] [ACLINFO]          + Message received on SMIA (ACLHandlingBehaviour) from gui_agent@xmpp.jp/816466927255326417207171618 line:53
+2025-06-20 12:19:59,882 [smia.behaviours.acl_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"capabilityIRI": "http://www.w3id.org/upv-ehu/gcis/css-smia#Transportation", "skillIRI": "http://www.w3id.org/hsu-aut/css#HumanTransport", "constraints": {"http://www.w3id.org/hsu-aut/css#PayloadWeight": "2"}, "skillParams": {"http://www.w3id.org/hsu-aut/css#Initial": "PA", "http://www.w3id.org/hsu-aut/css#Final": "PB"}} line:54
+2025-06-20 12:19:59,910 [smia.behaviours.acl_handling_behaviour] [INFO] Specific behaviour added to the agent to handle the message with thread [prueba-acl-smia-msg]. line:95
+2025-06-20 12:19:59,910 [behaviours.receive_acl_behaviour] [ACLINFO] Analyzing ACL message... Checking if it is a message for SMIA HI ...  line:42
+2025-06-20 12:19:59,910 [smia.behaviours.specific_handle_behaviours.handle_capability_behaviour] [INFO] HandleCapabilityBehaviour starting to handle the CSS service to the message with thread [prueba-acl-smia-msg]... line:48
+2025-06-20 12:19:59,912 [smia.aas_model.extended_submodel] [INFO] The Capability Constraint ExtendedCapabilityConstraint[urn:ehu:gcis:cedri:submodel:capabilityconstraints:0:1#operator001 / PayloadWeight] has been checked with data (2), resulting in True line:511
+2025-06-20 12:20:08,768 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-06-20 12:20:08,769 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-20 12:20:08,769 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-20 12:20:08,770 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:84
+2025-06-20 12:20:08,770 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:41
+2025-06-20 12:20:08,771 [behaviours.receive_acl_behaviour] [INFO] ReceiveACLBehaviour starting... line:30
+2025-06-20 12:20:08,771 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/SMIAHIGUIBehaviour with exit code: None line:154
+2025-06-20 12:24:24,339 [__main__] [INFO] Initializing SMIA HI ... line:19
+2025-06-20 12:24:24,339 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:296
+2025-06-20 12:24:24,348 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:24:24,350 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-20 12:24:24,359 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:24:24,363 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/CeDRI_Operator_instance.aasx file is already in SMIA archive. line:180
+2025-06-20 12:24:24,364 [smia] [INFO] AAS model CeDRI_Operator_instance.aasx copied to the SMIA Archive. line:91
+2025-06-20 12:24:24,397 [smia.aas_model.aas_model_utils] [WARNING] The file with path /aasx/config/smia-initialization.properties does not find within the AASX Package. line:73
+2025-06-20 12:24:24,398 [smia] [WARNING] The AAS model does not contain the initialization configuration file. Make sure that it is not necessary. line:103
+2025-06-20 12:24:24,407 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ReceiveACLBehaviour line:43
+2025-06-20 12:24:24,408 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/SMIAHIGUIBehaviour line:43
+2025-06-20 12:24:24,409 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: HumanTransportGUI line:62
+2025-06-20 12:24:24,409 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: VisuallyInspectGUI line:62
+2025-06-20 12:24:27,192 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-06-20 12:24:28,373 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/263932292837022538317208369634 line:935
+2025-06-20 12:24:28,686 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB4yNjM5MzIyOTI4MzcwMjI1MzgzMTcyMDgzNjk2MzRtAAAACMJlMEN9dGqF' line:2209
+2025-06-20 12:24:29,303 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-06-20 12:24:29,304 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:98
+2025-06-20 12:24:29,305 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:118
+2025-06-20 12:24:29,306 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-06-20 12:24:29,307 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-20 12:24:29,307 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:38
+2025-06-20 12:24:29,315 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 12:24:29,348 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 12:24:29,351 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-20 12:24:29,376 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:78
+2025-06-20 12:24:29,376 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [Self-configurableManufacturingIndustrialAgents] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:90
+2025-06-20 12:24:29,380 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-20 12:24:29,396 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-20 12:24:32,045 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-06-20 12:24:33,018 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-06-20 12:24:33,018 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-06-20 12:24:34,018 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['Transportation', 'VisualInspection']
+	- Analyzed capability constraints: ['PayloadWeight']
+	- Analyzed skills: ['HumanTransport', 'VisuallyInspect']
+	- Analyzed skill interfaces: ['HumanTransportGUI', 'VisuallyInspectGUI']
+	- Analyzed skill parameters: ['Initial', 'Final', 'Initial', 'Final']
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-06-20 12:24:34,019 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-06-20 12:24:34,020 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-06-20 12:24:34,068 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register the SMIA instance in the SMIA KB. line:88
+2025-06-20 12:24:34,385 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:91
+2025-06-20 12:24:39,399 [smia.states.state_booting] [WARNING] The registry of the SMIA instance gcis1@xmpp.jp has not been completed. Check the SMIA ISM or the SMIA KB. line:104
+2025-06-20 12:24:39,400 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:62
+2025-06-20 12:24:39,400 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-06-20 12:24:39,401 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-20 12:24:39,401 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-20 12:24:39,406 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:84
+2025-06-20 12:24:39,407 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:41
+2025-06-20 12:24:39,408 [behaviours.receive_acl_behaviour] [INFO] ReceiveACLBehaviour starting... line:30
+2025-06-20 12:24:39,409 [behaviours.smia_hi_gui_behaviour] [INFO] SMIA SPADE web interface required resources initialized. line:23
+2025-06-20 12:24:39,411 [behaviours.smia_hi_gui_behaviour] [INFO] Added SMIA Favicon to the web interface. line:27
+2025-06-20 12:24:39,411 [behaviours.smia_hi_gui_behaviour] [INFO] Added new web pages to the web interface. line:39
+2025-06-20 12:24:39,417 [behaviours.smia_hi_gui_behaviour] [INFO] Started SMIA HI SPADE web interface. line:43
+2025-06-20 12:24:39,418 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/SMIAHIGUIBehaviour with exit code: None line:154
+2025-06-20 12:24:39,419 [spade.Web] [INFO] Serving on http://0.0.0.0:20000/ line:39
+2025-06-20 12:24:49,392 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:24:49,393 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:24:49,434 [smia.behaviours.acl_handling_behaviour] [ACLINFO]          + Message received on SMIA (ACLHandlingBehaviour) from gui_agent@xmpp.jp/816466927255326417207171618 line:53
+2025-06-20 12:24:49,435 [smia.behaviours.acl_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"capabilityIRI": "http://www.w3id.org/upv-ehu/gcis/css-smia#Transportation", "skillIRI": "http://www.w3id.org/hsu-aut/css#HumanTransport", "constraints": {"http://www.w3id.org/hsu-aut/css#PayloadWeight": "2"}, "skillParams": {"http://www.w3id.org/hsu-aut/css#Initial": "PA", "http://www.w3id.org/hsu-aut/css#Final": "PB"}} line:54
+2025-06-20 12:24:49,456 [smia.behaviours.acl_handling_behaviour] [INFO] Specific behaviour added to the agent to handle the message with thread [prueba-acl-smia-msg]. line:95
+2025-06-20 12:24:49,456 [behaviours.receive_acl_behaviour] [ACLINFO] Analyzing ACL message... Checking if it is a message for SMIA HI ...  line:42
+2025-06-20 12:24:49,457 [smia.behaviours.specific_handle_behaviours.handle_capability_behaviour] [INFO] HandleCapabilityBehaviour starting to handle the CSS service to the message with thread [prueba-acl-smia-msg]... line:48
+2025-06-20 12:24:49,459 [smia.aas_model.extended_submodel] [INFO] The Capability Constraint ExtendedCapabilityConstraint[urn:ehu:gcis:cedri:submodel:capabilityconstraints:0:1#operator001 / PayloadWeight] has been checked with data (2), resulting in True line:511
+2025-06-20 12:26:14,396 [logic.smia_hi_agent_services] [INFO] Running the transport service using the human through SPADE web GUI line:14
+2025-06-20 12:26:34,439 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-06-20 12:26:34,443 [gcis1] [INFO] client shutting down (on request) line:975
+2025-06-20 12:26:34,444 [gcis1.StanzaStream] [INFO] stopping SM stream line:2473
+2025-06-20 12:26:34,444 [gcis1] [INFO] stopping stream line:989
+2025-06-20 12:27:03,803 [__main__] [INFO] Initializing SMIA HI ... line:19
+2025-06-20 12:27:03,803 [smia.utilities.general_utils] [ERROR] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. Please add the information and restart the container. line:296
+2025-06-20 12:27:03,812 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:27:03,812 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-06-20 12:27:03,820 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-06-20 12:27:03,823 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/CeDRI_Operator_instance.aasx file is already in SMIA archive. line:180
+2025-06-20 12:27:03,823 [smia] [INFO] AAS model CeDRI_Operator_instance.aasx copied to the SMIA Archive. line:91
+2025-06-20 12:27:03,854 [smia.aas_model.aas_model_utils] [WARNING] The file with path /aasx/config/smia-initialization.properties does not find within the AASX Package. line:73
+2025-06-20 12:27:03,854 [smia] [WARNING] The AAS model does not contain the initialization configuration file. Make sure that it is not necessary. line:103
+2025-06-20 12:27:03,864 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ReceiveACLBehaviour line:43
+2025-06-20 12:27:03,865 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/SMIAHIGUIBehaviour line:43
+2025-06-20 12:27:03,865 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: HumanTransportGUI line:62
+2025-06-20 12:27:03,866 [smia.agents.extensible_smia_agent] [INFO] Added a new agent service to SMIA: VisuallyInspectGUI line:62
+2025-06-20 12:27:06,572 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-06-20 12:27:07,709 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/1765706575925721468010739592963 line:935
+2025-06-20 12:27:07,990 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB8xNzY1NzA2NTc1OTI1NzIxNDY4MDEwNzM5NTkyOTYzbQAAAAhqSoXcdQgpig==' line:2209
+2025-06-20 12:27:08,595 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-06-20 12:27:08,596 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:98
+2025-06-20 12:27:08,598 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:118
+2025-06-20 12:27:08,599 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-06-20 12:27:08,600 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-06-20 12:27:08,601 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:38
+2025-06-20 12:27:08,606 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 12:27:08,624 [smia.css_ontology.css_ontology_utils] [INFO] The ontology OWL file is not found within the AASX package, so it will be searched for within the SMIA Archive. line:44
+2025-06-20 12:27:08,627 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-06-20 12:27:08,653 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:78
+2025-06-20 12:27:08,653 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [Self-configurableManufacturingIndustrialAgents] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:90
+2025-06-20 12:27:08,656 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:391
+2025-06-20 12:27:08,664 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:74
+2025-06-20 12:27:11,241 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:78
+2025-06-20 12:27:12,228 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:82
+2025-06-20 12:27:12,228 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:336
+2025-06-20 12:27:13,210 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['Transportation', 'VisualInspection']
+	- Analyzed capability constraints: ['PayloadWeight']
+	- Analyzed skills: ['HumanTransport', 'VisuallyInspect']
+	- Analyzed skill interfaces: ['HumanTransportGUI', 'VisuallyInspectGUI']
+	- Analyzed skill parameters: ['Initial', 'Final', 'Initial', 'Final']
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:364
+2025-06-20 12:27:13,210 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:92
+2025-06-20 12:27:13,211 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-06-20 12:27:13,270 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register the SMIA instance in the SMIA KB. line:88
+2025-06-20 12:27:13,577 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:91
+2025-06-20 12:27:18,583 [smia.states.state_booting] [WARNING] The registry of the SMIA instance gcis1@xmpp.jp has not been completed. Check the SMIA ISM or the SMIA KB. line:104
+2025-06-20 12:27:18,585 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:62
+2025-06-20 12:27:18,586 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-06-20 12:27:18,586 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-06-20 12:27:18,587 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-06-20 12:27:18,591 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:84
+2025-06-20 12:27:18,593 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:41
+2025-06-20 12:27:18,594 [behaviours.receive_acl_behaviour] [INFO] ReceiveACLBehaviour starting... line:30
+2025-06-20 12:27:18,595 [behaviours.smia_hi_gui_behaviour] [INFO] SMIA SPADE web interface required resources initialized. line:23
+2025-06-20 12:27:18,598 [behaviours.smia_hi_gui_behaviour] [INFO] Added SMIA Favicon to the web interface. line:27
+2025-06-20 12:27:18,599 [behaviours.smia_hi_gui_behaviour] [INFO] Added new web pages to the web interface. line:39
+2025-06-20 12:27:18,606 [behaviours.smia_hi_gui_behaviour] [INFO] Started SMIA HI SPADE web interface. line:43
+2025-06-20 12:27:18,607 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/SMIAHIGUIBehaviour with exit code: None line:154
+2025-06-20 12:27:18,609 [spade.Web] [INFO] Serving on http://0.0.0.0:20000/ line:39
+2025-06-20 12:27:28,593 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:27:28,594 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:27:38,584 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:27:38,587 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:27:48,582 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:27:48,584 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:27:58,591 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:27:58,591 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:28:08,586 [behaviours.receive_acl_behaviour] [INFO]          - No message received within 10 seconds on SMIA HI (ReceiveACLBehaviour) line:45
+2025-06-20 12:28:08,587 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:156
+2025-06-20 12:28:11,078 [smia.behaviours.acl_handling_behaviour] [ACLINFO]          + Message received on SMIA (ACLHandlingBehaviour) from gui_agent@xmpp.jp/816466927255326417207171618 line:53
+2025-06-20 12:28:11,078 [smia.behaviours.acl_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"capabilityIRI": "http://www.w3id.org/upv-ehu/gcis/css-smia#Transportation", "skillIRI": "http://www.w3id.org/hsu-aut/css#HumanTransport", "constraints": {"http://www.w3id.org/hsu-aut/css#PayloadWeight": "2"}, "skillParams": {"http://www.w3id.org/hsu-aut/css#Initial": "PA", "http://www.w3id.org/hsu-aut/css#Final": "PB"}} line:54
+2025-06-20 12:28:11,113 [smia.behaviours.acl_handling_behaviour] [INFO] Specific behaviour added to the agent to handle the message with thread [prueba-acl-smia-msg]. line:95
+2025-06-20 12:28:11,113 [behaviours.receive_acl_behaviour] [ACLINFO] Analyzing ACL message... Checking if it is a message for SMIA HI ...  line:42
+2025-06-20 12:28:11,115 [smia.behaviours.specific_handle_behaviours.handle_capability_behaviour] [INFO] HandleCapabilityBehaviour starting to handle the CSS service to the message with thread [prueba-acl-smia-msg]... line:48
+2025-06-20 12:28:11,117 [smia.aas_model.extended_submodel] [INFO] The Capability Constraint ExtendedCapabilityConstraint[urn:ehu:gcis:cedri:submodel:capabilityconstraints:0:1#operator001 / PayloadWeight] has been checked with data (2), resulting in True line:511
+2025-06-20 12:29:35,877 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-06-20 12:29:35,879 [gcis1] [INFO] client shutting down (on request) line:975

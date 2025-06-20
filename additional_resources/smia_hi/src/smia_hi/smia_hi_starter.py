@@ -7,6 +7,7 @@ from smia.utilities.general_utils import DockerUtils
 
 from behaviours.receive_acl_behaviour import ReceiveACLBehaviour
 from behaviours.smia_hi_gui_behaviour import SMIAHIGUIBehaviour
+from logic.smia_hi_agent_services import SMIAHIAgentServices
 
 _logger = logging.getLogger(__name__)
 
@@ -29,9 +30,9 @@ def main():
     smia_psswd = os.environ.get('AGENT_PASSWD')
 
     # TODO BORRAR (para pruebas)
-    # smia_jid = "gcis1@xmpp.jp"
-    # smia_psswd = "gcis1234"
-    # smia.load_aas_model('../smia_archive/config/aas/CeDRI_Operator_instance.aasx')
+    smia_jid = "gcis1@xmpp.jp"
+    smia_psswd = "gcis1234"
+    smia.load_aas_model('../smia_archive/config/aas/CeDRI_Operator_instance.aasx')
 
     # Create the agent object
     smia_hi_agent = ExtensibleSMIAAgent(smia_jid, smia_psswd)
@@ -43,6 +44,10 @@ def main():
     # The graphical web user interface is also added in order to manage the web Human Interface
     spia_gui_behaviour = SMIAHIGUIBehaviour()
     smia_hi_agent.add_new_agent_capability(spia_gui_behaviour)
+
+    # Let's add all Agent Services for SMIA HI
+    for service_id, service_method in SMIAHIAgentServices.SMIAHIAgentServicesMap.items():
+        smia_hi_agent.add_new_agent_service(service_id, service_method)
 
     smia.run(smia_hi_agent)
 
