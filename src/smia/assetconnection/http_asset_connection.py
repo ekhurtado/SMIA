@@ -96,6 +96,7 @@ class HTTPAssetConnection(AssetConnection):
             if http_response.status != 200:
                 _logger.warning("The HTTP request has not been answered correctly. "
                                 "Response: {}".format(await http_response.text()))
+            _logger.assetinfo("HTTP communication successfully completed.")
             return await self.get_response_content(interaction_metadata, await http_response.text())
         return None
 
