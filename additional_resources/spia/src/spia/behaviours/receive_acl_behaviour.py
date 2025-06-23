@@ -70,8 +70,10 @@ class ReceiveACLBehaviour(CyclicBehaviour):
                                             acl_smia_messages_utils.get_sender_from_acl_msg(msg)),
                                      'response_msg': msg_parsed_body['reason']})
 
-                                raise CriticalError('SPIA cannot continue due to a received FAILURE ACL message. '
+                                _logger.error('SPIA cannot continue due to a received FAILURE ACL message. '
                                                     'Reason: {}'.format(msg_parsed_body['reason']))
+                                _logger.warning("BPMNPerformerBehaviour will remain blocked due to the receipt of an "
+                                                "ACL failure message.... ")
                             if (msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB) ==
                                     FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM):
                                 # In this case the content is valid
