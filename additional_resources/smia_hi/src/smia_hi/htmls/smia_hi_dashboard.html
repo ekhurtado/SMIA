@@ -6,6 +6,9 @@
     <!-- Include SPADE CSS links -->
     {% include 'htmls/templates/spade_html_css_links.html' %}
 
+    <!--Added script to automatically reload the SMIA HI GUI webpage-->
+    <script type="text/javascript" src="https://livejs.com/live.js"></script>
+
     <style>
 
         .box-primary {
@@ -265,6 +268,7 @@
                                             <td colspan="3">
                                                 <div class="capability-info">
                                                     <ul>
+                                                        {% if 'constraints' in task_info and task_info['constraints'] != None %}
                                                         <li><i>Constraints: </i>
                                                             <ul>
                                                                 {% for constName, constValue in task_info['constraints'].items() %}
@@ -272,6 +276,8 @@
                                                                 {% endfor %}
                                                             </ul>
                                                         </li>
+                                                        {% endif %}
+                                                        {% if 'skillParams' in task_info and task_info['skillParams'] != None %}
                                                         <li><i>Skill parameters: </i>
                                                             <ul>
                                                                 {% for paramName, paramValue in task_info['skillParams'].items() %}
@@ -279,6 +285,7 @@
                                                                 {% endfor %}
                                                             </ul>
                                                         </li>
+                                                        {% endif %}
                                                     </ul>
                                                 </div>
                                             </td>
@@ -329,6 +336,7 @@
                                             <td colspan="3">
                                                 <div class="capability-info">
                                                     <ul>
+                                                        {% if 'constraints' in task_info and task_info['constraints'] != None %}
                                                         <li><i>Constraints: </i>
                                                             <ul>
                                                                 {% for constName, constValue in task_info['constraints'].items() %}
@@ -336,6 +344,8 @@
                                                                 {% endfor %}
                                                             </ul>
                                                         </li>
+                                                        {% endif %}
+                                                        {% if 'skillParams' in task_info and task_info['skillParams'] != None %}
                                                         <li><i>Skill parameters: </i>
                                                             <ul>
                                                                 {% for paramName, paramValue in task_info['skillParams'].items() %}
@@ -343,6 +353,7 @@
                                                                 {% endfor %}
                                                             </ul>
                                                         </li>
+                                                        {% endif %}
                                                     </ul>
                                                 </div>
                                             </td>
@@ -385,7 +396,12 @@
 
         let receivedTaskNumber = receivedTaskTable.querySelectorAll('tbody tr.expandable').length
         let completedTaskNumber = completedTaskTable.querySelectorAll('tbody tr.expandable').length
-        const percentage = Math.trunc(completedTaskNumber / (receivedTaskNumber + completedTaskNumber) * 100);
+        let percentage;
+        if ((receivedTaskNumber + completedTaskNumber) === 0) {
+            percentage = 0;
+        } else {
+            percentage = Math.trunc(completedTaskNumber / (receivedTaskNumber + completedTaskNumber) * 100);
+        }
         progressBar.style.width = percentage + "%";
         progressDescription.textContent = percentage + "% completed";
 

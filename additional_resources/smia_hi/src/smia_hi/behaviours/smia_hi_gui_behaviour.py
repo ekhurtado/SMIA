@@ -24,12 +24,12 @@ class SMIAHIGUIBehaviour(OneShotBehaviour):
         self.agent.completed_css_tasks = {}
 
         # TODO BORRAR
-        self.agent.received_css_tasks['taskID2154'] = {'capName': 'Transport', 'requestedTime': '24/06/2025 11:54',
-                                                       'constraints': {'Weight': '1 kg'}, 'skillParams': {'Initial': 'warehouse', 'Final': 'PB'}}
-        self.agent.received_css_tasks['taskID8763'] = {'capName': 'Transport', 'requestedTime': '24/06/2025 11:54',
-                                                       'constraints': {'Weight': '1 kg'}, 'skillParams': {'Initial': 'warehouse', 'Final': 'PB'}}
-        self.agent.received_css_tasks['taskID5433'] = {'capName': 'Transport', 'requestedTime': '24/06/2025 11:54',
-                                                       'constraints': {'Weight': '1 kg'}, 'skillParams': {'Initial': 'warehouse', 'Final': 'PB'}}
+        # self.agent.received_css_tasks['taskID2154'] = {'capName': 'Transport', 'requestedTime': '24/06/2025 11:54',
+        #                                                'constraints': {'Weight': '1 kg'}, 'skillParams': {'Initial': 'warehouse', 'Final': 'PB'}}
+        # self.agent.received_css_tasks['taskID8763'] = {'capName': 'Transport', 'requestedTime': '24/06/2025 11:54',
+        #                                                'constraints': {'Weight': '1 kg'}, 'skillParams': {'Initial': 'warehouse', 'Final': 'PB'}}
+        # self.agent.received_css_tasks['taskID5433'] = {'capName': 'Transport', 'requestedTime': '24/06/2025 11:54',
+        #                                                'constraints': {'Weight': '1 kg'}, 'skillParams': {'Initial': 'warehouse', 'Final': 'PB'}}
         # self.agent.completed_css_tasks['taskID2154-done'] = {'capName': 'Transport', 'requestedTime': '24/06/2025 11:54',
         #                                                 'completedTime': '24/06/2025 11:58',
         #                                                'constraints': {'Weight': '1 kg'},
@@ -55,5 +55,5 @@ class SMIAHIGUIBehaviour(OneShotBehaviour):
         _logger.info("Added new web pages to the web interface.")
 
         # Once all the configuration is done, the web interface is enabled in the SMIA SPADE agent
-        self.agent.web.start(hostname="0.0.0.0", port="10000")
+        self.agent.web.start(hostname="0.0.0.0", port="20000")
         _logger.info("Started SMIA HI SPADE web interface.")

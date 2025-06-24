@@ -46,7 +46,8 @@ def main():
     smia_hi_agent.add_new_agent_capability(spia_gui_behaviour)
 
     # Let's add all Agent Services for SMIA HI
-    for service_id, service_method in SMIAHIAgentServices.SMIAHIAgentServicesMap.items():
+    smia_hi_agent_services = SMIAHIAgentServices(smia_hi_agent)
+    for service_id, service_method in smia_hi_agent_services.services_map.items():
         smia_hi_agent.add_new_agent_service(service_id, service_method)
 
     smia.run(smia_hi_agent)

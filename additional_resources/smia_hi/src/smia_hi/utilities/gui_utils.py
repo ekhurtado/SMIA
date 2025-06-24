@@ -47,7 +47,7 @@ class GUIControllers:
         self.myagent.completed_css_tasks[task_id + '-done'] = {'capName': data.get("capName"),
                                                      'requestedTime': data.get("requestedTime"),
                                                      'completedTime': str(GeneralUtils.get_current_date_time()),
-                                                     'constraints': data.get("constraints"),
+                                                     'constraints': data.get("constraints", None),
                                                      'skillParams': data.get("skillParams")}
 
         return {'status': 'success'}
