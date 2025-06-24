@@ -19,6 +19,18 @@ class SMIAHIGUIBehaviour(OneShotBehaviour):
         self.agent.web_menu_entries = OrderedDict()
         self.agent.build_avatar_url = GUIFeatures.build_avatar_url
 
+        # The dictionaries related to the HTML webpage are also initialized
+        self.agent.received_css_tasks = {}
+        self.agent.completed_css_tasks = {}
+
+        # TODO BORRAR
+        self.agent.received_css_tasks['taskID2154'] = {'capName': 'Transport', 'requestedTime': '24/06/2025 11:54',
+                                                       'constraints': {'Weight': '1 kg'}, 'skillParams': {'Initial': 'warehouse', 'Final': 'PB'}}
+        self.agent.completed_css_tasks['taskID2154-done'] = {'capName': 'Transport', 'requestedTime': '24/06/2025 11:54',
+                                                        'completedTime': '24/06/2025 11:58',
+                                                       'constraints': {'Weight': '1 kg'},
+                                                       'skillParams': {'Initial': 'warehouse', 'Final': 'PB'}}
+        # TODO FIN BORRAR
 
         _logger.info("SMIA SPADE web interface required resources initialized.")
 

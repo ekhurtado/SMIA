@@ -4,7 +4,6 @@ _logger = logging.getLogger(__name__)
 
 class SMIAHIAgentServices:
 
-
     @staticmethod
     async def human_transport_gui(Initial, Final):
         # TODO

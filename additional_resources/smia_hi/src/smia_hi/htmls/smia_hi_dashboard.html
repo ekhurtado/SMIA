@@ -25,8 +25,30 @@
         }
 
         /*Add your own CSS style code*/
-        .small-boxes-div {
-            padding: 5px 10px;
+        .info-box-text {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+
+        /* Progress Bar */
+        .progress {
+            margin: 20px auto;
+            height: 5px !important;
+        }
+
+        .progress-bar, .info-box .progress .progress-bar {
+            background-color: #00a65a !important;
+        }
+
+        .table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+            table-layout: fixed;  /* Force consistent column sizing */
         }
 
         .table th, .table td {
@@ -49,22 +71,54 @@
             background-color: #f5f5f5;
         }
 
-        .info-box-text {
+        .options-container {
+            float: right;
+            display: flex;
+            gap: 10px;
+        }
+
+        .expandable {
+            cursor: pointer; /* Make the cursor pointer for the expandable elements */
+        }
+
+        .expand-icon {
+            /*cursor: pointer;*/
+            color: #2d688a;
+            float: right;
+        }
+
+        .expand-icon:hover {
+            color: #3C8DBC;
+        }
+
+        .select-button {
+            background-color: #d16c18;
+            border: none;
+            color: white;
+            font-size: 12px;
             font-weight: bold;
-            margin-bottom: 5px;
-            font-size: 24px;
+            transition: background-color 0.3s;
+            text-transform: uppercase;
         }
 
-        /* Progress Bar */
-        .progress {
-            margin: 20px auto;
-            height: 5px !important;
+        .select-button:hover {
+            background-color: #8c4711;
         }
 
-        .progress-bar, .info-box .progress .progress-bar {
-            background-color: #00a65a !important;
+        .subtable {
+            display: none;
+            margin-left: 2px;
+            margin-top: 10px;
         }
 
+        .subtable .capability-info {
+            width: 98%;
+            margin-bottom: 10px;
+            border-collapse: collapse;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            margin-left: 2px;
+        }
 
 
     </style>
@@ -90,7 +144,7 @@
             <section class="content">
                 <!-- Row with information about the operator-->
                 <div class="row">
-                    <div class="col-md-6 col-md-offset-3">
+                    <div class="col-md-8 col-md-offset-2">
                         <div class="box box-primary">
                             <div class="box-header with-border">
                                 <h3 class="box-title">SMIA HI operator information</h3>
@@ -105,7 +159,7 @@
                             <div class="box-body">
 
                                 <div class="row small-boxes-div">
-                                    <div class="col-lg-4 col-xs-7">
+                                    <div class="col-lg-3 col-xs-7">
                                         <!-- small box -->
                                         <div class="small-box bg-orange">
                                         <!-- There are multiple colors: https://basscss.com/v7/docs/background-colors/ -->
@@ -115,13 +169,13 @@
                                                 <p>Detected Capabilities</p>
                                             </div>
                                             <div class="icon">
-                                                <i class="fa fa-project-diagram"></i>
+                                                <i class="fas fa-stream"></i>
                                             </div>
                                         </div>
                                     </div>
                                     <!-- ./col -->
 
-                                    <div class="col-lg-4 col-xs-7">
+                                    <div class="col-lg-3 col-xs-7">
                                         <!-- small box -->
                                         <div class="small-box bg-aqua">
                                         <!-- There are multiple colors: https://basscss.com/v7/docs/background-colors/ -->
@@ -131,13 +185,13 @@
                                                 <p>Detected Skills</p>
                                             </div>
                                             <div class="icon">
-                                                <i class="fa fa-project-diagram"></i>
+                                                <i class="fas fa-indent"></i>
                                             </div>
                                         </div>
                                     </div>
                                     <!-- ./col -->
 
-                                    <div class="col-lg-4 col-xs-7">
+                                    <div class="col-lg-5 col-xs-7">
                                         <div class="info-box bg-gray">
                                             <span class="info-box-icon"><i class="fas fa-tasks"></i></span>
 
@@ -170,9 +224,9 @@
                 </div>
                 <!-- ./row -->
 
-                <!-- Row with received tasks for the operator-->
+                <!-- Row with received and completed tasks by the operator-->
                 <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
+                    <div class="col-md-6">
                         <div class="box box-warning">
                             <div class="box-header with-border">
                                 <h3 class="box-title">SMIA HI received tasks</h3>
@@ -185,37 +239,59 @@
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
-                                <h4>Information extracted from CSS-based BPMN workflow.</h4>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Capability</th>
+                                            <th>Requested time</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for task_id, task_info in agent.received_css_tasks.items() %}
+                                        <tr class="expandable" data-capability-id="{{ task_id }}">
+                                            <td>{{ task_info['capName'] }}</td>
+                                            <td>{{ task_info['requestedTime'] }}</td>
+                                            <td>
+                                                <div class="options-container">
+                                                    <button class="btn btn-sm btn-primary select-button">Done</button>
+                                                    <span class="glyphicon glyphicon-chevron-down expand-icon"></span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="subtable {{ task_id }}">
+                                            <td colspan="3">
+                                                <div class="capability-info">
+                                                    <ul>
+                                                        <li><i>Constraints: </i>
+                                                            <ul>
+                                                                {% for constName, constValue in task_info['constraints'].items() %}
+                                                                <li>{{ constName }}: {{ constValue }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </li>
+                                                        <li><i>Skill parameters: </i>
+                                                            <ul>
+                                                                {% for paramName, paramValue in task_info['skillParams'].items() %}
+                                                                <li>{{ paramName }}: {{ paramValue }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
 
-                                <div class="row small-boxes-div">
-                                    <div class="col-lg-3 col-xs-7">
-                                        <!-- small box -->
-                                        <div class="small-box bg-green">
-                                        <!-- There are multiple colors: https://basscss.com/v7/docs/background-colors/ -->
-                                            <div class="inner">
-                                                <h3> pp </h3>
-<!--                                                <h3>0</h3>-->
-                                                <p>Detected ServiceTasks</p>
-                                            </div>
-                                            <div class="icon">
-                                                <i class="fa fa-project-diagram"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- ./col -->
-                                </div>
-                                <!-- ./row -->
+                                    </tbody>
+                                </table>
                             </div>
                             <!-- /.box-body -->
                         </div>
                     </div>
                     <!-- /.col -->
-                </div>
-                <!-- ./row -->
 
-                <!-- Row with completed tasks by the operator-->
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
+                    <div class="col-md-6">
                         <div class="box box-success">
                             <div class="box-header with-border">
                                 <h3 class="box-title">SMIA HI completed tasks</h3>
@@ -228,26 +304,51 @@
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
-                                <h4>Information extracted from CSS-based BPMN workflow.</h4>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Capability</th>
+                                            <th>Requested time</th>
+                                            <th>Completed time</th>
+                                            <th style="width: 6%;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for task_id, task_info in agent.completed_css_tasks.items() %}
+                                        <tr class="expandable" data-capability-id="{{ task_id }}">
+                                            <td>{{ task_info['capName'] }}</td>
+                                            <td>{{ task_info['requestedTime'] }}</td>
+                                            <td>{{ task_info['completedTime'] }}</td>
+                                            <td>
+                                                <span class="glyphicon glyphicon-chevron-down expand-icon"></span>
+                                            </td>
+                                        </tr>
+                                        <tr class="subtable {{ task_id }}">
+                                            <td colspan="3">
+                                                <div class="capability-info">
+                                                    <ul>
+                                                        <li><i>Constraints: </i>
+                                                            <ul>
+                                                                {% for constName, constValue in task_info['constraints'].items() %}
+                                                                <li>{{ constName }}: {{ constValue }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </li>
+                                                        <li><i>Skill parameters: </i>
+                                                            <ul>
+                                                                {% for paramName, paramValue in task_info['skillParams'].items() %}
+                                                                <li>{{ paramName }}: {{ paramValue }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
 
-                                <div class="row small-boxes-div">
-                                    <div class="col-lg-3 col-xs-7">
-                                        <!-- small box -->
-                                        <div class="small-box bg-green">
-                                        <!-- There are multiple colors: https://basscss.com/v7/docs/background-colors/ -->
-                                            <div class="inner">
-                                                <h3> pp </h3>
-<!--                                                <h3>0</h3>-->
-                                                <p>Detected ServiceTasks</p>
-                                            </div>
-                                            <div class="icon">
-                                                <i class="fa fa-project-diagram"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- ./col -->
-                                </div>
-                                <!-- ./row -->
+                                    </tbody>
+                                </table>
                             </div>
                             <!-- /.box-body -->
                         </div>
@@ -255,8 +356,6 @@
                     <!-- /.col -->
                 </div>
                 <!-- ./row -->
-
-
 
             </section>
             <!-- /.content -->
@@ -275,6 +374,29 @@
 
     <script>
         // Here some JS code can be added
+        document.addEventListener('DOMContentLoaded', function() {
+            const expandIcons = document.querySelectorAll('.expandable');
+            expandIcons.forEach(icon => {
+                icon.addEventListener('click', function() {
+
+                    // Prevent expansion if the click is on the request button
+                    if (!event.target.classList.contains('request-button')) {
+
+                        const parentRow = this.closest('tr');
+                        const subtableClass = parentRow.getAttribute('data-file-id') || parentRow.getAttribute('data-capability-id') || parentRow.getAttribute('data-skill-id');
+                        const subtableRows = document.querySelectorAll(`.subtable.${subtableClass}`);
+
+                        subtableRows.forEach(row => {
+                            row.style.display = row.style.display === 'none' || row.style.display === '' ? 'table-row' : 'none';
+                        });
+
+                        const icon = this.querySelector('.expand-icon');
+                        icon.classList.toggle('glyphicon-chevron-down');
+                        icon.classList.toggle('glyphicon-chevron-up');
+                    }
+                });
+            });
+        });
 
     </script>
 
