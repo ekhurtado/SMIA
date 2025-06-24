@@ -26,10 +26,14 @@ class SMIAHIGUIBehaviour(OneShotBehaviour):
         # TODO BORRAR
         self.agent.received_css_tasks['taskID2154'] = {'capName': 'Transport', 'requestedTime': '24/06/2025 11:54',
                                                        'constraints': {'Weight': '1 kg'}, 'skillParams': {'Initial': 'warehouse', 'Final': 'PB'}}
-        self.agent.completed_css_tasks['taskID2154-done'] = {'capName': 'Transport', 'requestedTime': '24/06/2025 11:54',
-                                                        'completedTime': '24/06/2025 11:58',
-                                                       'constraints': {'Weight': '1 kg'},
-                                                       'skillParams': {'Initial': 'warehouse', 'Final': 'PB'}}
+        self.agent.received_css_tasks['taskID8763'] = {'capName': 'Transport', 'requestedTime': '24/06/2025 11:54',
+                                                       'constraints': {'Weight': '1 kg'}, 'skillParams': {'Initial': 'warehouse', 'Final': 'PB'}}
+        self.agent.received_css_tasks['taskID5433'] = {'capName': 'Transport', 'requestedTime': '24/06/2025 11:54',
+                                                       'constraints': {'Weight': '1 kg'}, 'skillParams': {'Initial': 'warehouse', 'Final': 'PB'}}
+        # self.agent.completed_css_tasks['taskID2154-done'] = {'capName': 'Transport', 'requestedTime': '24/06/2025 11:54',
+        #                                                 'completedTime': '24/06/2025 11:58',
+        #                                                'constraints': {'Weight': '1 kg'},
+        #                                                'skillParams': {'Initial': 'warehouse', 'Final': 'PB'}}
         # TODO FIN BORRAR
 
         _logger.info("SMIA SPADE web interface required resources initialized.")
@@ -43,7 +47,7 @@ class SMIAHIGUIBehaviour(OneShotBehaviour):
         # Then, the required HTML webpages are added to the SMIA SPADE web module
         self.agent.web.add_get('/smia_hi_dashboard', self.operator_gui_controllers.smia_hi_gui_get_controller,
                                '/htmls/smia_hi_dashboard.html')
-        self.agent.web.add_post('/smia_hi_dashboard', self.operator_gui_controllers.smia_hi_post_controller, None)
+        self.agent.web.add_post('/smia_hi_dashboard', self.operator_gui_controllers.smia_hi_task_done_controller, None)
 
         # The new webpages need also to be added in the manu of the web interface
         # await GUIFeatures.add_new_menu_entry(self.agent,'System view', '/system_view', 'fa fa-eye')

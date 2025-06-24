@@ -91,7 +91,7 @@
             color: #3C8DBC;
         }
 
-        .select-button {
+        .done-button {
             background-color: #d16c18;
             border: none;
             color: white;
@@ -101,7 +101,7 @@
             text-transform: uppercase;
         }
 
-        .select-button:hover {
+        .done-button:hover {
             background-color: #8c4711;
         }
 
@@ -201,10 +201,12 @@
                                                 </div>
 
                                                 <div class="progress progress-sm active">
-                                                    <div class="progress-bar progress-bar-success progress-bar-striped active" style="width: 70%"></div>
+                                                    <div id="progressBar" class="progress-bar progress-bar-success
+                                                    progress-bar-striped progress-bar-animated active"
+                                                         role="progressbar" style="width: 0"></div>
                                                 </div>
                                                 <span class="progress-description">
-                                                    70% completed
+                                                    0% completed
                                                 </span>
                                             </div>
                                             <!-- /.info-box-content -->
@@ -239,7 +241,7 @@
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
-                                <table class="table table-bordered">
+                                <table class="table table-bordered" id="received-task-table">
                                     <thead>
                                         <tr>
                                             <th>Capability</th>
@@ -254,7 +256,7 @@
                                             <td>{{ task_info['requestedTime'] }}</td>
                                             <td>
                                                 <div class="options-container">
-                                                    <button class="btn btn-sm btn-primary select-button">Done</button>
+                                                    <button class="btn btn-sm btn-primary done-button">Done</button>
                                                     <span class="glyphicon glyphicon-chevron-down expand-icon"></span>
                                                 </div>
                                             </td>
@@ -304,7 +306,7 @@
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
-                                <table class="table table-bordered">
+                                <table class="table table-bordered" id="completed-task-table">
                                     <thead>
                                         <tr>
                                             <th>Capability</th>
@@ -374,13 +376,26 @@
 
     <script>
         // Here some JS code can be added
+
+        // Code related to progress bar
+        let progressBar = document.getElementById("progressBar");
+        let receivedTaskTable = document.getElementById("received-task-table");
+        let completedTaskTable = document.getElementById("completed-task-table");
+        let progressDescription = progressBar.closest('div.info-box-content').querySelector('span.progress-description');
+
+        let receivedTaskNumber = receivedTaskTable.querySelectorAll('tbody tr.expandable').length
+        let completedTaskNumber = completedTaskTable.querySelectorAll('tbody tr.expandable').length
+        const percentage = Math.trunc(completedTaskNumber / (receivedTaskNumber + completedTaskNumber) * 100);
+        progressBar.style.width = percentage + "%";
+        progressDescription.textContent = percentage + "% completed";
+
         document.addEventListener('DOMContentLoaded', function() {
             const expandIcons = document.querySelectorAll('.expandable');
             expandIcons.forEach(icon => {
                 icon.addEventListener('click', function() {
 
-                    // Prevent expansion if the click is on the request button
-                    if (!event.target.classList.contains('request-button')) {
+                    // Prevent expansion if the click is on the done button
+                    if (!event.target.classList.contains('done-button')) {
 
                         const parentRow = this.closest('tr');
                         const subtableClass = parentRow.getAttribute('data-file-id') || parentRow.getAttribute('data-capability-id') || parentRow.getAttribute('data-skill-id');
@@ -396,6 +411,87 @@
                     }
                 });
             });
+
+            const doneButtons = document.querySelectorAll('.done-button');
+            doneButtons.forEach(button => {
+                button.addEventListener('click', async function(event) {
+
+                    const parentRow = this.closest('tr');
+                    const subtableClass = parentRow.getAttribute('data-capability-id');
+                    const divCapInfo = document.querySelector(`.subtable.${subtableClass} td div.capability-info`);
+                    const infoRows = divCapInfo.querySelectorAll('li');
+                    const rowColumns = parentRow.querySelectorAll('td');
+
+                    let requestInfo = '';
+                    let skillParamsInfo = null;
+                    let constraintsInfo = null;
+                    infoRows.forEach(row => {
+                        const attrib = row.textContent.split(": ")[0];
+                        if (attrib === 'Constraints') {
+                            const availableConstraintsList = row.querySelector('ul');
+                            const availableConstraintsRows = availableConstraintsList.querySelectorAll('li');
+                            constraintsInfo = getInfoFromRows(availableConstraintsRows);
+                        } else if (attrib === 'Skill parameters') {
+                            const availableSkills = row.querySelector('ul');
+                            const availableSkillsRows = availableSkills.querySelectorAll('li');
+                            skillParamsInfo = getInfoFromRows(availableSkillsRows);
+                        }
+                    });
+
+                    requestInfo += `Capability: ${rowColumns[0].textContent}, time: ${rowColumns[1].textContent}\n`;
+                    let requestJSON = {'TaskID': subtableClass, 'capName': rowColumns[0].textContent,
+                        'requestedTime': rowColumns[1].textContent, 'skillParams': skillParamsInfo};
+                    if (constraintsInfo !== null) {
+                        requestInfo += `  - Constraints: \n`;
+                        requestJSON['constraints'] = constraintsInfo;
+                        for (constraint in constraintsInfo) {
+                            requestInfo += `    + ${constraint}: ${constraintsInfo[constraint]} \n`;
+                        }
+                    }
+                    requestInfo += `Skill: \n`;
+                    for (skillParam in skillParamsInfo) {
+                        requestInfo += `    + ${skillParam}: ${skillParamsInfo[skillParam]} \n`;
+                    }
+                    alert(`Quiere seleccionar esta capacidad:\n\n${requestInfo}\n`);
+
+                    // To send to the agent it has to be via HTTP message
+                    try {
+                        const response = await fetch('/smia_hi_dashboard', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(requestJSON)
+                        });
+
+                        const json = await response.json();
+
+                        if (json.status === 'success') {
+                            console.log('Completed CSS task successfully saved.');
+                        } else {
+                            alert(`Failed to save completed CSS task due to reason: ${json.reason}.`);
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('Failed to save completed CSS task. Error: .' + error);
+                    }
+
+                    location.reload();  // The web page is reloaded in order to obtain all new data
+
+                });
+            });
+
+            function getInfoFromRows(availableRows) {
+                if (availableRows.length === 0) {
+                    return null;
+                }
+                allInfo = {};
+                availableRows.forEach(constRow => {
+                    let attrib = constRow.textContent.split(": ")[0];
+                    allInfo[attrib] = constRow.textContent.split(": ")[1];
+                });
+                return allInfo;
+            }
         });
 
     </script>

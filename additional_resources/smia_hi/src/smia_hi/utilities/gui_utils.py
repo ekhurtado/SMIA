@@ -4,7 +4,7 @@ import os
 
 from SpiffWorkflow.specs import StartTask
 from aiohttp import web
-
+from smia import GeneralUtils
 
 _logger = logging.getLogger(__name__)
 
@@ -31,12 +31,25 @@ class GUIControllers:
         """
         return {"status": "success"}
 
-    async def smia_hi_post_controller(self, request):
+    async def smia_hi_task_done_controller(self, request):
         """
         The controller during the request of SMIA PE Dashboard.
         """
         data = await request.json()
-        # TODO
+
+        # First, the taskID is obtained and is used to remove the information from the received task dictionary
+        task_id = data.get("TaskID", None)
+        if task_id is None:
+            return {"status": "error", "message": "Task ID is missing"}
+        self.myagent.received_css_tasks.pop(task_id)
+
+        # Then, the information is saved in completed task dictionary
+        self.myagent.completed_css_tasks[task_id + '-done'] = {'capName': data.get("capName"),
+                                                     'requestedTime': data.get("requestedTime"),
+                                                     'completedTime': str(GeneralUtils.get_current_date_time()),
+                                                     'constraints': data.get("constraints"),
+                                                     'skillParams': data.get("skillParams")}
+
         return {'status': 'success'}
         # return web.json_response({'status': 'success'})
         # return {"status": "success", "reason": "success reason"}
