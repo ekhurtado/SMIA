@@ -20,18 +20,19 @@ async def capability_checking(agent_object, received_css_json):
 
     # The associated constraints and received values for them are also obtained
     constraint_instance_list = cap_ontology_instance.get_associated_constraint_instances()
-    received_constraint_data = received_css_json[CapabilitySkillACLInfo.ATTRIB_CAPABILITY_CONSTRAINTS]
+    if constraint_instance_list is not None:
+        received_constraint_data = received_css_json[CapabilitySkillACLInfo.ATTRIB_CAPABILITY_CONSTRAINTS]
 
-    # At this point, the data received has already been verified, so that the values of the constraints can be
-    # checked directly.
-    for constraint_instance in constraint_instance_list:
-        aas_cap_constraint_elem = await agent_object.aas_model.get_object_by_reference(
-            constraint_instance.get_aas_sme_ref())
-        result = aas_cap_constraint_elem.check_constraint(received_constraint_data[constraint_instance.iri])
-        if not result:
-            return False, 'The constraint {} with data {} is not valid'.format(constraint_instance.name,
-                                                                               received_constraint_data[
-                                                                                   constraint_instance.name])
+        # At this point, the data received has already been verified, so that the values of the constraints can be
+        # checked directly.
+        for constraint_instance in constraint_instance_list:
+            aas_cap_constraint_elem = await agent_object.aas_model.get_object_by_reference(
+                constraint_instance.get_aas_sme_ref())
+            result = aas_cap_constraint_elem.check_constraint(received_constraint_data[constraint_instance.iri])
+            if not result:
+                return False, 'The constraint {} with data {} is not valid'.format(constraint_instance.name,
+                                                                                   received_constraint_data[
+                                                                                       constraint_instance.name])
     # If all capability constraint are valid, the checking valid
     # TODO PENSAR MAS VALIDACIONES DURANTE EL CAPABILITY CHECKING
     return True, ''
