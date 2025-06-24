@@ -2,7 +2,6 @@ import logging
 import ntpath
 import os
 
-from SpiffWorkflow.specs import StartTask
 from aiohttp import web
 from smia import GeneralUtils
 
