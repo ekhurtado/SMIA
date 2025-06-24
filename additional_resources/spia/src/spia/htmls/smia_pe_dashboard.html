@@ -237,11 +237,17 @@
                             <!-- /.box-header -->
                             <div class="box-body" id="bpmn-graphviz-div">
                                 <script>
-                                    var viz = new Viz();
-                                    viz.renderSVGElement("{{ agent.to_graphviz(agent)|safe }}")
-                                    .then(function(element) {
-                                      document.getElementById("bpmn-graphviz-div").appendChild(element);
-                                    });
+                                    setInterval(addGraphvizSVG, 2000);
+
+                                    function addGraphvizSVG() {
+                                        var viz = new Viz();
+                                        let graphVizDiv = document.getElementById("bpmn-graphviz-div");
+                                        graphVizDiv.removeChild(graphVizDiv.lastChild);
+                                        viz.renderSVGElement("{{ agent.to_graphviz(agent)|safe }}")
+                                            .then(function (element) {
+                                                graphVizDiv.appendChild(element);
+                                        });
+                                    }
                                 </script>
                             </div>
                             <!-- /.box-body -->
