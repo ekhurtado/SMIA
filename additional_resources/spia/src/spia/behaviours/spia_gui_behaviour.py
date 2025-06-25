@@ -24,6 +24,7 @@ class SPIAGUIBehaviour(OneShotBehaviour):
         self.agent.bpmn_execution_status = True
         self.agent.bpmn_info = {'ServiceTasks': 0, 'ExclusiveGateways': 0, 'Capabilities': 0, 'Skills': 0, 'Assets': 0}
         self.agent.bpmn_graphviz_info = "digraph SMIA_PE_workflow { rankdir=LR; node [fixedsize=true];}"
+        self.agent.bpmn_workflow_elements = []
         self.agent.to_graphviz =  GUIFeatures.to_graphviz
 
 
@@ -41,6 +42,8 @@ class SPIAGUIBehaviour(OneShotBehaviour):
         self.agent.web.add_get('/smia_pe_tracking', self.operator_gui_controllers.spia_gui_get_controller,
                                '/htmls/smia_pe_tracking.html')
         self.agent.web.add_post('/smia_pe_dashboard', self.operator_gui_controllers.spia_gui_post_controller, None)
+        self.agent.web.add_get('/smia_pe_dashboard/bpmn_dot',
+                                self.operator_gui_controllers.spia_gui_bpmn_dot_controller, None)
 
         # The new webpages need also to be added in the manu of the web interface
         # await GUIFeatures.add_new_menu_entry(self.agent,'System view', '/system_view', 'fa fa-eye')

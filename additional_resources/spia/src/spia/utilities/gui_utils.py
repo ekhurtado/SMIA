@@ -43,6 +43,14 @@ class GUIControllers:
         GUIFeatures.analyze_bpmn_workflow(self.myagent)
         return {"status": "success"}
 
+    async def spia_gui_bpmn_dot_controller(self, request):
+        """
+        The controller during the request of SMIA PE Dashboard.
+        """
+        # The BPMN process parser is analyzed, in order to extract useful information
+        return GUIFeatures.to_graphviz(self.myagent)
+        # return web.Response(text=GUIFeatures.to_graphviz(self.myagent), content_type="text/plain")
+
     async def spia_gui_post_controller(self, request):
         """
         The controller during the request of SMIA PE Dashboard.
@@ -126,6 +134,9 @@ class GUIFeatures:
                      "ranksep=0.75; nodesep=0.5;")
             additional_graph = ""
             if hasattr(agent_object, 'bpmn_process_parser'):
+                # Let's also update the process parser elements
+                agent_object.bpmn_workflow_elements = []
+
                 process_parser = agent_object.bpmn_process_parser
                 current_elem = process_parser.get_spec().start
                 while current_elem is not None:
@@ -158,6 +169,8 @@ class GUIFeatures:
                     else:
                         additional_graph_options += 'label={}'.format(SMIABPMNUtils.
                                                               get_bpmn_display_name(current_elem).replace(" ", "_"))
+
+                        agent_object.bpmn_workflow_elements.append(current_elem)
 
                     if hasattr(current_elem, 'current_exec_elem') and current_elem.current_exec_elem:
                         additional_graph_options += ', style=filled, fillcolor=green'
