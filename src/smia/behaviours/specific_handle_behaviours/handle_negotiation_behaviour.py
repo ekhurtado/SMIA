@@ -1,5 +1,6 @@
 import json
 import logging
+import random
 
 from spade.behaviour import CyclicBehaviour
 
@@ -133,10 +134,17 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                     # As the received value is higher than this SMIA value, it must exit the negotiation.
                     await self.exit_negotiation(is_winner=False)
                     return  # killing a behaviour does not cancel its current run loop
-                if (float(sender_agent_neg_value) == self.neg_value) and not self.agent.tie_break:
+                if float(sender_agent_neg_value) == self.neg_value:
+                    _logger.warning("AHORA HAY EMPATE con {} y su valor {} contra mi valor {}".format(
+                        acl_smia_messages_utils.get_sender_from_acl_msg(msg), float(sender_agent_neg_value),
+                        self.neg_value
+                    ))  # TODO BORRAR
+                # if (float(sender_agent_neg_value) == self.neg_value) and not self.agent.tie_break:
                     # In this case the negotiation is tied but this SMIA is not the tie breaker.
-                    await self.exit_negotiation(is_winner=False)
-                    return  # killing a behaviour does not cancel its current run loop
+                    if not await self.handle_neg_values_tie(acl_smia_messages_utils.get_sender_from_acl_msg(msg),
+                                                            float(sender_agent_neg_value)):
+                        await self.exit_negotiation(is_winner=False)
+                        return  # killing a behaviour does not cancel its current run loop
                 # The target is added as processed in the local object (as it is a Python 'set' object there is no problem
                 # of duplicate agents)
                 self.targets_processed.add(acl_smia_messages_utils.get_sender_from_acl_msg(msg))
@@ -192,7 +200,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
             asset_connection_class = await self.myagent.get_asset_connection_class_by_ref(aas_asset_interface_elem)
             _logger.assetinfo("The Asset connection of the Skill Interface has been obtained.")
             # Now the negotiation value can be obtained through an asset service
-            _logger.assetinfo("Obtaining the negotiation value for [{}] through an asset service...".format(self.thread))
+            _logger.assetinfo("Obtaining the negotiation value for [{}] through an asset service...".format(
+                self.received_acl_msg.thread))
             current_neg_value = await asset_connection_class.execute_asset_service(
                 interaction_metadata=aas_skill_interface_elem)
             _logger.assetinfo("Negotiation value for [{}] through an asset service obtained: {}.".format(
@@ -226,6 +235,35 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
             current_neg_value = (current_neg_value - 0.0) / 100.0
         self.neg_value = current_neg_value
 
+    async def handle_neg_values_tie(self, received_agent_id, received_neg_value):
+        """
+        This method handles the situations where negotiation values tie. A seeded randomization process will be
+        performed which will slightly modify the tied trading values and obtain a random winner. This method will be
+        executed in all SMIA instances where the tie occurs, but since the ACL message thread is used as seed, they
+        will all return the same result.
+
+        Args:
+            received_agent_id (str): identifier of the received SMIA agent proposal with the tie.
+            received_neg_value (float): received tie negotiation value
+        """
+        _logger.warning("VAMOS A GESTIONAR UN EMPATE ENTRE YO Y {}".format(received_agent_id))  # TODO BORRAR
+        # First, the dictionary will be created with the agents that have the same negotiation value
+        scores_dict = {str(self.myagent.jid): self.neg_value, received_agent_id: received_neg_value}
+        # The pseudo-random number generator (PRNG) with the seed will give the same random values
+        random.seed(self.received_acl_msg.thread)
+        # As the negotiation values are the same, the following will be disturbed
+        perturbations = {opt: random.uniform(-0.001, 0.001)
+               for opt in sorted(scores_dict.keys())}
+        _logger.warning("LOS VALORES MODIFICADOS SON {}".format(perturbations))  # TODO BORRAR
+        scores_dict_disturbed = {opt: scores_dict[opt] * (1 + perturbations[opt])
+                                 for opt in perturbations}
+        _logger.warning("LOS SCORES DESPUES DE SER MODIFICADOS QUEDAN {}".format(scores_dict_disturbed))  # TODO BORRAR
+        if max(scores_dict_disturbed, key=lambda k: scores_dict_disturbed[k]) != str(self.myagent.jid):
+            # In this case the SMIA instance has loosened the negotiation, so a False is returned
+            _logger.warning("HE PERDIDO EL EMPATE")  # TODO BORRAR
+            return False
+        _logger.warning("HE GANADO EL EMPATE")  # TODO BORRAR
+        return True
 
     async def exit_negotiation(self, is_winner):
         """
