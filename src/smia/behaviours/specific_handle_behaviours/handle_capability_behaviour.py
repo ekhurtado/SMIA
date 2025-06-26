@@ -425,8 +425,8 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
             _logger.assetinfo("Executing skill of the capability through an asset service...")
 
             # # TODO BORRAR: PARA PRUEBAS CEDRI
-            # if 'smia-pe' in self.received_acl_msg.thread:
-            #     return {'status': 'success', 'prueba': 'cedri'}
+            if 'smia-pe' in self.received_acl_msg.thread:
+                return {'status': 'success', 'prueba': 'cedri'}
 
             skill_execution_result = await asset_connection_class.execute_asset_service(
                 interaction_metadata=aas_skill_interface_elem, service_input_data=received_skill_input_data)
