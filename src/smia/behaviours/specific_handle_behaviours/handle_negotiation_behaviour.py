@@ -2,13 +2,14 @@ import json
 import logging
 import random
 
+from smia.css_ontology import css_operations
 from spade.behaviour import CyclicBehaviour
 
 from smia import GeneralUtils
 from smia.logic import negotiation_utils, inter_smia_interactions_utils, acl_smia_messages_utils
 from smia.logic.exceptions import CapabilityRequestExecutionError, AssetConnectionError
 from smia.utilities import smia_archive_utils
-from smia.utilities.fipa_acl_info import FIPAACLInfo
+from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo
 from smia.utilities.smia_info import AssetInterfacesInfo
 
 _logger = logging.getLogger(__name__)
@@ -47,7 +48,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
 
         # Negotiation-related variables are also initialized
         self.targets_processed = set()
-        self.neg_value = -1
+        self.neg_value = 0.0
         self.myagent.tie_break = True   # In case of equal value neg is set as tie-breaker TODO check these cases (which need to be tie-breaker?)
 
         self.requested_timestamp = GeneralUtils.get_current_timestamp()
@@ -57,6 +58,25 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         This method implements the initialization process of this behaviour.
         """
         _logger.info("HandleNegotiationBehaviour starting...")
+
+        # Before starting, if the FIPA-CNP protocol is related to a CSS service, it will perform the capability checking
+        if (self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB) ==
+                ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE):
+            result, reason = await css_operations.capability_checking(self.myagent, self.received_body_json)
+            if not result:
+                _logger.info("The SMIA has received a negotiation with failed capability checking [" +
+                             self.received_acl_msg.thread + "]")
+
+                # Since the capability check failed, it will reply to the sender with a Refuse message
+                await inter_smia_interactions_utils.send_response_msg_from_received(
+                    self, self.received_acl_msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REFUSE,
+                    response_body={'reason': 'CapabilityChecking failed: {}'.format(reason)})
+                _logger.aclinfo("ACL response sent for the result of the negotiation request with thread ["
+                                + self.received_acl_msg.thread + "]")
+
+                # The negotiation value will be -1 to lose all comparisons
+                self.neg_value = -1.0
+
 
         # First, it will analyze whether it is the only participant in the negotiation, in which case it will be the
         # direct winner
@@ -135,8 +155,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                     await self.exit_negotiation(is_winner=False)
                     return  # killing a behaviour does not cancel its current run loop
                 if float(sender_agent_neg_value) == self.neg_value:
-                # if (float(sender_agent_neg_value) == self.neg_value) and not self.agent.tie_break:
-                    # In this case the negotiation is tied but this SMIA is not the tie breaker.
+                    # In this case the negotiation is tied, so it must be managed
                     if not await self.handle_neg_values_tie(acl_smia_messages_utils.get_sender_from_acl_msg(msg),
                                                             float(sender_agent_neg_value)):
                         await self.exit_negotiation(is_winner=False)
@@ -175,61 +194,69 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         """
         _logger.info("Getting the negotiation value for [{}]...".format(self.received_acl_msg.thread))
 
-        # Since negotiation is a capability of the agent, it is necessary to analyze which skill has been defined. The
-        # associated skill interface will be the one from which the value of negotiation can be obtained.
-        # Thus, skill is the negotiation criterion for which the ontological instance will be obtained.
-        neg_skill_instance = await self.myagent.css_ontology.get_ontology_instance_by_iri(
-            self.received_body_json['negCriterion'])
+        if self.neg_value != -1.0:
 
-        # The related skill interface will be obtained
-        skill_interface = list(neg_skill_instance.get_associated_skill_interface_instances())[0]
-        # The AAS element of the skill interface will be used to analyze the skill implementation
-        aas_skill_interface_elem = await self.myagent.aas_model.get_object_by_reference(
-            skill_interface.get_aas_sme_ref())
+            # Since negotiation is a capability of the agent, it is necessary to analyze which skill has been defined.
+            # The associated skill interface will be the one from which the value of negotiation can be obtained.
+            # Thus, skill is the negotiation criterion for which the ontological instance will be obtained.
+            neg_skill_instance = await self.myagent.css_ontology.get_ontology_instance_by_iri(
+                self.received_body_json['negCriterion'])
 
-        parent_submodel = aas_skill_interface_elem.get_parent_submodel()
-        if parent_submodel.check_semantic_id_exist(AssetInterfacesInfo.SEMANTICID_INTERFACES_SUBMODEL):
-            # In this case, the value need to be obtained through an asset service
-            # With the AAS SubmodelElement of the asset interface the related Python class, able to connect to the
-            # asset, can be obtained.
-            aas_asset_interface_elem = aas_skill_interface_elem.get_associated_asset_interface()
-            asset_connection_class = await self.myagent.get_asset_connection_class_by_ref(aas_asset_interface_elem)
-            _logger.assetinfo("The Asset connection of the Skill Interface has been obtained.")
-            # Now the negotiation value can be obtained through an asset service
-            _logger.assetinfo("Obtaining the negotiation value for [{}] through an asset service...".format(
-                self.received_acl_msg.thread))
-            current_neg_value = await asset_connection_class.execute_asset_service(
-                interaction_metadata=aas_skill_interface_elem)
-            _logger.assetinfo("Negotiation value for [{}] through an asset service obtained: {}.".format(
-                self.received_acl_msg.thread, current_neg_value))
-            if not isinstance(current_neg_value, float):
+            if neg_skill_instance is None:
+                _logger.warning("This SMIA instance does not have the Skill Interface {} defined to obtain the "
+                                "negotiation value. It will remain with the value 0.0.".format(
+                    self.received_body_json['negCriterion']))
+                return
+
+            # The related skill interface will be obtained
+            skill_interface = list(neg_skill_instance.get_associated_skill_interface_instances())[0]
+            # The AAS element of the skill interface will be used to analyze the skill implementation
+            aas_skill_interface_elem = await self.myagent.aas_model.get_object_by_reference(
+                skill_interface.get_aas_sme_ref())
+
+            parent_submodel = aas_skill_interface_elem.get_parent_submodel()
+            if parent_submodel.check_semantic_id_exist(AssetInterfacesInfo.SEMANTICID_INTERFACES_SUBMODEL):
+                # In this case, the value need to be obtained through an asset service
+                # With the AAS SubmodelElement of the asset interface the related Python class, able to connect to the
+                # asset, can be obtained.
+                aas_asset_interface_elem = aas_skill_interface_elem.get_associated_asset_interface()
+                asset_connection_class = await self.myagent.get_asset_connection_class_by_ref(aas_asset_interface_elem)
+                _logger.assetinfo("The Asset connection of the Skill Interface has been obtained.")
+                # Now the negotiation value can be obtained through an asset service
+                _logger.assetinfo("Obtaining the negotiation value for [{}] through an asset service...".format(
+                    self.received_acl_msg.thread))
+                current_neg_value = await asset_connection_class.execute_asset_service(
+                    interaction_metadata=aas_skill_interface_elem)
+                _logger.assetinfo("Negotiation value for [{}] through an asset service obtained: {}.".format(
+                    self.received_acl_msg.thread, current_neg_value))
+                if not isinstance(current_neg_value, float):
+                    try:
+                        current_neg_value = float(current_neg_value)
+                    except ValueError as e:
+                        # TODO PENSAR OTRAS EXCEPCIONES EN NEGOCIACIONES (durante el asset connection...)
+                        _logger.error(e)
+                        raise CapabilityRequestExecutionError(self.received_acl_msg.thread, 'Negotiation',
+                                                              "The requested negotiation {} cannot be executed because the "
+                                                              "negotiation value returned by the asset does not have a valid"
+                                                              " format.".format(self.received_acl_msg.thread), self)
+            else:
+                # In this case, the value need to be obtained through an agent service
                 try:
-                    current_neg_value = float(current_neg_value)
-                except ValueError as e:
-                    # TODO PENSAR OTRAS EXCEPCIONES EN NEGOCIACIONES (durante el asset connection...)
+                    current_neg_value = await self.myagent.agent_services.execute_agent_service_by_id(
+                        aas_skill_interface_elem.id_short)
+                except (KeyError, ValueError) as e:
                     _logger.error(e)
                     raise CapabilityRequestExecutionError(self.received_acl_msg.thread, 'Negotiation',
                                                           "The requested negotiation {} cannot be executed because the "
-                                                          "negotiation value returned by the asset does not have a valid"
-                                                          " format.".format(self.received_acl_msg.thread), self)
-        else:
-            # In this case, the value need to be obtained through an agent service
-            try:
-                current_neg_value = await self.myagent.agent_services.execute_agent_service_by_id(
-                    aas_skill_interface_elem.id_short)
-            except (KeyError, ValueError) as e:
-                _logger.error(e)
-                raise CapabilityRequestExecutionError(self.received_acl_msg.thread, 'Negotiation',
-                                                      "The requested negotiation {} cannot be executed because the "
-                                                      "negotiation value cannot be obtained through the agent service "
-                                                      "{}.".format(self.received_acl_msg.thread,
-                                                                   aas_skill_interface_elem.id_short), self)
+                                                          "negotiation value cannot be obtained through the agent service "
+                                                          "{}.".format(self.received_acl_msg.thread,
+                                                                       aas_skill_interface_elem.id_short), self)
 
-        # Let's normalize the value between 0.0 and 1.0
-        if 1.0 < current_neg_value <= 100.0:
-            # Normalize within 0.0 and 100.0 range
-            current_neg_value = (current_neg_value - 0.0) / 100.0
-        self.neg_value = current_neg_value
+            # Let's normalize the value between 0.0 and 1.0
+            if 1.0 < current_neg_value <= 100.0:
+                # Normalize within 0.0 and 100.0 range
+                current_neg_value = (current_neg_value - 0.0) / 100.0
+            self.neg_value = current_neg_value
 
     async def handle_neg_values_tie(self, received_agent_id, received_neg_value):
         """
@@ -242,6 +269,9 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
             received_agent_id (str): identifier of the received SMIA agent proposal with the tie.
             received_neg_value (float): received tie negotiation value
         """
+        if self.neg_value == -1.0 and received_neg_value == -1.0:
+            # If both agents have not passed the Capability Check, neither of them can be the winner
+            return False
         # First, the dictionary will be created with the agents that have the same negotiation value
         scores_dict = {str(self.myagent.jid): self.neg_value, received_agent_id: received_neg_value}
         # The pseudo-random number generator (PRNG) with the seed will give the same random values

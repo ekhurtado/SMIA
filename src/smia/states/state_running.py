@@ -30,12 +30,6 @@ class StateRunning(State):
         # On the one hand, a behaviour is required to handle ACL messages
         acl_handling_behav = ACLHandlingBehaviour(self.agent)
         self.agent.add_behaviour(acl_handling_behav, SMIAInteractionInfo.ACL_INDIVIDUAL_INTERACTIONS_ACL_TEMPLATE)
-        # self.agent.add_behaviour(acl_handling_behav, SMIAInteractionInfo.SVC_STANDARD_ACL_TEMPLATE)   # TODO ANTIGUO ENFOQUE
-
-        # On the other hand, a behaviour is required to handle interaction messages
-        # TODO revisar, ya que en el nuevo enfoque no hay AAS Core
-        # interaction_handling_behav = InteractionHandlingBehaviour(self.agent)
-        # self.agent.add_behaviour(interaction_handling_behav)
 
         # Besides, the negotiation behaviour has to be added to the agent
         agent_behaviours_classes = await self.add_agent_capabilities_behaviours()
@@ -45,7 +39,7 @@ class StateRunning(State):
         await acl_handling_behav.join()
         # await interaction_handling_behav.join()
         if agent_behaviours_classes:
-            # TODO revisar si esto se quiere hacer asi (pensar en las transciones entre estados)
+            # TODO revisar si esto se quiere hacer asi (pensar en las transiciones entre estados)
             for behav_class in agent_behaviours_classes:
                 await behav_class.join()
 
@@ -62,6 +56,13 @@ class StateRunning(State):
             behaviours_instances: all instances of behavior to know that these are part of the Running state.
         """
         behaviours_instances = []
+
+        # The negotiation behavior is always added to the agent (during its execution, if a specific skill has not been
+        # added to obtain the required negotiation value it will return a Failure message).
+        negotiation_behav = NegotiatingBehaviour(self.agent)
+        self.agent.add_behaviour(negotiation_behav, SMIAInteractionInfo.ACL_CNP_INTERACTIONS_ACL_TEMPLATE)
+        behaviours_instances.append(negotiation_behav)
+
         agent_capabilities = await self.agent.css_ontology.get_ontology_instances_by_class_iri(
             CapabilitySkillOntologyInfo.CSS_ONTOLOGY_AGENT_CAPABILITY_IRI)
         # If no agent capabilities were found it returns None
@@ -69,11 +70,7 @@ class StateRunning(State):
             for capability_instance in agent_capabilities:
                 if capability_instance.name == 'Negotiation':
                     # The negotiation behaviour has to be added to the agent
-                    _logger.info("This SMIA has negotiation capability.")
-                    negotiation_behav = NegotiatingBehaviour(self.agent)
-                    self.agent.add_behaviour(negotiation_behav, SMIAInteractionInfo.ACL_CNP_INTERACTIONS_ACL_TEMPLATE)
-                    # self.agent.add_behaviour(negotiation_behav, SMIAInteractionInfo.NEG_STANDARD_ACL_TEMPLATE)   # TODO ANTIGUO ENFOQUE
-                    behaviours_instances.append(negotiation_behav)
+                    _logger.info("This SMIA has negotiation capability defined with specific skills.")
                 elif capability_instance.name == 'OtherAgentCapability':
                     # TODO pensarlo
                     pass

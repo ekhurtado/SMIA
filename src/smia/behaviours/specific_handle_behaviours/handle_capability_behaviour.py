@@ -96,7 +96,7 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
             # can perform it.
             result, reason = await css_operations.capability_checking(self.myagent, self.received_body_json)
             if not result:
-                raise CapabilityRequestExecutionError(
+                raise CapabilityRequestExecutionError(self.received_acl_msg.thread,
                     cap_name,f"The capability {cap_name} cannot be executed because the capability checking "
                              f"result is invalid. Reason: {reason}.", self)
 

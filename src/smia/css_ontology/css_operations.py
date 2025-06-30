@@ -32,7 +32,7 @@ async def capability_checking(agent_object, received_css_json):
             if not result:
                 return False, 'The constraint {} with data {} is not valid'.format(constraint_instance.name,
                                                                                    received_constraint_data[
-                                                                                       constraint_instance.name])
+                                                                                       constraint_instance.iri])
     # If all capability constraint are valid, the checking valid
     # TODO PENSAR MAS VALIDACIONES DURANTE EL CAPABILITY CHECKING
     return True, ''

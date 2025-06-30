@@ -206,43 +206,43 @@ class NegotiatingBehaviour(CyclicBehaviour):
             _logger.info("         - No message received within 10 seconds on SMIA (NegotiatingBehaviour)")
 
 
-    async def check_received_capability_request_data(self, cap_req_data):
-        """
-        This method checks whether the data received contains the necessary information to be able to execute
-        the agent capability. If an error occurs, it throws a CapabilityDataError exception.
-
-        Args:
-            cap_req_data: (dict): all the information about the agent capability request
-        """
-        # First, the structure and attributes of the received data are checked and validated
-        await inter_smia_interactions_utils.check_received_request_data_structure_old(
-            cap_req_data, ACLSMIAJSONSchemas.JSON_SCHEMA_CAPABILITY_REQUEST)
-        received_cap_data = cap_req_data['serviceData']['serviceParams']
-        cap_name = received_cap_data[CapabilitySkillACLInfo.REQUIRED_CAPABILITY_NAME]
-        cap_ontology_instance = await self.myagent.css_ontology.get_ontology_instance_by_name(cap_name)
-        if cap_ontology_instance is None:
-            raise RequestDataError("The capability {} does not an instance defined in the ontology of this "
-                                   "DT".format(cap_name))
-        if CapabilitySkillACLInfo.REQUIRED_SKILL_NAME not in received_cap_data:
-            raise RequestDataError("The skill need to be defined in negotiation requests.")
-        skill_name = received_cap_data[CapabilitySkillACLInfo.REQUIRED_SKILL_NAME]
-        result, skill_instance = cap_ontology_instance.check_and_get_related_instance_by_instance_name(skill_name)
-        if result is False:
-            raise RequestDataError("The capability {} and skill {} are not linked in the ontology of this "
-                                   "DT, or the skill does not have an instance"
-                                   ".".format(cap_name, skill_name))
-        if CapabilitySkillACLInfo.REQUIRED_SKILL_INTERFACE_NAME in received_cap_data:
-            # Solo si se ha definido la skill se define la skill interface, sino no tiene significado
-            # TODO pensar la frase anterior. Realmente tiene significado o no? Si no se define la skill, podriamos
-            #  definir una interfaz que queremos utilizar si o si? En ese caso, habria que buscar una skill con esa
-            #  interfaz para ejecutarla
-            skill_interface_name = received_cap_data[CapabilitySkillACLInfo.REQUIRED_SKILL_INTERFACE_NAME]
-            result, instance = skill_instance.check_and_get_related_instance_by_instance_name(skill_interface_name)
-            if result is False:
-                raise RequestDataError("The skill {} and skill interface {} are not linked in the ontology of "
-                                       "this DT, or the skill interface does not have an instance"
-                                       ".".format(skill_name, skill_interface_name))
-        # Negotiation requests require some mandatory values
-        if 'targets' not in received_cap_data:
-            raise RequestDataError("The negotiation capability request cannot be fulfilled due to lack of objectives "
-                                   "in the negotiation data.")
+    # async def check_received_capability_request_data(self, cap_req_data):
+    #     """
+    #     This method checks whether the data received contains the necessary information to be able to execute
+    #     the agent capability. If an error occurs, it throws a CapabilityDataError exception.
+    #
+    #     Args:
+    #         cap_req_data: (dict): all the information about the agent capability request
+    #     """
+    #     # First, the structure and attributes of the received data are checked and validated
+    #     await inter_smia_interactions_utils.check_received_request_data_structure_old(
+    #         cap_req_data, ACLSMIAJSONSchemas.JSON_SCHEMA_CAPABILITY_REQUEST)
+    #     received_cap_data = cap_req_data['serviceData']['serviceParams']
+    #     cap_name = received_cap_data[CapabilitySkillACLInfo.REQUIRED_CAPABILITY_NAME]
+    #     cap_ontology_instance = await self.myagent.css_ontology.get_ontology_instance_by_name(cap_name)
+    #     if cap_ontology_instance is None:
+    #         raise RequestDataError("The capability {} does not an instance defined in the ontology of this "
+    #                                "DT".format(cap_name))
+    #     if CapabilitySkillACLInfo.REQUIRED_SKILL_NAME not in received_cap_data:
+    #         raise RequestDataError("The skill need to be defined in negotiation requests.")
+    #     skill_name = received_cap_data[CapabilitySkillACLInfo.REQUIRED_SKILL_NAME]
+    #     result, skill_instance = cap_ontology_instance.check_and_get_related_instance_by_instance_name(skill_name)
+    #     if result is False:
+    #         raise RequestDataError("The capability {} and skill {} are not linked in the ontology of this "
+    #                                "DT, or the skill does not have an instance"
+    #                                ".".format(cap_name, skill_name))
+    #     if CapabilitySkillACLInfo.REQUIRED_SKILL_INTERFACE_NAME in received_cap_data:
+    #         # Solo si se ha definido la skill se define la skill interface, sino no tiene significado
+    #         # TODO pensar la frase anterior. Realmente tiene significado o no? Si no se define la skill, podriamos
+    #         #  definir una interfaz que queremos utilizar si o si? En ese caso, habria que buscar una skill con esa
+    #         #  interfaz para ejecutarla
+    #         skill_interface_name = received_cap_data[CapabilitySkillACLInfo.REQUIRED_SKILL_INTERFACE_NAME]
+    #         result, instance = skill_instance.check_and_get_related_instance_by_instance_name(skill_interface_name)
+    #         if result is False:
+    #             raise RequestDataError("The skill {} and skill interface {} are not linked in the ontology of "
+    #                                    "this DT, or the skill interface does not have an instance"
+    #                                    ".".format(skill_name, skill_interface_name))
+    #     # Negotiation requests require some mandatory values
+    #     if 'targets' not in received_cap_data:
+    #         raise RequestDataError("The negotiation capability request cannot be fulfilled due to lack of objectives "
+    #                                "in the negotiation data.")
