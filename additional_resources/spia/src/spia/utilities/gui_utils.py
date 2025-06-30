@@ -141,7 +141,8 @@ class GUIFeatures:
                 # Hacer una lista para ir analizando todos los que se vayan detectando (añadir todos los outputs), ya que da igual que se repitan (o se puede hacer otra lista para los analizados)
                 elems_to_analyze = [process_parser.get_spec().start]
                 analyzed_elems = []
-                while True:
+                while len(elems_to_analyze) > 0:
+                # while True:
                     current_elem = elems_to_analyze.pop()
                     if current_elem not in analyzed_elems:
                         if isinstance(current_elem, StartTask):
@@ -192,8 +193,8 @@ class GUIFeatures:
                         for out_elem in current_elem.outputs: elems_to_analyze.append(out_elem)
                         analyzed_elems.append(current_elem)
 
-                        if isinstance(current_elem, EndEvent):
-                            break
+                        # if isinstance(current_elem, EndEvent):
+                        #     break
 
                 graph += additional_graph
                 graph += "}"
