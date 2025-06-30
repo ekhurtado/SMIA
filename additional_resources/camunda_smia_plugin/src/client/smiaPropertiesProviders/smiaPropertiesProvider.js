@@ -90,6 +90,12 @@ export default class SMIAPropertiesProvider {
           component: RequestToFollowingEntry,
           isEdited: isTextFieldEntryEdited,
           element
+        },
+        {
+          id: 'requestToTaskById',
+          component: RequestToTaskById,
+          isEdited: isTextFieldEntryEdited,
+          element
         }
       ]
     };
@@ -456,7 +462,29 @@ function RequestToPreviousEntry(props) {
   const debounce = useService('debounceInput');
 
   const getValue = () => {
-    return element.businessObject.get('smia:requestToPrevious') || '';
+    let input = element.businessObject.get('smia:requestToPrevious') || '';
+    if (input !== '') {
+      const fullPattern = /^(\w+\[[^\[\];]+\];)*(\w+\[[^\[\];]+\])$/;
+      if (!fullPattern.test(input)) {
+        return '';
+      }
+      let updatedString = '';
+      for (const pair of input.split(';')) {
+        const match = pair.match(/^(\w+)\[([^\[\];]+)\]$/);
+        if (match) {
+          let [, elem, attrib] = match;
+          let auxAttrib = attribExistInElement(element, elem, attrib);
+          if (auxAttrib !== null) {
+            attrib = auxAttrib;
+          }
+          updatedString += `${elem}[${attrib}]`;
+        } else {
+          return '';
+        }
+      }
+      return updatedString;
+    }
+    // return element.businessObject.get('smia:requestToPrevious') || '';
   };
 
   const setValue = (value) => {
@@ -486,8 +514,33 @@ function RequestToFollowingEntry(props) {
   const commandStack = useService('commandStack');
   const debounce = useService('debounceInput');
 
+  const { displayNotification } = this.props;
+
   const getValue = () => {
-    return element.businessObject.get('smia:requestToFollowing') || '';
+    let input = element.businessObject.get('smia:requestToFollowing') || '';
+    if (input !== '') {
+      const fullPattern = /^(\w+\[[^\[\];]+\];)*(\w+\[[^\[\];]+\])$/;
+      if (!fullPattern.test(input)) {
+        return '';
+      }
+      let updatedString = '';
+      for (const pair of input.split(';')) {
+        const match = pair.match(/^(\w+)\[([^\[\];]+)\]$/);
+        if (match) {
+          let [, elem, attrib] = match;
+          let auxAttrib = attribExistInElement(element, elem, attrib);
+          if (auxAttrib !== null) {
+            attrib = auxAttrib;
+          }
+          updatedString += `${elem}[${attrib}]`;
+        } else {
+          return '';
+        }
+      }
+      return updatedString;
+    }
+
+    // return element.businessObject.get('smia:requestToFollowing') || '';
   };
 
   const setValue = (value) => {
@@ -504,6 +557,58 @@ function RequestToFollowingEntry(props) {
     label: translate('requestToFollowing (separated by \';\')'),
     placeholder: 'elem[attrib];elem[attrib]',
     tooltip: translate('Each data will be requested to the following SMIA instance in the flow (e.g. with a reference to an AAS element). Follow "element[attribute]" (e.g. SkillParameter[myParamName]). Elements can be: Capability,CapabilityConstraint,Skill,SkillParameter,Asset.'),
+    getValue,
+    setValue,
+    debounce
+  });
+}
+
+function RequestToTaskById(props) {
+
+  const { element } = props;
+  const translate = useService('translate');
+  const commandStack = useService('commandStack');
+  const debounce = useService('debounceInput');
+
+  const getValue = () => {
+    let input = element.businessObject.get('smia:requestToTaskById') || '';
+    if (input !== '') {
+      const fullPattern = /^(\w+\[\w+\[[^\[\];]+\]\];)*(\w+\[\w+\[[^\[\];]+\]\])$/;
+      if (!fullPattern.test(input)) {
+        return '';
+      }
+      let updatedString = '';
+      for (const pair of input.split(';')) {
+        const match = pair.match(/^(\w+)\[(\w+)\[([^\[\];]+)\]\]$/);
+        if (match) {
+          let [, taskID, elem, attrib] = match;
+          if (!attrib.includes('#'))
+            attrib = 'http://www.w3id.org/hsu-aut/css#' + attrib;
+          updatedString += `${taskID}[${elem}[${attrib}]]`;
+        } else {
+          return '';
+        }
+      }
+      return updatedString;
+    }
+
+    return element.businessObject.get('smia:requestToTaskById') || '';
+  };
+
+  const setValue = (value) => {
+    commandStack.execute('element.updateModdleProperties', {
+      element,
+      moddleElement: element.businessObject,
+      properties: { 'smia:requestToTaskById': value }
+    });
+  };
+
+  return TextFieldEntry({
+    element,
+    id: 'requestToTaskById',
+    label: translate('requestToTaskById (separated by \';\')'),
+    placeholder: 'taskID[elem[attrib]];taskID[elem[attrib]]',
+    tooltip: translate('Data will be requested to the specific task in the flow (e.g. with a reference to an AAS element). Follow "task[element[attribute]]" (e.g. SkillParameter[myParamName]). Elements can be: Capability,CapabilityConstraint,Skill,SkillParameter,Asset.'),
     getValue,
     setValue,
     debounce
@@ -542,9 +647,21 @@ function TimeoutEntry(props) {
   });
 }
 
-
 // Useful functions
 // ----------------
+function attribExistInElement(element, elem, attrib) {
+  let dict_values = {};
+  if (elem === 'SkillParameter') {
+    dict_values = parseStringWithDelimiters(element.businessObject.get('smia:skillParameters') || '');
+  } else if (elem === 'Constraint') {
+    dict_values = parseStringWithDelimiters(element.businessObject.get('smia:constraints') || '');
+  }
+  const result = Object.entries(dict_values).find(([k]) => k.split('#')[1] === attrib);
+  if (result !== undefined)
+    return result[0];
+  return null;
+}
+
 function parseStringWithDelimiters(stringToParse) {
   return (stringToParse || "").split(';').reduce((acc, pair) => {
     const [key, value] = pair.split('=').map(s => s.trim());
@@ -560,4 +677,4 @@ function serializeJSONToStringWithDelimiters(jsonObject) {
       .join(';');
 }
 
-SMIAPropertiesProvider.$inject = ['propertiesPanel', 'injector', 'translate'];
+SMIAPropertiesProvider.$inject = ['propertiesPanel', 'injector', 'translate', 'elementRegistry'];
