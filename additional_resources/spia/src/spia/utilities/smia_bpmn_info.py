@@ -11,6 +11,7 @@ class SMIABPMNInfo:
     TASK_REQUEST_DISTRIBUTED_CNP = 'TaskRequestDistributedCNP'
     TASK_REQUEST_DATA_TO_PREVIOUS = 'TaskRequestDataToPrevious'
     TASK_REQUEST_DATA_TO_FOLLOWING = 'TaskRequestDataToFollowing'
+    TASK_REQUEST_DATA_TO_TASK = 'TaskRequestDataToTask'
 
     # SMIA own attributes for BPMN elements
     SERVICE_TASK_CAPABILITY_ATTRIBUTE = 'capability'
@@ -20,9 +21,11 @@ class SMIABPMNInfo:
     SERVICE_TASK_ASSET_ATTRIBUTE = 'asset'
     SERVICE_TASK_REQUEST_PREVIOUS_ATTRIBUTE = 'requestToPrevious'
     SERVICE_TASK_REQUEST_FOLLOWING_ATTRIBUTE = 'requestToFollowing'
+    SERVICE_TASK_REQUEST_TASK_BY_ID = 'requestToTaskById'
 
     GATEWAY_TIMEOUT_ATTRIBUTE = 'timeoutValue'
 
     REQUEST_DATA_SPLIT_PATTERN = r"(\w+)\[(.*)\]"
+    REQUEST_TASK_DATA_SPLIT_PATTERN = r"(\w+)\[(\w+)\[(.*)\]\]"
 
 

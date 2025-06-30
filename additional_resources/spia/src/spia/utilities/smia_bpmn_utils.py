@@ -90,6 +90,8 @@ class SMIABPMNUtils:
                         node, SMIABPMNInfo.SERVICE_TASK_REQUEST_PREVIOUS_ATTRIBUTE)
                     spec_instance.smia_request_to_following = SMIABPMNUtils.get_node_smia_attrib(
                         node, SMIABPMNInfo.SERVICE_TASK_REQUEST_FOLLOWING_ATTRIBUTE)
+                    spec_instance.smia_request_to_task_by_id = SMIABPMNUtils.get_node_smia_attrib(
+                        node, SMIABPMNInfo.SERVICE_TASK_REQUEST_TASK_BY_ID)
 
                     # The obtained data will be processed in order to be more accessible
                     if spec_instance.smia_skill_parameters is not None:
@@ -104,6 +106,9 @@ class SMIABPMNUtils:
                     if spec_instance.smia_request_to_following is not None:
                         spec_instance.smia_request_to_following = SMIABPMNUtils.get_requested_data_json_list(
                             spec_instance.smia_request_to_following)
+                    if spec_instance.smia_request_to_task_by_id is not None:
+                        spec_instance.smia_request_to_task_by_id = SMIABPMNUtils.get_requested_data_json_list(
+                            spec_instance.smia_request_to_task_by_id, tasks_defined=True)
 
                     # Now the possible additional tasks will be obtained
                     additional_tasks = []
@@ -124,6 +129,9 @@ class SMIABPMNUtils:
                     if spec_instance.smia_request_to_following is not None:
                         # This ServiceTask needs a data from the following ServiceTask of the flow
                         additional_tasks.append(SMIABPMNInfo.TASK_REQUEST_DATA_TO_FOLLOWING)
+                    if spec_instance.smia_request_to_task_by_id is not None:
+                        # This ServiceTask needs a data from a specific ServiceTask of the flow
+                        additional_tasks.append(SMIABPMNInfo.TASK_REQUEST_DATA_TO_TASK)
                     spec_instance.smia_additional_tasks = additional_tasks
 
     @staticmethod
@@ -267,14 +275,21 @@ class SMIABPMNUtils:
         return json_object
 
     @staticmethod
-    def get_requested_data_json_list(requested_data_string):
+    def get_requested_data_json_list(requested_data_string, tasks_defined=False):
         requested_data_json_list = []
         for request_data in requested_data_string.split(';'):
             try:
-                match = re.fullmatch(SMIABPMNInfo.REQUEST_DATA_SPLIT_PATTERN, request_data)
+                if not tasks_defined:
+                    match = re.fullmatch(SMIABPMNInfo.REQUEST_DATA_SPLIT_PATTERN, request_data)
+                else:
+                    match = re.fullmatch(SMIABPMNInfo.REQUEST_TASK_DATA_SPLIT_PATTERN, request_data)
                 if match:
-                    elem_type, attrib = match.groups()
-                    requested_data_json_list.append({'elementType': elem_type, 'attrib': attrib})
+                    if not tasks_defined:
+                        elem_type, attrib = match.groups()
+                        requested_data_json_list.append({'elementType': elem_type, 'attrib': attrib})
+                    else:
+                        task_id, elem_type, attrib = match.groups()
+                        requested_data_json_list.append({'taskID': task_id, 'elementType': elem_type, 'attrib': attrib})
                 else:
                     raise ValueError("String format is incorrect for requested data {}. Expected format: "
                                      "'Element[attribute]'".format(requested_data_string))

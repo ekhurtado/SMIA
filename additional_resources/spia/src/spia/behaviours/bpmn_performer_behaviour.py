@@ -234,6 +234,30 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
                     SMIABPMNUtils.update_bpmn_element_with_requested_data(bpmn_element, following_request,
                                                                           required_data_value)
 
+            if task == SMIABPMNInfo.TASK_REQUEST_DATA_TO_TASK:
+                for task_request in bpmn_element.smia_request_to_task_by_id:
+                    task_element = SMIABPMNUtils.get_bpmn_element_by_id(self.process_parser, task_request['taskID'])
+                    if task_element.smia_asset is None:
+                        # It cannot request to the following element because it needs to perform a distributed CNP
+                        # protocol to obtain the asset and SMIA identifiers
+                        smia_instance_candidates = await self.get_smia_instances_id_by_capability(
+                            task_element.smia_capability)
+                        task_element.smia_instance = await self.execute_acl_cnp_protocol(smia_instance_candidates,
+                                                                                         task_element)
+                        # With the winner SMIA instance, it can be obtained the associated asset ID
+                        task_element.smia_asset = await self.get_asset_id_by_smia_instance_id(
+                            task_element.smia_instance)
+
+                    # Now the following element is specified, so the data can be requested
+                    _logger.assetinfo("The data {} need to be requested to the SMIA instance {} related to the task "
+                                 "within the BPMN workflow.".format(task_request, task_element.smia_instance))
+                    required_data_ref = SMIABPMNUtils.get_required_data_from_bpmn_element(bpmn_element, task_request)
+                    required_data_value = await self.execute_acl_qp_aas_protocol(task_element.smia_instance,
+                        AASRelatedServicesInfo.AAS_DISCOVERY_SERVICE_GET_SM_VALUE_BY_REF, required_data_ref)
+                    # When the data is obtained, it needs to be added to the BPMN element
+                    SMIABPMNUtils.update_bpmn_element_with_requested_data(bpmn_element, task_request,
+                                                                          required_data_value)
+
             if task == SMIABPMNInfo.TASK_CHECK_TIMEOUT:
                 # At this point it is set as False. During the execution of the BPMN element will be set a True if the
                 # timeout is reached
