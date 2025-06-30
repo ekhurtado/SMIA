@@ -138,46 +138,62 @@ class GUIFeatures:
                 agent_object.bpmn_workflow_elements = []
 
                 process_parser = agent_object.bpmn_process_parser
-                current_elem = process_parser.get_spec().start
-                while current_elem is not None:
-                    if isinstance(current_elem, StartTask):
-                        current_elem = current_elem.outputs[0]
-                        continue
-                    if isinstance(current_elem, EndEvent):
-                        current_elem.outputs = []
+                # Hacer una lista para ir analizando todos los que se vayan detectando (añadir todos los outputs), ya que da igual que se repitan (o se puede hacer otra lista para los analizados)
+                elems_to_analyze = [process_parser.get_spec().start]
+                analyzed_elems = []
+                while True:
+                    current_elem = elems_to_analyze.pop()
+                    if current_elem not in analyzed_elems:
+                        if isinstance(current_elem, StartTask):
+                            for out_elem in current_elem.outputs: elems_to_analyze.append(out_elem)
+                            continue
+                        if isinstance(current_elem, EndEvent):
+                            current_elem.outputs = []
 
-                    origin = current_elem.bpmn_id
-                    origin = origin.replace(" ", "_")
-                    for output_elem in current_elem.outputs:
-                        dest = output_elem.bpmn_id
-                        dest = dest.replace(" ", "_")
-                        graph += "{0} -> {1};".format(origin, dest)
+                        origin = current_elem.bpmn_id
+                        origin = origin.replace(" ", "_")
+                        if isinstance(current_elem, ExclusiveGateway):
+                            for condition, elem_id in current_elem.cond_task_specs:
+                                dest = ''
+                                if condition.args[0].lower() in ('yes', 'true', 't', '1'):
+                                    dest = elem_id.replace(" ", "_") + ' [label=yes]'
+                                elif condition.args[0].lower() in ('no', 'false', 'f', '0'):
+                                    dest = elem_id.replace(" ", "_") + ' [label=no]'
+                                graph += "{0} -> {1};".format(origin, dest)
+                        else:
+                            for output_elem in current_elem.outputs:
+                                dest = output_elem.bpmn_id
+                                dest = dest.replace(" ", "_")
+                                graph += "{0} -> {1};".format(origin, dest)
 
-                    # The options for each element are also added
-                    additional_graph_options = ''
-                    if (SMIABPMNUtils.get_bpmn_display_name(current_elem) == 'Start' or
-                            isinstance(current_elem, EndEvent)):
-                        additional_graph_options += 'label={}, shape=ellipse'.format(
-                            SMIABPMNUtils.get_bpmn_display_name(current_elem).replace(" ", "_"))
+                        # The options for each element are also added
+                        additional_graph_options = ''
+                        if (SMIABPMNUtils.get_bpmn_display_name(current_elem) == 'Start' or
+                                isinstance(current_elem, EndEvent)):
+                            additional_graph_options += 'label={}, shape=ellipse'.format(
+                                SMIABPMNUtils.get_bpmn_display_name(current_elem).replace(" ", "_"))
 
-                    elif isinstance(current_elem, ExclusiveGateway):
-                        additional_graph_options += 'label={}, shape=diamond'.format(
-                            SMIABPMNUtils.get_bpmn_display_name(current_elem).replace(" ", "_"))
-                        # The outputs of the exclusive are added at the same level
-                        additional_graph += ('{ rank=same; ' + '; '.join(out.bpmn_id for out in current_elem.outputs)
-                                             + '; }')
-                    else:
-                        additional_graph_options += 'label={}'.format(SMIABPMNUtils.
-                                                              get_bpmn_display_name(current_elem).replace(" ", "_"))
+                        elif isinstance(current_elem, ExclusiveGateway):
+                            additional_graph_options += 'label={}, shape=diamond'.format(
+                                SMIABPMNUtils.get_bpmn_display_name(current_elem).replace(" ", "_"))
+                            # The outputs of the exclusive are added at the same level
+                            additional_graph += ('{ rank=same; ' + '; '.join(out.bpmn_id for out in current_elem.outputs)
+                                                 + '; }')
+                        else:
+                            additional_graph_options += 'label={}'.format(SMIABPMNUtils.
+                                                                  get_bpmn_display_name(current_elem).replace(" ", "_"))
 
-                        agent_object.bpmn_workflow_elements.append(current_elem)
+                            agent_object.bpmn_workflow_elements.append(current_elem)
 
-                    if hasattr(current_elem, 'current_exec_elem') and current_elem.current_exec_elem:
-                        additional_graph_options += ', style=filled, fillcolor=green'
+                        if hasattr(current_elem, 'current_exec_elem') and current_elem.current_exec_elem:
+                            additional_graph_options += ', style=filled, fillcolor=green'
 
-                    additional_graph += '{} [{}]; '.format(origin, additional_graph_options)
-                    current_elem = next(iter(current_elem.outputs), None)
-                    # current_elem = current_elem.outputs[0]
+                        additional_graph += '{} [{}]; '.format(origin, additional_graph_options)
+                        for out_elem in current_elem.outputs: elems_to_analyze.append(out_elem)
+                        analyzed_elems.append(current_elem)
+
+                        if isinstance(current_elem, EndEvent):
+                            break
 
                 graph += additional_graph
                 graph += "}"
