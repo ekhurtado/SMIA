@@ -2,6 +2,54 @@
 
 (Release Notes)=
 
+## v0.2.4
+
+This release of Self-Configurable Manufacturing Industrial Agents (SMIA) comes with an upgrade of the solution in terms of interaction between different SMIA instances.
+
+> SMIA: All Python files structured in Python modules.
+> - It includes the launcher files to run the software in the ``launchers`` module: _smia_cli_starter.py_, _smia_starter.py_ and _smia_docker_starter.py_.
+
+### Features
+
+- A class for AAS services information (``aas_services_info``) has been added.
+- The possible interactions between SMIA instances have been analyzed and a new ACL message structure for the SMIA approach has been proposed.
+  - This proposal will be used for all SMIA instances.
+  - The proposal is based on FIPA-ACL, integrating the FIPA performatives and proposing ontologies based on the different AAS services defined in the Functional View of AAS.
+- JSON schemas have been added within SMIA for the new structures of ACL messages.
+  - These schemas will be used to both validate incoming messages and create new ones to be sent.
+  - Added a method to check ACL-SMIA messages with the new JSONSchemas in ``inter_aas_interactions_utils``.
+  - Added util code to interactions between SMIA instances: create message from received ones, create message body using JSONSchemas...
+- Improved JSONSchema for AAS ModelReferences. Now it can be defined in object (as defined in the AAS meta-model) or in String (e.g., as copied from the AASX Package Explorer).
+- Added code into ``HTTPAssetConnection`` to send POST requests with the service data in the body, serialized by the specified content type.
+- Added method to register the SMIA instance itself in the SMIA KB using by requesting an AAS infrastructure service.
+- Improved distributed negotiation algorithm in FIPA-CNP management of SMIA (situations whit negotiation value tie).
+A seeded randomization process is now performed to manage the tie and obtain a random winner (the same for all instances managing the same specific tie).
+
+### Major Changes
+
+- Changed ``inter_aas_interactions_utils`` to ``inter_smia_interactions_utils``
+- The additional resource ``GUI Agent`` has been improved by adding the new structure for ACL message for interactions between SMIA instances
+- Added possibility to determine the affected element in ServiceRequestExecutionErrors
+- Modified all the ACL receiving methods and behaviours (ACLHandling, Negotiation…) with the new structure of ACL-SMIA message and the new approach to handle the interactions (depending on the ontology, its associated behaviour is added)
+- Modified the handling of AAS related services with the new approach and new ACL-SMIA message schemas: to handle asset-/agent-related services and AAS Services (discovery)
+- Modified the handling of CSS related services with the new approach and new ACL-SMIA message schemas: received JSON validation, capability checking and capability execution
+- Modified SMIA negotiation code (management of FIPA-CNP protocol) with the new structures of FIPA-SMIA-ACL messages
+Added ``CapabilityChecking`` in the FIPA-CNP management. In case it failed, SMIA instance returns Refuse message and it will have -1.0 negotiation value to lose against all the participants
+
+### Fixed errors
+
+- Fixed a bug during the self-configuration of an AAS without agent capabilities
+  - SMIA was trying to add non-existing elements
+- Fixed an error in the method to serialize service input data into HTTP request body
+- Fixed an error in HTTPAssetConnection by adding body content to the HTTP POST requests
+- Fixed error during saving information in log files (now the ontology values are used to determine the log file for each type of service)
+- Fixed error when receiving ACL message with non JSON body (e.g. in an Inform message)
+- Modified ``simple_human_in_the_mesh`` and ``cooperative_transport_logistics`` use cases deployment files to set v0.2.2 of SMIA as base Docker image
+  - To avoid errors due to future developments of the source code
+- Fixed README files regarding the links to SMIA ReadTheDocs project
+- Fixed error executing agent services defined both as asynchronous and as static methods
+- Fixed a problem in capability checking (constraints were checked although the capability did not have them)
+
 ## v0.2.3
 
 This release of Self-Configurable Manufacturing Industrial Agents (SMIA) comes with an upgrade of the solution in terms of validation and accesibility. 
