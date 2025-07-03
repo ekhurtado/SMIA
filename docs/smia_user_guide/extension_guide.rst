@@ -186,6 +186,41 @@ Once the desired Python methods for new agent services are developed, it is poss
         if __name__ == '__main__':
             main()
 
+.. dropdown:: Source code example for adding a new agent service from a Python class
+    :octicon:`code;1em;sd-text-primary`
+
+    .. tip::
+
+        If you add class instance methods (e.g., to have the agent object accessible), you must pass the agent service executable method as ``instance_class.method`` (so that it contains the self instance object included).
+
+    .. code:: python
+
+        import smia
+        from smia.agents.extensible_smia_agent import ExtensibleSMIAAgent
+        from my_agent_capabilities import NewCyclicBehaviour, NewOneShotBehaviour
+
+        class MyAgentServices:
+
+            def __init__(self, agent_object):
+                self.myagent = agent_object
+
+            async def new_asset_service_async(self):
+                print("New asynchronous asset service inside a Python instance class with agent " + self.myagent.jid)
+
+        def main():
+            smia.initial_self_configuration()
+            smia.load_aas_model(<path to the AAS model>)
+            my_extensible_smia_agent = ExtensibleSMIAAgent(<jid of SMIA SPADE agent>, <password of SMIA SPADE agent>)
+
+            # The methods of the new agent services are added to SMIA
+            my_smia_agent_services = MyAgentServices(my_extensible_smia_agent)
+            my_extensible_smia_agent.add_new_agent_service('new_service_async_id_short', my_smia_agent_services.new_asset_service_async)
+
+            smia.run(my_extensible_smia_agent)
+
+        if __name__ == '__main__':
+            main()
+
 Starting-up an extended SMIA
 ----------------------------
 
