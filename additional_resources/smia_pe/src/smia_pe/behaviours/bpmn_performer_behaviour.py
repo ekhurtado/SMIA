@@ -7,7 +7,7 @@ from smia import CriticalError, GeneralUtils
 from smia.logic import inter_smia_interactions_utils, acl_smia_messages_utils
 from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
 from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo, ACLSMIAJSONSchemas
-from spade.behaviour import OneShotBehaviour
+from spade.behaviour import OneShotBehaviour, CyclicBehaviour
 
 from utilities.smia_bpmn_info import SMIABPMNInfo
 from utilities.smia_bpmn_utils import SMIABPMNUtils
@@ -15,7 +15,8 @@ from utilities.smia_pe_aas_model_utils import SMIAPEModelUtils
 
 _logger = logging.getLogger(__name__)
 
-class BPMNPerformerBehaviour(OneShotBehaviour):
+class BPMNPerformerBehaviour(CyclicBehaviour):
+# class BPMNPerformerBehaviour(OneShotBehaviour):
     """
     This class implements the behaviour that handles the execution of a CSS-driven BPMN flexible production plan.
     """
@@ -149,13 +150,14 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
             # A one-second wait will be added between the execution of each step
             await asyncio.sleep(1)
 
-        # When it is arrived to an EndEvent the current_elem is None, so the BPMN can finish
+        # When it is arrived to an EndEvent the current_elem is None, so the BPMN is finished
         _logger.assetinfo("BPMN workflow completed successfully.")
         self.myagent.bpmn_info['CompletedWorkflows'] += 1
         # The information to be displayed in the GUI is also added
         self.myagent.smia_pe_info['InteractionsDict'].append(
             {'type': 'analysis', 'title': 'SMIA workflow successfully completed',
              'message': 'All the steps of the SMIA-BPMN workflow have been performed.'})
+
 
     async def execute_bpmn_element(self, current_bpmn_elem):
         """
