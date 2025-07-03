@@ -58,7 +58,7 @@ class SMIABPMNUtils:
         # Then, the attributes values of the Gateways are added
         SMIABPMNUtils.add_smia_gateways_attributes_values(process_parser)
 
-        _logger.assetinfo("All SMIA attributes values have been added to the process parser objects.")
+        _logger.info("All SMIA attributes values have been added to the process parser objects.")
 
 
     @staticmethod

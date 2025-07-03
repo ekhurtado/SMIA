@@ -151,6 +151,7 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
 
         # When it is arrived to an EndEvent the current_elem is None, so the BPMN can finish
         _logger.assetinfo("BPMN workflow completed successfully.")
+        self.myagent.bpmn_info['CompletedWorkflows'] += 1
         # The information to be displayed in the GUI is also added
         self.myagent.smia_pe_info['InteractionsDict'].append(
             {'type': 'analysis', 'title': 'SMIA workflow successfully completed',

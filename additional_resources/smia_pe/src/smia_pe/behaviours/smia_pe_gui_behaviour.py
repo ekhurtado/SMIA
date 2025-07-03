@@ -22,7 +22,8 @@ class SMIAPEGUIBehaviour(OneShotBehaviour):
 
         # The dictionaries related to the HTML webpage are also initialized
         self.agent.bpmn_execution_status = True
-        self.agent.bpmn_info = {'ServiceTasks': 0, 'ExclusiveGateways': 0, 'Capabilities': 0, 'Skills': 0, 'Assets': 0}
+        self.agent.bpmn_info = {'ServiceTasks': 0, 'ExclusiveGateways': 0, 'Capabilities': 0, 'Skills': 0, 'Assets': 0,
+                                'CompletedWorkflows': 0}
         self.agent.bpmn_graphviz_info = "digraph SMIA_PE_workflow { rankdir=LR; node [fixedsize=true];}"
         self.agent.bpmn_workflow_elements = []
         self.agent.to_graphviz =  GUIFeatures.to_graphviz
