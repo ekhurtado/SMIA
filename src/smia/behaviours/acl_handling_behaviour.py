@@ -7,10 +7,8 @@ from spade.behaviour import CyclicBehaviour
 
 from smia.behaviours.specific_handle_behaviours.handle_capability_behaviour import HandleCapabilityBehaviour
 from smia.behaviours.specific_handle_behaviours.handle_aas_related_svc_behaviour import HandleAASRelatedSvcBehaviour
-from smia.behaviours.specific_handle_behaviours.handle_svc_response_behaviour import HandleSvcResponseBehaviour
 from smia.logic import inter_smia_interactions_utils, acl_smia_messages_utils
 from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAJSONSchemas, ACLSMIAOntologyInfo
-from smia.utilities.general_utils import GeneralUtils
 
 _logger = logging.getLogger(__name__)
 
@@ -23,7 +21,8 @@ class ACLHandlingBehaviour(CyclicBehaviour):
 
     def __init__(self, agent_object):
         """
-        The constructor method is rewritten to add the object of the agent
+        The constructor method is rewritten to add the object of the agent.
+
         Args:
             agent_object (spade.Agent): the SPADE agent object of the SMIA agent.
         """

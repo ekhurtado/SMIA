@@ -8,6 +8,7 @@ Submodules
    :maxdepth: 3
 
    smia.utilities.aas_model_extension_utils
+   smia.utilities.aas_related_services_info
    smia.utilities.fipa_acl_info
    smia.utilities.general_utils
    smia.utilities.properties_file_utils

@@ -10,6 +10,7 @@ Submodules
    smia.css_ontology.capability_skill_module
    smia.css_ontology.capability_skill_ontology
    smia.css_ontology.css_ontology_utils
+   smia.css_ontology.css_operations
 
 Module contents
 ---------------

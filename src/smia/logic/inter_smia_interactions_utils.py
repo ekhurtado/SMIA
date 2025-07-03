@@ -2,15 +2,11 @@
 import json
 import logging
 
-import jsonschema
-from jsonschema.exceptions import ValidationError
-
 from smia.logic import acl_smia_messages_utils
 from smia.utilities.fipa_acl_info import FIPAACLInfo
 from spade.message import Message
 
-from smia.logic.exceptions import RequestDataError
-from smia.utilities.general_utils import GeneralUtils
+
 
 _logger = logging.getLogger(__name__)
 
@@ -55,6 +51,7 @@ def create_inter_smia_response_msg(receiver, thread, performative, ontology, ser
     Returns:
         spade.message.Message: SPADE message object FIPA-ACL-compliant.
     """
+    from smia.utilities.general_utils import GeneralUtils  # Local imports to avoid circular import error
 
     request_msg = Message(to=receiver, thread=thread)
     request_msg.set_metadata('performative', performative)
@@ -188,6 +185,9 @@ async def check_received_request_data_structure_old(received_data, json_schema):
         received_data (dict): received data in form of a JSON object.
         json_schema (dict): JSON Schema in form of a JSON object.
     """
+    import jsonschema
+    from smia.logic.exceptions import RequestDataError
+    from jsonschema.exceptions import ValidationError
     # TODO modificarlo cuando se piense la estructura del lenguaje I4.0
     if 'serviceData' not in received_data:
         raise RequestDataError("The received request is invalid due to missing #serviceData field in the"
@@ -213,6 +213,10 @@ async def check_received_request_data_structure(received_data, json_schema):
         received_data (dict): received data in form of a JSON object.
         json_schema (dict): JSON Schema in form of a JSON object.
     """
+    import jsonschema
+    from jsonschema.exceptions import ValidationError
+    from smia.logic.exceptions import RequestDataError  # Local imports to avoid circular import error
+
     # The received JSON object is validated against the associated JSON Schema
     try:
         jsonschema.validate(instance=received_data, schema=json_schema)

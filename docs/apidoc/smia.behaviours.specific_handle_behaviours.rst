@@ -7,9 +7,9 @@ Submodules
 .. toctree::
    :maxdepth: 3
 
+   smia.behaviours.specific_handle_behaviours.handle_aas_related_svc_behaviour
    smia.behaviours.specific_handle_behaviours.handle_capability_behaviour
    smia.behaviours.specific_handle_behaviours.handle_negotiation_behaviour
-   smia.behaviours.specific_handle_behaviours.handle_svc_request_behaviour
    smia.behaviours.specific_handle_behaviours.handle_svc_response_behaviour
 
 Module contents
