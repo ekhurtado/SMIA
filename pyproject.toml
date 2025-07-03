@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "smia"
-version = '0.2.4.2'  # cambiar cuando funcione a 0.3.0 (se añaden SMIA KB y SPIA)
+version = '0.2.4.3'  # cambiar cuando funcione a 0.3.0 (se añaden SMIA KB y SPIA)
 authors = [{ name="Ekaitz Hurtado", email="ekaitz.hurtado@ehu.eus" },]
 description = "Self-configurable Manufacturing Industrial Agents (SMIA)."
 readme = 'README_pypi.md'
@@ -25,7 +25,7 @@ classifiers = [
     'Programming Language :: Python :: 3.12',
 ]
 dependencies = [
-    "spade == 3.3.3",
+    "spade >= 3.3.3",
     "basyx-python-sdk == 1.2.0",
     "owlready2 == 0.47",
     "jsonpath-ng == 1.7.0",
