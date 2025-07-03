@@ -5,18 +5,18 @@ import smia
 from smia.agents.extensible_smia_agent import ExtensibleSMIAAgent
 from smia.utilities.general_utils import DockerUtils
 
-from behaviours.spia_gui_behaviour import SPIAGUIBehaviour
+from behaviours.smia_pe_gui_behaviour import SMIAPEGUIBehaviour
 from behaviours.bpmn_performer_behaviour import BPMNPerformerBehaviour
 from behaviours.receive_acl_behaviour import ReceiveACLBehaviour
 
 _logger = logging.getLogger(__name__)
 
-# This is the starter file to launch the SPIA (Self-configurable Planning Industrial Agents)
+# This is the starter file to launch the SMIA (Self-configurable Manufacturing Industrial Agents Production Execution)
 
 def main():
     # First, the initial configuration must be executed
     smia.initial_self_configuration()
-    _logger.info("Initializing SPIA ...")
+    _logger.info("Initializing SMIA PE ...")
 
     # The AAS model is obtained from the environmental variables
     aas_model_path = DockerUtils.get_aas_model_from_env_var()
@@ -35,23 +35,23 @@ def main():
     # smia.load_aas_model('../smia_archive/config/aas/SPEIA_CeDRI_ScenarioB.aasx')
 
     # Create the agent object
-    spia_agent = ExtensibleSMIAAgent(smia_jid, smia_psswd)
+    smia_pe_agent = ExtensibleSMIAAgent(smia_jid, smia_psswd)
 
-    # The behavior to receive all ACL messages and check if they are replies to previous SPIA messages is added
-    receive_acl_behaviour = ReceiveACLBehaviour(spia_agent)
-    spia_agent.add_new_agent_capability(receive_acl_behaviour)
+    # The behavior to receive all ACL messages and check if they are replies to previous SMIA PE messages is added
+    receive_acl_behaviour = ReceiveACLBehaviour(smia_pe_agent)
+    smia_pe_agent.add_new_agent_capability(receive_acl_behaviour)
 
     # The behaviour for executing the CSS-driven BPMN production plan is added
-    bpmn_performer_behaviour = BPMNPerformerBehaviour(spia_agent)
-    spia_agent.add_new_agent_capability(bpmn_performer_behaviour)
+    bpmn_performer_behaviour = BPMNPerformerBehaviour(smia_pe_agent)
+    smia_pe_agent.add_new_agent_capability(bpmn_performer_behaviour)
 
     # The graphical web user interface is also added in order to manage the BPMN workflow
-    spia_gui_behaviour = SPIAGUIBehaviour()
-    spia_agent.add_new_agent_capability(spia_gui_behaviour)
+    smia_pe_gui_behaviour = SMIAPEGUIBehaviour()
+    smia_pe_agent.add_new_agent_capability(smia_pe_gui_behaviour)
 
-    smia.run(spia_agent)
+    smia.run(smia_pe_agent)
 
 if __name__ == '__main__':
 
-    # Run main program with SMIA
+    # Run main program with SMIA PE
     main()

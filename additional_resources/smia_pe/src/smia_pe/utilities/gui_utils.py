@@ -35,7 +35,7 @@ class GUIControllers:
         """
         return {"status": "OK"}
 
-    async def spia_gui_get_controller(self, request):
+    async def smia_pe_gui_get_controller(self, request):
         """
         The controller during the request of SMIA PE Dashboard.
         """
@@ -43,7 +43,7 @@ class GUIControllers:
         GUIFeatures.analyze_bpmn_workflow(self.myagent)
         return {"status": "success"}
 
-    async def spia_gui_bpmn_dot_controller(self, request):
+    async def smia_pe_gui_bpmn_dot_controller(self, request):
         """
         The controller during the request of SMIA PE Dashboard.
         """
@@ -51,7 +51,7 @@ class GUIControllers:
         return GUIFeatures.to_graphviz(self.myagent)
         # return web.Response(text=GUIFeatures.to_graphviz(self.myagent), content_type="text/plain")
 
-    async def spia_gui_post_controller(self, request):
+    async def smia_pe_gui_post_controller(self, request):
         """
         The controller during the request of SMIA PE Dashboard.
         """

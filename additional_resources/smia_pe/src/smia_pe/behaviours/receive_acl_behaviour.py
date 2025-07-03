@@ -9,8 +9,8 @@ _logger = logging.getLogger(__name__)
 
 class ReceiveACLBehaviour(CyclicBehaviour):
     """
-    This class implements the behaviour that handles all the ACL messages that the SPIA will receive from the
-    others SMIAs in the I4.0 System. If some of these messages are responses to previous SPIA requests, the associated
+    This class implements the behaviour that handles all the ACL messages that the SMIA PE will receive from the
+    others SMIAs in the I4.0 System. If some of these messages are responses to previous SMIA PE requests, the associated
     BPMNPerformerBehaviour will be unlocked to continue execution of the production plan.
     """
 
@@ -42,10 +42,10 @@ class ReceiveACLBehaviour(CyclicBehaviour):
         msg = await self.receive(
             timeout=10)  # Timeout set to 10 seconds so as not to continuously execute the behavior.
         if msg:
-            # This method will receive all ACL messages to the SPIA, so it will check if some of them are responses to
-            # previous SPIA requests to unlock the associated BPMNPerformerBehaviour
-            _logger.aclinfo("Analyzing ACL message... Checking if it is a response from previous SPIA message... "
-                            "Unlocking SPIA...")
+            # This method will receive all ACL messages to the SMIA PE, so it will check if some of them are responses to
+            # previous SMIA PE requests to unlock the associated BPMNPerformerBehaviour
+            _logger.aclinfo("Analyzing ACL message... Checking if it is a response from previous SMIA PE message... "
+                            "Unlocking SMIA PE...")
             # Let's check if the BPMN performer behaviour is waiting for a response
             for behaviour in self.myagent.behaviours:
                 if str(behaviour.__class__.__name__) == 'BPMNPerformerBehaviour':
@@ -58,7 +58,7 @@ class ReceiveACLBehaviour(CyclicBehaviour):
                             msg_parsed_body = acl_smia_messages_utils.get_parsed_body_from_acl_msg(msg)
                             if (msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB) ==
                                     FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE):
-                                _logger.error("SPIA has received a Failure for the thread [{}], so it cannot continue. "
+                                _logger.error("SMIA PE has received a Failure for the thread [{}], so it cannot continue. "
                                               "Reason: {}".format(thread, msg_parsed_body['reason']))
 
                                 # The information to be displayed in the GUI is also added
@@ -70,7 +70,7 @@ class ReceiveACLBehaviour(CyclicBehaviour):
                                             acl_smia_messages_utils.get_sender_from_acl_msg(msg)),
                                      'response_msg': msg_parsed_body['reason']})
 
-                                _logger.error('SPIA cannot continue due to a received FAILURE ACL message. '
+                                _logger.error('SMIA PE cannot continue due to a received FAILURE ACL message. '
                                                     'Reason: {}'.format(msg_parsed_body['reason']))
                                 _logger.warning("BPMNPerformerBehaviour will remain blocked due to the receipt of an "
                                                 "ACL failure message.... ")
@@ -89,4 +89,4 @@ class ReceiveACLBehaviour(CyclicBehaviour):
                                     'received from {}'.format(acl_smia_messages_utils.get_sender_from_acl_msg(msg)),
                                     'response_msg': msg.body})
         else:
-            _logger.info("         - No message received within 10 seconds on SPIA (ReceiveACLBehaviour)")
+            _logger.info("         - No message received within 10 seconds on SMIA PE (ReceiveACLBehaviour)")

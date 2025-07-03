@@ -11,7 +11,7 @@ from spade.behaviour import OneShotBehaviour
 
 from utilities.smia_bpmn_info import SMIABPMNInfo
 from utilities.smia_bpmn_utils import SMIABPMNUtils
-from utilities.spia_aas_model_utils import SPIAAASModelUtils
+from utilities.smia_pe_aas_model_utils import SMIAPEModelUtils
 
 _logger = logging.getLogger(__name__)
 
@@ -37,7 +37,7 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
         # The object to store the content of the associated BPMN file
         self.bpmn_file_bytes = None
 
-        # This event object will allow waiting for the response of an ACL request message from SPIA to other SMIA
+        # This event object will allow waiting for the response of an ACL request message from SMIA PE to other SMIA
         # instances (when requesting data, requesting capabilities execution...). Since this behaviour is OneShot, when
         # it needs to wait for a response it will be blocked with this object. When the ACL response arrived, the
         # ReceiveACLBehaviour will unlock this behaviour, offering the response message content
@@ -52,23 +52,23 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
         """
         _logger.info("BPMNPerformerBehaviour starting...")
 
-        # The variable for execution information about the SPIA is initialized
+        # The variable for execution information about the SMIA PE is initialized
         self.myagent.smia_pe_info = {'Status': 'Starting', 'StartTime': GeneralUtils.get_current_date_time(),
                                      'ISMInteractions': 0, 'Interactions': 0, 'ReceivedACLmsg': 0,
                                      'InteractionsDict': []}
 
         # The BPMN file content is obtained in bytes
         _logger.info("Obtaining the BPMN file content...")
-        self.bpmn_file_bytes = SPIAAASModelUtils.get_bpmn_file_bytes_from_aas()
+        self.bpmn_file_bytes = SMIAPEModelUtils.get_bpmn_file_bytes_from_aas()
         if self.bpmn_file_bytes is None:
-            CriticalError("BPMN file not found, so the SPIA cannot start.")
-        _logger.info("The BPMN file content for this SPIA obtained and stored.")
+            CriticalError("BPMN file not found, so the SMIA PE cannot start.")
+        _logger.info("The BPMN file content for this SMIA PE obtained and stored.")
 
         # The information to be displayed in the GUI is also added
         self.myagent.smia_pe_info['InteractionsDict'].append({'type': 'analysis', 'title':
             'Obtaining BPMN file ...', 'message': 'The BPMN file has been obtained from the AAS model.'})
 
-        _logger.info("SPIA will wait 15 seconds for other instances to complete their initializations..")
+        _logger.info("SMIA PE will wait 15 seconds for other instances to complete their initializations..")
         await asyncio.sleep(15)
 
     async def run(self):
@@ -165,7 +165,7 @@ class BPMNPerformerBehaviour(OneShotBehaviour):
         """
         # Before executing the BPMN element it is necessary to check if some additional tasks need to be done
         if isinstance(current_bpmn_elem, ServiceTask):
-            # Only ServiceTasks can be executed by SPIA
+            # Only ServiceTasks can be executed by SMIA PE
             if len(current_bpmn_elem.smia_additional_tasks) > 0:
                 await self.execute_additional_tasks_of_bpmn_element(current_bpmn_elem)
             _logger.assetinfo("Executing BPMN element {}".format(current_bpmn_elem.bpmn_name))
