@@ -4,6 +4,7 @@ import basyx.aas.model.submodel
 from basyx.aas.model import UnexpectedTypeError
 from basyx.aas.util import traversal
 from smia.aas_model.aas_model_utils import AASModelInfo, AASModelUtils
+from smia.logic import acl_smia_messages_utils
 
 from smia.logic.exceptions import CapabilityCheckingError, AASModelReadingError, OntologyReadingError
 from smia.css_ontology.css_ontology_utils import CapabilitySkillOntologyUtils, CapabilitySkillACLInfo, \
@@ -86,11 +87,12 @@ class ExtendedAASModel:
             for software_nameplate_instance in software_nameplate_submodel.submodel_element:
                 aas_smia_instance_name = software_nameplate_instance.get_sm_element_by_semantic_id(AASModelInfo.SEMANTICID_SOFTWARE_NAMEPLATE_INSTANCE_NAME)
                 if aas_smia_instance_name is not None:
-                    if aas_smia_instance_name.value != smia_agent.jid.localpart:
+                    if aas_smia_instance_name.value != await acl_smia_messages_utils.get_agent_id_from_jid(smia_agent.jid):
                         _logger.warning(
                             "The SMIA instance name defined in the SoftwareNameplate submodel [{}] and the identifier "
                             "used to start the agent [{}] do not match. This can result in errors during SMIA runtime."
-                            "".format(aas_smia_instance_name.value, smia_agent.jid.localpart))
+                            "".format(aas_smia_instance_name.value,
+                                      await acl_smia_messages_utils.get_agent_id_from_jid(smia_agent.jid)))
         # TODO Add more checks
 
     # ----------------------
