@@ -4,9 +4,7 @@ import os
 import time
 from os import getcwd
 
-import aioxmpp
 from aiohttp import web
-from aioxmpp import PresenceState, JID, disco
 
 from gui_features.behaviours import GUIAgentBehaviours
 

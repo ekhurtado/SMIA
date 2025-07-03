@@ -1,7 +1,5 @@
 import asyncio
 
-import aioxmpp
-from aioxmpp import PresenceState, JID
 from spade.agent import Agent
 import logging
 
