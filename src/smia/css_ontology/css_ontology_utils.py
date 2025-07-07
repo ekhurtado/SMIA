@@ -38,29 +38,28 @@ class CapabilitySkillOntologyUtils:
                                 ontology_zip_file = aasx_reader.reader.open_part(part_name)
                                 ontology_file_bytes = ontology_zip_file.read()
                                 return properties_file_utils.create_ontology_file(ontology_file_bytes)
-                        else:
-                            # If the ontology file is not inside the AASX and is not defined in the initialization
-                            # properties file, an OWL file will be looked for inside the SMIA Archive.
-                            _logger.info("The ontology OWL file is not found within the AASX package, so it will be "
-                                         "searched for within the SMIA Archive.")
-                            ontology_file_path = smia_archive_utils.get_file_by_extension(
-                                SMIAGeneralInfo.CONFIGURATION_FOLDER_PATH, '.owl')
-                            if ontology_file_path is None:
-                                raise CriticalError("Failed to read ontology file inside the AASX package (FileNotFound)"
-                                                    " and inside the SMIA Archive.")
-                            else:
-                                return ontology_file_path
-
                 except ValueError as e:
                     raise CriticalError("Failed to read AAS model: invalid file.")
+
+            # If the ontology file is not inside the AASX and is not defined in the initialization
+            # properties file, an OWL file will be looked for inside the SMIA Archive.
+            _logger.info("The ontology OWL file is not found within the AASX package, so it will be "
+                         "searched for within the SMIA Archive.")
+            ontology_file_path = smia_archive_utils.get_file_by_extension(
+                SMIAGeneralInfo.CONFIGURATION_FOLDER_PATH, '.owl')
+            if ontology_file_path is None:
+                raise CriticalError("Failed to read ontology file inside the AASX package (FileNotFound)"
+                                    " and inside the SMIA Archive.")
             else:
-                # The serialization format must be AASX. However, it will be checked if the ontology file defined in
-                # the properties file is valid.
-                _logger.warning("The properties file may not be well defined. The ontology file is set as is within "
-                                "AASX, but the serialization format of the AAS model is not AASX.")
-                # It will try with the file path defined in the properties file, if it does not exist, it will crash
-                # during the loading of the ontology
-                return properties_file_utils.get_defined_ontology_filepath()
+                return ontology_file_path
+            # else:
+            #     # The serialization format must be AASX. However, it will be checked if the ontology file defined in
+            #     # the properties file is valid.
+            #     _logger.warning("The properties file may not be well defined. The ontology file is set as is within "
+            #                     "AASX, but the serialization format of the AAS model is not AASX.")
+            #     # It will try with the file path defined in the properties file, if it does not exist, it will crash
+            #     # during the loading of the ontology
+            #     return properties_file_utils.get_defined_ontology_filepath()
         else:
             return properties_file_utils.get_defined_ontology_filepath()
 

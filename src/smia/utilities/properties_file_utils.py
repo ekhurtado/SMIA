@@ -20,7 +20,7 @@ def create_empty_file():
     config_prop['DT'] = {'dt.version': '#', 'dt.agentID': '#', 'dt.password': '#', 'dt.xmpp-server': '#',
                          'dt.web-ui': '#'}
     config_prop['AAS'] = {'aas.meta-model.version': '#', 'aas.model.serialization': '#', 'aas.model.folder': '#',
-                          'aas.model.file': '#'}
+                          'aas.model.file': '#', 'aas.id': '#'}
     config_prop['ONTOLOGY'] = {'ontology.file': '#', 'ontology.inside-aasx': '#'}
     update_properties_file_by_parser(config_prop)
 

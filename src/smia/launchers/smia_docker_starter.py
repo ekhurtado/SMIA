@@ -18,9 +18,15 @@ def main():
 
     # The AAS model is obtained from the environmental variables
     aas_model_path = DockerUtils.get_aas_model_from_env_var()
-
     # When the AAS model path has been obtained, it is added to SMIA
-    smia.load_aas_model(aas_model_path)
+    if aas_model_path is not None:
+        smia.load_aas_model(aas_model_path)
+
+    # The AAS model is obtained from the environmental variables
+    aas_id = DockerUtils.get_aas_model_from_env_var()
+    # When the AAS model path has been obtained, it is added to SMIA
+    if aas_id is not None:
+        smia.load_aas_id(aas_id)
 
     # The jid and password can also be set as environmental variables. In case they are not set, the values are obtained
     # from the initialization properties file

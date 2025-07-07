@@ -208,11 +208,12 @@ class CLIUtils:
         parser.add_argument("-m", "--model")
         # parser.add_argument("-o", "--ontology")
         parser.add_argument("-c", "--config")
+        parser.add_argument("-a-id", "--aas-id")
         args = parser.parse_args(cli_args)
         return args.config, args.model
 
     @staticmethod
-    def check_and_save_cli_information(init_config, aas_model):
+    def check_and_save_cli_information(init_config, aas_model, aas_id):
         """
         This method checks the information added in the CLI and, depending on the result of the check, it gets the
         necessary information and saves it in the appropriate variable.
@@ -226,6 +227,10 @@ class CLIUtils:
         from smia.utilities import smia_archive_utils
         from smia.utilities import properties_file_utils
         import ntpath
+
+        # First, the AAS identifier is saved if it has been set
+        if aas_id is not None:
+            SMIAGeneralInfo.CM_AAS_ID = aas_id
 
         if (init_config is None) and (aas_model is None):
             # If all are none, the CLI information is invalid
@@ -293,9 +298,25 @@ class DockerUtils:
         """
         aas_model_name = os.environ.get('AAS_MODEL_NAME')
         if aas_model_name is None:
-            _logger.error("The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so SMIA cannot start. "
-                          "Please add the information and restart the container.")
-            return
+            _logger.warning("The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so check that it "
+                            "is not necessary. Please add the information (or the AAS id) and restart the container.")
+            return None
         _logger.info('Loaded AAS model: {}'.format(aas_model_name))
         aas_model_path = SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/' + aas_model_name
         return aas_model_path
+
+    @staticmethod
+    def get_aas_id_from_env_var():
+        """
+        This method returns the AAS identifier, obtained from the required 'AAS_ID' environmental variable.
+
+        Returns:
+            str: path to the AAS model to be loaded.
+        """
+        aas_id = os.environ.get('AAS_ID')
+        if aas_id is None:
+            _logger.warning("The environment variable 'AAS_ID' for the AAS model is not set, so check that it is not "
+                            "necessary. Please add the information (or the AAS model path) and restart the container.")
+            return None
+        _logger.info('Loaded AAS ID: {}'.format(aas_id))
+        return aas_id

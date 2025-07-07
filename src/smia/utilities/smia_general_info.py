@@ -43,6 +43,7 @@ class SMIAGeneralInfo:
     CONFIGURATION_AAS_FOLDER_PATH = CONFIGURATION_FOLDER_PATH + '/aas'
     CM_GENERAL_PROPERTIES_FILENAME = 'smia-initialization.properties'
     CM_AAS_MODEL_FILENAME = ''
+    CM_AAS_ID = ''
     CM_AAS_PROPERTIES_FILENAME = 'aas.properties'
     CM_ASSET_PROPERTIES_FILENAME = 'asset.properties'
     CM_SM_PROPERTIES_FILENAME = 'submodels.properties'

@@ -6,10 +6,14 @@ import basyx
 from basyx.aas import model
 from basyx.aas.adapter import aasx
 from basyx.aas.util import traversal
-from smia.utilities.fipa_acl_info import ACLSMIAJSONSchemas
+
+from smia.logic import acl_smia_messages_utils, inter_smia_interactions_utils
+from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
+
+from smia.utilities.fipa_acl_info import ACLSMIAJSONSchemas, FIPAACLInfo, ACLSMIAOntologyInfo
 
 from smia.logic.exceptions import CriticalError, AASModelReadingError
-from smia.utilities import properties_file_utils
+from smia.utilities import properties_file_utils, smia_archive_utils
 from smia.utilities.smia_general_info import SMIAGeneralInfo
 
 _logger = logging.getLogger(__name__)
@@ -29,28 +33,80 @@ class AASModelUtils:
         object_store = None
         aas_model_file_path = properties_file_utils.get_aas_model_filepath()
         aas_model_file_name, aas_model_file_extension = path.splitext(SMIAGeneralInfo.CM_AAS_MODEL_FILENAME)
-        try:
-            # The AAS model is read depending on the serialization format (extension of the AAS model file)
-            if aas_model_file_extension == '.json':
-                object_store = basyx.aas.adapter.json.read_aas_json_file(aas_model_file_path)
-            elif aas_model_file_extension == '.xml':
-                object_store = basyx.aas.adapter.xml.read_aas_xml_file(aas_model_file_path)
-            elif aas_model_file_extension == '.aasx':
-                with aasx.AASXReader(aas_model_file_path) as reader:
-                    # Read all contained AAS objects and all referenced auxiliary files
-                    object_store = model.DictObjectStore()
-                    suppl_file_store = aasx.DictSupplementaryFileContainer()
-                    reader.read_into(object_store=object_store,
-                                     file_store=suppl_file_store)
-        except ValueError as e:
-            _logger.error("Failed to read AAS model: invalid file.")
-            _logger.error(e)
-            raise CriticalError("Failed to read AAS model: invalid file.")
+        if aas_model_file_name != '' and aas_model_file_extension != '':
+            try:
+                # The AAS model is read depending on the serialization format (extension of the AAS model file)
+                if aas_model_file_extension == '.json':
+                    object_store = basyx.aas.adapter.json.read_aas_json_file(aas_model_file_path)
+                elif aas_model_file_extension == '.xml':
+                    object_store = basyx.aas.adapter.xml.read_aas_xml_file(aas_model_file_path)
+                elif aas_model_file_extension == '.aasx':
+                    with aasx.AASXReader(aas_model_file_path) as reader:
+                        # Read all contained AAS objects and all referenced auxiliary files
+                        object_store = model.DictObjectStore()
+                        suppl_file_store = aasx.DictSupplementaryFileContainer()
+                        reader.read_into(object_store=object_store,
+                                         file_store=suppl_file_store)
+            except ValueError as e:
+                _logger.error("Failed to read AAS model: invalid file.")
+                _logger.error(e)
+                raise CriticalError("Failed to read AAS model: invalid file.")
+        elif SMIAGeneralInfo.CM_AAS_ID != '':
+            # In this case the AAS ID is defined, so it need to be got the AAS object from an Infrastructure Service
+            return 'FromAASId'
+
         if object_store is None or len(object_store) == 0:
             raise CriticalError("The AAS model is not valid. It is not possible to read and obtain elements of the AAS "
                                 "metamodel.")
         else:
             return object_store
+
+    @staticmethod
+    async def read_aas_model_object_store_from_aas_repository(agent_object, agent_behav):
+        """
+        This method reads the AAS model obtained from the AAS repository.
+
+        Args:
+            agent_object (spade.Agent): the SPADE agent object of the SMIA agent.
+            agent_behav : the current SPADE agent behaviour of the SMIA agent.
+
+        Returns:
+            basyx.aas.model.DictObjectStore:  object with all Python elements of the AAS model.
+        """
+        from smia import GeneralUtils
+
+        smia_ism_jid = (f"{AASRelatedServicesInfo.SMIA_ISM_ID}@"
+                        f"{await acl_smia_messages_utils.get_xmpp_server_from_jid(agent_object.jid)}")
+        get_aas_acl_msg = await inter_smia_interactions_utils.create_acl_smia_message(
+            smia_ism_jid, await acl_smia_messages_utils.create_random_thread(agent_object),
+            FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST, ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE,
+            protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL, msg_body=await acl_smia_messages_utils.
+            generate_json_from_schema(ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE, serviceID=
+            AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_AAS_BY_ID, serviceType=
+                                      AASRelatedServicesInfo.AAS_INFRASTRUCTURE_SERVICE_TYPE_REGISTRY,
+                                      serviceParams=SMIAGeneralInfo.CM_AAS_ID))
+        _logger.info("Sending the infrastructure service request to {} to obtain the AAS model by its ID."
+                     "".format(smia_ism_jid))
+        await agent_behav.send(get_aas_acl_msg)
+        _logger.info("Waiting for the confirmation of the registry in the SMIA KB...")
+        msg = await agent_behav.receive(timeout=10)  # Timeout set to 10 seconds
+        if msg:
+            valid_msg_template = GeneralUtils.create_acl_template(
+                FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM, ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE)
+            if valid_msg_template.match(msg) and msg.thread == get_aas_acl_msg.thread:
+                _logger.aclinfo("AAS model obtained successfully from the AAS Repository.")
+                SMIAGeneralInfo.CM_AAS_MODEL_FILENAME = 'aas_model.json'
+                smia_archive_utils.update_json_file(properties_file_utils.get_aas_model_filepath(),
+                                                    acl_smia_messages_utils.get_parsed_body_from_acl_msg(msg))
+                # Now, the AAS model can be read
+                return AASModelUtils.read_aas_model_object_store()
+            else:
+                _logger.warning("A message arrived but it is not about the AAS model. Performative [{}], Ontology [{}],"
+                                " body [{}]".format(msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB),
+                    msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB), msg.body))
+        else:
+            _logger.error("The AAS model cannot be obtained from the AAS Repository. Check the SMIA ISM or the "
+                            "AAS Repository.")
 
     # Methods related to AASX Package
     # -------------------------------

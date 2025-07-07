@@ -62,6 +62,9 @@ class InitAASModelBehaviour(OneShotBehaviour):
         # Depending on the serialization format, the required BaSyx read method shall be executed. This will store all
         # the received elements of the model in the corresponding global object of the agent.
         object_store = AASModelUtils.read_aas_model_object_store()
+        if isinstance(object_store, str) and  object_store == 'FromAASId':
+            # In this case the AAS model need to be obtained from the AAS Repository with the AAS ID
+            object_store = await AASModelUtils.read_aas_model_object_store_from_aas_repository(self.myagent, self)
         await self.myagent.aas_model.set_aas_model_object_store(object_store)
 
         # First, the initial general analysis is performed on the AAS model.

@@ -104,3 +104,17 @@ def load_aas_model(file_path):
                         "not necessary.")
 
         # _logger.error(e)
+
+def load_aas_id(aas_id):
+    """
+    This method loads the AAS identifier in the SMIA properties file within the SMIA Archive.
+
+    Args:
+        aas_id (str): identifier of the AAS.
+    """
+    # If the user has not run the initial self-configuration method, it is now executed
+    initial_self_configuration()
+
+    # The global variable is updated
+    SMIAGeneralInfo.CM_AAS_ID = aas_id
+
