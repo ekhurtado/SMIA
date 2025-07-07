@@ -96,10 +96,10 @@ class StateBooting(State):
             if valid_msg_template.match(msg) and msg.thread == register_acl_msg.thread:
                 _logger.aclinfo("SMIA instance successfully registered in the SMIA KB")
             else:
-                _logger.warning("A message arrived but it is not from a confirmation of the SMIA instance registry. "
-                                "Performative [{}], Ontology [{}], body [{}]".format(
-                    msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB),
-                    msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB), msg.body))
+                ("A message arrived but it is not about the AAS model. Sender [{}], Performative [{}], "
+                 "Ontology [{}]".format(acl_smia_messages_utils.get_sender_from_acl_msg(msg),
+                                        msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB),
+                                        msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB)))
         else:
             _logger.warning("The registry of the SMIA instance {} has not been completed. Check the SMIA ISM or the "
                             "SMIA KB.".format(str(self.agent.jid)))

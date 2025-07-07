@@ -101,9 +101,10 @@ class AASModelUtils:
                 # Now, the AAS model can be read
                 return AASModelUtils.read_aas_model_object_store()
             else:
-                raise CriticalError("A message arrived but it is not about the AAS model. Performative [{}], Ontology [{}],"
-                                " body [{}]".format(msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB),
-                    msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB), msg.body))
+                _logger.warning("A message arrived but it is not about the AAS model. Sender [{}], Performative [{}], "
+                                "Ontology [{}]".format(acl_smia_messages_utils.get_sender_from_acl_msg(msg),
+                    msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB),
+                    msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB)))
         else:
             raise CriticalError("The AAS model cannot be obtained from the AAS Repository. Check the SMIA ISM or the "
                             "AAS Repository.")
