@@ -101,11 +101,11 @@ class AASModelUtils:
                 # Now, the AAS model can be read
                 return AASModelUtils.read_aas_model_object_store()
             else:
-                _logger.warning("A message arrived but it is not about the AAS model. Performative [{}], Ontology [{}],"
+                raise CriticalError("A message arrived but it is not about the AAS model. Performative [{}], Ontology [{}],"
                                 " body [{}]".format(msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB),
                     msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB), msg.body))
         else:
-            _logger.error("The AAS model cannot be obtained from the AAS Repository. Check the SMIA ISM or the "
+            raise CriticalError("The AAS model cannot be obtained from the AAS Repository. Check the SMIA ISM or the "
                             "AAS Repository.")
 
     # Methods related to AASX Package
