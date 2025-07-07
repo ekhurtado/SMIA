@@ -24,7 +24,7 @@ def main():
         smia.load_aas_model(aas_model_path)
 
     # The AAS model is obtained from the environmental variables
-    aas_id = DockerUtils.get_aas_model_from_env_var()
+    aas_id = DockerUtils.get_aas_id_from_env_var()
     # When the AAS model path has been obtained, it is added to SMIA
     if aas_id is not None:
         _logger.info("The AAS ID has been added as environmental variable.")
