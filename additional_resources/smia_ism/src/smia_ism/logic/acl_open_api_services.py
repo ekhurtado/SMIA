@@ -113,5 +113,6 @@ class ACLOpenAPIServices:
         AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_ASSET_BY_SMIA: get_asset_id_by_smia_instance,
         AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_ALL_ASSET_BY_CAPABILITY: get_assets_ids_of_capability,
 
-        'GetAssetAdministrationShellById': get_asset_adminitration_shell_by_id,    # TODO AÑADIRLO EN SMIA
+        AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_AAS_BY_ID: get_asset_adminitration_shell_by_id,    # TODO AÑADIRLO EN SMIA
+        # 'GetAssetAdministrationShellById': get_asset_adminitration_shell_by_id,    # TODO AÑADIRLO EN SMIA
     }  #: This object maps the service identifiers with its associated execution methods
