@@ -425,3 +425,22 @@ def xml_to_file(file_path, xml_content):
     """
     with open(file_path, 'wb') as xml_file:
         xml_file.write(xml_content)
+
+# --------------------------
+# Methods related to metrics
+# --------------------------
+def safe_metrics_csv_timestamp(file_path, agent_jid, description=None):
+    import csv
+    from smia.logic import acl_smia_messages_utils
+
+    agent_jid = acl_smia_messages_utils.get_agent_id_from_jid(agent_jid)
+    if description is None:
+        description = ''
+    try:
+        with open(file_path, 'a', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
+            if not os.path.isfile(file_path) or os.path.getsize(file_path) == 0:
+                writer.writerow(['AgentID', 'Timestamp', 'Description'])
+            writer.writerow([f"{agent_jid:.4f}", f"{GeneralUtils.get_current_timestamp():.4f}", f"{description:.4f}"])
+    except Exception as e:
+        print(f"Error writing to file: {e}")
