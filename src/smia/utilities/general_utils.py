@@ -178,6 +178,16 @@ class GeneralUtils:
         return calendar.timegm(time.gmtime())
 
     @staticmethod
+    def get_current_timestamp_microsecs():
+        """
+        This method returns the current timestamp of the SMIA in microseconds.
+
+        Returns:
+            int: current timestamp in microseconds
+        """
+        return time.time()
+
+    @staticmethod
     def get_current_date_time():
         """
         This method returns the current DateTime of the SMIA. The DateTime is obtained from the UNIX timestamp.

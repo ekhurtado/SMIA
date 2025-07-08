@@ -445,6 +445,6 @@ async def save_csv_metrics_timestamp(folder_path, agent_jid, description=None):
             writer = csv.writer(file)
             if not os.path.isfile(file_path) or os.path.getsize(file_path) == 0:
                 writer.writerow(['AgentID', 'Timestamp', 'Description'])
-            writer.writerow([f"{agent_jid}", f"{GeneralUtils.get_current_timestamp():.4f}", f"{description}"])
+            writer.writerow([f"{agent_jid}", f"{GeneralUtils.get_current_timestamp_microsecs():.4f}", f"{description}"])
     except Exception as e:
         print(f"Error writing to file: {e}")
