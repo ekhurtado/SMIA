@@ -98,7 +98,7 @@ class SMIAAgent(Agent):
         # TODO BORRAR -> es para obtener los datos para el analisis
         from smia.utilities import smia_archive_utils, smia_general_info
         await smia_archive_utils.safe_csv_metrics_timestamp(
-            smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH, self.jid, 'SMIA started')
+            smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.jid, 'SMIA started')
 
         # First, the FSMBehaviour is instantiated
         fsm_behaviour = AASFSMBehaviour()

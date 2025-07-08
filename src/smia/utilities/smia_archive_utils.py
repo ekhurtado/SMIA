@@ -436,12 +436,15 @@ async def safe_csv_metrics_timestamp(folder_path, agent_jid, description=None):
     agent_jid = await acl_smia_messages_utils.get_agent_id_from_jid(agent_jid)
     if description is None:
         description = ''
+    if not os.path.exists(folder_path):
+        os.mkdir(folder_path)  # If necessary, the folder is created
+
     file_path = f"{folder_path}/{agent_jid}-metrics.csv"
     try:
         with open(file_path, 'a', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
             if not os.path.isfile(file_path) or os.path.getsize(file_path) == 0:
                 writer.writerow(['AgentID', 'Timestamp', 'Description'])
-            writer.writerow([f"{agent_jid:.4f}", f"{GeneralUtils.get_current_timestamp():.4f}", f"{description:.4f}"])
+            writer.writerow([f"{agent_jid}", f"{GeneralUtils.get_current_timestamp():.4f}", f"{description}"])
     except Exception as e:
         print(f"Error writing to file: {e}")
