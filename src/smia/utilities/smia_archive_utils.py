@@ -429,7 +429,7 @@ def xml_to_file(file_path, xml_content):
 # --------------------------
 # Methods related to metrics
 # --------------------------
-def safe_metrics_csv_timestamp(file_path, agent_jid, description=None):
+def safe_csv_metrics_timestamp(file_path, agent_jid, description=None):
     import csv
     from smia.logic import acl_smia_messages_utils
 
