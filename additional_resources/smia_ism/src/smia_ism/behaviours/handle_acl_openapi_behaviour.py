@@ -71,7 +71,7 @@ class HandleACLOpenAPIBehaviour(OneShotBehaviour):
             # At this point the Infrastructure Service can be executed
             _logger.info("The AAS Infrastructure Service {} has been requested.".format(requested_infrastructure_svc))
             # Let's get the parameters of the infrastructure service
-            svc_params= await AgentServiceUtils.get_agent_service_parameters(
+            svc_params = await AgentServiceUtils.get_agent_service_parameters(
                 await self.myagent.acl_openapi_services.get_agent_service_by_id(requested_infrastructure_svc))
             if len(svc_params) > 1:
                 svc_params = await AgentServiceUtils.get_adapted_service_parameters(
@@ -82,6 +82,15 @@ class HandleACLOpenAPIBehaviour(OneShotBehaviour):
             result = await self.myagent.acl_openapi_services.execute_agent_service_by_id(requested_infrastructure_svc,
                                                                                          **svc_params)  # TODO PENSAR DONDE IRAN LOS PARAMETROS
             if 'ERROR' not in result:
+
+                if requested_infrastructure_svc == 'RegisterSMIAInstance':
+                    # TODO BORRAR -> es para obtener los datos para el analisis
+                    from smia.utilities import smia_archive_utils, smia_general_info
+                    await smia_archive_utils.safe_csv_metrics_timestamp(
+                        smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics',
+                        self.myagent.jid, f"{self.received_json_data['serviceParams']['id'].split('@')[0]}"
+                                          f" registered")
+
                 _logger.info("The AAS Infrastructure Service {} has been successfully executed.".format(requested_infrastructure_svc))
                 await inter_smia_interactions_utils.send_response_msg_from_received(
                     self, self.received_acl_msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM, result)
