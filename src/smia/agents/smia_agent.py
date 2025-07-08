@@ -58,11 +58,6 @@ class SMIAAgent(Agent):
 
         self.initialize_smia_attributes()
 
-        # TODO BORRAR -> es para obtener los datos para el analisis
-        from smia.utilities import smia_archive_utils, smia_general_info
-        smia_archive_utils.safe_csv_metrics_timestamp(smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH,
-                                                      self.jid, 'SMIA started')
-
     def initialize_smia_attributes(self):
         """
         This method initializes all the attributes of the SMIA.
@@ -99,6 +94,11 @@ class SMIAAgent(Agent):
         (FSM) of the general SMIA Agent.
         """
         _logger.info(f"Setting up {self.jid} SMIA...")
+
+        # TODO BORRAR -> es para obtener los datos para el analisis
+        from smia.utilities import smia_archive_utils, smia_general_info
+        await smia_archive_utils.safe_csv_metrics_timestamp(
+            smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH, self.jid, 'SMIA started')
 
         # First, the FSMBehaviour is instantiated
         fsm_behaviour = AASFSMBehaviour()

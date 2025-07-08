@@ -87,8 +87,9 @@ class InitAASModelBehaviour(OneShotBehaviour):
 
         # TODO BORRAR -> es para obtener los datos para el analisis
         from smia.utilities import smia_archive_utils, smia_general_info
-        smia_archive_utils.safe_csv_metrics_timestamp(smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH,
-                                                      self.myagent.jid, 'SMIA self-configuration completed')
+        await smia_archive_utils.safe_csv_metrics_timestamp(
+            smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH, self.myagent.jid,
+            'SMIA self-configuration completed')
 
         # The progress bar is closed
         self.progress_bar.close()
