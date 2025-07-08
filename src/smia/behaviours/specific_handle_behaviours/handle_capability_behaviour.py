@@ -430,16 +430,20 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
 
             # TODO BORRAR -> es para obtener los datos para el analisis
             from smia.utilities import smia_archive_utils, smia_general_info
-            await smia_archive_utils.safe_csv_metrics_timestamp(
+            await smia_archive_utils.save_csv_metrics_timestamp(
                 smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
                 f"Asset service requested [{self.received_acl_msg.thread}]")
+            await smia_archive_utils.save_csv_metrics_timestamp(
+                smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
+                "Asset service requested [{}]".format(self.received_acl_msg.thread))
+            _logger.assetinfo("Saved timestamp!!!.")
 
             skill_execution_result = await asset_connection_class.execute_asset_service(
                 interaction_metadata=aas_skill_interface_elem, service_input_data=received_skill_input_data)
             _logger.assetinfo("Skill of the capability successfully executed.")
 
             # TODO BORRAR -> es para obtener los datos para el analisis
-            await smia_archive_utils.safe_csv_metrics_timestamp(
+            await smia_archive_utils.save_csv_metrics_timestamp(
                 smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
                 f"Asset service completed [{self.received_acl_msg.thread}]")
 

@@ -87,7 +87,7 @@ class InitAASModelBehaviour(OneShotBehaviour):
 
         # TODO BORRAR -> es para obtener los datos para el analisis
         from smia.utilities import smia_archive_utils, smia_general_info
-        await smia_archive_utils.safe_csv_metrics_timestamp(
+        await smia_archive_utils.save_csv_metrics_timestamp(
             smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
             'SMIA self-configuration completed')
 
