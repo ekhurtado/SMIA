@@ -424,13 +424,24 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
             # such data
             _logger.assetinfo("Executing skill of the capability through an asset service...")
 
-            # # TODO BORRAR: PARA PRUEBAS CEDRI
-            # if 'smia-pe' in self.received_acl_msg.thread:
-            #     return {'status': 'success', 'prueba': 'cedri'}
+            # TODO BORRAR: PARA PRUEBAS CEDRI
+            if 'smia-pe' in self.received_acl_msg.thread:
+                return {'status': 'success', 'prueba': 'cedri'}
+
+            # TODO BORRAR -> es para obtener los datos para el analisis
+            from smia.utilities import smia_archive_utils, smia_general_info
+            await smia_archive_utils.safe_csv_metrics_timestamp(
+                smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
+                f"Asset service requested [{self.received_acl_msg.thread}]")
 
             skill_execution_result = await asset_connection_class.execute_asset_service(
                 interaction_metadata=aas_skill_interface_elem, service_input_data=received_skill_input_data)
             _logger.assetinfo("Skill of the capability successfully executed.")
+
+            # TODO BORRAR -> es para obtener los datos para el analisis
+            await smia_archive_utils.safe_csv_metrics_timestamp(
+                smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
+                f"Asset service completed [{self.received_acl_msg.thread}]")
 
             # TODO SI LA SKILL TIENE OUTPUT PARAMETERS, HAY QUE RECOGERLOS DEL skill_execution_result. En ese caso, se
             #  sobreescribirá el skill_execution_result con la variable output y su valor (el cual será lo que devolverá el
