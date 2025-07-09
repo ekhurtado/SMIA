@@ -77,6 +77,12 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
         This method implements the logic of the behaviour.
         """
 
+        # TODO BORRAR -> es para obtener los datos para el analisis
+        from smia.utilities import smia_archive_utils, smia_general_info
+        await smia_archive_utils.save_csv_metrics_timestamp(
+            smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
+            'SMIA PE workflow [wf-{}] analysis started'.format(self.myagent.bpmn_info['CompletedWorkflows']))
+
         # This behavior analyzes and performs a BPMN production plan based on CSS. The behavior is OneShot so it will
         # perform the plan and terminate itself. When requests need to be made to other SMIA instances it will remain
         # blocked until the response for this message arrives. A complementary Cyclic behavior has been developed to
@@ -106,6 +112,12 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
         # to be obtained
         await self.get_smia_instances_of_specified_assets()
 
+        # TODO BORRAR -> es para obtener los datos para el analisis
+        from smia.utilities import smia_archive_utils, smia_general_info
+        await smia_archive_utils.save_csv_metrics_timestamp(
+            smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
+            'SMIA PE workflow [wf-{}] analyzed'.format(self.myagent.bpmn_info['CompletedWorkflows']))
+
         # When the BPMN file has been initialized, it can be started to execute
         await self.execute_workflow()
 
@@ -134,6 +146,12 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
         # The element is set as the current execution step
         setattr(current_elem, 'current_exec_elem', True)
 
+        # TODO BORRAR -> es para obtener los datos para el analisis
+        from smia.utilities import smia_archive_utils, smia_general_info
+        await smia_archive_utils.save_csv_metrics_timestamp(
+            smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
+            'SMIA PE workflow [wf-{}] started'.format(self.myagent.bpmn_info['CompletedWorkflows']))
+
         while current_elem is not None:
             # The element is set as the current execution step
             setattr(current_elem, 'current_exec_elem', True)
@@ -149,6 +167,12 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
 
             # A one-second wait will be added between the execution of each step
             await asyncio.sleep(1)
+
+        # TODO BORRAR -> es para obtener los datos para el analisis
+        from smia.utilities import smia_archive_utils, smia_general_info
+        await smia_archive_utils.save_csv_metrics_timestamp(
+            smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
+            'SMIA PE workflow [wf-{}] completed'.format(self.myagent.bpmn_info['CompletedWorkflows']))
 
         # When it is arrived to an EndEvent the current_elem is None, so the BPMN is finished
         _logger.assetinfo("BPMN workflow completed successfully.")
@@ -534,7 +558,22 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
             bpmn_element.smia_capability, bpmn_element.smia_instance)})
         self.myagent.smia_pe_info['Interactions'] += 1
 
+        # TODO BORRAR -> es para obtener los datos para el analisis
+        from smia.utilities import smia_archive_utils, smia_general_info
+        await smia_archive_utils.save_csv_metrics_timestamp(
+            smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
+            f"CSS-service request to {bpmn_element.smia_instance} with thread [{request_css_acl_msg.thread}] "
+            f"within workflow [wf-{self.myagent.bpmn_info['CompletedWorkflows']}]")
+
         await self.send_acl_and_wait(request_css_acl_msg)
+
+        # TODO BORRAR -> es para obtener los datos para el analisis
+        from smia.utilities import smia_archive_utils, smia_general_info
+        await smia_archive_utils.save_csv_metrics_timestamp(
+            smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
+            f"CSS-service reply from {bpmn_element.smia_instance} with thread [{request_css_acl_msg.thread}] "
+            f"within workflow [wf-{self.myagent.bpmn_info['CompletedWorkflows']}]")
+
         # It will be checked whether the timeout has been reached
         if (isinstance(self.acl_messages_responses[request_css_acl_msg.thread], str) and
                 self.acl_messages_responses[request_css_acl_msg.thread] == 'ERROR: TIMEOUT REACHED'):
