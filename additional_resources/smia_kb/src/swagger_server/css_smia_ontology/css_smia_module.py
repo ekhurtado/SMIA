@@ -247,6 +247,24 @@ class Capability(ExtendedThing):
         else:
             return self.assets
 
+    def get_associated_asset_by_id(self, recv_asset_id):
+        """
+        This method gets a specific associated asset and, if it does not exist, returns the None object.
+
+        Args:
+            recv_asset_id (int): the receiver id of the associated asset.
+
+        Returns:
+            dict: JSON object with the information of the associated asset.
+        """
+        if len(self.assets) == 0:
+            return None
+        else:
+            for asset_id, asset_info in self.assets.items():
+                if asset_id == recv_asset_id:
+                    return asset_info
+            return None
+
 
 class CapabilityConstraint(ExtendedThing):
 

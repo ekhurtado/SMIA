@@ -234,6 +234,11 @@ def post_capability(body):  # noqa: E501
 
     :rtype: Capability
     """
+
+    # TODO BORRAR
+    print("LO QUE HA LLEGADO a POST Capability !!!!!!!!!!!!!!!!!!")
+    print(connexion.request.get_json())
+
     new_capability = None
     if connexion.request.is_json:
         new_capability = Capability.from_dict(connexion.request.get_json())  # noqa: E501
@@ -244,10 +249,44 @@ def post_capability(body):  # noqa: E501
     cap_ontology_instance = ontology.get_ontology_instance_by_iri(new_capability.iri)
     if cap_ontology_instance is not None:
         # In this case the capability exists, so it only need to update some data
-        # TODO FALTA HACERLO: actualizar atributos generales, y añadir nuevos skills y constraints (si no existen)
-        print("YA EXISTE LA CAPACIDAD !!!!!!!!!!!!!!!!!!!!!!!!")  # TODO BORRAR
-        print(new_capability)
+        cap_ontology_instance.name = new_capability.name
 
+        if new_capability.category is not None:
+            cap_ontology_instance.set_category(new_capability.category)
+
+        if new_capability.has_lifecycle:
+            cap_ontology_instance.data_properties_values_dict['hasLifecycle'] = new_capability.has_lifecycle
+
+        if new_capability.is_realized_by is not None:
+            for skill_iri in new_capability.is_realized_by:
+                # Hay que asociarle skills a la capacidad
+                skill_instance = ontology.get_ontology_instance_by_iri(skill_iri)
+                if skill_instance is None:
+                    print("The associated Skill with IRI [{}] does not exist. Please, register first and then "
+                          "link to the Capability.".format(skill_iri))
+
+                if skill_instance not in cap_ontology_instance.isRealizedBy:
+                    cap_ontology_instance.isRealizedBy.append(skill_instance)
+
+        if new_capability.is_restricted_by is not None:
+            for new_cap_constraint in new_capability.is_restricted_by:
+                new_cap_constraint_instance = ontology.get_ontology_instance_by_iri(new_cap_constraint.iri)
+                if new_cap_constraint_instance is None:
+                    cap_constraint_ontology_class = ontology.get_ontology_class_by_iri(
+                        CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_CONSTRAINT_IRI)
+                    new_cap_constraint_instance = ontology.create_ontology_object_instance(cap_constraint_ontology_class,
+                                                                                           new_cap_constraint.name)
+                new_cap_constraint_instance.iri = new_cap_constraint.iri
+                new_cap_constraint_instance.set_condition(new_cap_constraint.has_condition)
+
+                # La nueva CapabilityConstraint se asocia al Capability
+                if new_cap_constraint_instance not in cap_ontology_instance.isRestrictedBy:
+                    cap_ontology_instance.isRestrictedBy.append(new_cap_constraint_instance)
+
+        if new_capability.assets is not None:
+            for asset_info in new_capability.assets:
+                if cap_ontology_instance.get_associated_asset_by_id(asset_info.id) is None:
+                    cap_ontology_instance.add_associated_asset(asset_info.id, asset_info.kind, asset_info.type)
 
     else:
 
@@ -257,10 +296,12 @@ def post_capability(body):  # noqa: E501
         new_capability_instance.iri = new_capability.iri
         new_capability_instance.set_category(new_capability.category)
 
+        if new_capability.has_lifecycle is not None:
+            new_capability_instance.data_properties_values_dict['hasLifecycle'] = new_capability.has_lifecycle
+
         # Se añaden los datos opcionales
         if new_capability.is_realized_by is not None:
             for skill_iri in new_capability.is_realized_by:
-            # if len(new_capability.is_realized_by) > 0:
                 # Hay que asociarle skills a la capacidad
                 skill_instance = ontology.get_ontology_instance_by_iri(skill_iri)
                 if skill_instance is None:
@@ -278,6 +319,10 @@ def post_capability(body):  # noqa: E501
 
                 # La nueva CapabilityConstraint se asocia al Capability
                 new_capability_instance.isRestrictedBy.append(new_cap_constraint_instance)
+
+        if new_capability.assets is not None:
+            for asset_info in new_capability.assets:
+                new_capability_instance.add_associated_asset(asset_info.id, asset_info.kind, asset_info.type)
 
     ontology.persistent_save_ontology()
 

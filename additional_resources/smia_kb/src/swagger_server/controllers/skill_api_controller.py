@@ -152,47 +152,100 @@ def post_skill(body):  # noqa: E501
 
     :rtype: Skill
     """
+
+    # TODO BORRAR
+    print("LO QUE HA LLEGADO a POST Skill !!!!!!!!!!!!!!!!!!")
+    print("EL BODY a POST Skill !!!!!!!!!!!!!!!!!! {}".format(bytes.decode(body)))
+    print("LO QUE HA LLEGADO a POST Skill !!!!!!!!!!!!!!!!!! {}".format(connexion.request.get_json()))
+    print(connexion.request.get_json())
+
     new_skill = None
     if connexion.request.is_json:
         new_skill = Skill.from_dict(connexion.request.get_json())  # noqa: E501
 
-    # TODO PRUEBA CON ONTOLOGIA CSS (esta hecho de forma manual, hay que pensar como programarlo correctamente)
-    for onto_class in __main__.ontology.classes():
-        if onto_class.name == 'Skill':
-            skill1 = onto_class(new_skill.name)
-            print(skill1)
+    ontology = CapabilitySkillOntology.get_instance()
 
-    return 'do some magic! The skill to register has the following information: {}'.format(body)
-    # return 'do some magic!'
+    skill_ontology_instance = ontology.get_ontology_instance_by_iri(new_skill.iri)
+    if skill_ontology_instance is not None:
+        # In this case the skills exists, so it only need to update some data
+        skill_ontology_instance.name = new_skill.name
+
+        if new_skill.has_implementation_type is not None:
+            skill_ontology_instance.data_properties_values_dict['hasImplementationType'] = new_skill.has_implementation_type
+
+        if new_skill.accessible_through is not None:
+            for skill_interface_iri in new_skill.accessible_through:
+                skill_interface_ontology_instance = ontology.get_ontology_instance_by_iri(skill_interface_iri)
+                if skill_interface_ontology_instance is None:
+                    skill_interface_name = skill_interface_iri.split('#')[1] if '#' in skill_interface_iri else (
+                        skill_interface_iri)
+                    skill_interface_ontology_instance = ontology.create_ontology_object_instance(
+                        ontology.get_ontology_class_by_iri(CapabilitySkillOntologyInfo.CSS_ONTOLOGY_SKILL_INTERFACE_IRI),
+                        skill_interface_name)
+
+                # Hay que asociarle skill interface a la skill
+                if skill_interface_ontology_instance not in skill_ontology_instance.accessibleThrough:
+                    skill_ontology_instance.accessibleThrough.append(skill_interface_ontology_instance)
+
+        if new_skill.has_parameter is not None:
+            for new_skill_param in new_skill.has_parameter:
+                new_skill_param_instance = ontology.get_ontology_instance_by_iri(new_skill_param.iri)
+                if new_skill_param_instance is None:
+                    new_skill_param_instance = ontology.create_ontology_object_instance(ontology.get_ontology_class_by_iri(
+                        CapabilitySkillOntologyInfo.CSS_ONTOLOGY_SKILL_PARAMETER_IRI),
+                        new_skill_param.name)
+
+                new_skill_param_instance.iri = new_skill_param.iri
+                if new_skill_param.has_type is not None:
+                    new_skill_param_instance.data_properties_values_dict['hasType'] = new_skill_param.has_type
+
+                if new_skill_param_instance not in skill_ontology_instance.hasParameter:
+                    skill_ontology_instance.hasParameter.append(new_skill_param_instance)
+
+    else:
+        # Se crea la instancia ontologica con los datos añadidos
+        skill_ontology_class = ontology.get_ontology_class_by_iri(
+            CapabilitySkillOntologyInfo.CSS_ONTOLOGY_SKILL_IRI)
+        new_skill_instance = ontology.create_ontology_object_instance(skill_ontology_class,
+                                                                           new_skill.name)
+        new_skill_instance.iri = new_skill.iri
+
+        if new_skill.has_implementation_type is not None:
+            new_skill_instance.data_properties_values_dict['hasImplementationType'] = new_skill.has_implementation_type
+
+        # Se añaden los datos opcionales
+        if new_skill.accessible_through is not None:
+            for skill_interface_iri in new_skill.accessible_through:
+                skill_interface_ontology_instance = ontology.get_ontology_instance_by_iri(skill_interface_iri)
+                if skill_interface_ontology_instance is None:
+                    skill_interface_name = skill_interface_iri.split('#')[1] if '#' in skill_interface_iri else (
+                        skill_interface_iri)
+                    skill_interface_ontology_instance = ontology.create_ontology_object_instance(
+                        ontology.get_ontology_class_by_iri(CapabilitySkillOntologyInfo.CSS_ONTOLOGY_SKILL_INTERFACE_IRI),
+                        skill_interface_name)
+
+                # Hay que asociarle skill parameters a la skill
+                new_skill_instance.accessibleThrough.append(skill_interface_ontology_instance)
+
+        if new_skill.has_parameter is not None:
+            for new_skill_param in new_skill.has_parameter:
+                new_skill_param_instance = ontology.get_ontology_instance_by_iri(new_skill_param.iri)
+                if new_skill_param_instance is None:
+                    new_skill_param_instance = ontology.create_ontology_object_instance(ontology.get_ontology_class_by_iri(
+                        CapabilitySkillOntologyInfo.CSS_ONTOLOGY_SKILL_PARAMETER_IRI),
+                        new_skill_param.name)
+
+                new_skill_param_instance.iri = new_skill_param.iri
+                if new_skill_param.has_type is not None:
+                    new_skill_param_instance.data_properties_values_dict['hasType'] = new_skill_param.has_type
 
 
-# def post_skill(id, name, category, photo_urls, tags, status):  # noqa: E501
-#     """Add a new Skill to the SMIA KB.
-#
-#     Add a new Skill to the SMIA KB. # noqa: E501
-#
-#     :param id:
-#     :type id: int
-#     :param name:
-#     :type name: dict | bytes
-#     :param category:
-#     :type category: dict | bytes
-#     :param photo_urls:
-#     :type photo_urls: List[str]
-#     :param tags:
-#     :type tags: list | bytes
-#     :param status:
-#     :type status: str
-#
-#     :rtype: Skill
-#     """
-#     if connexion.request.is_json:
-#         name = CSSidentifier.from_dict(connexion.request.get_json())  # noqa: E501
-#     if connexion.request.is_json:
-#         category = Category.from_dict(connexion.request.get_json())  # noqa: E501
-#     if connexion.request.is_json:
-#         tags = [Tag.from_dict(d) for d in connexion.request.get_json()]  # noqa: E501
-#     return 'do some magic!'
+                # La nueva CapabilityConstraint se asocia al Capability
+                new_skill_instance.hasParameter.append(new_skill_param_instance)
+
+    ontology.persistent_save_ontology()
+
+    return new_skill  # Se ha especificado en el YAML que devuelve el JSON del objeto Skill
 
 
 def post_skill_parameter_by_skill_id(body, skill_identifier):  # noqa: E501
