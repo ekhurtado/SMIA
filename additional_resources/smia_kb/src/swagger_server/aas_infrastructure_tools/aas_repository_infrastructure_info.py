@@ -7,6 +7,7 @@ class AASRepositoryInfrastructureInfo:
     # Default values
     _AAS_HOST_IP_ADDRESS = 'http://192.168.186.129'  # TODO DE MOMENTO ESTA LA IP DE LA MAQUINA VIRTUAL. PENSARLO SI AÑADIRLO DE FORMA QUE SEA PARAMETRIZABLE (p.e. con variable de entorno para Docker)
     _AAS_REPOSITORY_PORT = 8081
+    _SELF_EXTRACT_CSS_FROM_AAS = False
 
     @classmethod
     def get_ip_address(cls):
@@ -43,6 +44,20 @@ class AASRepositoryInfrastructureInfo:
                 raise ValueError(f"ERROR: Port must be between 1-65535, got {port}")
         except (ValueError, TypeError):
             raise ValueError(f"ERROR: Port must be a valid integer, got {port}")
+
+    @classmethod
+    def get_self_extract_css(cls):
+        return cls._SELF_EXTRACT_CSS_FROM_AAS
+
+    @classmethod
+    def set_self_extract_css(cls, value):
+        # Validate port is a number and in valid range
+        try:
+            value_bool = bool(value)
+            cls._SELF_EXTRACT_CSS_FROM_AAS = value_bool
+
+        except (ValueError, TypeError):
+            raise ValueError(f"ERROR: Port must be a valid boolean, got {value}")
 
     # ---------------------------------------------
     # Methods to create URLs for the AAS Repository

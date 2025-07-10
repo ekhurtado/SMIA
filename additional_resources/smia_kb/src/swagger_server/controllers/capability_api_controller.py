@@ -241,71 +241,47 @@ def post_capability(body):  # noqa: E501
     # Ahora se va a crear una nueva instancia ontológica si esta no existe.
     ontology = CapabilitySkillOntology.get_instance()
 
-    # Se crea la instancia ontologica con los datos añadidos
-    capability_ontology_class = ontology.get_ontology_class_by_iri(CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI)
-    new_capability_instance = ontology.create_ontology_object_instance(capability_ontology_class, new_capability.name)
-    new_capability_instance.iri = new_capability.iri
-    new_capability_instance.set_category(new_capability.category)
+    cap_ontology_instance = ontology.get_ontology_instance_by_iri(new_capability.iri)
+    if cap_ontology_instance is not None:
+        # In this case the capability exists, so it only need to update some data
+        # TODO FALTA HACERLO: actualizar atributos generales, y añadir nuevos skills y constraints (si no existen)
+        print("YA EXISTE LA CAPACIDAD !!!!!!!!!!!!!!!!!!!!!!!!")  # TODO BORRAR
+        print(new_capability)
 
-    # Se añaden los datos opcionales
-    if new_capability.is_realized_by is not None:
-        for skill_iri in new_capability.is_realized_by:
-        # if len(new_capability.is_realized_by) > 0:
-            # Hay que asociarle skills a la capacidad
-            skill_instance = ontology.get_ontology_instance_by_iri(skill_iri)
-            if skill_instance is None:
-                print("The associated Skill with IRI [{}] does not exist. Please, register first and then "
-                      "link to the Capability.".format(skill_iri))
-            new_capability_instance.isRealizedBy.append(skill_instance)
-    if new_capability.is_restricted_by is not None:
-        for new_cap_constraint in new_capability.is_restricted_by:
-            cap_constraint_ontology_class = ontology.get_ontology_class_by_iri(
-                CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_CONSTRAINT_IRI)
-            new_cap_constraint_instance = ontology.create_ontology_object_instance(cap_constraint_ontology_class,
-                                                                                   new_cap_constraint.name)
-            new_cap_constraint_instance.iri = new_cap_constraint.iri
-            new_cap_constraint_instance.set_condition(new_cap_constraint.has_condition)
 
-            # La nueva CapabilityConstraint se asocia al Capability
-            new_capability_instance.isRestrictedBy.append(new_cap_constraint_instance)
+    else:
+
+        # Se crea la instancia ontologica con los datos añadidos
+        capability_ontology_class = ontology.get_ontology_class_by_iri(CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI)
+        new_capability_instance = ontology.create_ontology_object_instance(capability_ontology_class, new_capability.name)
+        new_capability_instance.iri = new_capability.iri
+        new_capability_instance.set_category(new_capability.category)
+
+        # Se añaden los datos opcionales
+        if new_capability.is_realized_by is not None:
+            for skill_iri in new_capability.is_realized_by:
+            # if len(new_capability.is_realized_by) > 0:
+                # Hay que asociarle skills a la capacidad
+                skill_instance = ontology.get_ontology_instance_by_iri(skill_iri)
+                if skill_instance is None:
+                    print("The associated Skill with IRI [{}] does not exist. Please, register first and then "
+                          "link to the Capability.".format(skill_iri))
+                new_capability_instance.isRealizedBy.append(skill_instance)
+        if new_capability.is_restricted_by is not None:
+            for new_cap_constraint in new_capability.is_restricted_by:
+                cap_constraint_ontology_class = ontology.get_ontology_class_by_iri(
+                    CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_CONSTRAINT_IRI)
+                new_cap_constraint_instance = ontology.create_ontology_object_instance(cap_constraint_ontology_class,
+                                                                                       new_cap_constraint.name)
+                new_cap_constraint_instance.iri = new_cap_constraint.iri
+                new_cap_constraint_instance.set_condition(new_cap_constraint.has_condition)
+
+                # La nueva CapabilityConstraint se asocia al Capability
+                new_capability_instance.isRestrictedBy.append(new_cap_constraint_instance)
 
     ontology.persistent_save_ontology()
 
     return new_capability   # Se ha especificado en el YAML que devuelve el JSON del objeto Capability
-    # return 'do some magic! The capability to register has the following information: {}'.format(body)
-
-# TODO CUIDADO! Estos metodos fallan, ya que no es capaz de obtener directamente todos los datos individualmente. Hay que desarrollar el codigo en el metodo anterior, ya que recoge todo el body. A partir de ahi, hay que obtener manualmente los datos.
-# def post_capability(id, name, category, skills, constraints, tags, status):  # noqa: E501
-#     """Add a new Capability to the SMIA KB.
-#
-#     Add a new Capability to the SMIA KB. # noqa: E501
-#
-#     :param id:
-#     :type id: int
-#     :param name:
-#     :type name: str
-#     :param category:
-#     :type category: dict | bytes
-#     :param skills:
-#     :type skills: list | bytes
-#     :param constraints:
-#     :type constraints: list | bytes
-#     :param tags:
-#     :type tags: list | bytes
-#     :param status:
-#     :type status: str
-#
-#     :rtype: Capability
-#     """
-#     if connexion.request.is_json:
-#         category = Category.from_dict(connexion.request.get_json())  # noqa: E501
-#     if connexion.request.is_json:
-#         skills = [Skill.from_dict(d) for d in connexion.request.get_json()]  # noqa: E501
-#     if connexion.request.is_json:
-#         constraints = [CapabilityConstraint.from_dict(d) for d in connexion.request.get_json()]  # noqa: E501
-#     if connexion.request.is_json:
-#         tags = [Tag.from_dict(d) for d in connexion.request.get_json()]  # noqa: E501
-#     return 'do some magic!'
 
 
 def post_capability_constraint(body, capability_identifier):  # noqa: E501

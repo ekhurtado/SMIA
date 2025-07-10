@@ -210,8 +210,10 @@ def get_information_from_cli(cli_args):
     parser.add_argument("-aas-ip", "--aas-env-ip")
     parser.add_argument("-aas-host", "--aas-env-host")
     parser.add_argument("-aas-port", "--aas-env-port")
+    parser.add_argument("-css", "--self-extract-css")
     args = parser.parse_args(cli_args)
-    return args.ontology, args.ontology_persistence, args.aas_env_ip, args.aas_env_host, args.aas_env_port
+    return (args.ontology, args.ontology_persistence, args.aas_env_ip, args.aas_env_host, args.aas_env_port,
+            args.self_extract_css)
 
 def configure_smia_kb(cli_args):
     """
@@ -224,7 +226,8 @@ def configure_smia_kb(cli_args):
     try:
         # First, let's check if CLI attributes has been set
         if len(cli_args) > 0:
-            ontology_path, ontology_persistence_path, aas_env_ip, aas_env_host, aas_env_port = get_information_from_cli(cli_args)
+            ontology_path, ontology_persistence_path, aas_env_ip, aas_env_host, aas_env_port, self_extract_css = (
+                get_information_from_cli(cli_args))
             if ontology_path is not None:
                 CapabilitySkillOntologyUtils.set_ontology_file_path(ontology_path)
             if ontology_persistence_path is not None:
@@ -235,6 +238,10 @@ def configure_smia_kb(cli_args):
                 AASRepositoryInfrastructureInfo.set_ip_address_host(aas_env_ip)
             if aas_env_port is not None:
                 AASRepositoryInfrastructureInfo.set_port(int(aas_env_port))
+            if self_extract_css is not None:
+                if self_extract_css.lower() in ('yes', 'true', 't', '1'):
+                    AASRepositoryInfrastructureInfo.set_self_extract_css(True)
+
         # Then, let's check also the environmental variables
         if os.environ.get('ONTOLOGY_FILE') is not None:
             CapabilitySkillOntologyUtils.set_ontology_file_path(os.environ.get('ONTOLOGY_FILE'))
@@ -246,6 +253,9 @@ def configure_smia_kb(cli_args):
             AASRepositoryInfrastructureInfo.set_ip_address_host(os.environ.get('AAS_ENV_HOST'))
         if os.environ.get('AAS_ENV_PORT') is not None:
             AASRepositoryInfrastructureInfo.set_port(int(os.environ.get('AAS_ENV_PORT')))
+        if os.environ.get('SELF_EXTRACT_CSS') is not None:
+            if os.environ.get('SELF_EXTRACT_CSS').lower() in ('yes', 'true', 't', '1'):
+                AASRepositoryInfrastructureInfo.set_self_extract_css(True)
     except ValueError as e:
         print("The SMIA KB cannot be configured due to an invalid data. Reason: {}".format(e), file=sys.stderr)
 
