@@ -91,7 +91,10 @@ class Skill(Model):
                     ontology_value = getattr(ontology_instance, attrib)
                     if isinstance(ontology_value, list):
                         # Si se ha definido un DataProperty puede que venga en tipo lista, hay que pasarlo a string
-                        ontology_value = ontology_value[0]
+                        if len(ontology_value) > 0:
+                            ontology_value = ontology_value[0]
+                        else:
+                            ontology_value = []
                 skill_json[attrib] = ontology_value
             except AttributeError:
                 print("ERROR: The attribute {} does not exist in the ontology instance {}.".format(attrib,
