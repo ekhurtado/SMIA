@@ -3,6 +3,7 @@ This class contains methods related to service management. It contains all type 
 Functional View of RAMI 4.0.
 """
 import inspect
+import json
 import logging
 import types
 
@@ -72,6 +73,9 @@ class AgentServiceUtils:
                 try:
                     if tipo == bool:  # bool(value) is true as long as the string is not empty, son it cannot be used.
                         adapted_params[param_name] = value.lower() in ('yes', 'true', 't', '1')
+                    elif tipo == list[dict]:
+                        # In this case it is a complex type, so it will use json library
+                        adapted_params[param_name] = json.loads(value)
                     else:
                         adapted_params[param_name] = tipo(value)
                 except ValueError as e:

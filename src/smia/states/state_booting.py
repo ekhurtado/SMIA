@@ -109,7 +109,7 @@ class StateBooting(State):
             protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL, msg_body=await acl_smia_messages_utils.
             generate_json_from_schema(ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE, serviceID=
             AASRelatedServicesInfo.AAS_INFRASTRUCTURE_REGISTRY_CSS_ELEMENTS, serviceType=
-            AASRelatedServicesInfo.AAS_INFRASTRUCTURE_SERVICE_TYPE_REGISTRY, serviceParams= css_elements_json))
+            AASRelatedServicesInfo.AAS_INFRASTRUCTURE_SERVICE_TYPE_REGISTRY, serviceParams=css_elements_json))
         _logger.info("Sending the infrastructure service request to {} to register all the CSS elements of the SMIA "
                      "instance in the SMIA KB.".format(smia_ism_jid))
         await self.send(register_acl_msg)
@@ -150,7 +150,7 @@ class StateBooting(State):
             protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL, msg_body=await acl_smia_messages_utils.
             generate_json_from_schema(ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE, serviceID=
             AASRelatedServicesInfo.AAS_INFRASTRUCTURE_REGISTRY_SERVICE_REGISTER_SMIA, serviceType=
-            AASRelatedServicesInfo.AAS_INFRASTRUCTURE_SERVICE_TYPE_REGISTRY, serviceParams= smia_instance_json))
+            AASRelatedServicesInfo.AAS_INFRASTRUCTURE_SERVICE_TYPE_REGISTRY, serviceParams=smia_instance_json))
         _logger.info("Sending the infrastructure service request to {} to register the SMIA instance in the SMIA "
                      "KB.".format(smia_ism_jid))
         await self.send(register_acl_msg)
