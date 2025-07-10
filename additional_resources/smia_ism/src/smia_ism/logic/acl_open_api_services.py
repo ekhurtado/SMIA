@@ -32,6 +32,31 @@ class ACLOpenAPIServices:
             return 'Cannot register SMIA instance. {}'.format(check_and_get_response_error(smia_instances_json))
         return {'status': 'success'}
 
+    @staticmethod
+    def register_css_elements(capabilities, skills):
+        """
+        This method registers CSS elements (capabilities and skills) in the SMIA KB.
+        """
+        # First, the skills need to be registered
+        if capabilities is None and skills is None:
+            return "ERROR: Both the capabilities and skills cannot be null."
+        if skills is not None and len(skills) > 0:
+            smia_kb_skills_url = SMIAKBInfrastructure.get_skills_url()
+            for skill_json in skills:
+                skill_instance_json = send_openapi_http_post_request(smia_kb_skills_url, body=skill_json)
+                if 'ERROR' in check_and_get_response_error(skill_instance_json):
+                    return 'Cannot register skill. {}'.format(check_and_get_response_error(skill_instance_json))
+
+        # Then, the capabilities can be registered
+        if capabilities is not None and len(capabilities) > 0:
+            smia_kb_capabilities_url = SMIAKBInfrastructure.get_capabilities_url()
+            for capability_json in capabilities:
+                cap_instance_json = send_openapi_http_post_request(smia_kb_capabilities_url, body=capability_json)
+                if 'ERROR' in check_and_get_response_error(cap_instance_json):
+                    return 'Cannot register capability. {}'.format(check_and_get_response_error(cap_instance_json))
+
+        return {'status': 'success'}
+
     # ---------------------------------
     # Infrastructure discovery services
     # ---------------------------------
@@ -108,6 +133,7 @@ class ACLOpenAPIServices:
     ACLOpenAPIServicesMap = {
         # Registry Services
         AASRelatedServicesInfo.AAS_INFRASTRUCTURE_REGISTRY_SERVICE_REGISTER_SMIA: register_smia_instance,
+        AASRelatedServicesInfo.AAS_INFRASTRUCTURE_REGISTRY_CSS_ELEMENTS: register_css_elements,
         # Discovery Services
         AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_SMIA_BY_ASSET: get_smia_instance_by_asset_id,
         AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_ASSET_BY_SMIA: get_asset_id_by_smia_instance,

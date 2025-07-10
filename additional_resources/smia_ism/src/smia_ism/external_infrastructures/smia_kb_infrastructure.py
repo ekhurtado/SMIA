@@ -64,12 +64,29 @@ class SMIAKBInfrastructure:
                 f"/capabilities/{capability_iri_encoded}")
 
     @classmethod
+    def get_capabilities_url(cls):
+        """
+        This method returns the URL to obtain the information of all Capabilities within SMIA KB in JSON format.
+        """
+        return f"{cls._SMIA_KB_HOST_IP_ADDRESS}:{cls._SMIA_KB_HOST_PORT}{cls.SMIA_KB_OPEN_API_VERSION}/capabilities"
+
+    @classmethod
     def get_assets_of_capability_url(cls, capability_iri):
         """
         This method returns the URL to obtain the information of a specific Capability within SMIA KB in JSON format.
         The Capability identifier must be added Base64-URL-encoded.
         """
         return f"{cls.get_capability_url(capability_iri)}/assets"
+
+    # -------------------------------------------------------
+    # Methods to create URLs for the Skill API of the SMIA KB
+    # -------------------------------------------------------
+    @classmethod
+    def get_skills_url(cls):
+        """
+        This method returns the URL to obtain the information of all Skills within SMIA KB in JSON format.
+        """
+        return f"{cls._SMIA_KB_HOST_IP_ADDRESS}:{cls._SMIA_KB_HOST_PORT}{cls.SMIA_KB_OPEN_API_VERSION}/skills"
 
     # ------------------------------------------------------
     # Methods to create URLs for the SMIA API of the SMIA KB
