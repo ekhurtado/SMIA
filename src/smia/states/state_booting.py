@@ -74,7 +74,7 @@ class StateBooting(State):
         registration confirmation. If it does not receive any message, it will just show a warning message and continue
         its execution.
         """
-        css_elements_json = {'Capabilities': [], 'Skills': []}
+        css_elements_json = {'capabilities': [], 'skills': []}
         # First, the JSON of each capability will be obtained
         for capability in (filter(None,
                 (await self.agent.css_ontology.get_ontology_instances_by_class_iri(
