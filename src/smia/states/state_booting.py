@@ -89,13 +89,13 @@ class StateBooting(State):
                 'id': await self.agent.aas_model.get_asset_information_attribute_value('asset_id'),
                 'kind': await self.agent.aas_model.get_asset_information_attribute_value('asset_kind'),
                 'type': await self.agent.aas_model.get_asset_information_attribute_value('asset_type')}
-            css_elements_json['Capabilities'].append(capability_json)
+            css_elements_json['capabilities'].append(capability_json)
 
         # Then, the JSON of each skill will be obtained
         for skill in await self.agent.css_ontology.get_ontology_instances_by_class_iri(
                 CapabilitySkillOntologyInfo.CSS_ONTOLOGY_SKILL_IRI):
             # The JSON is created from OWL instance
-            css_elements_json['Skills'].append(skill.from_ontology_instance_to_json())
+            css_elements_json['skills'].append(skill.from_ontology_instance_to_json())
 
 
         smia_ism_jid = (f"{AASRelatedServicesInfo.SMIA_ISM_ID}@"
