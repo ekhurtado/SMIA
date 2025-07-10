@@ -42,13 +42,10 @@ class ACLOpenAPIServices:
         if capabilities is None and skills is None:
             return "ERROR: Both the capabilities and skills cannot be null."
 
-        _logger.warning("SKILLS: {}".format(skills))
-        _logger.warning("CAPS: {}".format(capabilities))
         if skills is not None and len(skills) > 0:
 
             smia_kb_skills_url = SMIAKBInfrastructure.get_skills_url()
             for skill_json in skills:
-                _logger.warning("SKILL JSON: {}".format(skill_json))
                 skill_instance_json = send_openapi_http_post_request(smia_kb_skills_url, body=skill_json)
                 if 'ERROR' in check_and_get_response_error(skill_instance_json):
                     return 'Cannot register skill. {}'.format(check_and_get_response_error(skill_instance_json))
