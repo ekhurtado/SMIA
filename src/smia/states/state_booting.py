@@ -58,8 +58,10 @@ class StateBooting(State):
         # When all initialization tasks have been completed, the SMIA will try to register in the SMIA KB through an
         # infrastructure service provided by the SMIA ISM
         if await acl_smia_messages_utils.get_agent_id_from_jid(self.agent.jid) != AASRelatedServicesInfo.SMIA_ISM_ID:
+            # The extracted CSS elements in the self-configuration process will be registered in the SMIA KB
             await self.send_register_css_elements_acl_msg()
 
+            # The SMIA instance itself will be also registered in the SMIA KB
             await self.send_register_instance_acl_msg()
 
         # Finished the Boot State the agent can move to the next state
@@ -106,7 +108,7 @@ class StateBooting(State):
             FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST, ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE,
             protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL, msg_body=await acl_smia_messages_utils.
             generate_json_from_schema(ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE, serviceID=
-            AASRelatedServicesInfo.AAS_INFRASTRUCTURE_REGISTRY_SERVICE_REGISTER_SMIA, serviceType=
+            AASRelatedServicesInfo.AAS_INFRASTRUCTURE_REGISTRY_CSS_ELEMENTS, serviceType=
             AASRelatedServicesInfo.AAS_INFRASTRUCTURE_SERVICE_TYPE_REGISTRY, serviceParams= css_elements_json))
         _logger.info("Sending the infrastructure service request to {} to register all the CSS elements of the SMIA "
                      "instance in the SMIA KB.".format(smia_ism_jid))
