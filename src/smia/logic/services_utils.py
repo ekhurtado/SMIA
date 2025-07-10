@@ -75,7 +75,8 @@ class AgentServiceUtils:
                         adapted_params[param_name] = value.lower() in ('yes', 'true', 't', '1')
                     elif tipo == list[dict]:
                         # In this case it is a complex type, so it will use json library
-                        adapted_params[param_name] = json.loads(value)
+                        if not isinstance(value, list):
+                            adapted_params[param_name] = json.loads(value)
                     else:
                         adapted_params[param_name] = tipo(value)
                 except ValueError as e:
