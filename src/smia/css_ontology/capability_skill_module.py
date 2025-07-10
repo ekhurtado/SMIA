@@ -219,6 +219,15 @@ class ExtendedThing(Thing):
                     return True, related_instance
         return False, None
 
+    def from_ontology_instance_to_json(self):
+        """
+        This method converts an ontology instance into a JSON object.
+
+        Returns:
+            dict: JSON object with all the information of the ontology instance.
+        """
+        pass
+
 
 class Capability(ExtendedThing):
     """
@@ -276,6 +285,26 @@ class Capability(ExtendedThing):
         else:
             return self.isRestrictedBy
 
+    def from_ontology_instance_to_json(self):
+        """
+        This method converts an ontology instance into a JSON object.
+
+        Returns:
+            dict: JSON object with all the information of the ontology instance.
+        """
+        capability_json = {'iri': self.iri, 'name': self.name, 'category': self.is_a[0].name, 'isRealizedBy': [],
+                           'isRestrictedBy': []}
+        if len(self.data_properties_values_dict) > 0:
+            for prop, value in self.data_properties_values_dict.items():
+                capability_json[prop] = value
+        for skill in self.isRealizedBy:
+            capability_json['isRealizedBy'].append(skill.iri)
+        for constraint in self.isRestrictedBy:
+            capability_json['isRestrictedBy'].append(constraint.from_ontology_instance_to_json())
+
+        return capability_json
+
+
 class CapabilityConstraint(ExtendedThing):
 
     # The associated SubmodelElement class of the AAS is also defined
@@ -283,8 +312,19 @@ class CapabilityConstraint(ExtendedThing):
     # aas_sme_class = basyx.aas.model.SubmodelElement
     # aas_sme_class = extended_submodel.ExtendedCapabilityConstraint
 
-    # TODO PENSAR METODOS PARA CONSTRAINTS
-    pass
+    def from_ontology_instance_to_json(self):
+        """
+        This method converts an ontology instance into a JSON object.
+
+        Returns:
+            dict: JSON object with all the information of the ontology instance.
+        """
+        cap_constraint_json = {'iri': self.iri, 'name': self.name}
+        if len(self.data_properties_values_dict) > 0:
+            for prop, value in self.data_properties_values_dict.items():
+                cap_constraint_json[prop] = value
+
+        return cap_constraint_json
 
 
 class Skill(ExtendedThing):
@@ -327,6 +367,25 @@ class Skill(ExtendedThing):
         else:
             return self.hasParameter
 
+    def from_ontology_instance_to_json(self):
+        """
+        This method converts an ontology instance into a JSON object.
+
+        Returns:
+            dict: JSON object with all the information of the ontology instance.
+        """
+        skill_json = {'iri': self.iri, 'name': self.name, 'accessibleThrough': [], 'hasParameter': []}
+        if len(self.data_properties_values_dict) > 0:
+            for prop, value in self.data_properties_values_dict.items():
+                skill_json[prop] = value
+        for skill_interface in (self.accessibleThrough + self.accessibleThroughAgentService +
+                                self.accessibleThroughAssetService):
+            skill_json['accessibleThrough'].append(skill_interface.iri)
+        for skill_param in self.hasParameter:
+            skill_json['hasParameter'].append(skill_param.from_ontology_instance_to_json())
+
+        return skill_json
+
 
 class SkillInterface(ExtendedThing):
 
@@ -365,6 +424,19 @@ class SkillParameter(ExtendedThing):
                     return True
         return False
 
+    def from_ontology_instance_to_json(self):
+        """
+        This method converts an ontology instance into a JSON object.
+
+        Returns:
+            dict: JSON object with all the information of the ontology instance.
+        """
+        skill_param_json = {'iri': self.iri, 'name': self.name}
+        if len(self.data_properties_values_dict) > 0:
+            for prop, value in self.data_properties_values_dict.items():
+                skill_param_json[prop] = value
+
+        return skill_param_json
 
 
 class StateMachine(ExtendedThing):

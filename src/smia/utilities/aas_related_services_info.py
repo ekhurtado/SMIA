@@ -25,6 +25,7 @@ class AASRelatedServicesInfo:
 
     # AAS Infrastructure Registry Services identifiers
     AAS_INFRASTRUCTURE_REGISTRY_SERVICE_REGISTER_SMIA = 'RegisterSMIAInstance'
+    AAS_INFRASTRUCTURE_REGISTRY_CSS_ELEMENTS= 'RegisterCSSElements'
 
     # AAS Infrastructure Discovery Services identifiers
     AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_SMIA_BY_ASSET = 'GetSMIAInstanceIDByAssetID'

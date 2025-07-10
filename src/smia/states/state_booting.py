@@ -1,5 +1,7 @@
 import logging
 
+from smia.css_ontology.css_ontology_utils import CapabilitySkillOntologyInfo
+
 import smia
 
 from smia import GeneralUtils
@@ -56,13 +58,75 @@ class StateBooting(State):
         # When all initialization tasks have been completed, the SMIA will try to register in the SMIA KB through an
         # infrastructure service provided by the SMIA ISM
         if await acl_smia_messages_utils.get_agent_id_from_jid(self.agent.jid) != AASRelatedServicesInfo.SMIA_ISM_ID:
-            await self.send_register_acl_message()
+            await self.send_register_css_elements_acl_msg()
+
+            await self.send_register_instance_acl_msg()
 
         # Finished the Boot State the agent can move to the next state
         _logger.info(f"{self.agent.jid} agent has finished it Boot state.")
 
 
-    async def send_register_acl_message(self):
+    async def send_register_css_elements_acl_msg(self):
+        """
+        This method sends the ACL message to register all the CSS elements of the instance, extracted from the
+        self-configuration process. All the CSS elements will be registered in the SMIA KB  through an infrastructure
+        service provided by the SMIA ISM. It will wait 5 seconds for the 'inform' performative message with the
+        registration confirmation. If it does not receive any message, it will just show a warning message and continue
+        its execution.
+        """
+        css_elements_json = {'Capabilities': [], 'Skills': []}
+        # First, the JSON of each capability will be obtained
+        for capability in (filter(None,
+                (await self.agent.css_ontology.get_ontology_instances_by_class_iri(
+                    CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI) or []) +
+                (await self.agent.css_ontology.get_ontology_instances_by_class_iri(
+                    CapabilitySkillOntologyInfo.CSS_ONTOLOGY_AGENT_CAPABILITY_IRI) or []) +
+                (await self.agent.css_ontology.get_ontology_instances_by_class_iri(
+                    CapabilitySkillOntologyInfo.CSS_ONTOLOGY_ASSET_CAPABILITY_IRI) or []))):
+            capability_json = capability.from_ontology_instance_to_json()   # The JSON is created from OWL instance
+            # The asset information is also added
+            capability_json['assets'] = {
+                'id': await self.agent.aas_model.get_asset_information_attribute_value('asset_id'),
+                'kind': await self.agent.aas_model.get_asset_information_attribute_value('asset_kind'),
+                'type': await self.agent.aas_model.get_asset_information_attribute_value('asset_type')}
+            css_elements_json['Capabilities'].append(capability_json)
+
+        # Then, the JSON of each skill will be obtained
+        for skill in await self.agent.css_ontology.get_ontology_instances_by_class_iri(
+                CapabilitySkillOntologyInfo.CSS_ONTOLOGY_SKILL_IRI):
+            # The JSON is created from OWL instance
+            css_elements_json['Skills'].append(skill.from_ontology_instance_to_json())
+
+
+        smia_ism_jid = (f"{AASRelatedServicesInfo.SMIA_ISM_ID}@"
+                        f"{await acl_smia_messages_utils.get_xmpp_server_from_jid(self.agent.jid)}")
+        register_acl_msg = await inter_smia_interactions_utils.create_acl_smia_message(
+            # 'gcis1@xmpp.jp', await acl_smia_messages_utils.create_random_thread(self.agent),
+            smia_ism_jid, await acl_smia_messages_utils.create_random_thread(self.agent),
+            FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST, ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE,
+            protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL, msg_body=await acl_smia_messages_utils.
+            generate_json_from_schema(ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE, serviceID=
+            AASRelatedServicesInfo.AAS_INFRASTRUCTURE_REGISTRY_SERVICE_REGISTER_SMIA, serviceType=
+            AASRelatedServicesInfo.AAS_INFRASTRUCTURE_SERVICE_TYPE_REGISTRY, serviceParams= css_elements_json))
+        _logger.info("Sending the infrastructure service request to {} to register all the CSS elements of the SMIA "
+                     "instance in the SMIA KB.".format(smia_ism_jid))
+        await self.send(register_acl_msg)
+        _logger.info("Waiting for the confirmation of the registry in the SMIA KB...")
+        msg = await self.receive(timeout=5)  # Timeout set to 5 seconds
+        if msg:
+            valid_msg_template = GeneralUtils.create_acl_template(
+                FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM, ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE)
+            if valid_msg_template.match(msg) and msg.thread == register_acl_msg.thread:
+                _logger.aclinfo("CSS elements successfully registered in the SMIA KB")
+            else:
+                ("A message arrived but it is not about the CSS elements. Sender [{}], Performative [{}], "
+                 "Ontology [{}]".format(acl_smia_messages_utils.get_sender_from_acl_msg(msg),
+                                        msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB),
+                                        msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB)))
+        else:
+            _logger.warning("The registry of CSS elements has not been completed. Check the SMIA ISM or the SMIA KB.")
+
+    async def send_register_instance_acl_msg(self):
         """
         This method sends the ACL message to register its instance in the SMIA KB  through an infrastructure service
         provided by the SMIA ISM. It will wait 5 seconds for the 'inform' performative message with the registration
