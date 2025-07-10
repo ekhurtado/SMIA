@@ -77,6 +77,8 @@ class AgentServiceUtils:
                         # In this case it is a complex type, so it will use json library
                         if not isinstance(value, list):
                             adapted_params[param_name] = json.loads(value)
+                        else:
+                            adapted_params[param_name] = value
                     else:
                         adapted_params[param_name] = tipo(value)
                 except ValueError as e:
