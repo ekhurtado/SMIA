@@ -5239,3 +5239,368 @@ OpenSSL.SSL.SysCallError: (-1, 'Unexpected EOF')
 2025-07-07 12:01:08,656 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
 2025-07-07 12:01:08,657 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleAASRelatedSvcBehaviour with exit code: None line:154
 2025-07-07 12:01:08,661 [smia.behaviours.negotiating_behaviour] [INFO]          - No message received within 10 seconds on SMIA (NegotiatingBehaviour) line:206
+2025-07-10 16:50:25,832 [__main__] [INFO] Initializing SMIA ISM (Infrastructure Services Manager)... line:18
+2025-07-10 16:50:25,832 [smia.utilities.general_utils] [WARNING] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so check that it is not necessary. Please add the information (or the AAS id) and restart the container. line:311
+2025-07-10 16:50:25,838 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-07-10 16:50:25,839 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-07-10 16:50:25,844 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-07-10 16:50:25,845 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/SMIA_InfrastructureServicesManager.aasx file is already in SMIA archive. line:180
+2025-07-10 16:50:25,845 [smia] [INFO] AAS model SMIA_InfrastructureServicesManager.aasx copied to the SMIA Archive. line:91
+2025-07-10 16:50:25,855 [smia] [WARNING] The AAS model does not contain the initialization configuration file. Make sure that it is not necessary. line:103
+2025-07-10 16:50:25,886 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ACLOpenAPIHandlingBehaviour line:43
+2025-07-10 16:50:28,284 [slixmpp.features.feature_mechanisms.mechanisms] [INFO] Authentication failed: not-authorized line:260
+2025-07-10 16:50:29,477 [slixmpp.features.feature_bind.bind] [INFO] JID set to: gcis1@xmpp.jp/13382263160734807378502471750 line:60
+2025-07-10 16:50:29,478 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:194
+2025-07-10 16:50:29,479 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:96
+2025-07-10 16:50:29,481 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:121
+2025-07-10 16:50:29,481 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-07-10 16:50:29,482 [spade.behaviour] [INFO] FSM running state BOOTING line:571
+2025-07-10 16:50:29,482 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:40
+2025-07-10 16:50:29,507 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-07-10 16:50:29,516 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:79
+2025-07-10 16:50:29,516 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [smia-ism] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:91
+2025-07-10 16:50:29,517 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:400
+2025-07-10 16:50:29,530 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:77
+2025-07-10 16:50:30,451 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:81
+2025-07-10 16:50:30,661 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:85
+2025-07-10 16:50:30,662 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:345
+2025-07-10 16:50:31,668 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['ACLOpenAPIHandlingCapability']
+	- Analyzed capability constraints: []
+	- Analyzed skills: ['ACLOpenAPIHandlingBehaviour']
+	- Analyzed skill interfaces: []
+	- Analyzed skill parameters: []
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:373
+2025-07-10 16:50:31,668 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:101
+2025-07-10 16:50:31,668 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-07-10 16:50:31,742 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register all the CSS elements of the SMIA instance in the SMIA KB. line:113
+2025-07-10 16:50:31,742 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:116
+2025-07-10 16:50:31,750 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register the SMIA instance in the SMIA KB. line:154
+2025-07-10 16:50:31,750 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:157
+2025-07-10 16:50:32,040 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:68
+2025-07-10 16:50:32,040 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:594
+2025-07-10 16:50:32,040 [spade.behaviour] [INFO] FSM running state RUNNING line:571
+2025-07-10 16:50:32,040 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-07-10 16:50:32,041 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:81
+2025-07-10 16:50:32,042 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:40
+2025-07-10 16:50:32,042 [smia.behaviours.negotiating_behaviour] [INFO] NegotiationBehaviour starting... line:43
+2025-07-10 16:50:32,042 [behaviours.acl_openapi_handling_behaviour] [INFO] ACLOpenAPIHandlingBehaviour starting... line:47
+2025-07-10 16:50:32,043 [behaviours.acl_openapi_handling_behaviour] [INFO] Successfully loaded all Infrastructure Services with their associated execution methods. line:52
+2025-07-10 16:50:32,044 [smia.behaviours.acl_handling_behaviour] [ACLINFO]          + Message received on SMIA (ACLHandlingBehaviour) from smia-ism@xmpp.jp line:52
+2025-07-10 16:50:32,044 [smia.behaviours.acl_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"serviceID": "RegisterSMIAInstance", "serviceType": "RegistryService", "serviceParams": {"id": "gcis1@xmpp.jp", "asset": {"id": "smia-ism", "kind": "INSTANCE", "type": null}, "aasID": "urn:ehu:gcis:smia:ism:1:1", "status": "Running", "startedTimeStamp": 1752162631, "smiaVersion": "0.2.4"}} line:53
+2025-07-10 16:50:32,055 [smia.behaviours.acl_handling_behaviour] [INFO] Specific behaviour added to the agent to handle the message with thread [gcis1-baza8]. line:94
+2025-07-10 16:50:32,055 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]          + Message received on SMIA ISM (ACLOpenAPIHandlingBehaviour) from smia-ism@xmpp.jp line:92
+2025-07-10 16:50:32,055 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"serviceID": "RegisterSMIAInstance", "serviceType": "RegistryService", "serviceParams": {"id": "gcis1@xmpp.jp", "asset": {"id": "smia-ism", "kind": "INSTANCE", "type": null}, "aasID": "urn:ehu:gcis:smia:ism:1:1", "status": "Running", "startedTimeStamp": 1752162631, "smiaVersion": "0.2.4"}} line:93
+2025-07-10 16:50:32,062 [behaviours.acl_openapi_handling_behaviour] [ACLINFO] The SMIA sender [smia-ism@xmpp.jp], within thread [gcis1-baza8], needs a service related to OpenAPI infrastructures to be performed. A specific behavior will be triggered to handle this request.. line:116
+2025-07-10 16:50:32,063 [smia.behaviours.specific_handle_behaviours.handle_aas_related_svc_behaviour] [INFO] HandleAASRelatedSvcBehaviour starting to handle the service related to the message with thread [gcis1-baza8]... line:58
+2025-07-10 16:50:32,063 [smia.behaviours.specific_handle_behaviours.handle_aas_related_svc_behaviour] [INFO] Management of the AAS-related service with thread gcis1-baza8 finished. line:75
+2025-07-10 16:50:32,063 [behaviours.handle_acl_openapi_behaviour] [INFO] HandleCapabilityBehaviour starting... line:41
+2025-07-10 16:50:32,063 [behaviours.handle_acl_openapi_behaviour] [INFO] The AAS Infrastructure Service RegisterSMIAInstance has been requested. line:72
+2025-07-10 16:50:34,123 [utilities.acl_open_api_utils] [ERROR] ERROR: Connection error with http://192.168.186.129:8090/api/v3/smiaInstances line:88
+2025-07-10 16:50:34,123 [smia.logic.exceptions] [ERROR] Failure during the execution of the Infrastructure Service. Reason: Cannot register SMIA instance. ERROR: The response is Null line:103
+2025-07-10 16:50:34,123 [smia.logic.exceptions] [INFO] Due to an incorrect execution of the service related to the thread [gcis1-baza8], the requester shall be informed with a Failure message. line:105
+2025-07-10 16:50:34,125 [smia.logic.exceptions] [INFO] Failure message sent to the requester related to the thread [gcis1-baza8]. line:119
+2025-07-10 16:50:34,127 [smia.utilities.smia_archive_utils] [INFO] Saved new completed service information in the log. line:333
+2025-07-10 16:50:34,127 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleACLOpenAPIBehaviour with exit code: 10 line:154
+2025-07-10 16:50:34,127 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleAASRelatedSvcBehaviour with exit code: None line:154
+2025-07-10 16:50:34,128 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleACLOpenAPIBehaviour with exit code: None line:154
+2025-07-10 16:50:34,423 [smia.behaviours.acl_handling_behaviour] [ACLINFO]          + Message received on SMIA (ACLHandlingBehaviour) from smia-ism@xmpp.jp line:52
+2025-07-10 16:50:34,423 [smia.behaviours.acl_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"reason": "Failure during the execution of the Infrastructure Service. Reason: Cannot register SMIA instance. ERROR: The response is Null", "exceptionType": "ServiceRequestExecutionError", "affectedElement": "RegisterSMIAInstance"} line:53
+2025-07-10 16:50:34,437 [smia.logic.exceptions] [ERROR] The received JSON data within the request message is invalid against the required JSON schema. Invalid part: {'reason': 'Failure during the execution of the Infrastructure Service. Reason: Cannot register SMIA instance. ERROR: The response is Null', 'exceptionType': 'ServiceRequestExecutionError', 'affectedElement': 'RegisterSMIAInstance'}. Reason: 'serviceID' is a required property. line:29
+2025-07-10 16:50:34,437 [smia.logic.exceptions] [ERROR] The received JSON data within the request message is invalid against the required JSON schema. Invalid part: {'reason': 'Failure during the execution of the Infrastructure Service. Reason: Cannot register SMIA instance. ERROR: The response is Null', 'exceptionType': 'ServiceRequestExecutionError', 'affectedElement': 'RegisterSMIAInstance'}. Reason: 'serviceID' is a required property. line:103
+2025-07-10 16:50:34,437 [smia.logic.exceptions] [INFO] Due to an incorrect execution of the service related to the thread [gcis1-baza8], the requester shall be informed with a Failure message. line:105
+2025-07-10 16:50:34,437 [smia.logic.exceptions] [WARNING] A ServiceRequestExecutionError exception has been raised from a HandlingBehaviour that is not valid for this management. Reason: It does not have the 'received_acl_msg' attribute to store the received ACL message. line:123
+2025-07-10 16:50:34,438 [spade.behaviour] [ERROR] Exception running behaviour CyclicBehaviour/ACLHandlingBehaviour: Object of type ACLHandlingBehaviour is not JSON serializable line:291
+2025-07-10 16:50:34,455 [spade.behaviour] [ERROR] Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\smia\logic\inter_smia_interactions_utils.py", line 222, in check_received_request_data_structure
+    jsonschema.validate(instance=received_data, schema=json_schema)
+  File "C:\Python310\lib\site-packages\jsonschema\validators.py", line 1332, in validate
+    raise error
+jsonschema.exceptions.ValidationError: 'serviceID' is a required property
+
+Failed validating 'required' in schema:
+    {'allOf': [{'if': {'properties': {'serviceID': {'const': 'RegistrySMIAInstance'}}},
+                'then': {'properties': {'serviceParams': {'properties': {'aasID': {'type': 'string'},
+                                                                         'asset': {'properties': {'id': {'type': 'string'},
+                                                                                                  'kind': {'type': 'string'},
+                                                                                                  'type': {'type': 'string'}},
+                                                                                   'type': 'object'},
+                                                                         'id': {'type': 'string'},
+                                                                         'smiaVersion': {'type': 'string'},
+                                                                         'startedTimeStamp': {'type': 'integer'},
+                                                                         'status': {'type': 'string'}},
+                                                          'required': ['id',
+                                                                       'asset',
+                                                                       'aasID'],
+                                                          'type': 'object'}}}},
+               {'if': {'properties': {'serviceID': {'enum': ['GetSMIAInstanceIDByAssetID',
+                                                             'GetAssetIDBySMIAInstanceID',
+                                                             'GetAllAssetIDByCapability']}}},
+                'then': {'properties': {'serviceParams': {'type': 'string'}}}}],
+     'properties': {'serviceID': {'type': 'string'},
+                    'serviceParams': {},
+                    'serviceType': {'enum': ['RegistryService',
+                                             'DiscoveryService'],
+                                    'type': 'string'}},
+     'required': ['serviceID', 'serviceType'],
+     'title': 'AASInfrastructureServiceSchema',
+     'type': 'object'}
+
+On instance:
+    {'affectedElement': 'RegisterSMIAInstance',
+     'exceptionType': 'ServiceRequestExecutionError',
+     'reason': 'Failure during the execution of the Infrastructure '
+               'Service. Reason: Cannot register SMIA instance. ERROR: The '
+               'response is Null'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\smia\behaviours\acl_handling_behaviour.py", line 70, in run
+    await inter_smia_interactions_utils.check_received_request_data_structure(
+  File "C:\Python310\lib\site-packages\smia\logic\inter_smia_interactions_utils.py", line 224, in check_received_request_data_structure
+    raise RequestDataError("The received JSON data within the request message is invalid against the required "
+smia.logic.exceptions.RequestDataError: The received JSON data within the request message is invalid against the required JSON schema. Invalid part: {'reason': 'Failure during the execution of the Infrastructure Service. Reason: Cannot register SMIA instance. ERROR: The response is Null', 'exceptionType': 'ServiceRequestExecutionError', 'affectedElement': 'RegisterSMIAInstance'}. Reason: 'serviceID' is a required property.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\spade\behaviour.py", line 285, in _step
+    await self._run()
+  File "C:\Python310\lib\site-packages\spade\behaviour.py", line 274, in _run
+    await self.run()
+  File "C:\Python310\lib\site-packages\smia\behaviours\acl_handling_behaviour.py", line 80, in run
+    await svc_execution_error.handle_service_execution_error()
+  File "C:\Python310\lib\site-packages\smia\logic\exceptions.py", line 129, in handle_service_execution_error
+    smia_archive_utils.save_svc_error_log_info(GeneralUtils.get_current_timestamp(), acl_info, self.message,
+  File "C:\Python310\lib\site-packages\smia\utilities\smia_archive_utils.py", line 331, in save_svc_error_log_info
+    update_json_file(log_file_path, log_file_json)
+  File "C:\Python310\lib\site-packages\smia\utilities\smia_archive_utils.py", line 412, in update_json_file
+    json.dump(content, outfile)
+  File "C:\Python310\lib\json\__init__.py", line 179, in dump
+    for chunk in iterable:
+  File "C:\Python310\lib\json\encoder.py", line 429, in _iterencode
+    yield from _iterencode_list(o, _current_indent_level)
+  File "C:\Python310\lib\json\encoder.py", line 325, in _iterencode_list
+    yield from chunks
+  File "C:\Python310\lib\json\encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "C:\Python310\lib\json\encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "C:\Python310\lib\json\encoder.py", line 438, in _iterencode
+    o = _default(o)
+  File "C:\Python310\lib\json\encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type ACLHandlingBehaviour is not JSON serializable
+ line:296
+2025-07-10 16:50:34,458 [spade.behaviour] [INFO] Killing behavior CyclicBehaviour/ACLHandlingBehaviour with exit code: Object of type ACLHandlingBehaviour is not JSON serializable line:154
+2025-07-10 16:50:34,458 [spade.behaviour] [INFO] Killing behavior CyclicBehaviour/ACLHandlingBehaviour with exit code: None line:154
+2025-07-10 16:50:34,458 [behaviours.acl_openapi_handling_behaviour] [WARNING] Invalid message received on SMIA ISM: ACL message with invalid template. line:87
+2025-07-10 16:50:42,048 [smia.behaviours.negotiating_behaviour] [INFO]          - No message received within 10 seconds on SMIA (NegotiatingBehaviour) line:206
+2025-07-10 16:50:44,464 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:123
+2025-07-10 16:50:52,059 [smia.behaviours.negotiating_behaviour] [INFO]          - No message received within 10 seconds on SMIA (NegotiatingBehaviour) line:206
+2025-07-10 16:50:54,478 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:123
+2025-07-10 16:51:00,003 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]          + Message received on SMIA ISM (ACLOpenAPIHandlingBehaviour) from gui_agent@xmpp.jp/1763755835500458773718840896834 line:92
+2025-07-10 16:51:00,003 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"serviceID": "RegisterCSSElements", "serviceType": "RegistryService", "serviceParams": {"serviceID": "RegisterCSSElements", "serviceType": "RegistryService", "serviceParams": {"capabilities": [{"iri": "http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation", "name": "Negotiation", "category": "AgentCapability", "isRealizedBy": ["http://www.w3id.org/hsu-aut/css#NegotiateBasedOnRAM"], "isRestrictedBy": [], "hasLifecycle": "ASSURANCE", "assets": {"id": "https://indexedline/asset/2384_6192_5052_9914", "kind": "INSTANCE", "type": null}}, {"iri": "http://www.w3id.org/upv-ehu/gcis/css-smia#DrillingAndMilling", "name": "DrillingAndMilling", "category": "AssetCapability", "isRealizedBy": ["http://www.w3id.org/hsu-aut/css#DrillAndMill"], "isRestrictedBy": [{"iri": "http://www.w3id.org/hsu-aut/css#Depth", "name": "Depth", "hasCondition": "INVARIANT"}], "hasLifecycle": "ASSURANCE", "assets": {"id": "https://indexedline/asset/2384_6192_5052_9914", "kind": "INSTANCE", "type": null}}], "skills": [{"iri": "http://www.w3id.org/hsu-aut/css#DrillAndMill", "name": "DrillAndMill", "accessibleThrough": ["http://www.w3id.org/hsu-aut/css#action_drilling_milling"], "hasParameter": [{"iri": "http://www.w3id.org/hsu-aut/css#Ref_Subproduct_Type", "name": "Ref_Subproduct_Type", "hasType": "INPUT"}], "hasImplementationType": "OPERATION"}, {"iri": "http://www.w3id.org/hsu-aut/css#NegotiateBasedOnRAM", "name": "NegotiateBasedOnRAM", "accessibleThrough": ["http://www.w3id.org/hsu-aut/css#RAM_memory_function"], "hasParameter": [], "hasImplementationType": "SPADE_BEHAVIOUR"}]}}} line:93
+2025-07-10 16:51:00,016 [behaviours.acl_openapi_handling_behaviour] [ACLINFO] The SMIA sender [gui_agent@xmpp.jp], within thread [prueba-acl-smia-msg], needs a service related to OpenAPI infrastructures to be performed. A specific behavior will be triggered to handle this request.. line:116
+2025-07-10 16:51:00,016 [behaviours.handle_acl_openapi_behaviour] [INFO] HandleCapabilityBehaviour starting... line:41
+2025-07-10 16:51:00,016 [behaviours.handle_acl_openapi_behaviour] [INFO] The AAS Infrastructure Service RegisterCSSElements has been requested. line:72
+2025-07-10 16:51:00,017 [spade.behaviour] [ERROR] Exception running behaviour OneShotBehaviour/HandleACLOpenAPIBehaviour: Parameter serviceID not found in method <staticmethod(<function ACLOpenAPIServices.register_css_elements at 0x00000298E698AE60>)>. line:291
+2025-07-10 16:51:00,017 [spade.behaviour] [ERROR] Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\spade\behaviour.py", line 285, in _step
+    await self._run()
+  File "C:\Python310\lib\site-packages\spade\behaviour.py", line 274, in _run
+    await self.run()
+  File "C:\Users\ekait\OneDrive - UPV EHU\Tesis doctoral\TesisEkaitzHurtado\CodeRepositories\SMIA\additional_resources\smia_ism\src\smia_ism\behaviours\handle_acl_openapi_behaviour.py", line 50, in run
+    await self.handle_acl_openapi_request()
+  File "C:\Users\ekait\OneDrive - UPV EHU\Tesis doctoral\TesisEkaitzHurtado\CodeRepositories\SMIA\additional_resources\smia_ism\src\smia_ism\behaviours\handle_acl_openapi_behaviour.py", line 77, in handle_acl_openapi_request
+    svc_params = await AgentServiceUtils.get_adapted_service_parameters(
+  File "C:\Python310\lib\site-packages\smia\logic\services_utils.py", line 81, in get_adapted_service_parameters
+    raise ValueError(f"Parameter {param_name} not found in method {service_method}.")
+ValueError: Parameter serviceID not found in method <staticmethod(<function ACLOpenAPIServices.register_css_elements at 0x00000298E698AE60>)>.
+ line:296
+2025-07-10 16:51:00,017 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleACLOpenAPIBehaviour with exit code: Parameter serviceID not found in method <staticmethod(<function ACLOpenAPIServices.register_css_elements at 0x00000298E698AE60>)>. line:154
+2025-07-10 16:51:00,018 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleACLOpenAPIBehaviour with exit code: None line:154
+2025-07-10 16:51:02,069 [smia.behaviours.negotiating_behaviour] [INFO]          - No message received within 10 seconds on SMIA (NegotiatingBehaviour) line:206
+2025-07-10 16:51:10,024 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:123
+2025-07-10 16:51:12,082 [smia.behaviours.negotiating_behaviour] [INFO]          - No message received within 10 seconds on SMIA (NegotiatingBehaviour) line:206
+2025-07-10 16:51:20,031 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:123
+2025-07-10 16:51:20,780 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]          + Message received on SMIA ISM (ACLOpenAPIHandlingBehaviour) from gui_agent@xmpp.jp/1763755835500458773718840896834 line:92
+2025-07-10 16:51:20,780 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"serviceID": "RegisterCSSElements", "serviceType": "RegistryService", "serviceParams": {"capabilities": [{"iri": "http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation", "name": "Negotiation", "category": "AgentCapability", "isRealizedBy": ["http://www.w3id.org/hsu-aut/css#NegotiateBasedOnRAM"], "isRestrictedBy": [], "hasLifecycle": "ASSURANCE", "assets": {"id": "https://indexedline/asset/2384_6192_5052_9914", "kind": "INSTANCE", "type": null}}, {"iri": "http://www.w3id.org/upv-ehu/gcis/css-smia#DrillingAndMilling", "name": "DrillingAndMilling", "category": "AssetCapability", "isRealizedBy": ["http://www.w3id.org/hsu-aut/css#DrillAndMill"], "isRestrictedBy": [{"iri": "http://www.w3id.org/hsu-aut/css#Depth", "name": "Depth", "hasCondition": "INVARIANT"}], "hasLifecycle": "ASSURANCE", "assets": {"id": "https://indexedline/asset/2384_6192_5052_9914", "kind": "INSTANCE", "type": null}}], "skills": [{"iri": "http://www.w3id.org/hsu-aut/css#DrillAndMill", "name": "DrillAndMill", "accessibleThrough": ["http://www.w3id.org/hsu-aut/css#action_drilling_milling"], "hasParameter": [{"iri": "http://www.w3id.org/hsu-aut/css#Ref_Subproduct_Type", "name": "Ref_Subproduct_Type", "hasType": "INPUT"}], "hasImplementationType": "OPERATION"}, {"iri": "http://www.w3id.org/hsu-aut/css#NegotiateBasedOnRAM", "name": "NegotiateBasedOnRAM", "accessibleThrough": ["http://www.w3id.org/hsu-aut/css#RAM_memory_function"], "hasParameter": [], "hasImplementationType": "SPADE_BEHAVIOUR"}]}} line:93
+2025-07-10 16:51:20,791 [behaviours.acl_openapi_handling_behaviour] [ACLINFO] The SMIA sender [gui_agent@xmpp.jp], within thread [prueba-acl-smia-msg], needs a service related to OpenAPI infrastructures to be performed. A specific behavior will be triggered to handle this request.. line:116
+2025-07-10 16:51:20,792 [behaviours.handle_acl_openapi_behaviour] [INFO] HandleCapabilityBehaviour starting... line:41
+2025-07-10 16:51:20,792 [behaviours.handle_acl_openapi_behaviour] [INFO] The AAS Infrastructure Service RegisterCSSElements has been requested. line:72
+2025-07-10 16:51:20,792 [spade.behaviour] [ERROR] Exception running behaviour OneShotBehaviour/HandleACLOpenAPIBehaviour: Could not transform the value [{'iri': 'http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation', 'name': 'Negotiation', 'category': 'AgentCapability', 'isRealizedBy': ['http://www.w3id.org/hsu-aut/css#NegotiateBasedOnRAM'], 'isRestrictedBy': [], 'hasLifecycle': 'ASSURANCE', 'assets': {'id': 'https://indexedline/asset/2384_6192_5052_9914', 'kind': 'INSTANCE', 'type': None}}, {'iri': 'http://www.w3id.org/upv-ehu/gcis/css-smia#DrillingAndMilling', 'name': 'DrillingAndMilling', 'category': 'AssetCapability', 'isRealizedBy': ['http://www.w3id.org/hsu-aut/css#DrillAndMill'], 'isRestrictedBy': [{'iri': 'http://www.w3id.org/hsu-aut/css#Depth', 'name': 'Depth', 'hasCondition': 'INVARIANT'}], 'hasLifecycle': 'ASSURANCE', 'assets': {'id': 'https://indexedline/asset/2384_6192_5052_9914', 'kind': 'INSTANCE', 'type': None}}] for the parameter 'capabilities', reason: dictionary update sequence element #0 has length 7; 2 is required line:291
+2025-07-10 16:51:20,792 [spade.behaviour] [ERROR] Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\smia\logic\services_utils.py", line 76, in get_adapted_service_parameters
+    adapted_params[param_name] = tipo(value)
+ValueError: dictionary update sequence element #0 has length 7; 2 is required
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\spade\behaviour.py", line 285, in _step
+    await self._run()
+  File "C:\Python310\lib\site-packages\spade\behaviour.py", line 274, in _run
+    await self.run()
+  File "C:\Users\ekait\OneDrive - UPV EHU\Tesis doctoral\TesisEkaitzHurtado\CodeRepositories\SMIA\additional_resources\smia_ism\src\smia_ism\behaviours\handle_acl_openapi_behaviour.py", line 50, in run
+    await self.handle_acl_openapi_request()
+  File "C:\Users\ekait\OneDrive - UPV EHU\Tesis doctoral\TesisEkaitzHurtado\CodeRepositories\SMIA\additional_resources\smia_ism\src\smia_ism\behaviours\handle_acl_openapi_behaviour.py", line 77, in handle_acl_openapi_request
+    svc_params = await AgentServiceUtils.get_adapted_service_parameters(
+  File "C:\Python310\lib\site-packages\smia\logic\services_utils.py", line 78, in get_adapted_service_parameters
+    raise ValueError(f"Could not transform the value {value} for the parameter '{param_name}',"
+ValueError: Could not transform the value [{'iri': 'http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation', 'name': 'Negotiation', 'category': 'AgentCapability', 'isRealizedBy': ['http://www.w3id.org/hsu-aut/css#NegotiateBasedOnRAM'], 'isRestrictedBy': [], 'hasLifecycle': 'ASSURANCE', 'assets': {'id': 'https://indexedline/asset/2384_6192_5052_9914', 'kind': 'INSTANCE', 'type': None}}, {'iri': 'http://www.w3id.org/upv-ehu/gcis/css-smia#DrillingAndMilling', 'name': 'DrillingAndMilling', 'category': 'AssetCapability', 'isRealizedBy': ['http://www.w3id.org/hsu-aut/css#DrillAndMill'], 'isRestrictedBy': [{'iri': 'http://www.w3id.org/hsu-aut/css#Depth', 'name': 'Depth', 'hasCondition': 'INVARIANT'}], 'hasLifecycle': 'ASSURANCE', 'assets': {'id': 'https://indexedline/asset/2384_6192_5052_9914', 'kind': 'INSTANCE', 'type': None}}] for the parameter 'capabilities', reason: dictionary update sequence element #0 has length 7; 2 is required
+ line:296
+2025-07-10 16:51:20,792 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleACLOpenAPIBehaviour with exit code: Could not transform the value [{'iri': 'http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation', 'name': 'Negotiation', 'category': 'AgentCapability', 'isRealizedBy': ['http://www.w3id.org/hsu-aut/css#NegotiateBasedOnRAM'], 'isRestrictedBy': [], 'hasLifecycle': 'ASSURANCE', 'assets': {'id': 'https://indexedline/asset/2384_6192_5052_9914', 'kind': 'INSTANCE', 'type': None}}, {'iri': 'http://www.w3id.org/upv-ehu/gcis/css-smia#DrillingAndMilling', 'name': 'DrillingAndMilling', 'category': 'AssetCapability', 'isRealizedBy': ['http://www.w3id.org/hsu-aut/css#DrillAndMill'], 'isRestrictedBy': [{'iri': 'http://www.w3id.org/hsu-aut/css#Depth', 'name': 'Depth', 'hasCondition': 'INVARIANT'}], 'hasLifecycle': 'ASSURANCE', 'assets': {'id': 'https://indexedline/asset/2384_6192_5052_9914', 'kind': 'INSTANCE', 'type': None}}] for the parameter 'capabilities', reason: dictionary update sequence element #0 has length 7; 2 is required line:154
+2025-07-10 16:51:20,796 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleACLOpenAPIBehaviour with exit code: None line:154
+2025-07-10 16:51:22,094 [smia.behaviours.negotiating_behaviour] [INFO]          - No message received within 10 seconds on SMIA (NegotiatingBehaviour) line:206
+2025-07-10 16:51:30,808 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:123
+2025-07-10 16:51:32,104 [smia.behaviours.negotiating_behaviour] [INFO]          - No message received within 10 seconds on SMIA (NegotiatingBehaviour) line:206
+2025-07-10 16:51:40,810 [behaviours.acl_openapi_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA ISM (ACLOpenAPIHandlingBehaviour) line:123
+2025-07-10 16:51:42,107 [smia.behaviours.negotiating_behaviour] [INFO]          - No message received within 10 seconds on SMIA (NegotiatingBehaviour) line:206
+2025-07-10 16:51:49,040 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:142
+2025-07-10 16:51:49,041 [spade.behaviour] [INFO] Killing behavior FSMBehaviour/AASFSMBehaviour with exit code: None line:154
+2025-07-10 16:51:49,041 [spade.behaviour] [INFO] Killing behavior CyclicBehaviour/NegotiatingBehaviour with exit code: None line:154
+2025-07-10 16:51:49,041 [spade.behaviour] [INFO] Killing behavior CyclicBehaviour/ACLOpenAPIHandlingBehaviour with exit code: None line:154
+2025-07-10 16:53:39,971 [__main__] [INFO] Initializing SMIA ISM (Infrastructure Services Manager)... line:18
+2025-07-10 16:53:39,972 [smia.utilities.general_utils] [WARNING] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so check that it is not necessary. Please add the information (or the AAS id) and restart the container. line:311
+2025-07-10 16:53:39,993 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-07-10 16:53:39,993 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-07-10 16:53:40,047 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-07-10 16:53:40,053 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/SMIA_InfrastructureServicesManager.aasx file is already in SMIA archive. line:180
+2025-07-10 16:53:40,053 [smia] [INFO] AAS model SMIA_InfrastructureServicesManager.aasx copied to the SMIA Archive. line:91
+2025-07-10 16:53:40,154 [smia] [WARNING] The AAS model does not contain the initialization configuration file. Make sure that it is not necessary. line:103
+2025-07-10 16:53:40,284 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ACLOpenAPIHandlingBehaviour line:43
+2025-07-10 16:53:43,063 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-07-10 16:53:44,266 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/1233760452149207813918841098914 line:935
+2025-07-10 16:53:44,562 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB8xMjMzNzYwNDUyMTQ5MjA3ODEzOTE4ODQxMDk4OTE0bQAAAAhsW7+9vvfLhQ==' line:2209
+2025-07-10 16:53:45,182 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-07-10 16:53:45,182 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:96
+2025-07-10 16:53:45,185 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:121
+2025-07-10 16:53:45,186 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-07-10 16:53:45,186 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-07-10 16:53:45,186 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:40
+2025-07-10 16:53:45,224 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-07-10 16:53:45,253 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:79
+2025-07-10 16:53:45,253 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [smia-ism] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:91
+2025-07-10 16:53:45,256 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:400
+2025-07-10 16:53:45,283 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:77
+2025-07-10 16:53:46,165 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:81
+2025-07-10 16:53:46,363 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:85
+2025-07-10 16:53:46,364 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:345
+2025-07-10 16:53:47,357 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['ACLOpenAPIHandlingCapability']
+	- Analyzed capability constraints: []
+	- Analyzed skills: ['ACLOpenAPIHandlingBehaviour']
+	- Analyzed skill interfaces: []
+	- Analyzed skill parameters: []
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:373
+2025-07-10 16:53:47,359 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:101
+2025-07-10 16:53:47,360 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-07-10 16:53:47,549 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register all the CSS elements of the SMIA instance in the SMIA KB. line:113
+2025-07-10 16:53:47,871 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:116
+2025-07-10 16:53:49,894 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register the SMIA instance in the SMIA KB. line:154
+2025-07-10 16:53:50,456 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:157
+2025-07-10 16:53:55,471 [smia.states.state_booting] [WARNING] The registry of the SMIA instance gcis1@xmpp.jp has not been completed. Check the SMIA ISM or the SMIA KB. line:170
+2025-07-10 16:53:55,472 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:68
+2025-07-10 16:53:55,472 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-07-10 16:53:55,474 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-07-10 16:53:55,474 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-07-10 16:53:55,477 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:81
+2025-07-10 16:53:55,478 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:40
+2025-07-10 16:53:55,479 [smia.behaviours.negotiating_behaviour] [INFO] NegotiationBehaviour starting... line:43
+2025-07-10 16:53:55,480 [behaviours.acl_openapi_handling_behaviour] [INFO] ACLOpenAPIHandlingBehaviour starting... line:47
+2025-07-10 16:53:55,480 [behaviours.acl_openapi_handling_behaviour] [INFO] Successfully loaded all Infrastructure Services with their associated execution methods. line:52
+2025-07-10 16:53:58,962 [smia.behaviours.acl_handling_behaviour] [ACLINFO]          + Message received on SMIA (ACLHandlingBehaviour) from gui_agent@xmpp.jp/1763755835500458773718840896834 line:52
+2025-07-10 16:53:58,963 [smia.behaviours.acl_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"serviceID": "RegisterCSSElements", "serviceType": "RegistryService", "serviceParams": {"capabilities": [{"iri": "http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation", "name": "Negotiation", "category": "AgentCapability", "isRealizedBy": ["http://www.w3id.org/hsu-aut/css#NegotiateBasedOnRAM"], "isRestrictedBy": [], "hasLifecycle": "ASSURANCE", "assets": {"id": "https://indexedline/asset/2384_6192_5052_9914", "kind": "INSTANCE", "type": null}}, {"iri": "http://www.w3id.org/upv-ehu/gcis/css-smia#DrillingAndMilling", "name": "DrillingAndMilling", "category": "AssetCapability", "isRealizedBy": ["http://www.w3id.org/hsu-aut/css#DrillAndMill"], "isRestrictedBy": [{"iri": "http://www.w3id.org/hsu-aut/css#Depth", "name": "Depth", "hasCondition": "INVARIANT"}], "hasLifecycle": "ASSURANCE", "assets": {"id": "https://indexedline/asset/2384_6192_5052_9914", "kind": "INSTANCE", "type": null}}], "skills": [{"iri": "http://www.w3id.org/hsu-aut/css#DrillAndMill", "name": "DrillAndMill", "accessibleThrough": ["http://www.w3id.org/hsu-aut/css#action_drilling_milling"], "hasParameter": [{"iri": "http://www.w3id.org/hsu-aut/css#Ref_Subproduct_Type", "name": "Ref_Subproduct_Type", "hasType": "INPUT"}], "hasImplementationType": "OPERATION"}, {"iri": "http://www.w3id.org/hsu-aut/css#NegotiateBasedOnRAM", "name": "NegotiateBasedOnRAM", "accessibleThrough": ["http://www.w3id.org/hsu-aut/css#RAM_memory_function"], "hasParameter": [], "hasImplementationType": "SPADE_BEHAVIOUR"}]}} line:53
+2025-07-10 16:53:58,996 [smia.behaviours.acl_handling_behaviour] [INFO] Specific behaviour added to the agent to handle the message with thread [prueba-acl-smia-msg]. line:94
+2025-07-10 16:53:58,997 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]          + Message received on SMIA ISM (ACLOpenAPIHandlingBehaviour) from gui_agent@xmpp.jp/1763755835500458773718840896834 line:92
+2025-07-10 16:53:58,997 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"serviceID": "RegisterCSSElements", "serviceType": "RegistryService", "serviceParams": {"capabilities": [{"iri": "http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation", "name": "Negotiation", "category": "AgentCapability", "isRealizedBy": ["http://www.w3id.org/hsu-aut/css#NegotiateBasedOnRAM"], "isRestrictedBy": [], "hasLifecycle": "ASSURANCE", "assets": {"id": "https://indexedline/asset/2384_6192_5052_9914", "kind": "INSTANCE", "type": null}}, {"iri": "http://www.w3id.org/upv-ehu/gcis/css-smia#DrillingAndMilling", "name": "DrillingAndMilling", "category": "AssetCapability", "isRealizedBy": ["http://www.w3id.org/hsu-aut/css#DrillAndMill"], "isRestrictedBy": [{"iri": "http://www.w3id.org/hsu-aut/css#Depth", "name": "Depth", "hasCondition": "INVARIANT"}], "hasLifecycle": "ASSURANCE", "assets": {"id": "https://indexedline/asset/2384_6192_5052_9914", "kind": "INSTANCE", "type": null}}], "skills": [{"iri": "http://www.w3id.org/hsu-aut/css#DrillAndMill", "name": "DrillAndMill", "accessibleThrough": ["http://www.w3id.org/hsu-aut/css#action_drilling_milling"], "hasParameter": [{"iri": "http://www.w3id.org/hsu-aut/css#Ref_Subproduct_Type", "name": "Ref_Subproduct_Type", "hasType": "INPUT"}], "hasImplementationType": "OPERATION"}, {"iri": "http://www.w3id.org/hsu-aut/css#NegotiateBasedOnRAM", "name": "NegotiateBasedOnRAM", "accessibleThrough": ["http://www.w3id.org/hsu-aut/css#RAM_memory_function"], "hasParameter": [], "hasImplementationType": "SPADE_BEHAVIOUR"}]}} line:93
+2025-07-10 16:53:59,030 [behaviours.acl_openapi_handling_behaviour] [ACLINFO] The SMIA sender [gui_agent@xmpp.jp], within thread [prueba-acl-smia-msg], needs a service related to OpenAPI infrastructures to be performed. A specific behavior will be triggered to handle this request.. line:116
+2025-07-10 16:53:59,031 [smia.behaviours.specific_handle_behaviours.handle_aas_related_svc_behaviour] [INFO] HandleAASRelatedSvcBehaviour starting to handle the service related to the message with thread [prueba-acl-smia-msg]... line:58
+2025-07-10 16:53:59,031 [smia.behaviours.specific_handle_behaviours.handle_aas_related_svc_behaviour] [INFO] Management of the AAS-related service with thread prueba-acl-smia-msg finished. line:75
+2025-07-10 16:53:59,031 [behaviours.handle_acl_openapi_behaviour] [INFO] HandleCapabilityBehaviour starting... line:41
+2025-07-10 16:53:59,032 [behaviours.handle_acl_openapi_behaviour] [INFO] The AAS Infrastructure Service RegisterCSSElements has been requested. line:72
+2025-07-10 17:05:06,763 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-07-10 17:05:06,764 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleAASRelatedSvcBehaviour with exit code: None line:154
+2025-07-10 17:05:06,767 [asyncio] [ERROR] Fatal read error on STARTTLS transport
+protocol: <aioxmpp.protocol.XMLStream object at 0x0000020E534BB7F0>
+transport: <aioopenssl.STARTTLSTransport object at 0x0000020E535FAD40> line:1758
+Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\aioopenssl\__init__.py", line 493, in _read_ready
+    data = self._sock.recv(self.MAX_SIZE)
+  File "C:\Python310\lib\site-packages\OpenSSL\SSL.py", line 2067, in recv
+    self._raise_ssl_error(self._ssl, result)
+  File "C:\Python310\lib\site-packages\OpenSSL\SSL.py", line 1838, in _raise_ssl_error
+    raise SysCallError(-1, "Unexpected EOF")
+OpenSSL.SSL.SysCallError: (-1, 'Unexpected EOF')
+2025-07-10 17:05:06,781 [gcis1] [INFO] client shutting down (on request) line:975
+2025-07-10 17:05:06,781 [gcis1.StanzaStream] [INFO] stopping SM stream line:2473
+2025-07-10 17:05:06,781 [gcis1] [INFO] stopping stream line:989
+2025-07-10 17:05:06,782 [smia.behaviours.acl_handling_behaviour] [INFO]          - No message received within 10 seconds on SMIA (ACLHandlingBehaviour) line:155
+2025-07-10 17:05:27,368 [__main__] [INFO] Initializing SMIA ISM (Infrastructure Services Manager)... line:18
+2025-07-10 17:05:27,369 [smia.utilities.general_utils] [WARNING] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so check that it is not necessary. Please add the information (or the AAS id) and restart the container. line:311
+2025-07-10 17:05:27,376 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-07-10 17:05:27,376 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2025-07-10 17:05:27,386 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2025-07-10 17:05:27,390 [smia.utilities.smia_archive_utils] [INFO] The ../smia_archive/config/aas/SMIA_InfrastructureServicesManager.aasx file is already in SMIA archive. line:180
+2025-07-10 17:05:27,390 [smia] [INFO] AAS model SMIA_InfrastructureServicesManager.aasx copied to the SMIA Archive. line:91
+2025-07-10 17:05:27,417 [smia] [WARNING] The AAS model does not contain the initialization configuration file. Make sure that it is not necessary. line:103
+2025-07-10 17:05:27,458 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ACLOpenAPIHandlingBehaviour line:43
+2025-07-10 17:05:30,408 [aiosasl.scram] [INFO] attempting SCRAM-SHA-1 mechanism (using SCRAMHashInfo(hashfun_name='sha1', quality=1, minimum_iteration_count=4096) hashfun) line:150
+2025-07-10 17:05:31,589 [gcis1] [INFO] bound to jid: gcis1@xmpp.jp/1087982484687374193018841672674 line:935
+2025-07-10 17:05:31,881 [gcis1.StanzaStream] [INFO] SM started: resumable=True, stream id='g2gCbQAAAB8xMDg3OTgyNDg0Njg3Mzc0MTkzMDE4ODQxNjcyNjc0bQAAAAiF5Pdsn94dJA==' line:2209
+2025-07-10 17:05:32,487 [spade.Agent] [INFO] Agent gcis1@xmpp.jp connected and authenticated. line:163
+2025-07-10 17:05:32,487 [smia.agents.smia_agent] [INFO] Setting up gcis1@xmpp.jp SMIA... line:96
+2025-07-10 17:05:32,489 [smia.agents.smia_agent] [INFO] gcis1@xmpp.jp setup finished correctly. line:121
+2025-07-10 17:05:32,489 [smia.behaviours.aas_fsm_behaviour] [INFO]     ** FSM starting at initial state --> BOOTING line:14
+2025-07-10 17:05:32,489 [spade.behaviour] [INFO] FSM running state BOOTING line:568
+2025-07-10 17:05:32,489 [smia.states.state_booting] [INFO] ## STATE 1: BOOTING ##  (Initial state) line:40
+2025-07-10 17:05:32,513 [smia.css_ontology.capability_skill_ontology] [INFO] CSS ontology initialized line:43
+2025-07-10 17:05:32,533 [smia.aas_model.extended_aas_model] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this SMIA does not need to be connected to the asset via any communication protocols. line:79
+2025-07-10 17:05:32,533 [smia.aas_model.extended_aas_model] [WARNING] The SMIA instance name defined in the SoftwareNameplate submodel [smia-ism] and the identifier used to start the agent [gcis1] do not match. This can result in errors during SMIA runtime. line:91
+2025-07-10 17:05:32,534 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:400
+2025-07-10 17:05:32,546 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all defined ontology elements... line:77
+2025-07-10 17:05:33,406 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all relationships between ontology elements... line:81
+2025-07-10 17:05:33,597 [smia.behaviours.init_aas_model_behaviour] [INFO] Reading the AAS model to get all asset connections... line:85
+2025-07-10 17:05:33,597 [smia.behaviours.init_aas_model_behaviour] [WARNING] AssetInterfacesSubmodel submodel is not defined. Make sure that this DT does not need to be connected to the asset. line:345
+2025-07-10 17:05:34,577 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model analysis results. 
+	- Analyzed capabilities: ['ACLOpenAPIHandlingCapability']
+	- Analyzed capability constraints: []
+	- Analyzed skills: ['ACLOpenAPIHandlingBehaviour']
+	- Analyzed skill interfaces: []
+	- Analyzed skill parameters: []
+	- Analyzed asset connections: []
+	[91m- Errors found: [][0m line:373
+2025-07-10 17:05:34,578 [smia.behaviours.init_aas_model_behaviour] [INFO] AAS model initialized. line:101
+2025-07-10 17:05:34,579 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/InitAASModelBehaviour with exit code: None line:154
+2025-07-10 17:05:34,843 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register all the CSS elements of the SMIA instance in the SMIA KB. line:113
+2025-07-10 17:05:35,167 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:116
+2025-07-10 17:05:40,166 [smia.states.state_booting] [WARNING] The registry of CSS elements has not been completed. Check the SMIA ISM or the SMIA KB. line:129
+2025-07-10 17:05:40,211 [smia.states.state_booting] [INFO] Sending the infrastructure service request to smia-ism@xmpp.jp to register the SMIA instance in the SMIA KB. line:154
+2025-07-10 17:05:40,520 [smia.states.state_booting] [INFO] Waiting for the confirmation of the registry in the SMIA KB... line:157
+2025-07-10 17:05:45,515 [smia.states.state_booting] [WARNING] The registry of the SMIA instance gcis1@xmpp.jp has not been completed. Check the SMIA ISM or the SMIA KB. line:170
+2025-07-10 17:05:45,515 [smia.states.state_booting] [INFO] gcis1@xmpp.jp agent has finished it Boot state. line:68
+2025-07-10 17:05:45,516 [spade.behaviour] [INFO] FSM transiting from BOOTING to RUNNING. line:591
+2025-07-10 17:05:45,516 [spade.behaviour] [INFO] FSM running state RUNNING line:568
+2025-07-10 17:05:45,516 [smia.states.state_running] [INFO] ## STATE 2: RUNNING ##  (Initial state) line:25
+2025-07-10 17:05:45,518 [smia.states.state_running] [INFO] Extended agent capabilities will be added for the ExtensibleSMIAAgent. line:81
+2025-07-10 17:05:45,518 [smia.behaviours.acl_handling_behaviour] [INFO] ACLHandlingBehaviour starting... line:40
+2025-07-10 17:05:45,520 [smia.behaviours.negotiating_behaviour] [INFO] NegotiationBehaviour starting... line:43
+2025-07-10 17:05:45,520 [behaviours.acl_openapi_handling_behaviour] [INFO] ACLOpenAPIHandlingBehaviour starting... line:47
+2025-07-10 17:05:45,520 [behaviours.acl_openapi_handling_behaviour] [INFO] Successfully loaded all Infrastructure Services with their associated execution methods. line:52
+2025-07-10 17:05:53,458 [smia.behaviours.acl_handling_behaviour] [ACLINFO]          + Message received on SMIA (ACLHandlingBehaviour) from gui_agent@xmpp.jp/1763755835500458773718840896834 line:52
+2025-07-10 17:05:53,458 [smia.behaviours.acl_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"serviceID": "RegisterCSSElements", "serviceType": "RegistryService", "serviceParams": {"capabilities": [{"iri": "http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation", "name": "Negotiation", "category": "AgentCapability", "isRealizedBy": ["http://www.w3id.org/hsu-aut/css#NegotiateBasedOnRAM"], "isRestrictedBy": [], "hasLifecycle": "ASSURANCE", "assets": {"id": "https://indexedline/asset/2384_6192_5052_9914", "kind": "INSTANCE", "type": null}}, {"iri": "http://www.w3id.org/upv-ehu/gcis/css-smia#DrillingAndMilling", "name": "DrillingAndMilling", "category": "AssetCapability", "isRealizedBy": ["http://www.w3id.org/hsu-aut/css#DrillAndMill"], "isRestrictedBy": [{"iri": "http://www.w3id.org/hsu-aut/css#Depth", "name": "Depth", "hasCondition": "INVARIANT"}], "hasLifecycle": "ASSURANCE", "assets": {"id": "https://indexedline/asset/2384_6192_5052_9914", "kind": "INSTANCE", "type": null}}], "skills": [{"iri": "http://www.w3id.org/hsu-aut/css#DrillAndMill", "name": "DrillAndMill", "accessibleThrough": ["http://www.w3id.org/hsu-aut/css#action_drilling_milling"], "hasParameter": [{"iri": "http://www.w3id.org/hsu-aut/css#Ref_Subproduct_Type", "name": "Ref_Subproduct_Type", "hasType": "INPUT"}], "hasImplementationType": "OPERATION"}, {"iri": "http://www.w3id.org/hsu-aut/css#NegotiateBasedOnRAM", "name": "NegotiateBasedOnRAM", "accessibleThrough": ["http://www.w3id.org/hsu-aut/css#RAM_memory_function"], "hasParameter": [], "hasImplementationType": "SPADE_BEHAVIOUR"}]}} line:53
+2025-07-10 17:05:53,542 [smia.behaviours.acl_handling_behaviour] [INFO] Specific behaviour added to the agent to handle the message with thread [prueba-acl-smia-msg]. line:94
+2025-07-10 17:05:53,543 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]          + Message received on SMIA ISM (ACLOpenAPIHandlingBehaviour) from gui_agent@xmpp.jp/1763755835500458773718840896834 line:92
+2025-07-10 17:05:53,543 [behaviours.acl_openapi_handling_behaviour] [ACLINFO]                  |___ Message received with content: {"serviceID": "RegisterCSSElements", "serviceType": "RegistryService", "serviceParams": {"capabilities": [{"iri": "http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation", "name": "Negotiation", "category": "AgentCapability", "isRealizedBy": ["http://www.w3id.org/hsu-aut/css#NegotiateBasedOnRAM"], "isRestrictedBy": [], "hasLifecycle": "ASSURANCE", "assets": {"id": "https://indexedline/asset/2384_6192_5052_9914", "kind": "INSTANCE", "type": null}}, {"iri": "http://www.w3id.org/upv-ehu/gcis/css-smia#DrillingAndMilling", "name": "DrillingAndMilling", "category": "AssetCapability", "isRealizedBy": ["http://www.w3id.org/hsu-aut/css#DrillAndMill"], "isRestrictedBy": [{"iri": "http://www.w3id.org/hsu-aut/css#Depth", "name": "Depth", "hasCondition": "INVARIANT"}], "hasLifecycle": "ASSURANCE", "assets": {"id": "https://indexedline/asset/2384_6192_5052_9914", "kind": "INSTANCE", "type": null}}], "skills": [{"iri": "http://www.w3id.org/hsu-aut/css#DrillAndMill", "name": "DrillAndMill", "accessibleThrough": ["http://www.w3id.org/hsu-aut/css#action_drilling_milling"], "hasParameter": [{"iri": "http://www.w3id.org/hsu-aut/css#Ref_Subproduct_Type", "name": "Ref_Subproduct_Type", "hasType": "INPUT"}], "hasImplementationType": "OPERATION"}, {"iri": "http://www.w3id.org/hsu-aut/css#NegotiateBasedOnRAM", "name": "NegotiateBasedOnRAM", "accessibleThrough": ["http://www.w3id.org/hsu-aut/css#RAM_memory_function"], "hasParameter": [], "hasImplementationType": "SPADE_BEHAVIOUR"}]}} line:93
+2025-07-10 17:05:53,591 [behaviours.acl_openapi_handling_behaviour] [ACLINFO] The SMIA sender [gui_agent@xmpp.jp], within thread [prueba-acl-smia-msg], needs a service related to OpenAPI infrastructures to be performed. A specific behavior will be triggered to handle this request.. line:116
+2025-07-10 17:05:53,592 [smia.behaviours.specific_handle_behaviours.handle_aas_related_svc_behaviour] [INFO] HandleAASRelatedSvcBehaviour starting to handle the service related to the message with thread [prueba-acl-smia-msg]... line:58
+2025-07-10 17:05:53,592 [smia.behaviours.specific_handle_behaviours.handle_aas_related_svc_behaviour] [INFO] Management of the AAS-related service with thread prueba-acl-smia-msg finished. line:75
+2025-07-10 17:05:53,593 [behaviours.handle_acl_openapi_behaviour] [INFO] HandleCapabilityBehaviour starting... line:41
+2025-07-10 17:05:53,593 [behaviours.handle_acl_openapi_behaviour] [INFO] The AAS Infrastructure Service RegisterCSSElements has been requested. line:72
+2025-07-10 17:06:22,460 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:116
+2025-07-10 17:06:22,460 [spade.behaviour] [INFO] Killing behavior OneShotBehaviour/HandleAASRelatedSvcBehaviour with exit code: None line:154
+2025-07-10 17:06:22,461 [smia.behaviours.negotiating_behaviour] [INFO]          - No message received within 10 seconds on SMIA (NegotiatingBehaviour) line:206
