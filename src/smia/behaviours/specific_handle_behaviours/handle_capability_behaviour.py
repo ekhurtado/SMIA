@@ -437,6 +437,9 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
                 await smia_archive_utils.save_csv_metrics_timestamp(
                     smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
                     f"Asset service completed [{self.received_acl_msg.thread}]")
+
+                if self.received_body_json[CapabilitySkillACLInfo.ATTRIB_CAPABILITY_IRI] == 'http://www.w3id.org/upv-ehu/gcis/css-smia#DrillingAndMilling':
+                    await asyncio.sleep(40)
                 return {'status': 'success', 'prueba': 'cedri'}
 
             skill_execution_result = await asset_connection_class.execute_asset_service(
