@@ -13,14 +13,14 @@ import camundaModdleDescriptor from 'camunda-bpmn-moddle/resources/camunda.json'
 
 import { registerClientExtension, registerBpmnJSPlugin, registerBpmnJSModdleExtension } from 'camunda-modeler-plugin-helpers';
 
-import AutoSavePlugin from './AutoSavePlugin';
+import SMIAPlugin from './SMIAPlugin';
 import smiaPaletteProviderModule from './smiaPaletteProviders';
 import smiaPropertiesProviderModule from './smiaPropertiesProviders';
 import smiaPropertiesDescriptor from './smiaPropertiesProviders/properties/smiaPropertiesDescriptor.json';
 
 
 // Registramos el plugin para configuracion de la interfaz para el usuario
-registerClientExtension(AutoSavePlugin);
+registerClientExtension(SMIAPlugin);
 
 // Registramos el plugin para añadir nuevos ServiceTask para capacidades basadas en CSS model.
 registerBpmnJSPlugin(smiaPaletteProviderModule);

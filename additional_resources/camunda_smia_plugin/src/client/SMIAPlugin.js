@@ -43,7 +43,7 @@ const defaultState = {
  * An example client extension plugin to enable auto saving functionality
  * into the Camunda Modeler
  */
-export default class AutoSavePlugin extends PureComponent {
+export default class SMIAPlugin extends PureComponent {
 
   constructor(props) {
     super(props);
@@ -248,26 +248,6 @@ export default class AutoSavePlugin extends PureComponent {
           this.displayNotificationWithType('CSS information obtained',
               'Successfully obtained all CSS information from SMIA KB', 'success');
 
-
-            // TODO Prueba para datos recogidos del SMIA KB=
-            // TODO En esta primera version todos los datos de la skill estan dentro de cada capacidad, pero yo creo que
-            //  seria mejor tener dos grandes JSON (capacidad y skill), y en el de capacidad tener solo las referencias
-            //  a las skills (es decir, seguir la misma estructura que dentro del KB)
-            // window.SMIA_KB_DATA = [{
-            //   'capID001': {
-            //     'name': 'capability1', 'assetsID': ['asset1', 'asset2'],
-            //     'skills': [{
-            //       'name': 'skill1_1',
-            //       'inputParams': ['inputparam1_1', 'inputparam1_2']
-            //     }, {'name': 'skill1_2'}]
-            //   }
-            // },
-            //   {
-            //     'capID002': {
-            //       'name': 'capability2', 'assetsID': ['asset3'], 'constraints': ['constraint2_1', 'constraint2_2'],
-            //       'skills': [{'name': 'skill2_1'}, {'name': 'skill2_2'}]
-            //     }
-            //   }];
         }).catch(error => {
           this.displayNotificationWithType('ERROR', 'Some error occured: ' + error, 'error');
 
@@ -311,88 +291,6 @@ export default class AutoSavePlugin extends PureComponent {
       duration: duration
     });
   }
-
-  // handleRequest(text) {
-  //   // metodo para gestionar la seccion request
-  //   const { displayNotification } = this.props;
-  //
-  //   displayNotification({
-  //     title: 'Primer mensaje...',
-  //     content: 'Primer mensaje con su contenido... ' + text,
-  //     duration: 7000
-  //   });
-  //   console.log("Haciendo algo");
-  //   displayNotification({
-  //     title: 'Segundo mensaje...',
-  //     content: 'Segundo mensaje con su contenido... ' + text,
-  //     duration: 7000
-  //   });
-  //
-  //
-  //   // Mostrar conexion con la KB mencionando que se esta recogiendo la informacion de SMIA relacionada con el CSS model
-  //   displayNotification({
-  //     title: 'Connecting with SMIA KB...',
-  //     content: 'Trying to connect with the SMIA KB located in ' + text,
-  //     duration: 7000
-  //   }).then(() => {
-  //
-  //   // Segunda notificación (después de que termine la primera)
-  //   return displayNotification({
-  //     title: 'Obtaining SMIA information from KB...',
-  //     content: 'SMIA information related to the CSS model is being obtained.',
-  //     duration: 10000
-  //     });
-  //   }).then(() => {
-  //
-  //   // Tercera notificación
-  //
-  //   // -- fin mostrar conexion con KB
-  //
-  //   // Prueba notificacion con acciones
-  //   return displayNotification({
-  //     title: 'Actualización disponible',
-  //     content: '¿Desea actualizar a la nueva versión?',
-  //     primaryAction: {
-  //       label: 'Actualizar',
-  //       handler: () => this.updatePlugin()
-  //     },
-  //     secondaryAction: {
-  //       label: 'No ahora',
-  //       handler: () => this.dismissUpdate()
-  //     }
-  //     });
-  //   }).then(() => {
-  //   // Ultima notificación (después de que terminen todas las anteriores)
-  //
-  //   // Mostrar el texto solicitado en una notificación
-  //   return displayNotification({
-  //     title: 'Request finished',
-  //     content: text,
-  //     duration: 5000
-  //     });
-  //   }).catch(error => {
-  //     // Manejo de errores
-  //     displayNotification({
-  //       type: 'error',
-  //       title: 'Error',
-  //       content: 'An error occurred while processing your request: ' + error.message
-  //   });
-  //   });
-  //
-  //   // -- fin mostrar conexion con KB
-  //
-  //   // TODO Prueba para datos recogidos del SMIA KB=
-  //   window.SMIA_KB_DATA = [{'capID001': {'name': 'capability1', 'assetsID': ['asset1', 'asset2'],
-  //     'skills': [{'name': 'skill1_1', 'inputParams': ['inputparam1_1', 'inputparam1_2']},{'name': 'skill1_2'}]}},
-  //     {'capID002': {'name': 'capability2', 'assetsID': ['asset3'], 'constraints': ['constraint2_1', 'constraint2_2'],
-  //         'skills': [{'name': 'skill2_1'},{'name': 'skill2_2'}]}}];
-  //
-  //   // También actualizar el estado para mostrar el texto en la UI si se desea
-  //   this.setState({
-  //     showRequestText: true,
-  //     requestText: text
-  //   });
-  // }
 
   /**
    * render any React component you like to extend the existing
@@ -444,7 +342,7 @@ export default class AutoSavePlugin extends PureComponent {
         <ConfigOverlay
           anchor={ this._buttonRef.current }
           onClose={ this.handleConfigClosed }
-          onRequest={ this.handleRequest }  // Se enlaca el metodo onRequest de 'ConfigOverlay' al metodo handleRequest de 'AutoSavePlugin'
+          onRequest={ this.handleRequest }  // Se enlaca el metodo onRequest de 'ConfigOverlay' al metodo handleRequest de 'SMIAPlugin'
           initValues={ initValues }
         />
       )}

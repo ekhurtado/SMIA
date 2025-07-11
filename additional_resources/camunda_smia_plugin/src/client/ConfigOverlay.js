@@ -65,52 +65,53 @@ export default function ConfigOverlay({ anchor, initValues, onClose, onRequest }
         </Section.Body>
       </Section>
 
-      <Section>
-        <Section.Header>Auto save configuration</Section.Header>
+      {/*TODO AutoSave plugin section (not added in this SMIA plugin version)*/}
+      {/*<Section>*/}
+      {/*  <Section.Header>Auto save configuration</Section.Header>*/}
 
-        <Section.Body>
-          <form id="autoSaveConfigForm" onSubmit={ onSubmit }>
-            <div class="form-group">
-              <div class="custom-control custom-checkbox">
-                <input
-                  name="enabled"
-                  className="custom-control-input"
-                  id="enabled"
-                  type="checkbox"
-                  onChange={ () => setEnabled(!enabled) }
-                  value={ enabled }
-                  defaultChecked={ enabled } />
-                <label className="custom-control-label" htmlFor="enabled">
-                  Enabled
-                </label>
-              </div>
-            </div>
-            <div className="form-group">
-              <label htmlFor="interval">Interval (seconds)</label>
-              <input
-                type="number"
-                className="form-control"
-                name="interval"
-                min="1"
-                value={ interval }
-                onChange={ (event) =>
-                  setAutoSaveInterval(Number(event.target.value))
-                }
-              />
-            </div>
-          </form>
+      {/*  <Section.Body>*/}
+      {/*    <form id="autoSaveConfigForm" onSubmit={ onSubmit }>*/}
+      {/*      <div class="form-group">*/}
+      {/*        <div class="custom-control custom-checkbox">*/}
+      {/*          <input*/}
+      {/*            name="enabled"*/}
+      {/*            className="custom-control-input"*/}
+      {/*            id="enabled"*/}
+      {/*            type="checkbox"*/}
+      {/*            onChange={ () => setEnabled(!enabled) }*/}
+      {/*            value={ enabled }*/}
+      {/*            defaultChecked={ enabled } />*/}
+      {/*          <label className="custom-control-label" htmlFor="enabled">*/}
+      {/*            Enabled*/}
+      {/*          </label>*/}
+      {/*        </div>*/}
+      {/*      </div>*/}
+      {/*      <div className="form-group">*/}
+      {/*        <label htmlFor="interval">Interval (seconds)</label>*/}
+      {/*        <input*/}
+      {/*          type="number"*/}
+      {/*          className="form-control"*/}
+      {/*          name="interval"*/}
+      {/*          min="1"*/}
+      {/*          value={ interval }*/}
+      {/*          onChange={ (event) =>*/}
+      {/*            setAutoSaveInterval(Number(event.target.value))*/}
+      {/*          }*/}
+      {/*        />*/}
+      {/*      </div>*/}
+      {/*    </form>*/}
 
-          <Section.Actions>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              form="autoSaveConfigForm"
-            >
-              Save
-            </button>
-          </Section.Actions>
-        </Section.Body>
-      </Section>
+      {/*    <Section.Actions>*/}
+      {/*      <button*/}
+      {/*        type="submit"*/}
+      {/*        className="btn btn-primary"*/}
+      {/*        form="autoSaveConfigForm"*/}
+      {/*      >*/}
+      {/*        Save*/}
+      {/*      </button>*/}
+      {/*    </Section.Actions>*/}
+      {/*  </Section.Body>*/}
+      {/*</Section>*/}
     </Overlay>
   );
 }
