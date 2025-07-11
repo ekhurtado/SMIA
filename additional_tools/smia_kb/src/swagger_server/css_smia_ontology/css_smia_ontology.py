@@ -6,8 +6,10 @@ import owlready2
 from owlready2 import get_ontology, OwlReadyOntologyParsingError, sync_reasoner_pellet, \
     OwlReadyInconsistentOntologyError, ThingClass, Ontology, destroy_entity
 
+from swagger_server.css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyUtils, \
+    CapabilitySkillOntologyInfo
 from swagger_server.models import SMIAinstance
-from swagger_server.css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyUtils, CapabilitySkillOntologyInfo
+
 
 class CapabilitySkillOntology:
     """

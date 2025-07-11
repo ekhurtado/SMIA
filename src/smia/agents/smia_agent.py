@@ -1,20 +1,19 @@
 import asyncio
-
-from spade.agent import Agent
 import logging
 
+from spade.agent import Agent
+
 from smia.aas_model.extended_aas_model import ExtendedAASModel
+from smia.behaviours.aas_fsm_behaviour import AASFSMBehaviour
 from smia.css_ontology.capability_skill_ontology import CapabilitySkillOntology
-from smia.logic import acl_smia_messages_utils
 from smia.logic.agent_services import AgentServices
 from smia.logic.exceptions import AASModelReadingError
+from smia.states.state_booting import StateBooting
 from smia.states.state_running import StateRunning
 from smia.states.state_stopping import StateStopping
 from smia.utilities import properties_file_utils
-from smia.utilities.general_utils import SMIAGeneralInfo
-from smia.behaviours.aas_fsm_behaviour import AASFSMBehaviour
-from smia.states.state_booting import StateBooting
 from smia.utilities.general_utils import GeneralUtils
+from smia.utilities.general_utils import SMIAGeneralInfo
 
 _logger = logging.getLogger(__name__)
 

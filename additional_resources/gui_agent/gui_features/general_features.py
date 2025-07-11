@@ -1,11 +1,9 @@
 import asyncio
 import json
 import os
-import time
 from os import getcwd
 
 from aiohttp import web
-
 from gui_features.behaviours import GUIAgentBehaviours
 
 

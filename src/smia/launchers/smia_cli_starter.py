@@ -4,18 +4,17 @@ arguments.
 """
 
 import logging
-import os
 import sys
-
-# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))    # To run in CLI (executing in 'src' folder)
 
 import smia
 from smia.agents.smia_agent import SMIAAgent
 from smia.agents.smia_app_agent import SMIAAppAgent
 from smia.agents.smia_resource_agent import SMIAResourceAgent
-from smia.utilities import smia_archive_utils
 from smia.utilities import properties_file_utils
+from smia.utilities import smia_archive_utils
 from smia.utilities.general_utils import CLIUtils
+
+# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))    # To run in CLI (executing in 'src' folder)
 
 # XMPP_SERVER = 'worker4'
 # XMPP_SERVER = 'ejabberd'

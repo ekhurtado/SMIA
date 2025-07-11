@@ -1,18 +1,11 @@
-import asyncio
 import logging
 import ntpath
 import os
-import random
-import string
 
-import basyx
+from SpiffWorkflow.bpmn.specs.defaults import EndEvent, ExclusiveGateway
+from SpiffWorkflow.bpmn.specs.defaults import ServiceTask
 from SpiffWorkflow.specs import StartTask
 from aiohttp import web
-from basyx.aas import model
-from basyx.aas.adapter import aasx
-
-from SpiffWorkflow.bpmn.specs.defaults import ServiceTask, StartEvent
-from SpiffWorkflow.bpmn.specs.defaults import EndEvent, ExclusiveGateway
 
 from utilities.smia_bpmn_utils import SMIABPMNUtils
 

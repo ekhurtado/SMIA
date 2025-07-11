@@ -7,7 +7,6 @@ from swagger_server.models.category import Category  # noqa: E501
 from swagger_server.models.datatypes import ReferenceIRI
 from swagger_server.models.error import Error  # noqa: E501
 from swagger_server.models.skill import Skill  # noqa: E501
-from swagger_server.models.skill_parameter import SkillParameter  # noqa: E501
 from swagger_server.models.tag import Tag  # noqa: E501
 
 

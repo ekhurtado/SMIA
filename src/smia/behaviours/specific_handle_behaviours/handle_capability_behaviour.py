@@ -1,7 +1,6 @@
 import json
 import logging
 
-import basyx.aas.model
 from spade.behaviour import OneShotBehaviour
 
 from smia import GeneralUtils

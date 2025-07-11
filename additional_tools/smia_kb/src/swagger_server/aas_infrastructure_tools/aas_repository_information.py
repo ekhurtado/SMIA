@@ -131,7 +131,7 @@ class AASRepositoryInformation:
             return
         self.all_aas_information_json['assetAdministrationShells'] = aas_json
         for aas_info in aas_json:
-            aas_id = util.encode_string_in_base64_url(aas_info['id'])
+            # aas_id = util.encode_string_in_base64_url(aas_info['id'])
             for submodel_ref_data in aas_info['submodels']:
                 submodel_json = AASOpenAPITools.send_http_get_request(
                         AASRepositoryInfrastructureInfo.get_submodel_json_url_by_id(submodel_ref_data['keys'][0]['value']))

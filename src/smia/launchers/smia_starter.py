@@ -6,9 +6,7 @@ Python methods.
 import logging
 
 import smia
-from smia.agents.extensible_smia_agent import ExtensibleSMIAAgent
 from smia.agents.smia_agent import SMIAAgent
-from smia.assetconnection.asset_connection import AssetConnection
 
 _logger = logging.getLogger(__name__)
 
