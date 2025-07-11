@@ -199,8 +199,6 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
             _logger.assetinfo("-----------------> ")
 
             result = await self.execute_acl_rp_css_protocol(current_bpmn_elem)
-            # TODO PROBARLO Y ANALIZARLA EL MENSAJE DE RESPUESTA PARA VER SI HA FALLADO ALGO
-            # print("TODO")
 
     async def execute_additional_tasks_of_bpmn_element(self, bpmn_element):
         """
@@ -219,7 +217,6 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
                 else:
                     _logger.assetinfo("The capability {} has no asset identifier specified, so it will be obtained through "
                                  "the CNP protocol.".format(bpmn_element.smia_capability))
-                    # TODO COMPROBARLO AQUI
                     smia_instance_candidates = await self.get_smia_instances_id_by_capability(bpmn_element.smia_capability)
                     bpmn_element.smia_instance = await self.execute_acl_cnp_protocol(smia_instance_candidates, bpmn_element)
                     # With the winner SMIA instance, it can be obtained the associated asset ID
@@ -365,7 +362,6 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
         Returns:
             str: identifier of the associated asset.
         """
-        # TODO FALTA PROBARLO (y desarrollarlo en SMIA ISM)
         # In order to obtain the data, an AAS Infrastructure Service need to be requested to SMIA ISM
         request_acl_msg = await self.create_acl_message_to_smia_ism(await acl_smia_messages_utils.
                                                                     generate_json_from_schema(
