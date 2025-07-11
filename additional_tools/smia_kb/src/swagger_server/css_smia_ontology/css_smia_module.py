@@ -1,14 +1,12 @@
 # """This module contains all OWL clases in form of Python classes, in order to add required methods to the correct
 # execution of SMIA software. This module is associated to the OWL ontology since it is defined inside the file of the
 # definition of OWL. When the owlready2 package loads the ontology, it will automatically import this Python module."""
-import logging
 from itertools import chain
 
 from owlready2 import Thing, get_ontology, DataPropertyClass, DatatypeClass
 
-from swagger_server.css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo, CapabilitySkillOntologyUtils
-
-import builtins
+from swagger_server.css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo, \
+    CapabilitySkillOntologyUtils
 
 css_ontology = get_ontology(CapabilitySkillOntologyUtils.get_ontology_file_path())
 base_namespace = css_ontology.get_namespace(CapabilitySkillOntologyInfo.CSS_ONTOLOGY_BASE_NAMESPACE)

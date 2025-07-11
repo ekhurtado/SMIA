@@ -5,14 +5,9 @@ from json import JSONDecodeError
 from spade.behaviour import CyclicBehaviour
 
 from smia.behaviours.specific_handle_behaviours.handle_negotiation_behaviour import HandleNegotiationBehaviour
-from smia.behaviours.specific_handle_behaviours.handle_svc_response_behaviour import HandleSvcResponseBehaviour
-from smia.css_ontology.css_ontology_utils import CapabilitySkillACLInfo, CapabilitySkillOntologyUtils
-from smia.logic import negotiation_utils, inter_smia_interactions_utils, acl_smia_messages_utils
+from smia.logic import inter_smia_interactions_utils, acl_smia_messages_utils
 from smia.logic.exceptions import RequestDataError, ServiceRequestExecutionError
-from smia.utilities import smia_archive_utils
-from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAJSONSchemas, ServiceTypes
-from smia.utilities.smia_info import SMIAInteractionInfo
-from smia.utilities.general_utils import GeneralUtils
+from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAJSONSchemas
 
 _logger = logging.getLogger(__name__)
 

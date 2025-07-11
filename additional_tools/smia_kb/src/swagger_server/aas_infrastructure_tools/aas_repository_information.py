@@ -43,7 +43,7 @@ class AASRepositoryInformation:
         # When all the CSS information has been extracted, it is saved in an SQLite database (if SMIA KB is running in
         # a compatible Operating System)
         CapabilitySkillOntology.get_instance().persistent_save_ontology()
-        print(f"Extracted and saved all the CSS information from the AAS data.")
+        print("Extracted and saved all the CSS information from the AAS data.")
 
     def create_ontology_instances_from_aas(self, aas_model_object):
         for submodel_data in aas_model_object.submodel:

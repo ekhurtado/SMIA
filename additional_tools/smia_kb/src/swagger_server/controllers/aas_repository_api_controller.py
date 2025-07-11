@@ -1,12 +1,7 @@
-import connexion
-import six
-
 from swagger_server.aas_infrastructure_tools.aas_open_api_tools import AASOpenAPITools
 from swagger_server.aas_infrastructure_tools.aas_repository_information import AASRepositoryInformation
 from swagger_server.aas_infrastructure_tools.aas_repository_infrastructure_info import AASRepositoryInfrastructureInfo
-from swagger_server.models.datatypes import AASRepositoryURL  # noqa: E501
 from swagger_server.models.error import Error  # noqa: E501
-from swagger_server import util
 
 
 def check_aas_repository(aas_repository_url=None):  # noqa: E501

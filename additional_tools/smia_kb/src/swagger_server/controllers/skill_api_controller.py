@@ -1,17 +1,14 @@
 import connexion
-import six
 
-import __main__
 from swagger_server.controllers import controllers_util
 from swagger_server.css_smia_ontology.css_ontology_utils import CapabilitySkillOntologyInfo
 from swagger_server.css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
-from swagger_server.models.datatypes import ReferenceIRI
 from swagger_server.models.category import Category  # noqa: E501
+from swagger_server.models.datatypes import ReferenceIRI
 from swagger_server.models.error import Error  # noqa: E501
 from swagger_server.models.skill import Skill  # noqa: E501
 from swagger_server.models.skill_parameter import SkillParameter  # noqa: E501
 from swagger_server.models.tag import Tag  # noqa: E501
-from swagger_server import util
 
 
 def delete_skill_by_id(skill_identifier, api_key=None):  # noqa: E501
@@ -259,6 +256,7 @@ def post_skill_parameter_by_skill_id(body, skill_identifier):  # noqa: E501
     """
     if connexion.request.is_json:
         body = Skill.from_dict(connexion.request.get_json())  # noqa: E501
+        print(body)
     return 'do some magic!'
 
 
@@ -286,10 +284,13 @@ def post_skill_parameter_by_skill_id(id, name, category, photo_urls, tags, statu
     """
     if connexion.request.is_json:
         name = ReferenceIRI.from_dict(connexion.request.get_json())  # noqa: E501
+        print(name)
     if connexion.request.is_json:
         category = Category.from_dict(connexion.request.get_json())  # noqa: E501
+        print(category)
     if connexion.request.is_json:
         tags = [Tag.from_dict(d) for d in connexion.request.get_json()]  # noqa: E501
+        print(tags)
     return 'do some magic!'
 
 
@@ -307,6 +308,7 @@ def put_skill_by_id(body, skill_identifier):  # noqa: E501
     """
     if connexion.request.is_json:
         body = Skill.from_dict(connexion.request.get_json())  # noqa: E501
+        print(body)
     return 'do some magic!'
 
 
@@ -334,8 +336,10 @@ def put_skill_by_id(id, name, category, photo_urls, tags, status, skill_identifi
     """
     if connexion.request.is_json:
         category = Category.from_dict(connexion.request.get_json())  # noqa: E501
+        print(category)
     if connexion.request.is_json:
         tags = [Tag.from_dict(d) for d in connexion.request.get_json()]  # noqa: E501
+        print(tags)
     return 'do some magic!'
 
 
@@ -355,6 +359,7 @@ def put_skill_parameter_by_skill_id(body, skill_identifier, skill_parameter_iden
     """
     if connexion.request.is_json:
         body = Skill.from_dict(connexion.request.get_json())  # noqa: E501
+        print(body)
     return 'do some magic!'
 
 
@@ -384,6 +389,8 @@ def put_skill_parameter_by_skill_id(id, name, category, photo_urls, tags, status
     """
     if connexion.request.is_json:
         category = Category.from_dict(connexion.request.get_json())  # noqa: E501
+        print(category)
     if connexion.request.is_json:
         tags = [Tag.from_dict(d) for d in connexion.request.get_json()]  # noqa: E501
+        print(tags)
     return 'do some magic!'

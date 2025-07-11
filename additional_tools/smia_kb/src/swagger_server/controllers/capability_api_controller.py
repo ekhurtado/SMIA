@@ -1,10 +1,6 @@
-import os
 import sqlite3
 
 import connexion
-import owlready2
-import six
-from owlready2 import get_ontology
 
 import __main__
 from swagger_server.controllers import controllers_util
@@ -13,10 +9,7 @@ from swagger_server.css_smia_ontology.css_smia_ontology import CapabilitySkillOn
 from swagger_server.models.capability import Capability  # noqa: E501
 from swagger_server.models.capability_constraint import CapabilityConstraint  # noqa: E501
 from swagger_server.models.error import Error  # noqa: E501
-from swagger_server.models.skill import Skill  # noqa: E501
 from swagger_server.models.tag import Tag  # noqa: E501
-from swagger_server import util
-
 
 all_capabilities = []
 
@@ -222,6 +215,7 @@ def post_asset_to_capability(body, capability_identifier):  # noqa: E501
     """
     if connexion.request.is_json:
         body = str.from_dict(connexion.request.get_json())  # noqa: E501
+        print(body)
     return 'do some magic!'
 
 
@@ -344,6 +338,7 @@ def post_capability_constraint(body, capability_identifier):  # noqa: E501
     """
     if connexion.request.is_json:
         body = CapabilityConstraint.from_dict(connexion.request.get_json())  # noqa: E501
+        print(body)
     return 'do some magic!'
 
 
@@ -365,6 +360,7 @@ def post_capability_constraint(id, tags, status, capability_identifier):  # noqa
     """
     if connexion.request.is_json:
         tags = [Tag.from_dict(d) for d in connexion.request.get_json()]  # noqa: E501
+        print(tags)
     return 'do some magic!'
 
 
@@ -479,6 +475,7 @@ def put_capability_constraint_by_capability_id(body, capability_identifier, capa
     """
     if connexion.request.is_json:
         body = CapabilityConstraint.from_dict(connexion.request.get_json())  # noqa: E501
+        print(body)
     return 'do some magic!'
 
 
@@ -502,4 +499,5 @@ def put_capability_constraint_by_capability_id(id, tags, status, capability_iden
     """
     if connexion.request.is_json:
         tags = [Tag.from_dict(d) for d in connexion.request.get_json()]  # noqa: E501
+        print(tags)
     return 'do some magic!'

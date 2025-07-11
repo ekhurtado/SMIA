@@ -1,6 +1,5 @@
 import logging
 
-from smia import CriticalError
 from smia.logic import acl_smia_messages_utils
 from smia.utilities.fipa_acl_info import FIPAACLInfo
 from spade.behaviour import CyclicBehaviour

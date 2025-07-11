@@ -1,12 +1,8 @@
 import connexion
-import six
 
 from swagger_server.css_smia_ontology.css_smia_ontology import CapabilitySkillOntology
-from swagger_server.models.category import Category  # noqa: E501
 from swagger_server.models.error import Error  # noqa: E501
 from swagger_server.models.smia_instance import SMIAinstance  # noqa: E501
-from swagger_server.models.tag import Tag  # noqa: E501
-from swagger_server import util
 
 
 def delete_smia_instance_by_id(smia_instance_identifier, api_key=None):  # noqa: E501
@@ -125,6 +121,7 @@ def put_smia_instance_by_id(body, smia_instance_identifier):  # noqa: E501
     """
     if connexion.request.is_json:
         body = SMIAinstance.from_dict(connexion.request.get_json())  # noqa: E501
+        print(body)
     return 'do some magic!'
 
 

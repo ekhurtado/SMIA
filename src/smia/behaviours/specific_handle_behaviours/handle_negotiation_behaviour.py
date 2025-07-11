@@ -1,11 +1,10 @@
-import json
 import logging
 import random
 
-from smia.css_ontology import css_operations
 from spade.behaviour import CyclicBehaviour
 
 from smia import GeneralUtils
+from smia.css_ontology import css_operations
 from smia.logic import negotiation_utils, inter_smia_interactions_utils, acl_smia_messages_utils
 from smia.logic.exceptions import CapabilityRequestExecutionError, AssetConnectionError
 from smia.utilities import smia_archive_utils

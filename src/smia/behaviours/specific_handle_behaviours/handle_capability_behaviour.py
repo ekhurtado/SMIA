@@ -6,13 +6,13 @@ from spade.behaviour import OneShotBehaviour
 
 from smia import GeneralUtils
 from smia.css_ontology import css_operations
+from smia.css_ontology.css_ontology_utils import CapabilitySkillACLInfo
 from smia.logic import inter_smia_interactions_utils, acl_smia_messages_utils
 from smia.logic.exceptions import CapabilityRequestExecutionError, CapabilityCheckingError, RequestDataError, \
     AssetConnectionError, OntologyReadingError, AASModelReadingError
-from smia.css_ontology.css_ontology_utils import CapabilitySkillACLInfo
 from smia.utilities import smia_archive_utils
+from smia.utilities.fipa_acl_info import FIPAACLInfo
 from smia.utilities.smia_info import AssetInterfacesInfo
-from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAJSONSchemas
 
 _logger = logging.getLogger(__name__)
 

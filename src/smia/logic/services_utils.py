@@ -5,7 +5,6 @@ Functional View of RAMI 4.0.
 import inspect
 import json
 import logging
-import types
 
 _logger = logging.getLogger(__name__)
 

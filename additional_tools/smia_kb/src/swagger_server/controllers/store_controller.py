@@ -1,9 +1,4 @@
-import connexion
-import six
-
-from swagger_server.models.error import Error  # noqa: E501
 from swagger_server.models.order import Order  # noqa: E501
-from swagger_server import util
 
 
 def delete_order(order_id):  # noqa: E501

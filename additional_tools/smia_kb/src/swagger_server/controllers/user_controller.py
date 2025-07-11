@@ -1,12 +1,9 @@
 import connexion
-import six
 
 from swagger_server.models.asset import Asset  # noqa: E501
 from swagger_server.models.category import Category  # noqa: E501
-from swagger_server.models.error import Error  # noqa: E501
 from swagger_server.models.tag import Tag  # noqa: E501
 from swagger_server.models.user import User  # noqa: E501
-from swagger_server import util
 
 
 def create_user(body=None):  # noqa: E501
@@ -21,6 +18,7 @@ def create_user(body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = Asset.from_dict(connexion.request.get_json())  # noqa: E501
+        print(body)
     return 'do some magic!'
 
 
@@ -46,8 +44,10 @@ def create_user(id=None, name=None, category=None, photo_urls=None, tags=None, s
     """
     if connexion.request.is_json:
         category = Category.from_dict(connexion.request.get_json())  # noqa: E501
+        print(category)
     if connexion.request.is_json:
         tags = [Tag.from_dict(d) for d in connexion.request.get_json()]  # noqa: E501
+        print(tags)
     return 'do some magic!'
 
 
@@ -63,6 +63,7 @@ def create_users_with_list_input(body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = [Asset.from_dict(d) for d in connexion.request.get_json()]  # noqa: E501
+        print(body)
     return 'do some magic!'
 
 
@@ -132,6 +133,7 @@ def update_user(username, body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = User.from_dict(connexion.request.get_json())  # noqa: E501
+        print(body)
     return 'do some magic!'
 
 

@@ -1,4 +1,3 @@
-import json
 import logging
 
 from smia.utilities.aas_related_services_info import AASRelatedServicesInfo

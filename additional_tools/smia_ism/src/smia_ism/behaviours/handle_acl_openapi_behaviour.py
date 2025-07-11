@@ -8,7 +8,6 @@ from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo
 from spade.behaviour import OneShotBehaviour
 
 from logic.acl_open_api_services import ACLOpenAPIServices
-from utilities.smia_acl_message_info import SMIAACLMessageInfo
 
 _logger = logging.getLogger(__name__)
 

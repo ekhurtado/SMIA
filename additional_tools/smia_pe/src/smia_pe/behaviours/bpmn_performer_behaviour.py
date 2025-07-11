@@ -7,7 +7,7 @@ from smia import CriticalError, GeneralUtils
 from smia.logic import inter_smia_interactions_utils, acl_smia_messages_utils
 from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
 from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo, ACLSMIAJSONSchemas
-from spade.behaviour import OneShotBehaviour, CyclicBehaviour
+from spade.behaviour import CyclicBehaviour
 
 from utilities.smia_bpmn_info import SMIABPMNInfo
 from utilities.smia_bpmn_utils import SMIABPMNUtils
@@ -540,7 +540,7 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
             # The information to be displayed in the GUI is also added
             self.myagent.smia_pe_info['InteractionsDict'].append({'type': 'analysis', 'title':
                 'A CSS-related execution need timeout checking ...', 'message': 'A timeout of {} seconds will be checked'
-                ' for execution of the capability with IRI on the SMIA instance {}'.format(
+                ' for execution of the capability with IRI {} on the SMIA instance {}'.format(
                 bpmn_element.timeout_value, bpmn_element.smia_capability, bpmn_element.smia_instance)})
 
             # In this case, the method for managing the timeout need to be performed in parallel to the CSS request

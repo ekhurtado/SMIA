@@ -2,10 +2,6 @@ import json
 import logging
 
 from basyx.aas.adapter.json import AASToJsonEncoder
-
-from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
-
-from smia.logic.services_utils import AgentServiceUtils
 from spade.behaviour import OneShotBehaviour
 
 from smia import GeneralUtils
@@ -13,8 +9,10 @@ from smia.aas_model.aas_model_utils import AASModelUtils
 from smia.logic import inter_smia_interactions_utils, acl_smia_messages_utils
 from smia.logic.exceptions import RequestDataError, ServiceRequestExecutionError, AASModelReadingError, \
     AssetConnectionError
+from smia.logic.services_utils import AgentServiceUtils
 from smia.utilities import smia_archive_utils
-from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAJSONSchemas, ServiceTypes, ACLSMIAOntologyInfo
+from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
+from smia.utilities.fipa_acl_info import FIPAACLInfo, ServiceTypes, ACLSMIAOntologyInfo
 from smia.utilities.smia_info import AssetInterfacesInfo
 
 _logger = logging.getLogger(__name__)

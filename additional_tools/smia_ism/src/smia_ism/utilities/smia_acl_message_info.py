@@ -1,6 +1,5 @@
 from smia import GeneralUtils
-from smia.utilities.fipa_acl_info import ServiceTypes, FIPAACLInfo, ACLSMIAOntologyInfo
-from spade.template import Template
+from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo
 
 
 class SMIAACLMessageInfo:
