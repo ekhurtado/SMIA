@@ -96,7 +96,7 @@ class AASRepositoryInfrastructure:
                       else AASRepositoryInfrastructure.clean_aas_json_information(value))
                 for key, value in data.items()
                 if (key not in ['category'])  # Add old attributes to be removed
-                   and not (key == 'idShort' and value == "")  # If idShort is not defined, it is removed
+                and not (key == 'idShort' and value == "")  # If idShort is not defined, it is removed
             }
         elif isinstance(data, list):
             # Apply recursively to each item in the list

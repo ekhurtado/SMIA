@@ -126,8 +126,8 @@ class ExtendedAASModel:
             return None
         aas_object = await self.get_aas_object()
         if aas_object is not None:
-                if hasattr(aas_object, attrib):
-                    return getattr(aas_object, attrib)
+            if hasattr(aas_object, attrib):
+                return getattr(aas_object, attrib)
         _logger.warning("Warning: the attribute does not exist in the AssetInformation of the AAS")
         return None
 
@@ -150,13 +150,13 @@ class ExtendedAASModel:
             return None
         aas_object = await self.get_aas_object()
         if aas_object is not None:
-                if attrib == 'asset_id':
-                    return aas_object.asset_information.get_asset_id()  # The extended method is used
-                elif attrib == 'asset_kind' and hasattr(aas_object.asset_information, attrib):
-                    return getattr(aas_object.asset_information, attrib).name if \
-                        getattr(aas_object.asset_information, attrib).name is not None else None
-                elif hasattr(aas_object.asset_information, attrib):
-                    return getattr(aas_object.asset_information, attrib)
+            if attrib == 'asset_id':
+                return aas_object.asset_information.get_asset_id()  # The extended method is used
+            elif attrib == 'asset_kind' and hasattr(aas_object.asset_information, attrib):
+                return getattr(aas_object.asset_information, attrib).name if \
+                    getattr(aas_object.asset_information, attrib).name is not None else None
+            elif hasattr(aas_object.asset_information, attrib):
+                return getattr(aas_object.asset_information, attrib)
 
         _logger.warning("Warning: the attribute does not exist in the AssetInformation of the AAS")
         return None
@@ -337,7 +337,7 @@ class ExtendedAASModel:
         for aas_object in self.aas_model_object_store:
             if isinstance(aas_object, basyx.aas.model.Submodel) and aas_object.administration is not None:
                 if aas_object.administration.template_id == template_id:
-                        return aas_object
+                    return aas_object
         return None
 
     async def check_and_adapt_for_templates(self, reference_dict):
@@ -614,7 +614,7 @@ class ExtendedAASModel:
             first_elem = await self.get_object_by_reference(rel.first)
             second_elem = await self.get_object_by_reference(rel.second)
             if first_elem == skill_elem:
-                 return  second_elem
+                return  second_elem
             elif second_elem == skill_elem:
                 return first_elem
         return None

@@ -39,6 +39,7 @@ def main():
     smia_agent = SMIAAgent(smia_jid, smia_psswd)
     smia.run(smia_agent)
 
+
 if __name__ == '__main__':
 
     # Run main program with SMIA

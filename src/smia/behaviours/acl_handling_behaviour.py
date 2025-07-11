@@ -55,7 +55,7 @@ class ACLHandlingBehaviour(CyclicBehaviour):
             # If the ontology value is not within the valid values in the SMIA approach, a 'not understood' ACL message
             # is returned.
             if (msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB) not in
-                ACLSMIAJSONSchemas.JSON_SCHEMA_ACL_SMIA_ONTOLOGIES_MAP.keys()):
+                    ACLSMIAJSONSchemas.JSON_SCHEMA_ACL_SMIA_ONTOLOGIES_MAP.keys()):
                 await inter_smia_interactions_utils.send_response_msg_from_received(
                     self, msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_NOT_UNDERSTOOD)
                 return  # The run method is terminated to restart checking for new messages

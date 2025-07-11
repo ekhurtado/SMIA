@@ -51,6 +51,7 @@ def main():
 
     smia.run(smia_pe_agent)
 
+
 if __name__ == '__main__':
 
     # Run main program with SMIA PE

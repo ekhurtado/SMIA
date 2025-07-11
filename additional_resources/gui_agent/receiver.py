@@ -58,7 +58,7 @@ class ReceiverAgent(Agent):
         # 1) Paso de la negociación
         step = 0
         # 2) Número de respuestas recibidas
-        replyNum = 0
+        reply_num = 0
 
         NEG_LOST = 0
         NEG_PARTIAL_WON = 1

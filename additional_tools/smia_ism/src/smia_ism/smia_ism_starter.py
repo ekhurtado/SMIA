@@ -45,6 +45,7 @@ def main():
 
     smia.run(smia_extensible_agent)
 
+
 if __name__ == '__main__':
 
     # Run main program with SMIA

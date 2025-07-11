@@ -253,10 +253,10 @@ class AssetConnection(metaclass=abc.ABCMeta):
                 (content_type == 'text/plain' and data_query_type != 'regex') or \
                 (content_type == 'application/x-www-form-urlencoded' and data_query_type != 'regex') or \
                 (content_type == 'application/xml' and data_query_type != 'xpath'):
-                        raise AssetConnectionError("The dataQuery type of interaction metadata {} is not valid for "
-                                                   "content type {}".format(interaction_elem_name, content_type),
-                                                   'invalid data query', "{} does no have a valid data"
-                                                                         " query".format(interaction_elem_name))
+                    raise AssetConnectionError("The dataQuery type of interaction metadata {} is not valid for "
+                                               "content type {}".format(interaction_elem_name, content_type),
+                                               'invalid data query', "{} does no have a valid data"
+                                                                     " query".format(interaction_elem_name))
 
 
 

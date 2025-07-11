@@ -52,6 +52,7 @@ def main():
 
     smia.run(smia_hi_agent)
 
+
 if __name__ == '__main__':
 
     # Run main program with SMIA

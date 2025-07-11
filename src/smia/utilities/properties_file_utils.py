@@ -192,7 +192,8 @@ def create_ontology_file(file_bytes_content):
 # --------------------------------------
 def get_asset_type():
     """
-    This method returns the asset type of the AAS set in the ConfigMap by the AAS Controller during the deployment process. This information is stored in "asset.properties" file.
+    This method returns the asset type of the AAS set in the ConfigMap by the AAS Controller during the deployment
+    process. This information is stored in "asset.properties" file.
 
     Returns:
         str: The asset type of the AAS.
