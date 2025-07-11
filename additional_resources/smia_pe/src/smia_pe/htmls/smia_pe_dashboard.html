@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SMIA PE Dashboard</title>
+    <!-- Include SPADE CSS links -->
+    {% include 'htmls/templates/spade_html_css_links.html' %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/2.1.2/viz.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/2.1.2/full.render.js"></script>
+
+    <!--Added script to automatically reload the SMIA PE GUI webpage-->
+    <script type="text/javascript" src="https://livejs.com/live.js"></script>
+
+    <style>
+
+        .box-primary {
+            padding-bottom: 5px;
+        }
+
+        .box-primary h2 {
+            margin-left: 10px;
+        }
+
+        .inner h1, .inner h2, .inner h3 {
+            /*Code to break lines long sentences in inner (used in small boxes)*/
+            word-wrap: break-word;
+            word-break: break-all;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+
+        /*Add your own CSS style code*/
+        .small-boxes-div {
+            padding: 5px 10px;
+        }
+
+        .table th, .table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+
+            word-wrap: break-word;
+            word-break: break-all;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        #bpmn-graphviz-div {
+            padding: 5px;
+            max-width: 100%;
+            width: 100%;
+            text-align: center;
+        }
+
+        /*BPMN management buttons*/
+        .bpmn-buttons-div {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            /*height: 150px; !* o el alto que necesites *!*/
+            max-width: 100%;
+            max-height: 100%;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .bpmn-continue-button, .bpmn-stop-button {
+            /*position: absolute;*/
+            right: 10px;
+            top: 50%;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            max-height: 100%;
+            max-width: 100%;
+            width: 60%;
+            text-align: center;
+            margin: 10px 30px;
+        }
+
+        .bpmn-continue-button:hover {
+            background-color: #218838;
+            border-color: #218838;
+        }
+
+        .bpmn-stop-button {
+            background-color: #e30000;
+        }
+
+        .bpmn-stop-button:hover {
+            background-color: #780000;
+            border-color: #780000;
+        }
+
+        .bpmn-execution-status {
+            font-weight: lighter;
+            font-style: italic;
+        }
+
+
+        .table {
+            width: 100%;
+            max-width: 100%;
+            table-layout: fixed;
+            margin-bottom: 20px;
+            background-color: transparent;
+            border-collapse: collapse;
+        }
+        .table th, .table td {
+            word-wrap: break-word;
+            word-break: break-all;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+        .table > thead {
+            background-color: #f4f4f4;
+            font-size: 15px;
+            width: fit-content;
+            text-align: justify;
+        }
+        .table > thead > tr > th {
+            border-bottom: 2px solid #f4f4f4;
+            width: fit-content;
+            text-align: center;
+            vertical-align: middle;
+            background-color: #dadada;
+        }
+        .table > tbody > tr > td {
+            border-top: 1px solid #f1f1f1;
+            width: fit-content;
+            max-width: 100%;
+            /*margin: 10px;*/
+            padding: 10px;
+            font-style: italic;
+        }
+
+        .table > tbody > tr:nth-child(even){
+            background-color: #ffffff;
+        }
+
+        .table tbody tr:hover {
+            background-color: #ececec;
+        }
+
+    </style>
+</head>
+<body class="sidebar-mini skin-blue" style="height: auto; min-height: 100%;">
+    <div class="wrapper" style="height: auto; min-height: 100%;">
+        <header class="main-header">
+            {% include 'htmls/templates/spade_html_header.html' %}
+        </header>
+        <aside class="main-sidebar">
+            {% include 'htmls/templates/spade_html_aside.html' %}
+        </aside>
+        <div class="content-wrapper" style="min-height: 960px;">
+            <section class="content-header">
+                <h1>SMIA PE Dashboard</h1>
+                <ol class="breadcrumb">
+                    <li><a href="/spade"><i class="fa fa-dashboard"></i> Home</a></li>
+                    <li class="active">SMIA PE Dashboard</li>
+                </ol>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <!-- Row with small boxes with information about SMIAs-->
+                <div class="row">
+                    <div class="col-md-7 col-md-offset-2">
+                        <div class="box box-success">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">SMIA CSS workflow information</h3>
+
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <h4>Information extracted from CSS-based BPMN workflow.</h4>
+
+                                <div class="row small-boxes-div">
+                                    <div class="col-lg-3 col-xs-7">
+                                        <!-- small box -->
+                                        <div class="small-box bg-aqua">
+                                        <!-- There are multiple colors: https://basscss.com/v7/docs/background-colors/ -->
+                                            <div class="inner">
+                                                <h3>{{ agent.bpmn_info.ServiceTasks }}</h3>
+<!--                                                <h3>0</h3>-->
+                                                <p>Detected ServiceTasks</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-project-diagram"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                    <div class="col-lg-3 col-xs-7">
+                                        <!-- small box -->
+                                        <div class="small-box bg-yellow">
+                                            <div class="inner">
+                                                <h3>{{ agent.bpmn_info.ExclusiveGateways }}</h3>
+<!--                                                <h3>0</h3>-->
+                                                <p>Detected ExclusiveGateways</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                    <div class="col-lg-3 col-xs-7">
+                                        <!-- small box -->
+                                        <div class="small-box bg-orange">
+                                            <div class="inner">
+                                                <h3>{{ agent.bpmn_info.Capabilities }}</h3>
+<!--                                                <h3>0</h3>-->
+                                                <p>Detected Capabilities</p>
+                                            </div>
+                                            <div class="icon">
+<!--                                                <i class="fa fa-sign-out-alt"></i>-->
+                                                <i class="fas fa-stream"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                    <div class="col-lg-3 col-xs-7">
+                                        <!-- small box -->
+                                        <div class="small-box bg-green">
+                                            <div class="inner">
+                                                <h3>{{ agent.bpmn_info.CompletedWorkflows }}</h3>
+<!--                                                <h3>0</h3>-->
+                                                <p>Completed workflows</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fas fa-flag-checkered"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                </div>
+                                <!-- ./row -->
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- ./row -->
+
+                <!-- Row with features related to BPMN workflow-->
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="box box-warning">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Workflow live status</h3>
+
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body" id="bpmn-graphviz-div">
+                                <script>
+                                    var viz = new Viz();
+                                    let graphVizDiv = document.getElementById("bpmn-graphviz-div");
+                                    viz.renderSVGElement("{{ agent.to_graphviz(agent)|safe }}")
+                                        .then(function (element) {
+                                            graphVizDiv.innerHTML = "";
+                                            graphVizDiv.appendChild(element);
+                                    });
+                                </script>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <!-- /.col -->
+
+                    <div class="col-md-4 col-md-offset-1">
+
+                        <div class="row">
+                            <div class="box box-primary">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Workflow management</h3>
+
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                                class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+
+                                    <div class="bpmn-buttons-div">
+                                        <button type="button" id="bpmn-continue-button" class="btn btn-primary load-button bpmn-continue-button">Continue</button>
+
+                                        <button type="button" id="bpmn-stop-button" class="btn btn-primary load-button bpmn-stop-button">Stop</button>
+
+                                        <div class="bpmn-execution-status-div">
+                                            {% if agent.bpmn_execution_status == True %}
+                                                <i class="fas fa-play-circle fa-lg" style="color: #28a745;"></i>
+                                                <span class="bpmn-execution-status">SMIA workflow executing</span>
+                                            {% else %}
+                                                <i class="fas fa-pause-circle fa-lg" style="color: #e30000;"></i>
+                                                <span class="bpmn-execution-status">SMIA workflow stoped</span>
+                                            {% endif %}
+                                    </div>
+
+                                    </div>
+
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <!-- /.box -->
+                        </div>
+                        <!-- ./row -->
+
+                        <div class="row">
+                            <div class="box box-primary">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Workflow information</h3>
+
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                                class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>CSS element</th>
+                                                <th>Asset</th>
+                                                <th>SMIA instance</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for bpmn_element in agent.bpmn_workflow_elements %}
+                                        <tr>
+                                            {% if '#' in bpmn_element.smia_capability %}
+                                            <td>{{ bpmn_element.smia_capability.split('#')[1] }}</td>
+                                            {% else %}
+                                            <td>{{ bpmn_element.smia_capability }}</td>
+                                            {% endif %}
+
+                                            {% if bpmn_element.smia_asset is not none %}
+                                            <td>{{ bpmn_element.smia_asset }}</td>
+                                            {% else %}
+                                            <td>-</td>
+                                            {% endif %}
+
+                                            {% if bpmn_element.smia_instance is defined and bpmn_element.smia_instance is not none %}
+                                            <td>{{ bpmn_element.smia_instance }}</td>
+                                            {% else %}
+                                            <td>-</td>
+                                            {% endif %}
+                                        </tr>
+                                        {% endfor %}
+<!--                                            <tr>-->
+<!--                                                <td>Transport</td>-->
+<!--                                                <td>id/asset/adsa/258818</td>-->
+<!--                                                <td>{industrial-robot-a</td>-->
+<!--                                            </tr>-->
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <!-- /.box -->
+                        </div>
+                        <!-- ./row -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- ./row -->
+
+            </section>
+            <!-- /.content -->
+        </div>
+
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 0.2.4
+            </div>
+            <strong>Copyright © {% now 'local', '%Y' %} <a href="https://github.com/ekhurtado/SMIA" target="_blank">SMIA</a>.</strong>
+        </footer>
+
+    </div>
+    <!-- Include SPADE scripts -->
+    {% include 'htmls/templates/spade_html_scripts.html' %}
+
+    <script>
+        // Here some JS code can be added
+        function reloadGraphviz() {
+            fetch('/smia_pe_dashboard/bpmn_dot')
+                .then(response => response.text())
+                .then(dot => {
+                    const viz = new Viz();
+                    dot = dot.replace(/"/g, '');
+                    return viz.renderSVGElement(dot);
+                })
+                .then(svg => {
+                    const div = document.getElementById("bpmn-graphviz-div");
+                    div.innerHTML = "";
+                    div.appendChild(svg);
+                })
+                .catch(err => console.error("Error when reloading Graphviz dot:", err));
+        }
+        setInterval(reloadGraphviz, 3000);
+
+        const continueButton = document.getElementById('bpmn-continue-button');
+        const stopButton = document.getElementById('bpmn-stop-button');
+
+        continueButton.addEventListener('click', async function(event) {
+
+            // Send data as JSON using fetch
+            let requestJSON = {'BPMNExecutionChange': 'Continue'};
+            try {
+                const response = await fetch('/smia_pe_dashboard', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestJSON)
+                });
+
+                const json = await response.json();
+                if (json.status !== 'success') {
+                    alert(`Failed to continue the SMIA PE workflow execution: ${json.reason}.`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to continue the SMIA PE workflow execution. Error: .' + error);
+            }
+
+            location.reload();  // The web page is reloaded
+        });
+
+        stopButton.addEventListener('click', async function(event) {
+
+            // Send data as JSON using fetch
+            const requestJSON = {'BPMNExecutionChange': 'Stop'};
+            try {
+                const response = await fetch('/smia_pe_dashboard', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestJSON)
+                });
+
+                const json = await response.json();
+                if (json.status === 'success') {
+                    alert(`Successfully stopped SMIA PE workflow execution.`);
+                } else {
+                    alert(`Failed to stop the SMIA PE workflow execution: ${json.reason}.`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to stop the SMIA PE workflow execution. Error: .' + error);
+            }
+
+            location.reload();  // The web page is reloaded
+        });
+    </script>
+
+</body>
+</html>
