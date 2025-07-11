@@ -1,0 +1,1820 @@
+openapi: 3.0.4
+info:
+  title: SMIA Knowledge Base (KB) | HTTP/REST | API Collection
+  description: |-
+    <img src="https://raw.githubusercontent.com/ekhurtado/SMIA/refs/heads/smia_kb_development/additional_resources/smia_kb/src/SMIA_KB_logo.png" alt="SMIA KB logo" height="100" />
+    
+    This is a sample Self-configurable Manufacturing Industrial Agents (SMIA) Knowledge Base (KB) based on the OpenAPI 3.0 specification.  You can find out more about at [GitHub](https://github.com/ekhurtado/SMIA). The SMIA KB has been developed as a SMIA-compliant infrastructure service, but it is designed to be interoperable with other approaches, taking advantage of following the OpenAPI specification. It addresses the realization of a Knowledge Base based on Capability-Skill-Service (CSS) model and driven by an ontological implementation, capable of providing CSS ontology information management.
+
+    Some useful links:
+    - [SMIA GitHub repository](https://github.com/ekhurtado/SMIA)
+    - [SMIA ReadTheDocs documentation project](https://smia.readthedocs.io/en/latest/)
+    - [SMIA DockerHub repository](hub.docker.com/r/ekhurtado/smia/)
+  termsOfService: https://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: https://swagger.io
+servers:
+- url: https://smiakb.gcis.ehu/api/v3
+tags:
+- name: Capability API
+  description: methods related to the Capability layer of the CSS model
+  externalDocs:
+    description: Find out more
+    url: https://smia.readthedocs.io/en/latest/
+- name: Skill API
+  description: methods related to the Skill layer of the CSS model
+  externalDocs:
+    description: Find out more
+    url: https://smia.readthedocs.io/en/latest/
+- name: SMIA API
+  description: methods related to SMIA instances
+  externalDocs:
+    description: Find out more
+    url: https://smia.readthedocs.io/en/latest/
+- name: Serialization API
+  description: useful methods for working with AAS and OWL identifiers
+  externalDocs:
+    description: Find out more
+    url: https://smia.readthedocs.io/en/latest/
+- name: AAS Repository API
+  description: useful methods for working with an OpenAPI-compliant AAS Repository
+  externalDocs:
+    description: Find out more
+    url: https://app.swaggerhub.com/apis/Plattform_i40/Entire-API-Collection/
+paths:
+  /capabilities:
+    get:
+      tags:
+      - Capability API
+      summary: Returns all capabilities related to the SMIA-CSS model.
+      description: Returns all capabilities related to the SMIA-CSS model. Capabilities
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: get_all_capabilities
+      responses:
+        "200":
+          description: Requested SMIA-CSS capabilities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Capability"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Capability"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+    post:
+      tags:
+      - Capability API
+      summary: Add a new Capability to the SMIA KB.
+      description: Add a new Capability to the SMIA KB.
+      operationId: post_capability
+      requestBody:
+        description: SMIA-CSS Capability object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Capability"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Capability"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Capability"
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Capability created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Capability"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Capability"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+  /capabilities/$identifiers:
+    get:
+      tags:
+      - Capability API
+      summary: Returns all capabilities identifiers related to the SMIA-CSS model.
+      description: Returns all capabilities identifiers related to the SMIA-CSS model.
+        Capabilities are extracted from the AAS repository or added by the user through
+        the SMIA KB API.
+      operationId: get_all_capabilities_identifiers
+      responses:
+        "200":
+          description: Requested SMIA-CSS capabilities identifiers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReferenceIRI"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReferenceIRI"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+  /capabilities/{capabilityIdentifier}:
+    get:
+      tags:
+      - Capability API
+      summary: Returns a specific capability related to the SMIA-CSS model.
+      description: Returns a specific capability related to the SMIA-CSS model. Capabilities
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: get_capability_by_id
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Capability"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Capability"
+        "400":
+          description: Invalid ontological IRI supplied
+        "404":
+          description: Capability not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+    put:
+      tags:
+      - Capability API
+      summary: Updates an existing capability related to the SMIA-CSS model.
+      description: Updates an existing capability related to the SMIA-CSS model. Capabilities
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: put_capability_by_id
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      requestBody:
+        description: SMIA-CSS Capability object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Capability"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Capability"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Capability"
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Capability updated successfully
+        "400":
+          description: bad request
+        "404":
+          description: Capability not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+    delete:
+      tags:
+      - Capability API
+      summary: Deletes a capability related to the SMIA-CSS model.
+      description: Deletes a capability related to the SMIA-CSS model.
+      operationId: delete_capability_by_id
+      parameters:
+      - name: api_key
+        in: header
+        description: ""
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      responses:
+        "200":
+          description: SMIA-CSS Capability deleted successfully
+        "400":
+          description: Invalid capability object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+  /capabilities/{capabilityIdentifier}/skill-refs:
+    get:
+      tags:
+      - Capability API
+      summary: Returns all references to the skills related to a specific capability
+        of the SMIA KB.
+      description: Returns all references to the skills related to a specific capability
+        of the SMIA KB. Associated skills of capabilities are extracted from the AAS-CSS
+        model and they are available through the Skill API.
+      operationId: get_all_skill_refs_by_capability_id
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      responses:
+        "200":
+          description: Requested skill references of a capability
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReferenceIRI"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReferenceIRI"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+    post:
+      tags:
+      - Capability API
+      summary: Add a new skill reference to a specific capability of the SMIA KB.
+      description: Add a new skill reference to a specific capability of the SMIA
+        KB.
+      operationId: post_skill_ref_to_capability
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      requestBody:
+        description: SMIA-CSS identifier of the Skill to be associated to the desired
+          capability.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReferenceIRI"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/ReferenceIRI"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/ReferenceIRI"
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Capability updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Capability"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Capability"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+  /capabilities/{capabilityIdentifier}/capabilitiesConstraints:
+    get:
+      tags:
+      - Capability API
+      summary: Returns all capabilities constraints related to the SMIA-CSS model.
+      description: Returns all capabilities constraints related to the SMIA-CSS model.
+        Capabilities are extracted from the AAS repository or added by the user through
+        the SMIA KB API.
+      operationId: get_all_capabilities_constraints_by_capability_id
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      responses:
+        "200":
+          description: Requested SMIA-CSS capabilities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CapabilityConstraint"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CapabilityConstraint"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+    post:
+      tags:
+      - Capability API
+      summary: Add a new Capability Constraint to the SMIA KB.
+      description: Add a new Capability Constraint to the SMIA KB.
+      operationId: post_capability_constraint
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      requestBody:
+        description: SMIA-CSS Capability Constraint object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CapabilityConstraint"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/CapabilityConstraint"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/CapabilityConstraint"
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Capability Constraint created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Capability"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Capability"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+  /capabilities/{capabilityIdentifier}/capabilitiesConstraints/{capabilityConstraintIdentifier}:
+    get:
+      tags:
+      - Capability API
+      summary: Returns a specific capability constraint related to the SMIA-CSS model.
+      description: Returns a specific capability related to the SMIA-CSS model. Capabilities
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: get_capability_constraint_by_capability_id
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      - name: capabilityConstraintIdentifier
+        in: path
+        description: The Capability Constraint's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CapabilityConstraint"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/CapabilityConstraint"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Capability Constraint not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+    put:
+      tags:
+      - Capability API
+      summary: Updates an existing capability related to the SMIA-CSS model.
+      description: Updates an existing capability related to the SMIA-CSS model. Capabilities
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: put_capability_constraint_by_capability_id
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      - name: capabilityConstraintIdentifier
+        in: path
+        description: The Capability Constraint's unique identifier (must be added
+          base64-url encoded. The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      requestBody:
+        description: SMIA-CSS Capability Constraints object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CapabilityConstraint"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/CapabilityConstraint"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/CapabilityConstraint"
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Capability Constraint updated successfully
+        "400":
+          description: bad request
+        "404":
+          description: Capability Constraint not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+    delete:
+      tags:
+      - Capability API
+      summary: Deletes a capability constraint related to the SMIA-CSS model.
+      description: Deletes a capability related to the SMIA-CSS model.
+      operationId: delete_capability_constraint_by_capability_id
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      - name: api_key
+        in: header
+        description: ""
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: capabilityConstraintIdentifier
+        in: path
+        description: The Capability Constraint's unique identifier (must be added
+          base64-url encoded. The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      responses:
+        "200":
+          description: SMIA-CSS Capability deleted successfully
+        "400":
+          description: Invalid capability object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+  /capabilities/{capabilityIdentifier}/assets:
+    get:
+      tags:
+      - Capability API
+      summary: Returns all assets related to the capability of the SMIA-CSS model.
+      description: Returns all assets related to the capability of the SMIA-CSS model.
+        Capabilities are extracted from the AAS repository or added by the user through
+        the SMIA KB API.
+      operationId: get_all_assets_by_capability_id
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      responses:
+        "200":
+          description: Requested assets related to a SMIA-CSS capability
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Asset"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Asset"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+    post:
+      tags:
+      - Capability API
+      summary: Add a new asset to a specific Capability of the SMIA KB.
+      description: Add a new asset to a specific Capability of the SMIA KB.
+      operationId: post_asset_to_capability
+      parameters:
+      - name: capabilityIdentifier
+        in: path
+        description: The Capability's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      requestBody:
+        description: SMIA-CSS Capability asset identifier
+        content:
+          application/json:
+            schema:
+              type: string
+          application/xml:
+            schema:
+              type: string
+          application/x-www-form-urlencoded:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Capability asset created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Capability"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Capability"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+      x-openapi-router-controller: swagger_server.controllers.capability_api_controller
+  /skills:
+    get:
+      tags:
+      - Skill API
+      summary: Returns all skills related to the SMIA-CSS model.
+      description: Returns all skills related to the SMIA-CSS model. Skills are extracted
+        from the AAS repository or added by the user through the SMIA KB API.
+      operationId: get_all_skills
+      responses:
+        "200":
+          description: Requested SMIA-CSS skills
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Skill"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Skill"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+    post:
+      tags:
+      - Skill API
+      summary: Add a new Skill to the SMIA KB.
+      description: Add a new Skill to the SMIA KB.
+      operationId: post_skill
+      requestBody:
+        description: SMIA-CSS Skill object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Skill"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Skill"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Skill"
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Skill created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Skill"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Skill"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+  /skills/$identifiers:
+    get:
+      tags:
+      - Skill API
+      summary: Returns all skills identifiers related to the SMIA-CSS model.
+      description: Returns all skills identifiers related to the SMIA-CSS model. Skills
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: get_all_skill_identifiers
+      responses:
+        "200":
+          description: Requested SMIA-CSS skills identifiers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReferenceIRI"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReferenceIRI"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+  /skills/{skillIdentifier}:
+    get:
+      tags:
+      - Skill API
+      summary: Returns a specific skill related to the SMIA-CSS model.
+      description: Returns a specific skill related to the SMIA-CSS model. Skills
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: get_skill_by_id
+      parameters:
+      - name: skillIdentifier
+        in: path
+        description: The Skill's unique identifier (must be added base64-url encoded.
+          The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Skill"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Skill"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Capability not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+    put:
+      tags:
+      - Skill API
+      summary: Updates an existing skill related to the SMIA-CSS model.
+      description: Updates an existing skill related to the SMIA-CSS model. Capabilities
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: put_skill_by_id
+      parameters:
+      - name: skillIdentifier
+        in: path
+        description: The Skill's unique identifier (must be added base64-url encoded.
+          The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      requestBody:
+        description: SMIA-CSS Skill object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Skill"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Skill"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Skill"
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Skill updated successfully
+        "400":
+          description: bad request
+        "404":
+          description: Skill not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+    delete:
+      tags:
+      - Skill API
+      summary: Deletes a skill related to the SMIA-CSS model.
+      description: Deletes a skill related to the SMIA-CSS model.
+      operationId: delete_skill_by_id
+      parameters:
+      - name: api_key
+        in: header
+        description: ""
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: skillIdentifier
+        in: path
+        description: The Skill's unique identifier (must be added base64-url encoded.
+          The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      responses:
+        "200":
+          description: SMIA-CSS Skill deleted successfully
+        "400":
+          description: Invalid Skill object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+  /skills/{skillIdentifier}/parameters:
+    get:
+      tags:
+      - Skill API
+      summary: Returns all skill parameters related to a specific SMIA-CSS skill.
+      description: Returns all skill parameters related to the SMIA-CSS model. Skills
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: get_all_skill_parameters_by_skill_id
+      parameters:
+      - name: skillIdentifier
+        in: path
+        description: The Skill's unique identifier (must be added base64-url encoded.
+          The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      responses:
+        "200":
+          description: Requested SMIA-CSS skill parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SkillParameter"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SkillParameter"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+    post:
+      tags:
+      - Skill API
+      summary: Add a new Skill Parameter to the SMIA KB.
+      description: Add a new Skill Parameter to the SMIA KB.
+      operationId: post_skill_parameter_by_skill_id
+      parameters:
+      - name: skillIdentifier
+        in: path
+        description: The Skill's unique identifier (must be added base64-url encoded.
+          The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      requestBody:
+        description: SMIA-CSS Skill object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SkillParameter"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/SkillParameter"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/SkillParameter"
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Skill Parameter created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Skill"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Skill"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+  /skills/{skillIdentifier}/parameters/{skillParameterIdentifier}:
+    get:
+      tags:
+      - Skill API
+      summary: Returns a specific skill parameter related to the SMIA-CSS model.
+      description: Returns a specific skill related to the SMIA-CSS model. Skills
+        are extracted from the AAS repository or added by the user through the SMIA
+        KB API.
+      operationId: get_skill_parameters_by_skill_id
+      parameters:
+      - name: skillIdentifier
+        in: path
+        description: The Skill's unique identifier (must be added base64-url encoded.
+          The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      - name: skillParameterIdentifier
+        in: path
+        description: The Skill parameter's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkillParameter"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/SkillParameter"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Capability not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+    put:
+      tags:
+      - Skill API
+      summary: Updates an existing skill related to the SMIA-CSS model with a new
+        Skill Parameter.
+      description: Updates an existing skill related to the SMIA-CSS model with a
+        new Skill Parameter. Capabilities are extracted from the AAS repository or
+        added by the user through the SMIA KB API.
+      operationId: put_skill_parameter_by_skill_id
+      parameters:
+      - name: skillIdentifier
+        in: path
+        description: The Skill's unique identifier (must be added base64-url encoded.
+          The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      - name: skillParameterIdentifier
+        in: path
+        description: The Skill parameter's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      requestBody:
+        description: SMIA-CSS Skill object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Skill"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Skill"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Skill"
+        required: true
+      responses:
+        "200":
+          description: SMIA-CSS Skill updated successfully
+        "400":
+          description: bad request
+        "404":
+          description: Skill not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+    delete:
+      tags:
+      - Skill API
+      summary: Deletes a skill parameter from a skill related to the SMIA-CSS model.
+      description: Deletes a skill parameter from a skill related to the SMIA-CSS
+        model.
+      operationId: delete_skill_parameter_by_skill_id
+      parameters:
+      - name: skillParameterIdentifier
+        in: path
+        description: The Skill parameter's unique identifier (must be added base64-url
+          encoded. The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      - name: api_key
+        in: header
+        description: ""
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: skillIdentifier
+        in: path
+        description: The Skill's unique identifier (must be added base64-url encoded.
+          The Serialization API can be used to obtain it)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceIRIencoded"
+      responses:
+        "200":
+          description: SMIA-CSS Skill deleted successfully
+        "400":
+          description: Invalid Skill object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+      x-openapi-router-controller: swagger_server.controllers.skill_api_controller
+  /smiaInstances:
+    get:
+      tags:
+      - SMIA API
+      summary: Finds all registered SMIA instances.
+      description: "Multiple tags can be provided with comma separated strings. Use\
+        \ tag1, tag2, tag3 for testing."
+      operationId: get_all_smia_instances
+      responses:
+        "200":
+          description: Requested SMIA instances
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SMIAinstance"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SMIAinstance"
+        "400":
+          description: Invalid tag value
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.smia_api_controller
+    post:
+      tags:
+      - SMIA API
+      summary: Add a new SMIA instance to the SMIA KB.
+      description: Add a new SMIA instance to the SMIA KB.
+      operationId: post_smia_instance
+      requestBody:
+        description: SMIA instance object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SMIAinstance"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/SMIAinstance"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/SMIAinstance"
+        required: true
+      responses:
+        "200":
+          description: SMIA instance created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SMIAinstance"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/SMIAinstance"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+      x-openapi-router-controller: swagger_server.controllers.smia_api_controller
+  /smiaInstances/$identifiers:
+    get:
+      tags:
+      - SMIA API
+      summary: Returns all SMIA instances identifiers registered in the SMIA KB.
+      description: Returns all SMIA instances identifiers registered in the SMIA KB.
+      operationId: get_all_smia_instances_identifiers
+      responses:
+        "200":
+          description: Requested SMIA instances identifiers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReferenceSMIA"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReferenceSMIA"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.smia_api_controller
+  /smiaInstances/{smiaInstanceIdentifier}:
+    get:
+      tags:
+      - SMIA API
+      summary: Returns a specific SMIA instance registered in the SMIA KB.
+      description: Returns a specific SMIA instance registered in the SMIA KB.
+      operationId: get_smia_instance_by_id
+      parameters:
+      - name: smiaInstanceIdentifier
+        in: path
+        description: The SMIA instance's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceSMIA"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SMIAinstance"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/SMIAinstance"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: SMIA instance not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.smia_api_controller
+    put:
+      tags:
+      - SMIA API
+      summary: Updates an existing SMIA instance registered in the SMIA KB.
+      description: Updates an existing SMIA instance registered in the SMIA KB. SMIA
+        instances automatically register themselves when deployed.
+      operationId: put_smia_instance_by_id
+      parameters:
+      - name: smiaInstanceIdentifier
+        in: path
+        description: The SMIA instance's unique id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceSMIA"
+      requestBody:
+        description: SMIA instance object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SMIAinstance"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/SMIAinstance"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/SMIAinstance"
+        required: true
+      responses:
+        "200":
+          description: SMIA instance updated successfully
+        "400":
+          description: bad request
+        "404":
+          description: SMIA instance not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+      x-openapi-router-controller: swagger_server.controllers.smia_api_controller
+    delete:
+      tags:
+      - SMIA API
+      summary: Deletes a SMIA instance within the SMIA KB.
+      description: Deletes a SMIA instance within the SMIA KB.
+      operationId: delete_smia_instance_by_id
+      parameters:
+      - name: api_key
+        in: header
+        description: ""
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: smiaInstanceIdentifier
+        in: path
+        description: SMIA instance id to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: "#/components/schemas/ReferenceSMIA"
+      responses:
+        "200":
+          description: SMIA instance deleted successfully
+        "400":
+          description: Invalid SMIA instance object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+      x-openapi-router-controller: swagger_server.controllers.smia_api_controller
+  /serialization:
+    put:
+      tags:
+      - Serialization API
+      summary: Serializes a string to the UTF8-BASE64-URL-encoded format necessary
+        to use within the SMIA KB API.
+      description: "Serializes a string to the UTF8-BASE64-URL-encoded format necessary\
+        \ to use within the SMIA KB API. The AAS and ontology identifiers need to\
+        \ be added in this format, as they are passed in the path. This method allows\
+        \ to encode a identifier of string format in UTF8-BASE64-URL."
+      operationId: serialize
+      requestBody:
+        description: Identifier in string format
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReferenceIRI"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/ReferenceIRI"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/ReferenceIRI"
+        required: true
+      responses:
+        "200":
+          description: Identifier encoded successfully
+        "400":
+          description: bad request
+        "404":
+          description: Identifier not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.serialization_api_controller
+  /deserialization:
+    put:
+      tags:
+      - Serialization API
+      summary: Deserializes a UTF8-BASE64-URL-encoded format necessary to use within
+        the SMIA KB API to a string.
+      description: "Serializes a string to the UTF8-BASE64-URL-encoded format necessary\
+        \ to use within the SMIA KB API. The AAS and ontology identifiers need to\
+        \ be added in this format, as they are passed in the path. This method allows\
+        \ to decode a identifier of UTF8-BASE64-URL format in string."
+      operationId: deserialize
+      requestBody:
+        description: Identifier in UTF8-BASE64-URL-encoded format
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReferenceIRIencoded"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/ReferenceIRIencoded"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/ReferenceIRIencoded"
+        required: true
+      responses:
+        "200":
+          description: Identifier decoded successfully
+        "400":
+          description: bad request
+        "404":
+          description: Identifier not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.serialization_api_controller
+  /checkAASRepository:
+    get:
+      tags:
+      - AAS Repository API
+      summary: Checks the availability of the AAS Repository.
+      description: "Checks the availability of the AAS Repository (if it is running\
+        \ and available). The AASRepositoryURL query parameter can be used to set\
+        \ the URL of the AAS Repository. If it is not set, the URL that the SMIA KB\
+        \ has predefined is taken."
+      operationId: check_aas_repository
+      parameters:
+      - name: AASRepositoryURL
+        in: query
+        description: The IP address and port [http://{ip}:{port}] of the AAS Repository (optional).
+        required: false
+        style: form
+        explode: false
+        schema:
+          $ref: "#/components/schemas/AASRepositoryURL"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "true"
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: string
+                example: "true"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: AAS Repository API method not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.aas_repository_api_controller
+  /extractCSSFromAASRepository:
+    get:
+      tags:
+      - AAS Repository API
+      summary: Extracts the CSS information from the AAS Repository.
+      description: "Gets all the AAS data from the AAS Repository API (if the repostiory\
+        \ is also OpenAPI-compliant), and extracts all the CSS information from it.\
+        \ The AASRepositoryURL query parameter can be used to set the URL of the AAS\
+        \ Repository. If it is not set, the URL that the SMIA KB has predefined is\
+        \ taken."
+      operationId: extract_css_from_aas_repository
+      parameters:
+      - name: AASRepositoryURL
+        in: query
+        description: The IP address and port [http://{ip}:{port}] of the AAS Repository (optional).
+        required: false
+        style: form
+        explode: false
+        schema:
+          $ref: "#/components/schemas/AASRepositoryURL"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+                example: CSS information successfully extracted.
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: string
+                example: CSS information successfully extracted.
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: AAS Repository API method not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-openapi-router-controller: swagger_server.controllers.aas_repository_api_controller
+components:
+  schemas:
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    ReferenceAAS:
+      type: string
+      example: http://example.com/ids/aasElement001
+    ReferenceIRI:
+      type: string
+      example: http://name.org/css-smia#Capability01
+    ReferenceIRIencoded:
+      type: string
+      example: aHR0cDovL25hbWUub3JnL2Nzcy1zbWlhI0NhcGFiaWxpdHkwMQ==
+    ReferenceSMIA:
+      type: string
+      example: agentInstance001
+    Capability:
+      required:
+      - assets
+      - category
+      - hasLifecycle
+      - iri
+      - isRealizedBy
+      - name
+      type: object
+      properties:
+        iri:
+          $ref: "#/components/schemas/ReferenceIRI"
+        name:
+          type: string
+          example: capability01
+        category:
+          type: string
+          example: AssetCapability
+          enum:
+          - AgentCapability
+          - AssetCapability
+        hasLifecycle:
+          type: string
+          description: The lifecycle of the capability.
+          example: ASSURANCE
+          enum:
+          - ASSURANCE
+          - OFFER
+          - REQUIREMENT
+        isRealizedBy:
+          minItems: 1
+          type: array
+          description: By which skills is the capability realized.
+          xml:
+            wrapped: true
+          items:
+            $ref: "#/components/schemas/ReferenceIRI"
+        assets:
+          type: array
+          description: Which assets can perform this capability.
+          xml:
+            wrapped: true
+          items:
+            $ref: "#/components/schemas/Asset"
+        isRestrictedBy:
+          type: array
+          description: By which constraints is the capability restricted.
+          xml:
+            wrapped: true
+          items:
+            $ref: "#/components/schemas/CapabilityConstraint"
+      example:
+        iri: http://name.org/css-smia#Capability01
+        assets:
+        - kind: Type
+          id: http://example.com/ids/asset001
+          type: http://example.com/ids/aasElement001
+        - kind: Type
+          id: http://example.com/ids/asset001
+          type: http://example.com/ids/aasElement001
+        isRestrictedBy:
+        - iri: null
+          name: capabilityConstraint01
+          hasCondition: INVARIANT
+        - iri: null
+          name: capabilityConstraint01
+          hasCondition: INVARIANT
+        name: capability01
+        isRealizedBy:
+        - null
+        - null
+        category: AssetCapability
+        hasLifecycle: ASSURANCE
+      xml:
+        name: capability
+    CapabilityConstraint:
+      required:
+      - hasCondition
+      - iri
+      - name
+      type: object
+      properties:
+        iri:
+          $ref: "#/components/schemas/ReferenceIRI"
+        name:
+          type: string
+          example: capabilityConstraint01
+        hasCondition:
+          type: string
+          description: The condition of the Capability Constraint.
+          example: INVARIANT
+          enum:
+          - INVARIANT
+          - POSTCONDITION
+          - PRECONDITION
+      example:
+        iri: null
+        name: capabilityConstraint01
+        hasCondition: INVARIANT
+      xml:
+        name: capabilityConstraint
+    Skill:
+      required:
+      - iri
+      - name
+      type: object
+      properties:
+        iri:
+          $ref: "#/components/schemas/ReferenceIRI"
+        name:
+          type: string
+          example: skill01
+        accessibleThrough:
+          minItems: 1
+          type: array
+          description: Through which skill interfaces is the capability accessible.
+          xml:
+            wrapped: true
+          items:
+            $ref: "#/components/schemas/ReferenceIRI"
+        hasParameter:
+          type: array
+          description: The associated skill parameters.
+          xml:
+            wrapped: true
+          items:
+            $ref: "#/components/schemas/SkillParameter"
+        hasImplementationType:
+          type: string
+          description: "The implementation type of the skill: OPERATION, SPADE_BEHAVIOUR..."
+          example: OPERATION
+      example:
+        iri: http://name.org/css-smia#Capability01
+        hasImplementationType: OPERATION
+        accessibleThrough:
+        - null
+        - null
+        name: skill01
+        hasParameter:
+        - iri: null
+          name: skillParameter01
+          hasType: INPUT
+        - iri: null
+          name: skillParameter01
+          hasType: INPUT
+      xml:
+        name: skill
+    SkillParameter:
+      required:
+      - hasType
+      - iri
+      - name
+      type: object
+      properties:
+        iri:
+          $ref: "#/components/schemas/ReferenceIRI"
+        name:
+          type: string
+          example: skillParameter01
+        hasType:
+          type: string
+          description: The type of the Skill Parameter.
+          example: INPUT
+          enum:
+          - INOUTPUT
+          - INPUT
+          - OUTPUT
+      example:
+        iri: null
+        name: skillParameter01
+        hasType: INPUT
+    Asset:
+      required:
+      - id
+      - kind
+      type: object
+      properties:
+        id:
+          type: string
+          example: http://example.com/ids/asset001
+        kind:
+          type: string
+          description: The kind of the asset.
+          example: Type
+          enum:
+          - Type
+          - Instance
+          - NotApplicable
+        type:
+          $ref: "#/components/schemas/ReferenceAAS"
+      example:
+        kind: Type
+        id: http://example.com/ids/asset001
+        type: http://example.com/ids/aasElement001
+      xml:
+        name: asset
+    SMIAinstance:
+      required:
+      - aasID
+      - asset
+      - id
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/ReferenceSMIA"
+        asset:
+          $ref: "#/components/schemas/Asset"
+        aasID:
+          $ref: "#/components/schemas/ReferenceAAS"
+        status:
+          type: string
+          example: Running
+        startedTimeStamp:
+          type: integer
+          format: int64
+          example: 1745932259
+        smiaVersion:
+          type: string
+          example: 0.2.3
+      example:
+        startedTimeStamp: 1745932259
+        smiaVersion: 0.2.3
+        aasID: http://example.com/ids/aasElement001
+        id: agentInstance001
+        asset:
+          kind: Type
+          id: http://example.com/ids/asset001
+          type: http://example.com/ids/aasElement001
+        status: Running
+      xml:
+        name: smiaInstance
+    AASRepositoryURL:
+      type: string
+  securitySchemes:
+    api_key:  # Esto se puede usar para añadir la necesidad de usar una api_key. Despues en authorization_controller se podria añadir la logica para validarla
+      type: apiKey
+      name: api_key
+      in: header
+      x-apikeyInfoFunc: swagger_server.controllers.authorization_controller.check_api_key
+

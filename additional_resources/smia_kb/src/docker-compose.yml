@@ -1,0 +1,15 @@
+#version: "2"
+
+services:
+
+  smia-kb:
+    build:
+      context: .
+      dockerfile: Dockerfile_SMIA_KB
+    image: ekhurtado/smia-tools:latest-smia-kb
+    container_name: smia-kb
+    ports:
+      - '8080:8080'
+    environment:
+      - AAS_ENV_IP=http://192.168.186.129:8081
+
