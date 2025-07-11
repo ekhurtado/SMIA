@@ -87,10 +87,10 @@ class StateBooting(State):
                     CapabilitySkillOntologyInfo.CSS_ONTOLOGY_ASSET_CAPABILITY_IRI) or []))):
             capability_json = capability.from_ontology_instance_to_json()   # The JSON is created from OWL instance
             # The asset information is also added
-            capability_json['assets'] = {
+            capability_json['assets'] = [{
                 'id': await self.agent.aas_model.get_asset_information_attribute_value('asset_id'),
                 'kind': await self.agent.aas_model.get_asset_information_attribute_value('asset_kind'),
-                'type': await self.agent.aas_model.get_asset_information_attribute_value('asset_type')}
+                'type': await self.agent.aas_model.get_asset_information_attribute_value('asset_type')}]
             css_elements_json['capabilities'].append(capability_json)
 
         # Then, the JSON of each skill will be obtained
