@@ -1,0 +1,12 @@
+FROM ekhurtado/smia:latest-alpine-base
+
+#COPY requirements.txt .
+#RUN pip install --no-cache-dir -r requirements.txt
+
+COPY smia_hi /smia_hi
+COPY smia_hi/htmls /htmls
+
+WORKDIR /smia_hi
+
+CMD ["python3", "-u", "smia_hi_starter.py"]
+#CMD [ "tail", "-f", "/dev/null"]
