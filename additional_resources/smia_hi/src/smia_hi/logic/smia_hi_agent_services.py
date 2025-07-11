@@ -26,6 +26,13 @@ class SMIAHIAgentServices:
         }  #: This object maps the service identifiers with its associated execution methods
 
     async def human_transport_gui(self, Initial, Final):
+        """
+        This method realizes the agent service related to the HumanTransport skill of the SMIA HI.
+
+        Args:
+            Initial: the skill input parameter of the initial position of the transport.
+            Final: the skill input parameter of the final position of the transport.
+        """
         _logger.info("Running the transport service using the human through SPADE web GUI")
         # First, a new received CSS task will be added in the GUI Agent
         random_task_id = await acl_smia_messages_utils.create_random_thread(self.myagent)
@@ -42,7 +49,9 @@ class SMIAHIAgentServices:
 
 
     async def visually_inspect_gui(self):
-        # TODO
+        """
+        This method realizes the agent service related to the VisuallyInspect skill of the SMIA HI.
+        """
         _logger.info("Running the transport service using the human through SPADE web GUI")
         # First, a new received CSS task will be added in the GUI Agent
         random_task_id = await acl_smia_messages_utils.create_random_thread(self.myagent)
