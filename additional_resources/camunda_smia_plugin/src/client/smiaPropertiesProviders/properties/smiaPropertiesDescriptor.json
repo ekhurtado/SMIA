@@ -1,0 +1,61 @@
+{
+  "name": "SMIAProps",
+  "prefix": "smia",
+  "uri": "http://upv-ehu/gcis/smia/bpmn",
+  "xml": {
+    "tagAlias": "lowerCase"
+  },
+  "associations": [],
+  "types": [
+    {
+      "name": "SMIAProps",
+      "extends": ["bpmn:BaseElement"],
+      "properties": [
+    {
+      "name": "capability",
+      "isAttr": true,
+      "type": "String"
+    },
+    {
+      "name": "constraints",
+      "isAttr": true,
+      "type": "String"
+    },
+    {
+      "name": "skill",
+      "isAttr": true,
+      "type": "String"
+    },
+    {
+      "name": "skillParameters",
+      "isAttr": true,
+      "type": "String"
+    },
+    {
+      "name": "asset",
+      "isAttr": true,
+      "type": "String"
+    },
+    {
+      "name": "requestToPrevious",
+      "isAttr": true,
+      "type": "String"
+    },
+    {
+      "name": "requestToFollowing",
+      "isAttr": true,
+      "type": "String"
+    },
+        {
+      "name": "requestToTaskById",
+      "isAttr": true,
+      "type": "String"
+    },
+    {
+      "name": "timeoutValue",
+      "isAttr": true,
+      "type": "Integer"
+    }
+        ]}
+  ]
+}

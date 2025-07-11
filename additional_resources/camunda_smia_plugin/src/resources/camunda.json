@@ -1,0 +1,194 @@
+{
+  "name": "Camunda",
+  "uri": "http://camunda.org/schema/1.0/bpmn",
+  "prefix": "camunda",
+  "xml": {
+    "tagAlias": "lowerCase"
+  },
+  "associations": [],
+  "types": [
+    {
+      "name": "InOutBinding",
+      "superClass": [
+        "Element"
+      ],
+      "isAbstract": true,
+      "properties": [
+        {
+          "name": "source",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "sourceExpression",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "target",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "businessKey",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "local",
+          "isAttr": true,
+          "type": "Boolean",
+          "default": false
+        },
+        {
+          "name": "variables",
+          "isAttr": true,
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "In",
+      "superClass": [
+        "InOutBinding"
+      ],
+      "properties": []
+    },
+    {
+      "name": "Out",
+      "superClass": [
+        "InOutBinding"
+      ],
+      "properties": []
+    },
+    {
+      "name": "Connector",
+      "superClass": [
+        "Element"
+      ],
+      "properties": [
+        {
+          "name": "inputOutput",
+          "type": "InputOutput"
+        },
+        {
+          "name": "connectorId",
+          "type": "String",
+          "isAttr": true
+        }
+      ]
+    },
+    {
+      "name": "InputOutput",
+      "superClass": [
+        "Element"
+      ],
+      "properties": [
+        {
+          "name": "inputParameters",
+          "type": "InputParameter",
+          "isMany": true
+        },
+        {
+          "name": "outputParameters",
+          "type": "OutputParameter",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "InputOutputParameterDefinition",
+      "isAbstract": true,
+      "properties": [
+        {
+          "name": "name",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "value",
+          "isBody": true,
+          "type": "String"
+        },
+        {
+          "name": "definition",
+          "type": "InputOutputParameterDefinition"
+        }
+      ]
+    },
+    {
+      "name": "InputOutputParameter",
+      "isAbstract": true,
+      "superClass": [
+        "InputOutputParameterDefinition"
+      ]
+    },
+    {
+      "name": "InputParameter",
+      "superClass": [
+        "InputOutputParameter"
+      ]
+    },
+    {
+      "name": "OutputParameter",
+      "superClass": [
+        "InputOutputParameter"
+      ]
+    },
+    {
+      "name": "Properties",
+      "superClass": [
+        "Element"
+      ],
+      "properties": [
+        {
+          "name": "values",
+          "type": "Property",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "Property",
+      "superClass": [
+        "Element"
+      ],
+      "properties": [
+        {
+          "name": "id",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "name",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "value",
+          "isAttr": true,
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "Script",
+      "superClass": [
+        "InputOutputParameterDefinition"
+      ],
+      "properties": [
+        {
+          "name": "scriptFormat",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "resource",
+          "isAttr": true,
+          "type": "String"
+        }
+      ]
+    }
+  ],
+  "emumerations": []
+}

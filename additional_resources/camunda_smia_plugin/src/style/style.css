@@ -1,0 +1,40 @@
+/* Custom styles go here */
+.smia-timeout-gateway,.smia-capability-service-task {
+    /*stroke-width: 2px !important;*/
+    /*stroke: #0059b3 !important; !* Slightly darker blue on hover *!*/
+    color: #52bcff !important;
+}
+
+.smia-header-logo {
+    display: flex;         /* Enables flexbox */
+    justify-content: center; /* Centers horizontally */
+    align-items: center;     /* Centers vertically */
+    /*overflow: hidden;   !* Prevents overflow *!*/
+    max-width: 100%; /* Ensures it doesn't go beyond parent width */
+    max-height: 100%; /* Ensures it doesn't go beyond parent height */
+}
+
+.smia-header-logo svg {
+  max-width: 100%; /* Ensures it doesn't go beyond parent width */
+  max-height: 100%; /* Ensures it doesn't go beyond parent height */
+  width: auto; /* Maintains aspect ratio */
+  height: auto; /* Maintains aspect ratio */
+}
+
+
+.smia-kb-conn-div {
+    width: 40px;
+    padding-left: 5px !important;
+    display: flex;
+    justify-content: center; /* Centrado horizontal */
+    align-items: center;    /* Centrado vertical */
+}
+
+.smia-kb-conn-div svg {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.smia-kb-conn-label {
+    padding-left: 0px !important;
+}
