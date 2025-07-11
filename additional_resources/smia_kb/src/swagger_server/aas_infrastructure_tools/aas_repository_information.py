@@ -40,15 +40,6 @@ class AASRepositoryInformation:
                 # Once the ontological instances have been created, the relationships between them are analyzed.
                 self.create_ontology_relationships_from_aas(aas_model_object)
 
-                # # Todo borrar
-                # print("PARA EL AAS CON ID [{}] SE HAN GENERADO ESTAS CLASES ONTOLOGICAS".format(aas_id))
-                # for onto in CapabilitySkillOntology.get_instance().get_ontology().individuals():
-                #     print("\t{} de la clase {}".format(onto, onto.is_a))
-                #     print("\t\t y tiene las propiedades: {}".format(onto.data_properties_values_dict))
-                #     cap_class = CapabilitySkillOntology.get_instance().get_ontology_class_by_iri(CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI)
-                #     if isinstance(onto, cap_class):
-                #         print("\t\tEsta capacidad tiene las skills [{}] esta asociada al activo {}".format(onto.isRealizedBy, onto.get_associated_assets()))
-
         # When all the CSS information has been extracted, it is saved in an SQLite database (if SMIA KB is running in
         # a compatible Operating System)
         CapabilitySkillOntology.get_instance().persistent_save_ontology()

@@ -235,10 +235,6 @@ def post_capability(body):  # noqa: E501
 
     :rtype: Capability
     """
-
-    # TODO BORRAR
-    print("EL BODY a POST Capability !!!!!!!!!!!!!!!!!! {}".format(bytes.decode(body)))
-
     new_capability = None
     if connexion.request.is_json:
         new_capability = Capability.from_dict(connexion.request.get_json())  # noqa: E501

@@ -81,8 +81,4 @@ class AASRepositoryInfrastructureInfo:
         return f"{cls._AAS_HOST_IP_ADDRESS}:{cls._AAS_REPOSITORY_PORT}/submodels/{submodel_id_encoded}"
 
 
-    # AAS_TOOLS_IP_ADDRESS = 'http://192.168.186.129'  # TODO DE MOMENTO ESTA LA IP DE LA MAQUINA VIRTUAL. PENSARLO SI AÑADIRLO DE FORMA QUE SEA PARAMETRIZABLE (p.e. con variable de entorno para Docker)
-    # AAS_REPOSITORY_PORT = 8081
-    # AAS_REPOSITORY_URL = AAS_TOOLS_IP_ADDRESS + ':' + str(AAS_REPOSITORY_PORT)  # TODO CUIDADO DE CUANDO SI MODIFIQUE EL IP ADDRESS (tambien hay que actualizar este)
-
     AAS_OPEN_API_COMMON_HEADERS = {"Accept": "application/json"}

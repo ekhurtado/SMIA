@@ -152,10 +152,6 @@ def post_skill(body):  # noqa: E501
 
     :rtype: Skill
     """
-
-    # TODO BORRAR
-    print("EL BODY a POST Skill !!!!!!!!!!!!!!!!!! {}".format(bytes.decode(body)))
-
     new_skill = None
     if connexion.request.is_json:
         new_skill = Skill.from_dict(connexion.request.get_json())  # noqa: E501
