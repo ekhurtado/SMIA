@@ -63,7 +63,6 @@ class HandleACLOpenAPIBehaviour(OneShotBehaviour):
         try:
             requested_infrastructure_svc = self.received_json_data['serviceID']
             if requested_infrastructure_svc not in ACLOpenAPIServices.ACLOpenAPIServicesMap:
-                # TODO MODIFICAR CON EL NUEVO METODO UTILS
                 raise ServiceRequestExecutionError(
                     self.received_acl_msg.thread,'ACL-OpenAPI infrastructure service not found',
                     ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE, self,
@@ -80,7 +79,7 @@ class HandleACLOpenAPIBehaviour(OneShotBehaviour):
             else:
                 svc_params = {next(iter(svc_params)): self.received_json_data['serviceParams']}
             result = await self.myagent.acl_openapi_services.execute_agent_service_by_id(requested_infrastructure_svc,
-                                                                                         **svc_params)  # TODO PENSAR DONDE IRAN LOS PARAMETROS
+                                                                                         **svc_params)
             if 'ERROR' not in result:
 
                 if requested_infrastructure_svc == 'RegisterSMIAInstance':

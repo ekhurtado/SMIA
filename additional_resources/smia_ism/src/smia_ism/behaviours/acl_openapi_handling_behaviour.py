@@ -59,18 +59,6 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
         if os.environ.get('SMIA_KB_PORT') is not None:
             SMIAKBInfrastructure.set_port(int(os.environ.get('SMIA_KB_PORT')))
 
-        # TODO TEST
-        # try:
-        #     params = {'smia_instance_id': 'agentInstance002'}
-        #     result = await self.myagent.acl_openapi_services.execute_agent_service_by_id('GetAssetIDBySMIAInstanceID',
-        #                                                                                  **params)
-        #     params = {'capability_iri': 'http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation'}
-        #     result = await self.myagent.acl_openapi_services.execute_agent_service_by_id('GetAssetIDsOfCapability',
-        #                                                                                  **params)
-        # except ValueError as e:
-        #     if "required parameters have not been provided" in str(e):
-        #         print("Aqui habria que responder con failure por el motivo (no se ha enviado el parametro)")
-
 
     async def run(self):
         """
@@ -101,7 +89,6 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
                         msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB)))
             except RequestDataError as cap_request_error:
                 # The added data are not valid, so a Refuse message to the requester must be sent
-                # TODO MODIFICAR LA RESPUESTA CON LA NUEVA ESTRUCTURA
                 svc_execution_error = ServiceRequestExecutionError(msg.thread, cap_request_error.message,
                     msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB), self)
                 await svc_execution_error.handle_service_execution_error()
@@ -112,7 +99,6 @@ class ACLOpenAPIHandlingBehaviour(CyclicBehaviour):
 
             # At this point, the received data for the AAS Infrastructure Service is valid, so the behaviour to manage
             # this specific interaction can be triggered
-            # TODO BORRAR (para pruebas con GUI Agent): {"serviceID": "serviceID", "serviceType": "InfrastructureService","SMIAInfrastructureService": "GetAssetIDsOfCapability", "serviceParams": {"capability_iri": "http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation"}}
             _logger.aclinfo("The SMIA sender [{}], within thread [{}], needs a service related to OpenAPI "
                             "infrastructures to be performed. A specific behavior will be triggered to handle this "
                             "request..".format(acl_smia_messages_utils.get_sender_from_acl_msg(msg), msg.thread))
