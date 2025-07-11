@@ -1,4 +1,5 @@
 import os
+import sqlite3
 
 import connexion
 import owlready2
@@ -236,8 +237,7 @@ def post_capability(body):  # noqa: E501
     """
 
     # TODO BORRAR
-    print("LO QUE HA LLEGADO a POST Capability !!!!!!!!!!!!!!!!!!")
-    print(connexion.request.get_json())
+    print("EL BODY a POST Capability !!!!!!!!!!!!!!!!!! {}".format(bytes.decode(body)))
 
     new_capability = None
     if connexion.request.is_json:
@@ -249,13 +249,17 @@ def post_capability(body):  # noqa: E501
     cap_ontology_instance = ontology.get_ontology_instance_by_iri(new_capability.iri)
     if cap_ontology_instance is not None:
         # In this case the capability exists, so it only need to update some data
-        cap_ontology_instance.name = new_capability.name
+        try:
+            cap_ontology_instance.name = new_capability.name
+        except sqlite3.IntegrityError:
+            pass
 
         if new_capability.category is not None:
             cap_ontology_instance.set_category(new_capability.category)
 
         if new_capability.has_lifecycle:
-            cap_ontology_instance.data_properties_values_dict['hasLifecycle'] = new_capability.has_lifecycle
+            cap_ontology_instance.set_data_property_value('hasLifecycle', new_capability.has_lifecycle)
+            # cap_ontology_instance.data_properties_values_dict['hasLifecycle'] = new_capability.has_lifecycle
 
         if new_capability.is_realized_by is not None:
             for skill_iri in new_capability.is_realized_by:
@@ -297,7 +301,8 @@ def post_capability(body):  # noqa: E501
         new_capability_instance.set_category(new_capability.category)
 
         if new_capability.has_lifecycle is not None:
-            new_capability_instance.data_properties_values_dict['hasLifecycle'] = new_capability.has_lifecycle
+            new_capability_instance.set_data_property_value('hasLifecycle', new_capability.has_lifecycle)
+            # new_capability_instance.data_properties_values_dict['hasLifecycle'] = new_capability.has_lifecycle
 
         # Se añaden los datos opcionales
         if new_capability.is_realized_by is not None:

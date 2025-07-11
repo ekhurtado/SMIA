@@ -154,10 +154,7 @@ def post_skill(body):  # noqa: E501
     """
 
     # TODO BORRAR
-    print("LO QUE HA LLEGADO a POST Skill !!!!!!!!!!!!!!!!!!")
     print("EL BODY a POST Skill !!!!!!!!!!!!!!!!!! {}".format(bytes.decode(body)))
-    print("LO QUE HA LLEGADO a POST Skill !!!!!!!!!!!!!!!!!! {}".format(connexion.request.get_json()))
-    print(connexion.request.get_json())
 
     new_skill = None
     if connexion.request.is_json:
@@ -171,7 +168,8 @@ def post_skill(body):  # noqa: E501
         skill_ontology_instance.name = new_skill.name
 
         if new_skill.has_implementation_type is not None:
-            skill_ontology_instance.data_properties_values_dict['hasImplementationType'] = new_skill.has_implementation_type
+            skill_ontology_instance.set_data_property_value('hasImplementationType', new_skill.has_implementation_type)
+            # skill_ontology_instance.data_properties_values_dict['hasImplementationType'] = new_skill.has_implementation_type
 
         if new_skill.accessible_through is not None:
             for skill_interface_iri in new_skill.accessible_through:
@@ -197,7 +195,8 @@ def post_skill(body):  # noqa: E501
 
                 new_skill_param_instance.iri = new_skill_param.iri
                 if new_skill_param.has_type is not None:
-                    new_skill_param_instance.data_properties_values_dict['hasType'] = new_skill_param.has_type
+                    new_skill_param_instance.set_data_property_value('hasType', new_skill_param.has_type)
+                    # new_skill_param_instance.data_properties_values_dict['hasType'] = new_skill_param.has_type
 
                 if new_skill_param_instance not in skill_ontology_instance.hasParameter:
                     skill_ontology_instance.hasParameter.append(new_skill_param_instance)
@@ -211,7 +210,8 @@ def post_skill(body):  # noqa: E501
         new_skill_instance.iri = new_skill.iri
 
         if new_skill.has_implementation_type is not None:
-            new_skill_instance.data_properties_values_dict['hasImplementationType'] = new_skill.has_implementation_type
+            new_skill_instance.set_data_property_value('hasImplementationType', new_skill.has_implementation_type)
+            # new_skill_instance.data_properties_values_dict['hasImplementationType'] = new_skill.has_implementation_type
 
         # Se añaden los datos opcionales
         if new_skill.accessible_through is not None:
@@ -237,7 +237,8 @@ def post_skill(body):  # noqa: E501
 
                 new_skill_param_instance.iri = new_skill_param.iri
                 if new_skill_param.has_type is not None:
-                    new_skill_param_instance.data_properties_values_dict['hasType'] = new_skill_param.has_type
+                    new_skill_param_instance.set_data_property_value('hasType', new_skill_param.has_type)
+                    # new_skill_param_instance.data_properties_values_dict['hasType'] = new_skill_param.has_type
 
 
                 # La nueva CapabilityConstraint se asocia al Capability
@@ -336,8 +337,6 @@ def put_skill_by_id(id, name, category, photo_urls, tags, status, skill_identifi
     :rtype: None
     """
     if connexion.request.is_json:
-        name = CSSidentifier.from_dict(connexion.request.get_json())  # noqa: E501
-    if connexion.request.is_json:
         category = Category.from_dict(connexion.request.get_json())  # noqa: E501
     if connexion.request.is_json:
         tags = [Tag.from_dict(d) for d in connexion.request.get_json()]  # noqa: E501
@@ -387,8 +386,6 @@ def put_skill_parameter_by_skill_id(id, name, category, photo_urls, tags, status
 
     :rtype: None
     """
-    if connexion.request.is_json:
-        name = CSSidentifier.from_dict(connexion.request.get_json())  # noqa: E501
     if connexion.request.is_json:
         category = Category.from_dict(connexion.request.get_json())  # noqa: E501
     if connexion.request.is_json:

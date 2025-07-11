@@ -61,7 +61,7 @@ class SkillParameter(Model):
         """
         skill_parameter_instance = SkillParameter()
         skill_parameter_json = {}
-        for attrib in skill_parameter_instance.attribute_map.values():
+        for attrib in skill_parameter_instance.attribute_map.keys():
             try:
                 ontology_value = getattr(ontology_instance, attrib)
                 if isinstance(ontology_value, list):

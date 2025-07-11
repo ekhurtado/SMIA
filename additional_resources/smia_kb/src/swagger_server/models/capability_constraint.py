@@ -62,7 +62,7 @@ class CapabilityConstraint(Model):
         """
         cap_constraint_instance = CapabilityConstraint()
         cap_constraint_json = {}
-        for attrib in cap_constraint_instance.attribute_map.values():
+        for attrib in cap_constraint_instance.attribute_map.keys():
             try:
                 ontology_value = getattr(ontology_instance, attrib)
                 if isinstance(ontology_value, list):
