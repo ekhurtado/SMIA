@@ -424,27 +424,26 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
             # such data
             _logger.assetinfo("Executing skill of the capability through an asset service...")
 
-            # TODO BORRAR: PARA PRUEBAS CEDRI
-            if 'smia-pe' in self.received_acl_msg.thread:
-                # TODO BORRAR -> es para obtener los datos para el analisis
-                from smia.utilities import smia_archive_utils, smia_general_info
-                import asyncio
-                await smia_archive_utils.save_csv_metrics_timestamp(
-                    smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
-                    f"Asset service requested [{self.received_acl_msg.thread}]")
-                await asyncio.sleep(1.5)
-                # TODO BORRAR -> es para obtener los datos para el analisis
-                await smia_archive_utils.save_csv_metrics_timestamp(
-                    smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
-                    f"Asset service completed [{self.received_acl_msg.thread}]")
+            # # TODO BORRAR: PARA PRUEBAS CEDRI
+            # if 'smia-pe' in self.received_acl_msg.thread:
+            #     import asyncio
+            #     await asyncio.sleep(1.5)
+            #     if self.received_body_json[CapabilitySkillACLInfo.ATTRIB_CAPABILITY_IRI] == 'http://www.w3id.org/upv-ehu/gcis/css-smia#DrillingAndMilling':
+            #         await asyncio.sleep(40)
+            #     return {'status': 'success', 'prueba': 'cedri'}
 
-                if self.received_body_json[CapabilitySkillACLInfo.ATTRIB_CAPABILITY_IRI] == 'http://www.w3id.org/upv-ehu/gcis/css-smia#DrillingAndMilling':
-                    await asyncio.sleep(40)
-                return {'status': 'success', 'prueba': 'cedri'}
+            # TODO BORRAR -> es para obtener los datos para el analisis
+            from smia.utilities import smia_archive_utils, smia_general_info
+            await smia_archive_utils.save_csv_metrics_timestamp(
+                smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
+                f"Asset service requested [{self.received_acl_msg.thread}]")
 
             skill_execution_result = await asset_connection_class.execute_asset_service(
                 interaction_metadata=aas_skill_interface_elem, service_input_data=received_skill_input_data)
             _logger.assetinfo("Skill of the capability successfully executed.")
+
+
+
 
             # TODO SI LA SKILL TIENE OUTPUT PARAMETERS, HAY QUE RECOGERLOS DEL skill_execution_result. En ese caso, se
             #  sobreescribirá el skill_execution_result con la variable output y su valor (el cual será lo que devolverá el
@@ -453,8 +452,21 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
             # In this case, the capability need to be executed through an agent service
             # TODO FALTA COMPROBAR QUE FUNCIONA
             try:
+
+                # TODO BORRAR -> es para obtener los datos para el analisis
+                from smia.utilities import smia_archive_utils, smia_general_info
+                await smia_archive_utils.save_csv_metrics_timestamp(
+                    smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
+                    f"Agent service requested [{self.received_acl_msg.thread}]")
+
                 skill_execution_result = await self.myagent.agent_services.execute_agent_service_by_id(
                     aas_skill_interface_elem.id_short, **received_skill_input_data)
+
+                # TODO BORRAR -> es para obtener los datos para el analisis
+                await smia_archive_utils.save_csv_metrics_timestamp(
+                    smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
+                    f"Agent service completed [{self.received_acl_msg.thread}]")
+
             except (KeyError, ValueError) as e:
                 raise CapabilityRequestExecutionError(cap_instance.name, "The requested capability {} cannot be "
                                                       "executed because the agent service {} cannot be successfully "
