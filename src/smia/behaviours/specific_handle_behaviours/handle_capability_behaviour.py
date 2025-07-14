@@ -441,7 +441,10 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
                 interaction_metadata=aas_skill_interface_elem, service_input_data=received_skill_input_data)
             _logger.assetinfo("Skill of the capability successfully executed.")
 
-
+            # TODO BORRAR -> es para obtener los datos para el analisis
+            await smia_archive_utils.save_csv_metrics_timestamp(
+                smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
+                f"Asset service completed [{self.received_acl_msg.thread}]")
 
 
             # TODO SI LA SKILL TIENE OUTPUT PARAMETERS, HAY QUE RECOGERLOS DEL skill_execution_result. En ese caso, se
