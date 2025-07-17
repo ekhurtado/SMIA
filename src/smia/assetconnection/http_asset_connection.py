@@ -251,11 +251,16 @@ class HTTPAssetConnection(AssetConnection):
                     raise AssetConnectionError("The request to asset timed out, so the asset is not available.",
                                                "AssetConnectTimeout", "The asset connection timed out")
                 if isinstance(connection_error, ClientConnectionError):
-                    raise AssetConnectionError("The connection with the asset has raised an exception.",
-                                               connection_error.__class__.__name__, connection_error.args[0].reason)
+                    if hasattr(connection_error.args[0], 'reason'):
+                        raise AssetConnectionError("The connection with the asset has raised an exception.",
+                                                   connection_error.__class__.__name__, connection_error.args[0].reason)
                 if isinstance(connection_error, ServerConnectionError):
-                    raise AssetConnectionError("The asset server has raised a connection exception.",
-                                               connection_error.__class__.__name__, connection_error.args[0].reason)
+                    if hasattr(connection_error, 'args'):
+                        raise AssetConnectionError("The asset server has raised a connection exception.",
+                                                   connection_error.__class__.__name__, str(connection_error.args[0]))
+                    if hasattr(connection_error, '__cause__'):
+                        raise AssetConnectionError("The asset server has raised a connection exception.",
+                                                   connection_error.__class__.__name__, str(connection_error.__cause__))
 
 
     async def serialize_data_by_content_type(self, interaction_metadata, service_data):
