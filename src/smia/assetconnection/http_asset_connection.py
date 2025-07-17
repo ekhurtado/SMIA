@@ -2,7 +2,7 @@ import json
 import logging
 
 import aiohttp
-from aiohttp import ClientConnectorError, ClientConnectionError
+from aiohttp import ClientConnectorError, ClientConnectionError, ServerConnectionError
 from basyx.aas.util import traversal
 
 from smia.assetconnection.asset_connection import AssetConnection
@@ -246,12 +246,15 @@ class HTTPAssetConnection(AssetConnection):
                     response = await session.put(url=self.request_uri, params=self.request_params)
                 await response.text()   # The content is saved in ClientResponse object
                 return response
-            except (ClientConnectorError, ClientConnectionError) as connection_error:
+            except (ClientConnectorError, ClientConnectionError, ServerConnectionError) as connection_error:
                 if isinstance(connection_error, ClientConnectorError):
                     raise AssetConnectionError("The request to asset timed out, so the asset is not available.",
                                                "AssetConnectTimeout", "The asset connection timed out")
                 if isinstance(connection_error, ClientConnectionError):
                     raise AssetConnectionError("The connection with the asset has raised an exception.",
+                                               connection_error.__class__.__name__, connection_error.args[0].reason)
+                if isinstance(connection_error, ServerConnectionError):
+                    raise AssetConnectionError("The asset server has raised a connection exception.",
                                                connection_error.__class__.__name__, connection_error.args[0].reason)
 
 
