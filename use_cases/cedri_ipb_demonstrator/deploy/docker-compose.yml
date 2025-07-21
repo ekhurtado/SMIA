@@ -112,12 +112,37 @@ services:
       - '8090:8080'
     environment:
       - AAS_ENV_IP=http://aas-env:8081
-      # - ONTOLOGY_PERSISTENCE_FILE=/smia_kb/smia_kb_data.sqlite3
+      #- SELF_EXTRACT_CSS=yes
     depends_on:   # It does not depend on the AAS environment, but is added to correctly obtain all the data during the start-up
       aas-env:
         condition: service_healthy
     # volumes:
     #   - ./smia_kb:/smia_kb
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://smia-kb:8080/api/v3/ui/ || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  smia-ism:
+    image: ekhurtado/smia-tools:latest-smia-ism
+    container_name: smia-ism
+    environment:
+      - AAS_MODEL_NAME=SMIA_InfrastructureServicesManager.aasx
+      - AGENT_ID=smia-ism@ejabberd
+      - AGENT_PSSWD=gciscedri1234
+      - SMIA_KB_IP=http://smia-kb:8080
+    depends_on:
+      xmpp-server:
+        condition: service_healthy
+      smia-kb:
+        condition: service_healthy
+    healthcheck:
+      test: exit 0
+      start_period: 15s
+    volumes:
+      - ./aas:/smia_archive/config/aas
 
 
   # -----------------------------
@@ -144,6 +169,8 @@ services:
     depends_on:
       xmpp-server:
         condition: service_healthy
+      smia-ism:
+        condition: service_healthy
     volumes:
       - ./aas:/smia_archive/config/aas
 
@@ -156,6 +183,8 @@ services:
       - AGENT_PSSWD=gciscedri1234
     depends_on:
       xmpp-server:
+        condition: service_healthy
+      smia-ism:
         condition: service_healthy
     volumes:
       - ./aas:/smia_archive/config/aas
@@ -170,6 +199,8 @@ services:
     depends_on:
       xmpp-server:
         condition: service_healthy
+      smia-ism:
+        condition: service_healthy
     volumes:
       - ./aas:/smia_archive/config/aas
 
@@ -182,6 +213,8 @@ services:
       - AGENT_PSSWD=gciscedri1234
     depends_on:
       xmpp-server:
+        condition: service_healthy
+      smia-ism:
         condition: service_healthy
     volumes:
       - ./aas:/smia_archive/config/aas
@@ -196,21 +229,41 @@ services:
     depends_on:
       xmpp-server:
         condition: service_healthy
+      smia-ism:
+        condition: service_healthy
     volumes:
       - ./aas:/smia_archive/config/aas
 
-
-  # !!!!!!!!!!!!!!!!!!!!!!!!1
-  # TODO BORRAR: Para enviar solicitudes CSS de prueba
-  smia-operator:
-    image: ekhurtado/smia-use-cases:latest-operator
-    container_name: smia-operator
+  smia-hi-operator:
+    image: ekhurtado/smia-tools:latest-smia-hi
+    container_name: smia-hi-operator
     environment:
-      - AAS_MODEL_NAME=SMIA_Operator_article.aasx
-      - AGENT_ID=operator001@ejabberd
-      - AGENT_PSSWD=gcis1234
+      - AAS_MODEL_NAME=CeDRI_Operator_instance.aasx
+      - AGENT_ID=smia-hi-operator@ejabberd
+      - AGENT_PSSWD=gciscedri1234
     depends_on:
       xmpp-server:
+        condition: service_healthy
+      smia-ism:
+        condition: service_healthy
+    volumes:
+      - ./aas:/smia_archive/config/aas
+    ports:
+      - 10010:10000
+
+  # SMIA Planning Execution
+  smia-pe:
+    image: ekhurtado/smia-tools:latest-smia-pe
+    container_name: smia-pe
+    environment:
+      - AAS_MODEL_NAME=SMIA_PE_CeDRI_ScenarioA.aasx
+      #- AAS_MODEL_NAME=SMIA_PE_CeDRI_ScenarioB.aasx
+      - AGENT_ID=smia-pe@ejabberd
+      - AGENT_PSSWD=gciscedri1234
+    depends_on:
+      xmpp-server:
+        condition: service_healthy
+      smia-ism:
         condition: service_healthy
     volumes:
       - ./aas:/smia_archive/config/aas
