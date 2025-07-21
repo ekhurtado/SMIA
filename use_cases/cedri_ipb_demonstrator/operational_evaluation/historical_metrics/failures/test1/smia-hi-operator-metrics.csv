@@ -1,0 +1,5 @@
+AgentID,Timestamp,Description
+smia-hi-operator,1752762737.3414,SMIA started
+smia-hi-operator,1752762741.6612,SMIA self-configuration completed
+smia-hi-operator,1752762763.9255,Agent service requested [smia-pe-oh3pl]
+smia-hi-operator,1752762775.9348,Agent service completed [smia-pe-oh3pl]

@@ -1,0 +1,5 @@
+AgentID,Timestamp,Description
+smia-indexedline-b,1753093274.2360,SMIA started
+smia-indexedline-b,1753093278.5149,SMIA self-configuration completed
+smia-indexedline-b,1753093343.8315,Asset service requested [smia-pe-or2t1]
+smia-indexedline-b,1753093369.7167,Asset service completed [smia-pe-or2t1]

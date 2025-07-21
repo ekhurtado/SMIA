@@ -1,0 +1,9 @@
+AgentID,Timestamp,Description
+smia-indexedline-b,1752766264.9924,SMIA started
+smia-indexedline-b,1752766269.0394,SMIA self-configuration completed
+smia-indexedline-b,1752766335.5506,Asset service requested [smia-pe-ksukg]
+smia-indexedline-b,1752766361.6734,Asset service completed [smia-pe-ksukg]
+smia-indexedline-b,1752766871.8249,Asset service requested [smia-pe-nvw4c]
+smia-indexedline-b,1752766897.3182,Asset service completed [smia-pe-nvw4c]
+smia-indexedline-b,1752767048.9673,Asset service requested [smia-pe-rkfoc]
+smia-indexedline-b,1752767075.5561,Asset service completed [smia-pe-rkfoc]

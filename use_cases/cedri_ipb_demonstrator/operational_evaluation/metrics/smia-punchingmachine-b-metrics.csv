@@ -1,0 +1,5 @@
+AgentID,Timestamp,Description
+smia-punchingmachine-b,1753093274.9356,SMIA started
+smia-punchingmachine-b,1753093278.6164,SMIA self-configuration completed
+smia-punchingmachine-b,1753093316.8670,Asset service requested [smia-pe-mmlad]
+smia-punchingmachine-b,1753093326.6385,Asset service completed [smia-pe-mmlad]

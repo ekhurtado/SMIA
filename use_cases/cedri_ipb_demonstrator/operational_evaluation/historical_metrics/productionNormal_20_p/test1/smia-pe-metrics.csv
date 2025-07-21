@@ -1,0 +1,298 @@
+AgentID,Timestamp,Description
+smia-pe,1753089950.6469,SMIA started
+smia-pe,1753089952.8581,SMIA self-configuration completed
+smia-pe,1753089969.7059,SMIA PE workflow [wf-0] analysis started
+smia-pe,1753089970.9314,SMIA PE workflow [wf-0] analyzed
+smia-pe,1753089970.9321,SMIA PE workflow [wf-0] started
+smia-pe,1753089971.2049,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-ajfnb] within workflow [wf-0]
+smia-pe,1753089987.3579,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-ajfnb] within workflow [wf-0]
+smia-pe,1753089987.3943,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-0tjkg] within workflow [wf-0]
+smia-pe,1753089998.9302,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-0tjkg] within workflow [wf-0]
+smia-pe,1753090000.4956,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-hffp3] within workflow [wf-0]
+smia-pe,1753090016.6317,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-hffp3] within workflow [wf-0]
+smia-pe,1753090016.6675,CSS-service request to smia-indexedline-a@ejabberd with thread [smia-pe-qlqau] within workflow [wf-0]
+smia-pe,1753090045.0098,CSS-service reply from smia-indexedline-a@ejabberd with thread [smia-pe-qlqau] within workflow [wf-0]
+smia-pe,1753090045.2230,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-f3wah] within workflow [wf-0]
+smia-pe,1753090057.3605,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-f3wah] within workflow [wf-0]
+smia-pe,1753090057.3690,SMIA PE workflow [wf-0] completed
+smia-pe,1753090057.3740,SMIA PE workflow [wf-1] analysis started
+smia-pe,1753090058.5560,SMIA PE workflow [wf-1] analyzed
+smia-pe,1753090058.5567,SMIA PE workflow [wf-1] started
+smia-pe,1753090058.7622,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-t6osc] within workflow [wf-1]
+smia-pe,1753090074.8956,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-t6osc] within workflow [wf-1]
+smia-pe,1753090074.9338,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-qnzmr] within workflow [wf-1]
+smia-pe,1753090086.0472,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-qnzmr] within workflow [wf-1]
+smia-pe,1753090087.6831,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-mgjjq] within workflow [wf-1]
+smia-pe,1753090103.8208,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-mgjjq] within workflow [wf-1]
+smia-pe,1753090103.8626,CSS-service request to smia-indexedline-a@ejabberd with thread [smia-pe-hkhlv] within workflow [wf-1]
+smia-pe,1753090130.1304,CSS-service reply from smia-indexedline-a@ejabberd with thread [smia-pe-hkhlv] within workflow [wf-1]
+smia-pe,1753090130.3140,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-li3nq] within workflow [wf-1]
+smia-pe,1753090142.4435,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-li3nq] within workflow [wf-1]
+smia-pe,1753090142.4444,SMIA PE workflow [wf-1] completed
+smia-pe,1753090142.4464,SMIA PE workflow [wf-2] analysis started
+smia-pe,1753090143.6688,SMIA PE workflow [wf-2] analyzed
+smia-pe,1753090143.6698,SMIA PE workflow [wf-2] started
+smia-pe,1753090143.8865,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-ubfrx] within workflow [wf-2]
+smia-pe,1753090160.0691,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-ubfrx] within workflow [wf-2]
+smia-pe,1753090160.0994,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-hwixn] within workflow [wf-2]
+smia-pe,1753090171.1743,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-hwixn] within workflow [wf-2]
+smia-pe,1753090172.7393,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-o3e6v] within workflow [wf-2]
+smia-pe,1753090186.8753,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-o3e6v] within workflow [wf-2]
+smia-pe,1753090186.9112,CSS-service request to smia-indexedline-b@ejabberd with thread [smia-pe-ozi4d] within workflow [wf-2]
+smia-pe,1753090213.2686,CSS-service reply from smia-indexedline-b@ejabberd with thread [smia-pe-ozi4d] within workflow [wf-2]
+smia-pe,1753090213.5179,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-aptpb] within workflow [wf-2]
+smia-pe,1753090226.6562,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-aptpb] within workflow [wf-2]
+smia-pe,1753090226.6567,SMIA PE workflow [wf-2] completed
+smia-pe,1753090226.6606,SMIA PE workflow [wf-3] analysis started
+smia-pe,1753090227.9960,SMIA PE workflow [wf-3] analyzed
+smia-pe,1753090227.9971,SMIA PE workflow [wf-3] started
+smia-pe,1753090228.2166,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-hyzzh] within workflow [wf-3]
+smia-pe,1753090244.3733,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-hyzzh] within workflow [wf-3]
+smia-pe,1753090244.4270,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-oxu0e] within workflow [wf-3]
+smia-pe,1753090256.2992,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-oxu0e] within workflow [wf-3]
+smia-pe,1753090258.0359,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-wczth] within workflow [wf-3]
+smia-pe,1753090272.1762,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-wczth] within workflow [wf-3]
+smia-pe,1753090272.2074,CSS-service request to smia-indexedline-b@ejabberd with thread [smia-pe-fpcjm] within workflow [wf-3]
+smia-pe,1753090298.3604,CSS-service reply from smia-indexedline-b@ejabberd with thread [smia-pe-fpcjm] within workflow [wf-3]
+smia-pe,1753090298.6510,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-nnlar] within workflow [wf-3]
+smia-pe,1753090311.8448,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-nnlar] within workflow [wf-3]
+smia-pe,1753090311.8456,SMIA PE workflow [wf-3] completed
+smia-pe,1753090311.8480,SMIA PE workflow [wf-4] analysis started
+smia-pe,1753090313.1872,SMIA PE workflow [wf-4] analyzed
+smia-pe,1753090313.1893,SMIA PE workflow [wf-4] started
+smia-pe,1753090313.4335,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-qztos] within workflow [wf-4]
+smia-pe,1753090329.5951,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-qztos] within workflow [wf-4]
+smia-pe,1753090329.6251,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-a6a68] within workflow [wf-4]
+smia-pe,1753090341.4073,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-a6a68] within workflow [wf-4]
+smia-pe,1753090342.8719,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-jicnr] within workflow [wf-4]
+smia-pe,1753090357.0228,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-jicnr] within workflow [wf-4]
+smia-pe,1753090357.0537,CSS-service request to smia-indexedline-b@ejabberd with thread [smia-pe-3zmrx] within workflow [wf-4]
+smia-pe,1753090383.5025,CSS-service reply from smia-indexedline-b@ejabberd with thread [smia-pe-3zmrx] within workflow [wf-4]
+smia-pe,1753090383.7589,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-zig7i] within workflow [wf-4]
+smia-pe,1753090396.9173,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-zig7i] within workflow [wf-4]
+smia-pe,1753090396.9184,SMIA PE workflow [wf-4] completed
+smia-pe,1753090396.9218,SMIA PE workflow [wf-5] analysis started
+smia-pe,1753090398.1815,SMIA PE workflow [wf-5] analyzed
+smia-pe,1753090398.1835,SMIA PE workflow [wf-5] started
+smia-pe,1753090398.4046,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-28zaz] within workflow [wf-5]
+smia-pe,1753090414.5865,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-28zaz] within workflow [wf-5]
+smia-pe,1753090414.6237,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-dtjdo] within workflow [wf-5]
+smia-pe,1753090426.5340,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-dtjdo] within workflow [wf-5]
+smia-pe,1753090428.1645,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-olenk] within workflow [wf-5]
+smia-pe,1753090442.3401,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-olenk] within workflow [wf-5]
+smia-pe,1753090442.3775,CSS-service request to smia-indexedline-b@ejabberd with thread [smia-pe-1m45z] within workflow [wf-5]
+smia-pe,1753090468.6296,CSS-service reply from smia-indexedline-b@ejabberd with thread [smia-pe-1m45z] within workflow [wf-5]
+smia-pe,1753090468.9938,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-gniyg] within workflow [wf-5]
+smia-pe,1753090482.1527,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-gniyg] within workflow [wf-5]
+smia-pe,1753090482.1543,SMIA PE workflow [wf-5] completed
+smia-pe,1753090482.1568,SMIA PE workflow [wf-6] analysis started
+smia-pe,1753090483.3990,SMIA PE workflow [wf-6] analyzed
+smia-pe,1753090483.3995,SMIA PE workflow [wf-6] started
+smia-pe,1753090483.6042,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-jexci] within workflow [wf-6]
+smia-pe,1753090499.7612,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-jexci] within workflow [wf-6]
+smia-pe,1753090499.7938,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-mypkt] within workflow [wf-6]
+smia-pe,1753090511.6327,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-mypkt] within workflow [wf-6]
+smia-pe,1753090513.2548,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-xzag6] within workflow [wf-6]
+smia-pe,1753090527.3931,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-xzag6] within workflow [wf-6]
+smia-pe,1753090527.4282,CSS-service request to smia-indexedline-b@ejabberd with thread [smia-pe-wxeiw] within workflow [wf-6]
+smia-pe,1753090553.7079,CSS-service reply from smia-indexedline-b@ejabberd with thread [smia-pe-wxeiw] within workflow [wf-6]
+smia-pe,1753090553.9523,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-tduan] within workflow [wf-6]
+smia-pe,1753090567.1124,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-tduan] within workflow [wf-6]
+smia-pe,1753090567.1132,SMIA PE workflow [wf-6] completed
+smia-pe,1753090567.1162,SMIA PE workflow [wf-7] analysis started
+smia-pe,1753090568.3348,SMIA PE workflow [wf-7] analyzed
+smia-pe,1753090568.3354,SMIA PE workflow [wf-7] started
+smia-pe,1753090568.5487,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-5ltdl] within workflow [wf-7]
+smia-pe,1753090584.6950,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-5ltdl] within workflow [wf-7]
+smia-pe,1753090584.7374,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-jpnrt] within workflow [wf-7]
+smia-pe,1753090595.7535,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-jpnrt] within workflow [wf-7]
+smia-pe,1753090597.2947,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-dxqb3] within workflow [wf-7]
+smia-pe,1753090611.4917,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-dxqb3] within workflow [wf-7]
+smia-pe,1753090611.5256,CSS-service request to smia-indexedline-b@ejabberd with thread [smia-pe-xze7d] within workflow [wf-7]
+smia-pe,1753090637.8103,CSS-service reply from smia-indexedline-b@ejabberd with thread [smia-pe-xze7d] within workflow [wf-7]
+smia-pe,1753090638.0628,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-7lrjv] within workflow [wf-7]
+smia-pe,1753090651.2319,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-7lrjv] within workflow [wf-7]
+smia-pe,1753090651.2327,SMIA PE workflow [wf-7] completed
+smia-pe,1753090651.2376,SMIA PE workflow [wf-8] analysis started
+smia-pe,1753090652.5213,SMIA PE workflow [wf-8] analyzed
+smia-pe,1753090652.5224,SMIA PE workflow [wf-8] started
+smia-pe,1753090652.7347,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-kz3bf] within workflow [wf-8]
+smia-pe,1753090668.8800,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-kz3bf] within workflow [wf-8]
+smia-pe,1753090668.9155,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-smmks] within workflow [wf-8]
+smia-pe,1753090679.8698,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-smmks] within workflow [wf-8]
+smia-pe,1753090681.6345,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-nnwwd] within workflow [wf-8]
+smia-pe,1753090695.7991,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-nnwwd] within workflow [wf-8]
+smia-pe,1753090695.8387,CSS-service request to smia-indexedline-b@ejabberd with thread [smia-pe-w6cub] within workflow [wf-8]
+smia-pe,1753090721.9598,CSS-service reply from smia-indexedline-b@ejabberd with thread [smia-pe-w6cub] within workflow [wf-8]
+smia-pe,1753090722.2151,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-nw7sw] within workflow [wf-8]
+smia-pe,1753090735.3929,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-nw7sw] within workflow [wf-8]
+smia-pe,1753090735.3960,SMIA PE workflow [wf-8] completed
+smia-pe,1753090735.3974,SMIA PE workflow [wf-9] analysis started
+smia-pe,1753090736.7000,SMIA PE workflow [wf-9] analyzed
+smia-pe,1753090736.7024,SMIA PE workflow [wf-9] started
+smia-pe,1753090736.8984,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-6aes9] within workflow [wf-9]
+smia-pe,1753090753.0616,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-6aes9] within workflow [wf-9]
+smia-pe,1753090753.0986,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-j2qkg] within workflow [wf-9]
+smia-pe,1753090764.9994,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-j2qkg] within workflow [wf-9]
+smia-pe,1753090766.4960,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-2zdyz] within workflow [wf-9]
+smia-pe,1753090782.6710,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-2zdyz] within workflow [wf-9]
+smia-pe,1753090782.7139,CSS-service request to smia-indexedline-a@ejabberd with thread [smia-pe-8ajiz] within workflow [wf-9]
+smia-pe,1753090811.0769,CSS-service reply from smia-indexedline-a@ejabberd with thread [smia-pe-8ajiz] within workflow [wf-9]
+smia-pe,1753090811.3389,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-wdwzx] within workflow [wf-9]
+smia-pe,1753090823.5285,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-wdwzx] within workflow [wf-9]
+smia-pe,1753090823.5298,SMIA PE workflow [wf-9] completed
+smia-pe,1753090823.5447,SMIA PE workflow [wf-10] analysis started
+smia-pe,1753090824.9056,SMIA PE workflow [wf-10] analyzed
+smia-pe,1753090824.9061,SMIA PE workflow [wf-10] started
+smia-pe,1753090825.1530,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-3t3ah] within workflow [wf-10]
+smia-pe,1753090841.3446,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-3t3ah] within workflow [wf-10]
+smia-pe,1753090841.3641,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-isy9b] within workflow [wf-10]
+smia-pe,1753090853.1409,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-isy9b] within workflow [wf-10]
+smia-pe,1753090854.9924,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-awyoc] within workflow [wf-10]
+smia-pe,1753090869.1983,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-awyoc] within workflow [wf-10]
+smia-pe,1753090869.2394,CSS-service request to smia-indexedline-b@ejabberd with thread [smia-pe-2arm3] within workflow [wf-10]
+smia-pe,1753090895.2154,CSS-service reply from smia-indexedline-b@ejabberd with thread [smia-pe-2arm3] within workflow [wf-10]
+smia-pe,1753090895.5276,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-ho1er] within workflow [wf-10]
+smia-pe,1753090908.7319,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-ho1er] within workflow [wf-10]
+smia-pe,1753090908.7323,SMIA PE workflow [wf-10] completed
+smia-pe,1753090908.7335,SMIA PE workflow [wf-11] analysis started
+smia-pe,1753090909.9506,SMIA PE workflow [wf-11] analyzed
+smia-pe,1753090909.9522,SMIA PE workflow [wf-11] started
+smia-pe,1753090910.1577,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-j5qqk] within workflow [wf-11]
+smia-pe,1753090926.3421,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-j5qqk] within workflow [wf-11]
+smia-pe,1753090926.3869,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-yhecl] within workflow [wf-11]
+smia-pe,1753090938.2472,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-yhecl] within workflow [wf-11]
+smia-pe,1753090939.9343,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-iwo0c] within workflow [wf-11]
+smia-pe,1753090954.0940,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-iwo0c] within workflow [wf-11]
+smia-pe,1753090954.1354,CSS-service request to smia-indexedline-b@ejabberd with thread [smia-pe-f8ubl] within workflow [wf-11]
+smia-pe,1753090980.3473,CSS-service reply from smia-indexedline-b@ejabberd with thread [smia-pe-f8ubl] within workflow [wf-11]
+smia-pe,1753090980.6966,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-jpzt2] within workflow [wf-11]
+smia-pe,1753090993.8530,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-jpzt2] within workflow [wf-11]
+smia-pe,1753090993.8537,SMIA PE workflow [wf-11] completed
+smia-pe,1753090993.8563,SMIA PE workflow [wf-12] analysis started
+smia-pe,1753090995.2655,SMIA PE workflow [wf-12] analyzed
+smia-pe,1753090995.2663,SMIA PE workflow [wf-12] started
+smia-pe,1753090995.5027,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-ui7iy] within workflow [wf-12]
+smia-pe,1753091011.6556,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-ui7iy] within workflow [wf-12]
+smia-pe,1753091011.6918,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-fazt2] within workflow [wf-12]
+smia-pe,1753091023.3488,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-fazt2] within workflow [wf-12]
+smia-pe,1753091025.1163,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-jiti3] within workflow [wf-12]
+smia-pe,1753091039.3058,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-jiti3] within workflow [wf-12]
+smia-pe,1753091039.3450,CSS-service request to smia-indexedline-b@ejabberd with thread [smia-pe-gqbuq] within workflow [wf-12]
+smia-pe,1753091064.4438,CSS-service reply from smia-indexedline-b@ejabberd with thread [smia-pe-gqbuq] within workflow [wf-12]
+smia-pe,1753091064.6815,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-zldjg] within workflow [wf-12]
+smia-pe,1753091077.8824,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-zldjg] within workflow [wf-12]
+smia-pe,1753091077.8839,SMIA PE workflow [wf-12] completed
+smia-pe,1753091077.8872,SMIA PE workflow [wf-13] analysis started
+smia-pe,1753091079.2800,SMIA PE workflow [wf-13] analyzed
+smia-pe,1753091079.2812,SMIA PE workflow [wf-13] started
+smia-pe,1753091079.5201,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-dnn7l] within workflow [wf-13]
+smia-pe,1753091095.6940,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-dnn7l] within workflow [wf-13]
+smia-pe,1753091095.7271,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-c1gch] within workflow [wf-13]
+smia-pe,1753091107.4698,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-c1gch] within workflow [wf-13]
+smia-pe,1753091109.4433,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-ig4fr] within workflow [wf-13]
+smia-pe,1753091123.6239,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-ig4fr] within workflow [wf-13]
+smia-pe,1753091123.6623,CSS-service request to smia-indexedline-b@ejabberd with thread [smia-pe-8gsj3] within workflow [wf-13]
+smia-pe,1753091149.5688,CSS-service reply from smia-indexedline-b@ejabberd with thread [smia-pe-8gsj3] within workflow [wf-13]
+smia-pe,1753091149.8440,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-ul1cj] within workflow [wf-13]
+smia-pe,1753091163.0476,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-ul1cj] within workflow [wf-13]
+smia-pe,1753091163.0494,SMIA PE workflow [wf-13] completed
+smia-pe,1753091163.0589,SMIA PE workflow [wf-14] analysis started
+smia-pe,1753091164.6666,SMIA PE workflow [wf-14] analyzed
+smia-pe,1753091164.6669,SMIA PE workflow [wf-14] started
+smia-pe,1753091164.9494,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-hxp15] within workflow [wf-14]
+smia-pe,1753091181.1417,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-hxp15] within workflow [wf-14]
+smia-pe,1753091181.1904,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-zffte] within workflow [wf-14]
+smia-pe,1753091192.5828,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-zffte] within workflow [wf-14]
+smia-pe,1753091194.6873,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-bwpfx] within workflow [wf-14]
+smia-pe,1753091210.8447,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-bwpfx] within workflow [wf-14]
+smia-pe,1753091210.8759,CSS-service request to smia-indexedline-a@ejabberd with thread [smia-pe-wxams] within workflow [wf-14]
+smia-pe,1753091239.6551,CSS-service reply from smia-indexedline-a@ejabberd with thread [smia-pe-wxams] within workflow [wf-14]
+smia-pe,1753091239.8605,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-c11zy] within workflow [wf-14]
+smia-pe,1753091252.0749,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-c11zy] within workflow [wf-14]
+smia-pe,1753091252.0751,SMIA PE workflow [wf-14] completed
+smia-pe,1753091252.0755,SMIA PE workflow [wf-15] analysis started
+smia-pe,1753091253.6517,SMIA PE workflow [wf-15] analyzed
+smia-pe,1753091253.6566,SMIA PE workflow [wf-15] started
+smia-pe,1753091253.9861,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-03tsy] within workflow [wf-15]
+smia-pe,1753091270.1934,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-03tsy] within workflow [wf-15]
+smia-pe,1753091270.2145,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-losjq] within workflow [wf-15]
+smia-pe,1753091281.7067,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-losjq] within workflow [wf-15]
+smia-pe,1753091283.7102,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-xvvgp] within workflow [wf-15]
+smia-pe,1753091297.8800,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-xvvgp] within workflow [wf-15]
+smia-pe,1753091297.9115,CSS-service request to smia-indexedline-b@ejabberd with thread [smia-pe-yibdy] within workflow [wf-15]
+smia-pe,1753091323.7862,CSS-service reply from smia-indexedline-b@ejabberd with thread [smia-pe-yibdy] within workflow [wf-15]
+smia-pe,1753091324.1059,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-lex8u] within workflow [wf-15]
+smia-pe,1753091337.2918,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-lex8u] within workflow [wf-15]
+smia-pe,1753091337.2923,SMIA PE workflow [wf-15] completed
+smia-pe,1753091337.2942,SMIA PE workflow [wf-16] analysis started
+smia-pe,1753091338.7324,SMIA PE workflow [wf-16] analyzed
+smia-pe,1753091338.7337,SMIA PE workflow [wf-16] started
+smia-pe,1753091339.0420,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-pfjck] within workflow [wf-16]
+smia-pe,1753091355.2395,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-pfjck] within workflow [wf-16]
+smia-pe,1753091355.2690,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-nnbfb] within workflow [wf-16]
+smia-pe,1753091366.8233,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-nnbfb] within workflow [wf-16]
+smia-pe,1753091368.7811,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-fub8j] within workflow [wf-16]
+smia-pe,1753091382.9762,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-fub8j] within workflow [wf-16]
+smia-pe,1753091383.0141,CSS-service request to smia-indexedline-b@ejabberd with thread [smia-pe-ynqga] within workflow [wf-16]
+smia-pe,1753091408.9094,CSS-service reply from smia-indexedline-b@ejabberd with thread [smia-pe-ynqga] within workflow [wf-16]
+smia-pe,1753091409.2262,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-uawxv] within workflow [wf-16]
+smia-pe,1753091422.4234,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-uawxv] within workflow [wf-16]
+smia-pe,1753091422.4262,SMIA PE workflow [wf-16] completed
+smia-pe,1753091422.4328,SMIA PE workflow [wf-17] analysis started
+smia-pe,1753091423.9170,SMIA PE workflow [wf-17] analyzed
+smia-pe,1753091423.9175,SMIA PE workflow [wf-17] started
+smia-pe,1753091424.2191,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-r4ndo] within workflow [wf-17]
+smia-pe,1753091440.3987,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-r4ndo] within workflow [wf-17]
+smia-pe,1753091440.4262,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-wrkwc] within workflow [wf-17]
+smia-pe,1753091451.9174,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-wrkwc] within workflow [wf-17]
+smia-pe,1753091453.9163,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-nye63] within workflow [wf-17]
+smia-pe,1753091470.1180,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-nye63] within workflow [wf-17]
+smia-pe,1753091470.1493,CSS-service request to smia-indexedline-a@ejabberd with thread [smia-pe-tyw8n] within workflow [wf-17]
+smia-pe,1753091500.0307,CSS-service reply from smia-indexedline-a@ejabberd with thread [smia-pe-tyw8n] within workflow [wf-17]
+smia-pe,1753091500.2967,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-vuhw2] within workflow [wf-17]
+smia-pe,1753091512.4927,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-vuhw2] within workflow [wf-17]
+smia-pe,1753091512.4945,SMIA PE workflow [wf-17] completed
+smia-pe,1753091512.4978,SMIA PE workflow [wf-18] analysis started
+smia-pe,1753091513.9928,SMIA PE workflow [wf-18] analyzed
+smia-pe,1753091513.9934,SMIA PE workflow [wf-18] started
+smia-pe,1753091514.2401,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-ljxz6] within workflow [wf-18]
+smia-pe,1753091530.4413,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-ljxz6] within workflow [wf-18]
+smia-pe,1753091530.4856,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-gmzci] within workflow [wf-18]
+smia-pe,1753091542.0588,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-gmzci] within workflow [wf-18]
+smia-pe,1753091544.0839,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-dqawz] within workflow [wf-18]
+smia-pe,1753091558.2804,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-dqawz] within workflow [wf-18]
+smia-pe,1753091558.3075,CSS-service request to smia-indexedline-b@ejabberd with thread [smia-pe-rnbrd] within workflow [wf-18]
+smia-pe,1753091585.1328,CSS-service reply from smia-indexedline-b@ejabberd with thread [smia-pe-rnbrd] within workflow [wf-18]
+smia-pe,1753091585.4288,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-k6zfb] within workflow [wf-18]
+smia-pe,1753091598.6283,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-k6zfb] within workflow [wf-18]
+smia-pe,1753091598.6292,SMIA PE workflow [wf-18] completed
+smia-pe,1753091598.6329,SMIA PE workflow [wf-19] analysis started
+smia-pe,1753091600.3214,SMIA PE workflow [wf-19] analyzed
+smia-pe,1753091600.3231,SMIA PE workflow [wf-19] started
+smia-pe,1753091600.6081,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-ntcg9] within workflow [wf-19]
+smia-pe,1753091616.8355,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-ntcg9] within workflow [wf-19]
+smia-pe,1753091616.8798,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-flzqy] within workflow [wf-19]
+smia-pe,1753091628.1788,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-flzqy] within workflow [wf-19]
+smia-pe,1753091630.3744,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-rck3j] within workflow [wf-19]
+smia-pe,1753091644.5965,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-rck3j] within workflow [wf-19]
+smia-pe,1753091644.6498,CSS-service request to smia-indexedline-b@ejabberd with thread [smia-pe-oiqcm] within workflow [wf-19]
+smia-pe,1753091670.2628,CSS-service reply from smia-indexedline-b@ejabberd with thread [smia-pe-oiqcm] within workflow [wf-19]
+smia-pe,1753091670.5937,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-me9hm] within workflow [wf-19]
+smia-pe,1753091683.8142,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-me9hm] within workflow [wf-19]
+smia-pe,1753091683.8151,SMIA PE workflow [wf-19] completed
+smia-pe,1753091683.8171,SMIA PE workflow [wf-20] analysis started
+smia-pe,1753091685.4022,SMIA PE workflow [wf-20] analyzed
+smia-pe,1753091685.4039,SMIA PE workflow [wf-20] started
+smia-pe,1753091685.6556,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-f9sik] within workflow [wf-20]
+smia-pe,1753091701.8520,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-f9sik] within workflow [wf-20]
+smia-pe,1753091701.8814,CSS-service request to smia-punchingmachine-b@ejabberd with thread [smia-pe-a4rcl] within workflow [wf-20]
+smia-pe,1753091713.2955,CSS-service reply from smia-punchingmachine-b@ejabberd with thread [smia-pe-a4rcl] within workflow [wf-20]
+smia-pe,1753091715.4589,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-u7lrj] within workflow [wf-20]
+smia-pe,1753091729.7111,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-u7lrj] within workflow [wf-20]
+smia-pe,1753091729.7530,CSS-service request to smia-indexedline-b@ejabberd with thread [smia-pe-raeou] within workflow [wf-20]
+smia-pe,1753091756.3679,CSS-service reply from smia-indexedline-b@ejabberd with thread [smia-pe-raeou] within workflow [wf-20]
+smia-pe,1753091756.7419,CSS-service request to smia-cedri-industrial-robot@ejabberd with thread [smia-pe-vfmxy] within workflow [wf-20]
+smia-pe,1753091769.9926,CSS-service reply from smia-cedri-industrial-robot@ejabberd with thread [smia-pe-vfmxy] within workflow [wf-20]
+smia-pe,1753091769.9945,SMIA PE workflow [wf-20] completed
+

@@ -1,0 +1,5 @@
+AgentID,Timestamp,Description
+smia-indexedline-b,1752661577.9523,SMIA started
+smia-indexedline-b,1752661581.7916,SMIA self-configuration completed
+smia-indexedline-b,1752661817.4128,Asset service requested [smia-pe-tywk7]
+smia-indexedline-b,1752661842.9385,Asset service completed [smia-pe-tywk7]
