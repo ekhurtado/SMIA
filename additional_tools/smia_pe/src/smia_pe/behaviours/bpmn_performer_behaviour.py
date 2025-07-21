@@ -165,8 +165,8 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
             else:
                 _logger.warning("BPMN execution is stopped via the GUI.")
 
-            # A one-second wait will be added between the execution of each step
-            # await asyncio.sleep(1)
+                # A one-second wait will be added between the execution of each step
+                await asyncio.sleep(1)
 
         # TODO BORRAR -> es para obtener los datos para el analisis
         from smia.utilities import smia_archive_utils, smia_general_info
