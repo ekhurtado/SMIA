@@ -85,12 +85,6 @@ class InitAASModelBehaviour(OneShotBehaviour):
         _logger.info("Reading the AAS model to get all asset connections...")
         await self.get_and_configure_asset_connections()
 
-        # TODO BORRAR -> es para obtener los datos para el analisis
-        from smia.utilities import smia_archive_utils, smia_general_info
-        await smia_archive_utils.save_csv_metrics_timestamp(
-            smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics', self.myagent.jid,
-            'SMIA self-configuration completed')
-
         # The progress bar is closed
         self.progress_bar.close()
         await asyncio.sleep(1)

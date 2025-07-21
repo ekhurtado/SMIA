@@ -80,15 +80,6 @@ class HandleACLOpenAPIBehaviour(OneShotBehaviour):
             result = await self.myagent.acl_openapi_services.execute_agent_service_by_id(requested_infrastructure_svc,
                                                                                          **svc_params)
             if 'ERROR' not in result:
-
-                if requested_infrastructure_svc == 'RegisterSMIAInstance':
-                    # TODO BORRAR -> es para obtener los datos para el analisis
-                    from smia.utilities import smia_archive_utils, smia_general_info
-                    await smia_archive_utils.save_csv_metrics_timestamp(
-                        smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics',
-                        self.myagent.jid, f"{self.received_json_data['serviceParams']['id'].split('@')[0]}"
-                                          f" registered")
-
                 _logger.info("The AAS Infrastructure Service {} has been successfully executed.".format(requested_infrastructure_svc))
                 await inter_smia_interactions_utils.send_response_msg_from_received(
                     self, self.received_acl_msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM, result)

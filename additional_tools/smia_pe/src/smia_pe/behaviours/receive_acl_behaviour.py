@@ -58,15 +58,6 @@ class ReceiveACLBehaviour(CyclicBehaviour):
                             if (msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB) ==
                                     FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE):
 
-                                # TODO BORRAR -> es para obtener los datos para el analisis
-                                from smia.utilities import smia_archive_utils, smia_general_info
-                                await smia_archive_utils.save_csv_metrics_timestamp(
-                                    smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics',
-                                    self.myagent.jid,
-                                    f"Failure reply from {acl_smia_messages_utils.get_sender_from_acl_msg(msg)}"
-                                    f" with thread [{msg.thread}] within workflow "
-                                    f"[wf-{self.myagent.bpmn_info['CompletedWorkflows']}]")
-
                                 _logger.error("SMIA PE has received a Failure for the thread [{}], so it cannot continue. "
                                               "Reason: {}".format(thread, msg_parsed_body['reason']))
 
