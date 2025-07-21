@@ -18,6 +18,18 @@ The features of the SMIA approach include:
     - easy to start-up
     - containerized solution
 
+.. important::
+
+    This documentation project is associated to the branch focused on the SMIA use case for CeDRI IPB demonstrator. The main documentation project of SMIA is available at `<https://smia.readthedocs.io/en/latest/>`_.
+
+.. note::
+
+    This use case has been developed based on SMIA v0.3.0.
+
+.. note::
+
+    The page that details the SMIA CeDRIP IPB demonstrator use case is available at :octicon:`repo-pull;1em` :ref:`SMIA Use Cases`.
+
 Documentation project structure
 -------------------------------
 
