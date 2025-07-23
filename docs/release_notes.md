@@ -2,6 +2,53 @@
 
 (Release Notes)=
 
+## v0.3.0
+
+This release of Self-configurable Manufacturing Industrial Agents (SMIA) comes with a significant upgrade of the solution in terms of flexible manufacturing automation using the SMIA approach. Version 0.2.x of SMIA focused on asset integration, and version 0.3.x will focus on autonomy and flexible manufacturing (where the interaction of multiple SMIA instances and the need for new infrastructure arise).
+
+This specific release introduces new components within the SMIA ecosystem that enable flexible manufacturing automation. These new components are:
+- ``SMIA KB``: This is an infrastructure component for a Knowledge Base (KB). It is an OWL ontology instance management database based on the CSS model. This infrastructure provides HTTP access following the OpenAPI standard specification.
+- ``SMIA ISM``: This is a "special" SMIA agent in charge of managing all the infrastructure services that may be requested by SMIA instances. In other words, it offers the possibility of receiving requests for infrastructure services via FIPA-ACL, executing them and returning the response. In the validated case study it is used for the interaction between the ACL environment (SMIA instances) and HTTP-OpenAPI (SMIA KB and AAS Repository).
+- ``SMIA PE``: This is a "special" SMIA agent able to collect a flexible production plan serialized in BPMN and carry it out by performing the necessary interactions with the other SMIA instances or with the infrastructure services (through the SMIA ISM).
+- ``SMIA HI``: This is an extension of SMIA agent that provides a human interface (HI) so that a human can be an additional production asset. It is capable of submitting CSS requests and picking up completed ones via web GUI.
+
+> SMIA: All Python files structured in Python modules.
+> - It includes the launcher files to run the software in the ``launchers`` module: _smia_cli_starter.py_, _smia_starter.py_ and _smia_docker_starter.py_.
+
+### Features
+
+- All the code of the newly developed components has been added
+  - SMIA KB, SMIA ISM, SMIA PE, SMIA HI.
+  - Their developments have been done in individual branches, which have been integrated into the main at the end of their development.
+  - All of them have been added inside the ``additional_tools`` folder.
+- The SMIA plugin code for the Camunda Modeler software has been added.
+  - This plugin is able to collect the CSS ontology information from the SMIA KB and present it to the user during the design of the BPMN flow (which will represent the flexible production plan).
+- Added option to set the AAS ID (instead of the path to the AAS model file)
+  - Added option as CLI, environment variable (Docker) and via code (``smia.load_aas_id``).
+  - If the ID is set, and not the model file, the AAS model is obtained through an infrastructure service to SMIA ISM (it will obtain the whole AAS model from the AAS Repository)
+- Added more precision in saved timestamps for SMIA performance evaluation (new method ``get_current_timestamp_microsecs`` in GeneralUtils)
+- Added code to generate JSON objects from ontology instances for CSS elements. Added also the method to use this JSONs to register all the CSS elements extracted in the self-configuration in the SMIA KB
+
+### Major Changes
+
+- The additional software within the SMIA ecosystem has been divided into two folders
+  - ``additional_resources``: several additional static resources will be grouped here, such as the CSS-SMIA ontology OWL file, visual resources, etc.
+  - ``additional_tools``: several software programs developed within the SMIA ecosystem will be grouped here: SMIA KB, ISM, PE, HI, Camunda plugin...
+- The versions of some SMIA dependencies have been upgraded (regarding SPADE, other versions have had to be adapted for the software to function correctly)
+  - SPADE from v3.3.3 to v4.0.3
+  - Basyx-python-sdk to v1.2.1
+  - Owlready2 to v0.48
+- Added explanation in SMIA RTD ``Extension guide`` on how to correctly add agent services that are defined inside Python classes (need to be added with the "self" included in the executable method)
+- Added adaptation of complex parameters in ``get_adapted_service_parameters`` for services_utils
+
+### Fixed errors
+
+- Ontology file loading bug fixed: before if the properties file was not set, it always looked for the ontology inside the AASX, now it looks for it in the SMIA Archive.
+- Added ServerConnectionError handling during HTTP requests (connection with HTTP-based assets)
+  - For cases, e.g., in which the server suddenly is disconnected
+- Fixed an error obtaining the agent identifier from the agent JID with SPADE version >4.x.x (now the ``acl_smia_messages_utils.get_agent_id_from_jid`` method is used)
+- Fixed some circular imports error when creating SMIA documentation with Sphinx (for ReadTheDocs)
+
 ## v0.2.4
 
 This release of Self-Configurable Manufacturing Industrial Agents (SMIA) comes with an upgrade of the solution in terms of interaction between different SMIA instances.
