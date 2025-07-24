@@ -13,13 +13,37 @@ This use case represents a flexible production scenario, in which some different
 Description of the use case
 ---------------------------
 
-TODO
+To validate the solution in a suitable environment, it must feature a flexible production system with different types of assets and different functionalities. The selected demonstrator is therefore a small-scale production system based on Fischertechnik infrastructure, comprised of several machines and warehouses: two punching machines, two indexed lines and one industrial robot. These assets present different functionalities such as transportation, punching or drilling of workpieces. To this infrastructure, a human operator has been added as a new type of asset, capable of transportation and visual inspection of machines’ operation.
+
+Regarding asset control, the punching machines and indexed line are controlled by IEC 61313-3 programs running on a Modicon M340 programmable logic controller (PLC), the ABB robot is controlled by a RAPID-based program, and the human operator has an associated web graphical user interface (GUI). In terms of connectivity, the Fischertechnik infrastructure is accessed through HTTP-based middleware implemented with Node-RED, which modifies the necessary PLC memory using the Modbus protocol. In the case of the human operator, since the web GUI has been developed using SPADE's native web functionalities, it can be directly accessed.
+
+To effectively validate the solution with the demonstrator, it is necessary to identify the functionalities and capabilities of the assets. Since the SMIA approach works with the CSS model as a functional model, the following table presents the CSS information of the assets, as well as the interface to access them.
+
+.. centered:: Identification of demonstrator assets and their capabilities and interfaces.
+
+======================== ================================== ======================== ====================
+Asset                    Capability (ies)                   Capability constraints   Accessible through
+======================== ================================== ======================== ====================
+Industrial robot         Transportation                     Weight (max 1 kg)        HTTP/REST
+Punching machine A       Punching                           Strength (max 1N)        HTTP/REST
+Punching machine B       Punching                           Strength (max 10N)       HTTP/REST
+Indexed line machine A   DrillingAndMilling                 Depth (max 5cm)          HTTP/REST
+Indexed line machine B   DrillingAndMilling                 Depth (max 7cm)          HTTP/REST
+Human operator           Transportation, VisualInspection   Weight (max 3 kg)        Web GUI
+======================== ================================== ======================== ====================
+
 
 
 Development of the use case
 ---------------------------
 
-TODO
+For assets based on Fischertechnik infrastructure, only the associated AAS models need to be developed, as SMIA v0.3.0 (on which this use case is based) already has HTTP asset connection support.
+
+For human operators, as control is performed via a web graphical user interface developed with native SPADE tools, it can be hosted within the SMIA agent. A special type of SMIA software has been developed for this type of asset: SMIA HI (Human Interface). These types of SMIA instances have the web graphical user interface integrated within the agent along with the necessary controllers to manage it.
+
+.. note::
+
+    The SMIA HI can be used via its Docker image: ``ekhurtado/smia-tools:latest-smia-hi``. Its source code is also available at `<https://github.com/ekhurtado/SMIA/tree/main/additional_tools/smia_hi>`_.
 
 Deployment of the use case
 --------------------------
