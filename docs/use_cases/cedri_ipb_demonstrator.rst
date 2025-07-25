@@ -32,7 +32,24 @@ Indexed line machine B   DrillingAndMilling                 Depth (max 7cm)     
 Human operator           Transportation, VisualInspection   Weight (max 3 kg)        Web GUI
 ======================== ================================== ======================== ====================
 
+Production plans
+~~~~~~~~~~~~~~~~
 
+To efficiently validate the SMIA approach to flexible manufacturing, two production plans have been designed:
+
+* Production A: focused on automatic production through distributed asset selection
+
+.. image:: ../_static/images/use_cases_images/CeDRI_demonstrator_bpmn_planA.jpg
+  :align: center
+  :width: 600
+  :alt: CeDRI demonstrator validation: production plan A
+
+* Production B: focused on collaborative production between humans and machines through restricted capabilities for asset selection.
+
+.. image:: ../_static/images/use_cases_images/CeDRI_demonstrator_bpmn_planB.jpg
+  :align: center
+  :width: 600
+  :alt: CeDRI demonstrator validation: production plan B
 
 Development of the use case
 ---------------------------
@@ -43,7 +60,7 @@ For human operators, as control is performed via a web graphical user interface 
 
 .. note::
 
-    The SMIA HI can be used via its Docker image: ``ekhurtado/smia-tools:latest-smia-hi``. Its source code is also available at `<https://github.com/ekhurtado/SMIA/tree/main/additional_tools/smia_hi>`_.
+    The SMIA HI can be used via its Docker image: :bdg-primary:`ekhurtado/smia-tools:latest-smia-hi`. Its source code is also available at `<https://github.com/ekhurtado/SMIA/tree/main/additional_tools/smia_hi>`_.
 
 Deployment of the use case
 --------------------------
@@ -352,4 +369,9 @@ For this use case it has been decided to deploy SMIA using the Docker Compose me
 Use case results
 ----------------
 
-TODO
+During the development of the case study and the validation performed in its application, some results and conclusions have been obtained:
+
+* Having a standard such as :term:`AAS` as a basis, although it may seem complex at first, offers many advantages. A key advantage is that if SMIA is compatible with the asset interface, only its AAS models need to be developed (as is the case with the entire Fischertechnik infrastructure).
+* The integration of an architectural style focused on flexible manufacturing, such as the CSS model, offers simplicity when encapsulating asset functionality and using it in production. It also allows the description of functionality to be separated from its implementation (e.g., both industrial robots and human operators offer transport capacity, but the execution is completely different).
+* The solution offers several ways to select assets for each step of the process: directly specifying the asset identifier, specifying a capacity constraint that must be met, or leaving the decision to the SMIA instances via the FIPA-CNP protocol. It has been concluded that all methods have worked satisfactorily in this use case.
+* It has been concluded that an efficient discovery system is necessary to know the available SMIAs and therefore the available assets. This is because a global knowledge of the system is necessary in solutions that require interactions between different components. For this use case, SMIA KB has been developed to meet this requirement.
