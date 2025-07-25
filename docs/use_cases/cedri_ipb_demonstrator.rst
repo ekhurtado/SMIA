@@ -50,6 +50,10 @@ Deployment of the use case
 
 For this use case it has been decided to deploy SMIA using the Docker Compose method, as it offers the possibility of a self-contained deployment. This way, everything necessary is added in the ``docker-compose-yml`` file and the complete use case can be deployed with a simple command, as Docker Compose takes care of starting the containers and enabling communication between them. All the necessary infrastructure has also been added, as well as the dependency between them using the ``depends_on`` attributes.
 
+.. code:: bash
+
+        docker-compose up
+
 .. dropdown:: ``docker-compose.yml`` file of the use case
     :octicon:`file-code;1em;sd-text-primary`
 
@@ -217,7 +221,7 @@ For this use case it has been decided to deploy SMIA using the Docker Compose me
           # SMIA instances for assets
           # -------------------------
           smia-industrial-robot:
-            image: ekhurtado/smia:latest-alpine
+            image: ekhurtado/smia:0.3.0-alpine
             container_name: smia-industrial-robot
             environment:
               - AAS_MODEL_NAME=CeDRI_IndustrialRobot_instance.aasx
@@ -232,7 +236,7 @@ For this use case it has been decided to deploy SMIA using the Docker Compose me
               - ./aas:/smia_archive/config/aas
 
           smia-punching-machine-a:
-            image: ekhurtado/smia:latest-alpine
+            image: ekhurtado/smia:0.3.0-alpine
             container_name: smia-punching-machine-a
             environment:
               - AAS_MODEL_NAME=CeDRI_PunchingMachine_instanceA.aasx
@@ -247,7 +251,7 @@ For this use case it has been decided to deploy SMIA using the Docker Compose me
               - ./aas:/smia_archive/config/aas
 
           smia-punching-machine-b:
-            image: ekhurtado/smia:latest-alpine
+            image: ekhurtado/smia:0.3.0-alpine
             container_name: smia-punching-machine-b
             environment:
               - AAS_MODEL_NAME=CeDRI_PunchingMachine_instanceB.aasx
@@ -262,7 +266,7 @@ For this use case it has been decided to deploy SMIA using the Docker Compose me
               - ./aas:/smia_archive/config/aas
 
           smia-indexed-line-a:
-            image: ekhurtado/smia:latest-alpine
+            image: ekhurtado/smia:0.3.0-alpine
             container_name: smia-indexed-line-a
             environment:
               - AAS_MODEL_NAME=CeDRI_IndexedLine_instanceA.aasx
@@ -277,7 +281,7 @@ For this use case it has been decided to deploy SMIA using the Docker Compose me
               - ./aas:/smia_archive/config/aas
 
           smia-indexed-line-b:
-            image: ekhurtado/smia:latest-alpine
+            image: ekhurtado/smia:0.3.0-alpine
             container_name: smia-indexed-line-b
             environment:
               - AAS_MODEL_NAME=CeDRI_IndexedLine_instanceB.aasx
@@ -327,6 +331,22 @@ For this use case it has been decided to deploy SMIA using the Docker Compose me
             ports:
               - 10000:10000
 
+
+.. note::
+
+    The Docker Compose presented above collects all the necessary containers, but to facilitate the development of multiple tests, there are also some Docker Composes available that are divided between the infrastructure (available at `SMIA GitHub repository <https://raw.githubusercontent.com/ekhurtado/SMIA/refs/heads/cedri_ipb_demonstrator/use_cases/cedri_ipb_demonstrator/deploy/docker-compose-infrastructure.yml>`_) and the SMIA instances (available at `SMIA GitHub repository <https://raw.githubusercontent.com/ekhurtado/SMIA/refs/heads/cedri_ipb_demonstrator/use_cases/cedri_ipb_demonstrator/deploy/docker-compose-instances.yml>`_). Both Docker Compose have been configured to enable communication between all containers.
+
+    This way, you can deploy the infrastructure on one side by running the following command:
+
+    .. code:: bash
+
+        docker-compose -f docker-compose-infrastructure.yml up
+
+    and run the instances on the other side with:
+
+    .. code:: bash
+
+        docker-compose -f docker-compose-instances.yml up
 
 
 Use case results

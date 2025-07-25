@@ -160,7 +160,7 @@ services:
   # SMIA instances for assets
   # -------------------------
   smia-industrial-robot:
-    image: ekhurtado/smia:latest-alpine
+    image: ekhurtado/smia:0.3.0-alpine
     container_name: smia-industrial-robot
     environment:
       - AAS_MODEL_NAME=CeDRI_IndustrialRobot_instance.aasx
@@ -175,7 +175,7 @@ services:
       - ./aas:/smia_archive/config/aas
 
   smia-punching-machine-a:
-    image: ekhurtado/smia:latest-alpine
+    image: ekhurtado/smia:0.3.0-alpine
     container_name: smia-punching-machine-a
     environment:
       - AAS_MODEL_NAME=CeDRI_PunchingMachine_instanceA.aasx
@@ -190,7 +190,7 @@ services:
       - ./aas:/smia_archive/config/aas
 
   smia-punching-machine-b:
-    image: ekhurtado/smia:latest-alpine
+    image: ekhurtado/smia:0.3.0-alpine
     container_name: smia-punching-machine-b
     environment:
       - AAS_MODEL_NAME=CeDRI_PunchingMachine_instanceB.aasx
@@ -205,7 +205,7 @@ services:
       - ./aas:/smia_archive/config/aas
 
   smia-indexed-line-a:
-    image: ekhurtado/smia:latest-alpine
+    image: ekhurtado/smia:0.3.0-alpine
     container_name: smia-indexed-line-a
     environment:
       - AAS_MODEL_NAME=CeDRI_IndexedLine_instanceA.aasx
@@ -220,7 +220,7 @@ services:
       - ./aas:/smia_archive/config/aas
 
   smia-indexed-line-b:
-    image: ekhurtado/smia:latest-alpine
+    image: ekhurtado/smia:0.3.0-alpine
     container_name: smia-indexed-line-b
     environment:
       - AAS_MODEL_NAME=CeDRI_IndexedLine_instanceB.aasx
