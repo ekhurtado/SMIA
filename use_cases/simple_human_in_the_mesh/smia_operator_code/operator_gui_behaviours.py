@@ -130,6 +130,7 @@ class OperatorRequestBehaviour(OneShotBehaviour):
 
         self.thread = req_data['thread']
         self.smia_id_list = req_data['formData'].getall('smia_id[]', [])
+        self.smia_version_list = req_data['formData'].getall('smia_version[]', [])
         self.asset_id_list = req_data['formData'].getall('asset_id[]', [])
         self.selected = req_data['formData'].getall('checkbox[]', [])
         self.capability = req_data['formData'].get('capability', None)  # Default if missing
@@ -145,6 +146,7 @@ class OperatorRequestBehaviour(OneShotBehaviour):
             if smia_id in self.selected:
                 self.processed_data.append({
                     "smiaID": smia_id,
+                    "smiaVersion": self.smia_version_list[idx],
                     "assetID": self.asset_id_list[idx],
                 })
                 self.selected_smia_ids.append(smia_id + '@' + str(self.myagent.jid.domain))
@@ -183,6 +185,13 @@ class OperatorRequestBehaviour(OneShotBehaviour):
             # The JSON for the message body is added to message object
             msg.body = json.dumps(msg_body_json)
             smia_id = self.selected_smia_ids[0]
+
+            for i in self.processed_data:
+                _logger.warning("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                _logger.warning("SMIA VERSION: ".format(i['smiaVersion']))
+                if (OperatorRequestBehaviour.version_str_to_tuple(i['smiaVersion']) >=
+                        OperatorRequestBehaviour.version_str_to_tuple('0.2.4')):
+                    _logger.warning("It is a version higher than 0.2.4, so it requires a specific FIPA-SMIA-ACL message format.")
 
             if len(self.processed_data) > 1:
                 _logger.info("There are multiple SMIAs to be requested: negotiation is required")
@@ -326,3 +335,16 @@ class OperatorRequestBehaviour(OneShotBehaviour):
         msg.metadata = metadata
         msg.body = json.dumps(body_json)
         return msg
+
+    @staticmethod
+    def version_str_to_tuple(version_str):
+        """
+        This method converts a version string to tuple in order to make comparisons.
+
+        Args:
+            version_str (str): string version to convert.
+
+        Returns:
+            tuple: version in tuple format.
+        """
+        return tuple(map(int, version_str.split('.')))

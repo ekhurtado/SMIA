@@ -55,6 +55,9 @@ class GUIControllers:
                     smia_jid = await GUIFeatures.get_smia_jid_from_aas_store(self.myagent, aas_object_store)
                     self.myagent.loaded_smias[file.name]['SMIA_JID'] = smia_jid
 
+                    smia_version = await GUIFeatures.get_smia_version_from_aas_store(self.myagent, aas_object_store)
+                    self.myagent.loaded_smias[file.name]['SMIA_VERSION'] = smia_version
+
                     asset_id = await GUIFeatures.get_asset_id_from_aas_store(aas_object_store)
                     self.myagent.loaded_smias[file.name]['AssetID'] = asset_id
 
@@ -144,6 +147,7 @@ class GUIControllers:
                 for aas_model in cap_info['AASmodel']:
                     available_smia = {'SMIAsInfo': {
                         'SMIA_JID' : await self.get_smia_attrib_by_file_name(aas_model,'SMIA_JID'),
+                        'SMIA_VERSION' : await self.get_smia_attrib_by_file_name(aas_model,'SMIA_VERSION'),
                         'AssetID' : await self.get_smia_attrib_by_file_name(aas_model,'AssetID')}
                     }
                     available_smia.update(data)
@@ -191,6 +195,7 @@ class GUIControllers:
 
         # Extract arrays for each field
         smia_id_list = data.getall('smia_id[]', [])
+        smia_version_list = data.getall('asset_version[]', [])
         asset_id_list = data.getall('asset_id[]', [])
         selected = data.getall('checkbox[]', [])
         capability = data.get('capability', None)   # Default if missing
@@ -211,6 +216,7 @@ class GUIControllers:
                 processed_data.append({
                     "smiaID": smia_id,
                     "assetID": asset_id_list[idx],
+                    "smiaVersion": smia_version_list[idx],
                 })
                 selected_smia_ids.append(smia_id)
         print("Requested SMIAs: {}".format(processed_data))
@@ -439,6 +445,41 @@ class GUIFeatures:
             if aas_smia_instance_name is not None:
                 await agent_object.aas_model.set_aas_model_object_store(operator_aas_model_store)
                 return aas_smia_instance_name.value
+        _logger.warning("The SoftwareNameplate submodel is defined within the AAS model, but the instance name is not. "
+                        "This SMIA cannot be loaded into the SMIA operator.")
+        await agent_object.aas_model.set_aas_model_object_store(operator_aas_model_store)
+        return None
+
+    @staticmethod
+    async def get_smia_version_from_aas_store(agent_object, aas_model_store):
+        """
+        This method gets the SMIA software version from the AAS model store. The SMIA approach establishes that this
+        information need to be added within the 'SoftwareNameplate' standardized submodel.
+
+        Args:
+            agent_object (smia.agents.smia_agent.SMIAAgent): SMIA SPADE agent object.
+            aas_model_store (basyx.aas.model.DictObjectStore): Python object with the AAS model.
+
+        Returns:
+            version (str): SMIA version value.
+        """
+        # First, the AAS model store of SMIA operator is subtracted from it in order to be able to use the Extended AAS Model methods.
+        operator_aas_model_store = await agent_object.aas_model.get_aas_model_object_store()
+        await agent_object.aas_model.set_aas_model_object_store(aas_model_store)
+        software_nameplate_submodel = await agent_object.aas_model.get_submodel_by_semantic_id(
+            AASModelInfo.SEMANTICID_SOFTWARE_NAMEPLATE_SUBMODEL)
+        if not software_nameplate_submodel:
+            _logger.warning("SoftwareNameplate submodel is not defined within AAS model. This SMIA cannot be loaded to SMIA operator.")
+            await agent_object.aas_model.set_aas_model_object_store(operator_aas_model_store)
+            return None
+        # Checks if the instance name is defined (SMIA JID)
+        for software_nameplate_instance in software_nameplate_submodel.submodel_element:
+            aas_smia_version = software_nameplate_instance.get_sm_element_by_semantic_id(
+                'https://admin-shell.io/idta/SoftwareNameplate/1/0/SoftwareNameplate/SoftwareNameplateInstance/'
+                'InstalledVersion')
+            if aas_smia_version is not None:
+                await agent_object.aas_model.set_aas_model_object_store(operator_aas_model_store)
+                return aas_smia_version.value
         _logger.warning("The SoftwareNameplate submodel is defined within the AAS model, but the instance name is not. "
                         "This SMIA cannot be loaded into the SMIA operator.")
         await agent_object.aas_model.set_aas_model_object_store(operator_aas_model_store)
