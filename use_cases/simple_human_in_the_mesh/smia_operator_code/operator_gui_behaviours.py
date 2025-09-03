@@ -186,14 +186,9 @@ class OperatorRequestBehaviour(OneShotBehaviour):
             msg.body = json.dumps(msg_body_json)
             smia_id = self.selected_smia_ids[0]
 
-            for i in self.processed_data:
-                _logger.warning("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                _logger.warning("SMIA VERSION: ".format(i['smiaVersion']))
-                if (OperatorRequestBehaviour.version_str_to_tuple(i['smiaVersion']) >=
-                        OperatorRequestBehaviour.version_str_to_tuple('0.2.4')):
-                    _logger.warning("It is a version higher than 0.2.4, so it requires a specific FIPA-SMIA-ACL message format.")
-
             if len(self.processed_data) > 1:
+                #  TODO HACER AHORA ! Para multiples SMIAs falta modificar las estructuras ACL a partir de SMIA v0.2.4
+
                 _logger.info("There are multiple SMIAs to be requested: negotiation is required")
 
                 # The negotiation request is made by performative CallForProposal (CFP)
@@ -262,13 +257,44 @@ class OperatorRequestBehaviour(OneShotBehaviour):
                 # and the winner has been received, so the capacity will have to be requested from the winner. If there is
                 # only one SMIA, the capacity will be requested directly.
 
-                if self.capability == 'Negotiation':
-                    # In this particular case, the negotiation request is made via the performative CallForProposal
-                    msg_metadata = SMIAInteractionInfo.NEG_STANDARD_ACL_TEMPLATE_CFP.metadata
-                    msg_body_json['serviceData']['serviceParams'].update({'neg_requester_jid': str(self.myagent.jid),
-                                                                          'targets': smia_id})
+                if (OperatorRequestBehaviour.version_str_to_tuple(self.get_smia_version_by_id(smia_id)) >=
+                        OperatorRequestBehaviour.version_str_to_tuple('0.2.4')):
+                    _logger.info("It is a version higher than 0.2.4, so it requires a specific FIPA-SMIA-ACL "
+                                 "message format.")
+                    msg_metadata = {'performative': 'request', 'ontology': 'css-service', 'protocol': 'fipa-request'}
+                    if '#' not in self.capability:
+                        self.capability = 'http://www.w3id.org/upv-ehu/gcis/css-smia#' + self.capability
+                    if '#' not in self.skill:
+                        self.skill = 'http://www.w3id.org/hsu-aut/css#' + self.skill
+
+                    msg_body_json = {'capabilityIRI': self.capability, 'skillIRI': self.skill}
+                    if self.skill_params is not None:
+                        skill_params_dict = {}
+                        for param in set(eval(self.skill_params)):
+                            param_value = self.form_data.get(param, None)
+                            if param_value is None:
+                                _logger.warning(
+                                    "The value of the {} parameter is missing, it is possible that the capability "
+                                    "cannot be executed.".format(param))
+                            if '#' not in param:
+                                param = 'http://www.w3id.org/hsu-aut/css#' + param
+                            skill_params_dict[param] = param_value
+                        msg_body_json['skillParams'] = skill_params_dict
+                    if self.constraints is not None:
+                        constraints = {}
+                        for const_name, const_value in eval(self.constraints).items():
+                            if '#' not in const_name:
+                                const_name = 'http://www.w3id.org/hsu-aut/css#' + const_name
+                            constraints[const_name] = const_value
+                        msg_body_json['constraints'] = constraints
                 else:
-                    msg_metadata = SMIAInteractionInfo.CAP_STANDARD_ACL_TEMPLATE_REQUEST.metadata
+                    if self.capability == 'Negotiation':
+                        # In this particular case, the negotiation request is made via the performative CallForProposal
+                        msg_metadata = SMIAInteractionInfo.NEG_STANDARD_ACL_TEMPLATE_CFP.metadata
+                        msg_body_json['serviceData']['serviceParams'].update({'neg_requester_jid': str(self.myagent.jid),
+                                                                              'targets': smia_id})
+                    else:
+                        msg_metadata = SMIAInteractionInfo.CAP_STANDARD_ACL_TEMPLATE_REQUEST.metadata
 
                 # msg.body = json.dumps(msg_body_json)
                 msg = OperatorRequestBehaviour.create_acl_msg(smia_id, self.thread, msg_metadata, msg_body_json)
@@ -292,8 +318,14 @@ class OperatorRequestBehaviour(OneShotBehaviour):
                 await self.receive_msg_event.wait()
 
                 # The information about the CSS-related response is added in the agent dictionary for HTML result page
-                response_info = {'type': 'acl_recv', 'title': 'Obtaining CSS-related capability execution result ...',
-                                 'response_msg': str(json.loads(self.receive_msg.body)['serviceData']['serviceParams'])}
+                if (OperatorRequestBehaviour.version_str_to_tuple(self.get_smia_version_by_id(smia_id)) >=
+                        OperatorRequestBehaviour.version_str_to_tuple('0.2.4')):
+                    response_info = {'type': 'acl_recv',
+                                     'title': 'Obtaining CSS-related capability execution result ...',
+                                     'response_msg': str(json.loads(self.receive_msg.body))}
+                else:
+                    response_info = {'type': 'acl_recv', 'title': 'Obtaining CSS-related capability execution result ...',
+                                     'response_msg': str(json.loads(self.receive_msg.body)['serviceData']['serviceParams'])}
                 if self.receive_msg.get_metadata('performative') == FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE:
                     response_info.update({'response_type': 'failure', 'response_title':
                         'The CSS-related execution has not been completed.'})
@@ -335,6 +367,23 @@ class OperatorRequestBehaviour(OneShotBehaviour):
         msg.metadata = metadata
         msg.body = json.dumps(body_json)
         return msg
+
+    def get_smia_version_by_id(self, smia_id):
+        """
+        This method get the SMIA version y its identifier.
+
+        Args:
+            smia_id (str): identifier of the SMIA instance.
+
+        Returns:
+            str: version in string format.
+        """
+        if '@' in smia_id:
+            smia_id = smia_id.split('@')[0]
+        for data in self.processed_data:
+            if data['smiaID'] == smia_id:
+                return data['smiaVersion']
+        return None
 
     @staticmethod
     def version_str_to_tuple(version_str):

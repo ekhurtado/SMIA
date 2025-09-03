@@ -195,7 +195,7 @@ class GUIControllers:
 
         # Extract arrays for each field
         smia_id_list = data.getall('smia_id[]', [])
-        smia_version_list = data.getall('asset_version[]', [])
+        smia_version_list = data.getall('smia_version[]', [])
         asset_id_list = data.getall('asset_id[]', [])
         selected = data.getall('checkbox[]', [])
         capability = data.get('capability', None)   # Default if missing
