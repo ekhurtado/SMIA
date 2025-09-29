@@ -261,7 +261,7 @@ class GUIControllers:
 
 class GUIFeatures:
     """This class contains the methods related to SPADE web interface customization."""
-    FAVICON_PATH = '/htmls/static/SMIA_favicon.ico'
+    FAVICON_PATH = 'htmls/static/SMIA_favicon.ico'
 
     @staticmethod
     async def add_new_menu_entry(agent, entry_name, entry_url, entry_icon):
