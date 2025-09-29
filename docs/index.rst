@@ -21,7 +21,6 @@ Welcome to SMIA's documentation!
    CODE_OF_CONDUCT.md
    release_notes
 
-.. TODO faltaria añadir paginas para: contributing, code of conduct
 
 Indices and tables
 ==================
