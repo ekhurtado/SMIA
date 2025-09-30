@@ -62,7 +62,7 @@ class CapabilitySkillOntology:
             self.ontology.load()
         except FileNotFoundError as e:
             self.ontology = None
-            print("ERROR: The OWL file of the ontology does not exist.", file=sys.stderr)
+            print("ERROR: The OWL file of the ontology does not exist.{}".format(e), file=sys.stderr)
         except OwlReadyOntologyParsingError as e:
             if 'NTriples' in e.args[0]:
                 print("ERROR: The OWL file is invalid (only RDF/XML, OWL/XML or NTriples format are accepted).", file=sys.stderr)
@@ -230,8 +230,8 @@ class CapabilitySkillOntology:
         try:
             getattr(domain_instance, object_property_name).append(range_instance)
         except AttributeError as e:
-            print("ERROR: The class {} does not have the attribute {}".format(domain_instance,
-                                                                              object_property_name), file=sys.stderr)
+            print("ERROR: The class {} does not have the attribute {}: {}".format(domain_instance,
+                                                                              object_property_name, e), file=sys.stderr)
 
     def get_all_subclasses_of_class(self, owl_class):
         """

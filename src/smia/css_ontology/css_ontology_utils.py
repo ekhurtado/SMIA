@@ -39,6 +39,7 @@ class CapabilitySkillOntologyUtils:
                                 ontology_file_bytes = ontology_zip_file.read()
                                 return properties_file_utils.create_ontology_file(ontology_file_bytes)
                 except ValueError as e:
+                    _logger.warning(e)
                     raise CriticalError("Failed to read AAS model: invalid file.")
 
             # If the ontology file is not inside the AASX and is not defined in the initialization
@@ -157,6 +158,7 @@ class CapabilitySkillOntologyUtils:
                                            "AAS model classes defined".format(object_property_class))
             return domain_aas_class, range_aas_class
         except KeyError as e:
+            _logger.warning(e)
             raise OntologyReadingError("The domain or range of object property object {} does not have associated "
                                            "AAS model classes defined".format(object_property_class))
 

@@ -258,8 +258,8 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
                 #  definir una interfaz que queremos utilizar si o si? En ese caso, habria que buscar una skill con esa
                 #  interfaz para ejecutarla
                 skill_interface_iri = self.received_body_json[CapabilitySkillACLInfo.ATTRIB_SKILL_INTERFACE_IRI]
-                skill_interface_ontology_instance = await self.myagent.css_ontology.get_ontology_instance_by_iri(
-                    skill_interface_iri)
+                # skill_interface_ontology_instance = await self.myagent.css_ontology.get_ontology_instance_by_iri(
+                #     skill_interface_iri)
                 if skill_ontology_instance is None:
                     raise RequestDataError(f"The given skill interface {skill_interface_iri} does not exist in the "
                                            f"ontology of this SMIA instance.")

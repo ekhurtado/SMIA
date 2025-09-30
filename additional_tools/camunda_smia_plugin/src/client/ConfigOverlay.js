@@ -8,10 +8,8 @@ const OFFSET = { right: 0 };
 
 // we can even use hooks to render into the application
 export default function ConfigOverlay({ anchor, initValues, onClose, onRequest }) {
-  const [ enabled ] = useState(initValues.enabled); // Utiliza useState para manejar el estado de activación/desactivación del autoguardado
-  // const [ enabled, setEnabled ] = useState(initValues.enabled);
-  const [ interval ] = useState(initValues.interval); // Utiliza useState para manejar el estado de intervalo de tiempo entre autoguardados
-  // const [ interval, setAutoSaveInterval ] = useState(initValues.interval);
+  // const [ enabled, setEnabled ] = useState(initValues.enabled); // Utiliza useState para manejar el estado de activación/desactivación del autoguardado
+  // const [ interval, setAutoSaveInterval ] = useState(initValues.interval); // Utiliza useState para manejar el estado de intervalo de tiempo entre autoguardados
   const [ requestText, setRequestText ] = useState(initValues.requestText || ''); // Nuevo estado requestText para almacenar el texto ingresado por el usuario
 
   // const onSubmit = () => onClose({ enabled, interval });

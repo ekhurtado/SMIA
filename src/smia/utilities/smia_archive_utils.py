@@ -46,7 +46,7 @@ def safe_open_file(file_path):
     """
     try:
         return open(file_path, 'x')
-    except FileExistsError as e:
+    except FileExistsError:
         return open(file_path, 'w')
 
 def create_archive_folders():

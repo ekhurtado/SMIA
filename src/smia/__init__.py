@@ -99,7 +99,7 @@ def load_aas_model(file_path):
         # with open(SMIAGeneralInfo.CONFIGURATION_FOLDER_PATH + '/' + init_config_file_name, "wb") as binary_file:
         #     binary_file.write(config_file_bytes)  # Write bytes to file
         # SMIAGeneralInfo.CM_GENERAL_PROPERTIES_FILENAME = init_config_file_name
-    except Exception as e:
+    except Exception:
         _logger.warning("The AAS model does not contain the initialization configuration file. Make sure that it is "
                         "not necessary.")
 

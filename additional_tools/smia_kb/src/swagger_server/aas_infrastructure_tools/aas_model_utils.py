@@ -28,7 +28,7 @@ class AASModelUtils:
             elif isinstance(reference, basyx.aas.model.ModelReference):
                 return reference.resolve(aas_environment_object)
         except KeyError as e:
-            print("ERROR: The object within the AAS model with reference {} does not exist".format(reference),
+            print("ERROR: The object within the AAS model with reference {} does not exist: {}".format(reference, e),
                   file=sys.stderr)
 
     @staticmethod

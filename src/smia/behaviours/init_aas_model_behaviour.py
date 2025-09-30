@@ -312,7 +312,7 @@ class InitAASModelBehaviour(OneShotBehaviour):
                             await self.myagent.css_ontology.add_object_property_to_instances_by_names(
                                 rel_ontology_class.name, skill.id_short, variable.id_short)
                 except OntologyReadingError as error:
-                    _logger.warning("Check the CSS ontology definition.")
+                    _logger.warning("Check the CSS ontology definition. {}".format(error))
                     if None not in (skill, variable):
                         self.errors_found.append("{} ({},{})".format('hasParameter', skill.id_short,
                                                                      variable.id_short))

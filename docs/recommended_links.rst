@@ -10,7 +10,7 @@ SMIA own links
 
 The SMIA software is developed as part of scientific research. The SMIA approach is presented in the following article:
 
-E. Hurtado, A. Burgos, A. Armentia, and O. Casquero, *Self-configurable Manufacturing Industrial Agents (SMIA): a standardized approach for digitizing manufacturing assets*, Journal of Industrial Information Integration, vol. 47, p. 100915, Sept. 2025, doi: `10.1016/j.jii.2025.100915 <https://doi.org/10.1016/j.jii.2025.100915>`_
+    E. Hurtado, A. Burgos, A. Armentia, and O. Casquero, *Self-configurable Manufacturing Industrial Agents (SMIA): a standardized approach for digitizing manufacturing assets*, Journal of Industrial Information Integration, vol. 47, p. 100915, Sept. 2025, doi: `10.1016/j.jii.2025.100915 <https://doi.org/10.1016/j.jii.2025.100915>`_
 
 Additionally, the following links refer to all the own resources of the SMIA approach.
 
