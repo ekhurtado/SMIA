@@ -57,6 +57,7 @@ def send_openapi_http_get_request(url, headers = None, timeout: int = 5):
 
     except Exception as e:
         _logger.error("ERROR: Unexpected error with {}".format(url))
+        print(e)
 
     return None
 
@@ -89,6 +90,7 @@ def send_openapi_http_post_request(url, headers = None, body = None, timeout: in
 
     except Exception as e:
         _logger.error("ERROR: Unexpected error with {}".format(url))
+        print(e)
 
     return None
 

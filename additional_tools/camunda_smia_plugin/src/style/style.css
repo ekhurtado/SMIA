@@ -1,7 +1,7 @@
 /* Custom styles go here */
 .smia-timeout-gateway,.smia-capability-service-task {
-    /*stroke-width: 2px !important;*/
-    /*stroke: #0059b3 !important; !* Slightly darker blue on hover *!*/
+    /* stroke-width: 2px !important; */
+    /* stroke: #0059b3 !important; !* Slightly darker blue on hover *! */
     color: #52bcff !important;
 }
 
@@ -9,7 +9,7 @@
     display: flex;         /* Enables flexbox */
     justify-content: center; /* Centers horizontally */
     align-items: center;     /* Centers vertically */
-    /*overflow: hidden;   !* Prevents overflow *!*/
+    /* overflow: hidden;   !* Prevents overflow *! */
     max-width: 100%; /* Ensures it doesn't go beyond parent width */
     max-height: 100%; /* Ensures it doesn't go beyond parent height */
 }
@@ -36,5 +36,5 @@
 }
 
 .smia-kb-conn-label {
-    padding-left: 0px !important;
+    padding-left: 0 !important;
 }

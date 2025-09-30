@@ -60,6 +60,7 @@ class ExtendedThing(Thing):
                 getattr(self, object_property_name).append(ontological_instance)
         except AttributeError as e:
             print("ERROR: The class {} does not have the attribute {}".format(self, object_property_name))
+            print(e)
 
     def get_data_properties_names(self):
         """

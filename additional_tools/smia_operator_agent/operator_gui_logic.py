@@ -292,7 +292,7 @@ class GUIFeatures:
         Returns:
             web.FileResponse: response to the web browser.
         """
-        favicon_path = os.path.join(GUIFeatures.FAVICON_PATH)
+        # favicon_path = os.path.join(GUIFeatures.FAVICON_PATH)
         return web.FileResponse(GUIFeatures.FAVICON_PATH)
 
     @staticmethod

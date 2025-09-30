@@ -1,4 +1,4 @@
-import { format } from 'react-string-format';
+// import { format } from 'react-string-format';
 
 import BpmnModeler from 'bpmn-js/lib/Modeler';
 import camundaModdleDescriptor from 'camunda-bpmn-moddle/resources/camunda.json';

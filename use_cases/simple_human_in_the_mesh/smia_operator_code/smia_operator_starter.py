@@ -2,10 +2,9 @@ import logging
 import os
 
 import smia
+from operator_gui_behaviours import OperatorGUIBehaviour
 from smia.agents.extensible_smia_agent import ExtensibleSMIAAgent
 from smia.utilities.general_utils import DockerUtils
-from operator_gui_behaviours import OperatorGUIBehaviour
-from operator_gui_behaviours import OperatorReceiveBehaviour
 
 _logger = logging.getLogger(__name__)
 
@@ -34,6 +33,7 @@ def main():
     smia_extensible_agent.add_new_agent_capability(operator_behaviour)
 
     smia.run(smia_extensible_agent)
+
 
 if __name__ == '__main__':
 

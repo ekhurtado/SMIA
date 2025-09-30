@@ -73,13 +73,13 @@ There are some additional resources offered within the SMIA approach. All of the
 
     This tool contains the ontology for the Capability-Skill-Service (CSS) model in an OWL file. It also provides some ExtendedClasses implemented in Python.
 
-    .. button-link:: https://github.com/ekhurtado/SMIA/tree/main/additional_resources/gui_agent/
+    .. button-link:: https://github.com/ekhurtado/SMIA/tree/main/additional_tools/smia_operator_agent/
             :color: primary
             :outline:
 
-            :octicon:`mark-github;1em` GUI Agent
+            :octicon:`mark-github;1em` SMIA Operator Agent
 
-    This tool provides a SPADE agent with an easy-to-use graphical interface. This agent provides several useful functionalities for SMIA usage and execution.
+    This tool provides a SPADE agent with an easy-to-use graphical interface. This agent enables to automatically discover available SMIA instances and their corresponding CSS-enriched information, as well as to request the execution of specific capabilities and assign them to the appropriate agents.
 
 
 
