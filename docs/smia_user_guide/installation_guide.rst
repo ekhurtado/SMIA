@@ -119,15 +119,15 @@ OWLReady2 is used by SMIA to manage the OWL-based CSS ontology in Python. An off
 
     .. code:: bash
 
-        pip install basyx-python-sdk==1.1.0
+        pip install basyx-python-sdk==1.2.1
 
     .. code:: bash
 
-        pip install spade==3.3.3
+        pip install spade==4.0.3
 
     .. code:: bash
 
-        pip install owlready2==0.47
+        pip install owlready2==0.48
 
 SMIA source code
 ~~~~~~~~~~~~~~~~
