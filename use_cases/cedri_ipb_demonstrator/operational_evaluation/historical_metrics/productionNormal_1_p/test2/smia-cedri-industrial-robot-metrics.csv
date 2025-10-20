@@ -1,0 +1,9 @@
+AgentID,Timestamp,Description
+smia-cedri-industrial-robot,1753093273.7998,SMIA started
+smia-cedri-industrial-robot,1753093277.2352,SMIA self-configuration completed
+smia-cedri-industrial-robot,1753093300.4866,Asset service requested [smia-pe-p4vkc]
+smia-cedri-industrial-robot,1753093316.5106,Asset service completed [smia-pe-p4vkc]
+smia-cedri-industrial-robot,1753093329.5420,Asset service requested [smia-pe-vhd32]
+smia-cedri-industrial-robot,1753093343.5646,Asset service completed [smia-pe-vhd32]
+smia-cedri-industrial-robot,1753093370.3353,Asset service requested [smia-pe-6prh8]
+smia-cedri-industrial-robot,1753093383.3535,Asset service completed [smia-pe-6prh8]

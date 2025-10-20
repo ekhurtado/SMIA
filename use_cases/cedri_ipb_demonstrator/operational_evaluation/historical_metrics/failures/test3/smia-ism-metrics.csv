@@ -1,0 +1,8 @@
+AgentID,Timestamp,Description
+smia-ism,1752763291.1250,smia-punchingmachine-b registered
+smia-ism,1752763292.7471,smia-punchingmachine-a registered
+smia-ism,1752763294.0021,smia-pe registered
+smia-ism,1752763294.0782,smia-cedri-industrial-robot registered
+smia-ism,1752763294.6417,smia-indexedline-a registered
+smia-ism,1752763294.7692,smia-indexedline-b registered
+smia-ism,1752763295.2420,smia-hi-operator registered

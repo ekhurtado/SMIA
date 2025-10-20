@@ -1,0 +1,102 @@
+services:
+
+  # This Docker Compose need to be deployed after "-infrastructure.yml", as this is where the shared network is
+  # configured (here it is set as external).
+
+  # -------------------------
+  # SMIA instances for assets
+  # -------------------------
+  smia-industrial-robot:
+    image: ekhurtado/smia:0.3.0-alpine
+    container_name: smia-industrial-robot
+    environment:
+      - AAS_MODEL_NAME=CeDRI_IndustrialRobot_instance.aasx
+      - AGENT_ID=smia-cedri-industrial-robot@ejabberd
+      - AGENT_PSSWD=gciscedri1234
+    volumes:
+      - ./aas:/smia_archive/config/aas
+    networks:
+      - smia-cedri-net
+
+  smia-punching-machine-a:
+    image: ekhurtado/smia:0.3.0-alpine
+    container_name: smia-punching-machine-a
+    environment:
+      - AAS_MODEL_NAME=CeDRI_PunchingMachine_instanceA.aasx
+      - AGENT_ID=smia-punchingmachine-a@ejabberd
+      - AGENT_PSSWD=gciscedri1234
+    volumes:
+      - ./aas:/smia_archive/config/aas
+    networks:
+      - smia-cedri-net
+
+  smia-punching-machine-b:
+    image: ekhurtado/smia:0.3.0-alpine
+    container_name: smia-punching-machine-b
+    environment:
+      - AAS_MODEL_NAME=CeDRI_PunchingMachine_instanceB.aasx
+      - AGENT_ID=smia-punchingmachine-b@ejabberd
+      - AGENT_PSSWD=gciscedri1234
+    volumes:
+      - ./aas:/smia_archive/config/aas
+    networks:
+      - smia-cedri-net
+
+  smia-indexed-line-a:
+    image: ekhurtado/smia:0.3.0-alpine
+    container_name: smia-indexed-line-a
+    environment:
+      - AAS_MODEL_NAME=CeDRI_IndexedLine_instanceA.aasx
+      - AGENT_ID=smia-indexedline-a@ejabberd
+      - AGENT_PSSWD=gciscedri1234
+    volumes:
+      - ./aas:/smia_archive/config/aas
+    networks:
+      - smia-cedri-net
+
+  smia-indexed-line-b:
+    image: ekhurtado/smia:0.3.0-alpine
+    container_name: smia-indexed-line-b
+    environment:
+      - AAS_MODEL_NAME=CeDRI_IndexedLine_instanceB.aasx
+      - AGENT_ID=smia-indexedline-b@ejabberd
+      - AGENT_PSSWD=gciscedri1234
+    volumes:
+      - ./aas:/smia_archive/config/aas
+    networks:
+      - smia-cedri-net
+
+  smia-hi-operator:
+    image: ekhurtado/smia-tools:latest-smia-hi
+    container_name: smia-hi-operator
+    environment:
+      - AAS_MODEL_NAME=CeDRI_Operator_instance.aasx
+      - AGENT_ID=smia-hi-operator@ejabberd
+      - AGENT_PSSWD=gciscedri1234
+    volumes:
+      - ./aas:/smia_archive/config/aas
+    ports:
+      - 10010:10000
+    networks:
+      - smia-cedri-net
+
+  # SMIA Planning Execution
+  smia-pe:
+    image: ekhurtado/smia-tools:latest-smia-pe
+    container_name: smia-pe
+    environment:
+      #- AAS_MODEL_NAME=SMIA_PE_CeDRI_ScenarioA.aasx
+      - AAS_MODEL_NAME=SMIA_PE_CeDRI_ScenarioB.aasx
+      - AGENT_ID=smia-pe@ejabberd
+      - AGENT_PSSWD=gciscedri1234
+    volumes:
+      - ./aas:/smia_archive/config/aas
+    ports:
+      - 10000:10000
+    networks:
+      - smia-cedri-net
+
+networks:
+  smia-cedri-net:
+    external: true
+    name: smia_cedri_use_case_net

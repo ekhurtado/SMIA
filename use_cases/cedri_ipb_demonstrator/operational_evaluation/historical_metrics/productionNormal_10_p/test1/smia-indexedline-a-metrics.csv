@@ -1,0 +1,18 @@
+AgentID,Timestamp,Description
+smia-indexedline-a,1752767564.4760,SMIA started
+smia-indexedline-a,1752767568.4051,SMIA self-configuration completed
+smia-indexedline-a,1752767638.6841,Asset service requested [smia-pe-7dsu7]
+smia-indexedline-a,1752767662.2198,Asset service completed [smia-pe-7dsu7]
+smia-indexedline-a,1752767989.6175,Asset service requested [smia-pe-f4xnx]
+smia-indexedline-a,1752768019.6855,Asset service completed [smia-pe-f4xnx]
+smia-indexedline-a,1752768172.7041,Asset service requested [smia-pe-odx61]
+smia-indexedline-a,1752768201.8916,Asset service completed [smia-pe-odx61]
+smia-indexedline-a,1752768441.2097,Asset service requested [smia-pe-pvhgo]
+smia-indexedline-a,1752768469.2128,Asset service completed [smia-pe-pvhgo]
+smia-indexedline-a,1752768622.7402,Asset service requested [smia-pe-yynlm]
+smia-indexedline-a,1752768650.6408,Asset service completed [smia-pe-yynlm]
+smia-indexedline-a,1752768804.1136,Asset service requested [smia-pe-esqnl]
+smia-indexedline-a,1752768831.8595,Asset service completed [smia-pe-esqnl]
+smia-indexedline-a,1752768895.6779,Asset service requested [smia-pe-kn0v8]
+smia-indexedline-a,1752768924.9552,Asset service completed [smia-pe-kn0v8]
+smia-indexedline-a,1752768987.6065,Asset service requested [smia-pe-69p1i]

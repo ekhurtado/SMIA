@@ -1,3 +1,4 @@
+
 services:
 
   # ----------------------------------------
@@ -21,6 +22,9 @@ services:
         condition: service_healthy
       mongo:
         condition: service_healthy
+    networks:
+      - smia-cedri-net
+
   aas-registry:
     image: eclipsebasyx/aas-registry-log-mongodb:2.0.0-SNAPSHOT
     container_name: aas-registry
@@ -34,6 +38,9 @@ services:
     depends_on:
       mongo:
         condition: service_healthy
+    networks:
+      - smia-cedri-net
+
   sm-registry:
     image: eclipsebasyx/submodel-registry-log-mongodb:2.0.0-SNAPSHOT
     container_name: sm-registry
@@ -47,6 +54,9 @@ services:
     depends_on:
       mongo:
         condition: service_healthy
+    networks:
+      - smia-cedri-net
+
   mongo:
     image: mongo:5.0.10
     container_name: mongo
@@ -59,6 +69,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - smia-cedri-net
+
   aas-web-ui:
     image: eclipsebasyx/aas-gui:SNAPSHOT
     container_name: aas-ui
@@ -79,6 +92,9 @@ services:
         condition: service_healthy
     volumes:
       - ./logo:/usr/src/app/dist/Logo
+    networks:
+      - smia-cedri-net
+
 
 
   # ----------------------------
@@ -104,6 +120,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+    networks:
+      - smia-cedri-net
 
   smia-kb:
     image: ekhurtado/smia-tools:latest-smia-kb
@@ -116,14 +134,14 @@ services:
     depends_on:   # It does not depend on the AAS environment, but is added to correctly obtain all the data during the start-up
       aas-env:
         condition: service_healthy
-    # volumes:
-    #   - ./smia_kb:/smia_kb
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://smia-kb:8080/api/v3/ui/ || exit 1
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 5s
+    networks:
+      - smia-cedri-net
 
   smia-ism:
     image: ekhurtado/smia-tools:latest-smia-ism
@@ -143,6 +161,9 @@ services:
       start_period: 15s
     volumes:
       - ./aas:/smia_archive/config/aas
+    networks:
+      - smia-cedri-net
+
 
 
   # -----------------------------
@@ -155,117 +176,9 @@ services:
       - 1880:1880
     volumes:
       - ./nodered:/data
+    networks:
+      - smia-cedri-net
 
-  # -------------------------
-  # SMIA instances for assets
-  # -------------------------
-  smia-industrial-robot:
-    image: ekhurtado/smia:0.3.0-alpine
-    container_name: smia-industrial-robot
-    environment:
-      - AAS_MODEL_NAME=CeDRI_IndustrialRobot_instance.aasx
-      - AGENT_ID=smia-cedri-industrial-robot@ejabberd
-      - AGENT_PSSWD=gciscedri1234
-    depends_on:
-      xmpp-server:
-        condition: service_healthy
-      smia-ism:
-        condition: service_healthy
-    volumes:
-      - ./aas:/smia_archive/config/aas
-
-  smia-punching-machine-a:
-    image: ekhurtado/smia:0.3.0-alpine
-    container_name: smia-punching-machine-a
-    environment:
-      - AAS_MODEL_NAME=CeDRI_PunchingMachine_instanceA.aasx
-      - AGENT_ID=smia-punchingmachine-a@ejabberd
-      - AGENT_PSSWD=gciscedri1234
-    depends_on:
-      xmpp-server:
-        condition: service_healthy
-      smia-ism:
-        condition: service_healthy
-    volumes:
-      - ./aas:/smia_archive/config/aas
-
-  smia-punching-machine-b:
-    image: ekhurtado/smia:0.3.0-alpine
-    container_name: smia-punching-machine-b
-    environment:
-      - AAS_MODEL_NAME=CeDRI_PunchingMachine_instanceB.aasx
-      - AGENT_ID=smia-punchingmachine-b@ejabberd
-      - AGENT_PSSWD=gciscedri1234
-    depends_on:
-      xmpp-server:
-        condition: service_healthy
-      smia-ism:
-        condition: service_healthy
-    volumes:
-      - ./aas:/smia_archive/config/aas
-
-  smia-indexed-line-a:
-    image: ekhurtado/smia:0.3.0-alpine
-    container_name: smia-indexed-line-a
-    environment:
-      - AAS_MODEL_NAME=CeDRI_IndexedLine_instanceA.aasx
-      - AGENT_ID=smia-indexedline-a@ejabberd
-      - AGENT_PSSWD=gciscedri1234
-    depends_on:
-      xmpp-server:
-        condition: service_healthy
-      smia-ism:
-        condition: service_healthy
-    volumes:
-      - ./aas:/smia_archive/config/aas
-
-  smia-indexed-line-b:
-    image: ekhurtado/smia:0.3.0-alpine
-    container_name: smia-indexed-line-b
-    environment:
-      - AAS_MODEL_NAME=CeDRI_IndexedLine_instanceB.aasx
-      - AGENT_ID=smia-indexedline-b@ejabberd
-      - AGENT_PSSWD=gciscedri1234
-    depends_on:
-      xmpp-server:
-        condition: service_healthy
-      smia-ism:
-        condition: service_healthy
-    volumes:
-      - ./aas:/smia_archive/config/aas
-
-  smia-hi-operator:
-    image: ekhurtado/smia-tools:latest-smia-hi
-    container_name: smia-hi-operator
-    environment:
-      - AAS_MODEL_NAME=CeDRI_Operator_instance.aasx
-      - AGENT_ID=smia-hi-operator@ejabberd
-      - AGENT_PSSWD=gciscedri1234
-    depends_on:
-      xmpp-server:
-        condition: service_healthy
-      smia-ism:
-        condition: service_healthy
-    volumes:
-      - ./aas:/smia_archive/config/aas
-    ports:
-      - 10010:10000
-
-  # SMIA Planning Execution
-  smia-pe:
-    image: ekhurtado/smia-tools:latest-smia-pe
-    container_name: smia-pe
-    environment:
-      - AAS_MODEL_NAME=SMIA_PE_CeDRI_ScenarioA.aasx
-      #- AAS_MODEL_NAME=SMIA_PE_CeDRI_ScenarioB.aasx
-      - AGENT_ID=smia-pe@ejabberd
-      - AGENT_PSSWD=gciscedri1234
-    depends_on:
-      xmpp-server:
-        condition: service_healthy
-      smia-ism:
-        condition: service_healthy
-    volumes:
-      - ./aas:/smia_archive/config/aas
-    ports:
-      - 10000:10000
+networks:
+  smia-cedri-net:
+    name: smia_cedri_use_case_net
