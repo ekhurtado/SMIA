@@ -32,11 +32,20 @@ The development of the SMIA approach is addressed by Ekaitz Hurtado as part of a
 
 The repository of the SMIA project is structured as follows:
 
-- [additional_tools](https://github.com/ekhurtado/SMIA/tree/main/additional_tools): additional tools developed related to the SMIA.
-  - [aas_ontology_reader](https://github.com/ekhurtado/SMIA/tree/main/additional_tools/aas_ontology_reader): this tool contains the source code of a reader capable of analyzing an AAS model based on a given OWL ontology.
-  - [aasx_package_explorer_resources](https://github.com/ekhurtado/SMIA/tree/main/additional_tools/aasx_package_explorer_resources): this tool contains the JSON files to extend the AASX Package Explorer software with the Capability-Skill-Service (CSS) model.
-  - [capability_skill_ontology](https://github.com/ekhurtado/SMIA/tree/main/additional_tools/capability_skill_ontology): this tool contains the ontology for the Capability-Skill-Service (CSS) model in an OWL file. It also provides some ExtendedClasses implemented in Python.
-  - [gui_agent](https://github.com/ekhurtado/SMIA/tree/main/additional_tools/gui_agent): this tool provides a SPADE agent with an easy-to-use graphical interface. This agent provides several useful functionalities for SMIA usage and execution.
+- [additional_resources](https://github.com/ekhurtado/SMIA/tree/main/additional_resources): additional resources developed and offered related to the SMIA approach.
+  - [aas_ontology_reader](https://github.com/ekhurtado/SMIA/tree/main/additional_resources/aas_ontology_reader): this resource contains the source code of a reader capable of analyzing an AAS model based on a given OWL ontology.
+  - [aasx_package_explorer_resources](https://github.com/ekhurtado/SMIA/tree/main/additional_resources/aasx_package_explorer_resources): this resource contains the JSON files to extend the AASX Package Explorer software with the Capability-Skill-Service (CSS) model.
+  - [capability_skill_ontology](https://github.com/ekhurtado/SMIA/tree/main/additional_resources/capability_skill_ontology): this resource contains the ontology for the Capability-Skill-Service (CSS) model in an OWL file. It also provides some ExtendedClasses implemented in Python.
+  - [gui_agent](https://github.com/ekhurtado/SMIA/tree/main/additional_resources/gui_agent): this resource provides a SPADE agent with an easy-to-use graphical interface. This agent provides several useful functionalities for SMIA usage and execution.
+- [additional_tools](https://github.com/ekhurtado/SMIA/tree/main/additional_tools): additional tools developed to support the SMIA approach or to obtain extended SMIA agents with additional logic.
+  - Extended agents
+    - [smia_pe](https://github.com/ekhurtado/SMIA/tree/main/additional_tools/smia_pe): SMIA Production Execution (PE) is an extended agent with autonomy for interpret and autonomously execute BPMN workflows.
+    - [smia_hi](https://github.com/ekhurtado/SMIA/tree/main/additional_tools/smia_hi): SMIA Human Interface (HI) is an extended agent with a GUI to manage incoming CSS-related requests to represent a human as a manufacturing asset.
+    - [smia_operator_agent](https://github.com/ekhurtado/SMIA/tree/main/additional_tools/smia_operator_agent): SMIA Operator is an extended agent with a GUI that allows you to perform CSS-related requests with an easy-to-use interface.
+  - Infrastructure components
+    - [smia_i_kb](https://github.com/ekhurtado/SMIA/tree/main/additional_tools/smia_i_kb): SMIA-I Knowledge Base (KB) is an ontological database to support SMIA ecosystem offering management of CSS-related information as well as agent-related information (e.g., registration of instances).
+    - [smia_ism](https://github.com/ekhurtado/SMIA/tree/main/additional_tools/smia_ism): SMIA Infrastructure Services Manager (ISM) is an extended agent that to acts as a mediator, encapsulating essential non-agent infrastructure services and exposing them to the normalized SMIA-based MAS.
+  - [camunda_smia_plugin](https://github.com/ekhurtado/SMIA/tree/main/additional_tools/camunda_smia_plugin): this tool is a plugin for Camunda Modeler software that is able to query functional information from the SMIA-I KB and offer it to the user. It also provides extended BPMN elements to ease the development of valid CSS-driven workflows for SMIA PE. 
 - [examples](https://github.com/ekhurtado/SMIA/tree/main/examples): some examples to facilitate the use of the solution.
   - [docker_compose_deployment](https://github.com/ekhurtado/SMIA/tree/main/examples/docker_compose_deployment): required files to easily deploy SMIA using the Docker Compose tool.
   - [smia_extended](https://github.com/ekhurtado/SMIA/tree/main/examples/smia_extended): an example of files related to a SMIA extension case.
