@@ -429,18 +429,19 @@ def xml_to_file(file_path, xml_content):
 # --------------------------
 # Methods related to metrics
 # --------------------------
-async def save_csv_metrics_timestamp(folder_path, agent_jid, description=None):
+async def save_csv_metrics_timestamp(folder_path, agent_jid, description=None, file_prefix=None):
     import csv
     from smia.logic import acl_smia_messages_utils
 
-    if agent_jid is None:
-        agent_jid = await acl_smia_messages_utils.get_agent_id_from_jid(agent_jid)
+    agent_jid = await acl_smia_messages_utils.get_agent_id_from_jid(agent_jid)
     if description is None:
         description = ''
     if not os.path.exists(folder_path):
         os.mkdir(folder_path)  # If necessary, the folder is created
+    if file_prefix is None:
+        file_prefix = ''
 
-    file_path = f"{folder_path}/{agent_jid}-metrics.csv"
+    file_path = f"{folder_path}/{file_prefix}{agent_jid}-metrics.csv"
     try:
         with open(file_path, 'a', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)

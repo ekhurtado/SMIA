@@ -28,7 +28,8 @@ class StateRunning(State):
         metrics_folder = os.environ.get('METRICS_FOLDER')
         if metrics_folder is None:
             metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
-        await smia_archive_utils.save_csv_metrics_timestamp(metrics_folder, str(self.agent.jid) + '-ready', 'SMIA in Running state')
+        await smia_archive_utils.save_csv_metrics_timestamp(metrics_folder, self.agent.jid,
+                                                            description='SMIA in Running state', file_prefix='ready-')
 
         _logger.info("## STATE 2: RUNNING ##  (Initial state)")
 
