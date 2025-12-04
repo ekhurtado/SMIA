@@ -8,6 +8,7 @@ import os
 import smia
 from smia.agents.smia_agent import SMIAAgent
 from smia.utilities.general_utils import DockerUtils
+from smia.utilities import properties_file_utils
 
 _logger = logging.getLogger(__name__)
 
@@ -29,6 +30,10 @@ def main():
     if aas_id is not None:
         _logger.info("The AAS ID has been added as environmental variable.")
         smia.load_aas_id(aas_id)
+
+    smia_i_kb_registration = DockerUtils.get_env_var('SMIAI_KB_REGISTRATION')
+    if smia_i_kb_registration is not None:
+        properties_file_utils.set_dt_general_property('smia-i-kb-registration', smia_i_kb_registration)
 
     # The jid and password can also be set as environmental variables. In case they are not set, the values are obtained
     # from the initialization properties file

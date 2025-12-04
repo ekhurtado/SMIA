@@ -30,11 +30,11 @@ def main():
     # It is checked and saved the command line arguments
     CLIUtils.check_and_save_cli_information(init_config, aas_model, aas_id)
 
-    # The AAS_ID will be set in the associated ConfigMap, within the general-information of the AAS
+    # The AAS_ID will be set in the properties file, within the general-information of the AAS
     agent_id = properties_file_utils.get_dt_general_property('agentID')
     passwd = properties_file_utils.get_dt_general_property('password')
 
-    # The XMPP server of the MAS will also be set in the associated ConfiMap
+    # The XMPP server of the MAS will also be set in the properties file
     xmpp_server = properties_file_utils.get_dt_general_property('xmpp-server')
 
     # Build the agent jid and password

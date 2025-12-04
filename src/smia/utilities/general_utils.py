@@ -334,3 +334,18 @@ class DockerUtils:
             return None
         _logger.info('Loaded AAS ID: {}'.format(aas_id))
         return aas_id
+
+    @staticmethod
+    def get_env_var(env_var_name):
+        """
+        This method returns the value obtained from a specific environmental variable.
+
+        Returns:
+            str: value of the environmental variable.
+        """
+        env_var_value = os.environ.get(env_var_name)
+        if env_var_value is None:
+            _logger.warning("The environment variable [{}] is not set, so check that it is not "
+                            "necessary.".format(env_var_name))
+            return None
+        return env_var_value
