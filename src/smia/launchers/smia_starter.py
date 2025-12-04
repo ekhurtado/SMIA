@@ -26,14 +26,14 @@ def main():
 
     # Then, the AASX model is added
     # smia.load_aas_model('../examples/SMIA_Operator_article.aasx')
-    smia.load_aas_model('../examples/CeDRI_PunchingMachine_instanceA.aasx')
-    # smia.load_aas_model('../examples/SMIA_TransportRobot_article_1.aasx')
+    # smia.load_aas_model('../examples/CeDRI_PunchingMachine_instanceA.aasx')
+    smia.load_aas_model('../examples/SMIA_TransportRobot_article_1.aasx')
     # smia.load_aas_model('../examples/SMIA_TransportRobot_without_OWL.aasx')
     # smia.load_aas_model('../examples/SMIA_tutorial_1.aasx')
     # smia.load_aas_model('../smia_archive/config/SMIA_TransportRobot_with_OWL.aasx')
 
     # Create the agent object
-    smia_agent = SMIAAgent("gcis2@xmpp.jp", "gcis1234")
+    smia_agent = SMIAAgent("gcis3@xmpp.jp", "gcis1234")
     # smia_agent = SMIAAgent()
 
     # smia_agent = ExtensibleSMIAAgent()
