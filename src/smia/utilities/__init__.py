@@ -4,4 +4,4 @@ Archive, Submodel and ConfigMap.
 """
 
 # TODO Test to export only a part of the source code in the pypi package
-__all__ = ['aas_model_extension_utils', 'properties_file_utils', 'general_utils', 'smia_archive_utils']
+__all__ = ['aas_model_extension_utils', 'general_utils', 'smia_archive_utils', 'properties_file_utils']
