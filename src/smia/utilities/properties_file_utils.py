@@ -18,7 +18,7 @@ def create_empty_file():
 
     config_prop = configparser.RawConfigParser()
     config_prop['DT'] = {'dt.version': '#', 'dt.agentID': '#', 'dt.password': '#', 'dt.xmpp-server': '#',
-                         'dt.web-ui': '#'}
+                         'dt.web-ui': '#', 'dt.smia-i-kb-registration': '#'}
     config_prop['AAS'] = {'aas.meta-model.version': '#', 'aas.model.serialization': '#', 'aas.model.folder': '#',
                           'aas.model.file': '#', 'aas.id': '#'}
     config_prop['ONTOLOGY'] = {'ontology.file': '#', 'ontology.inside-aasx': '#'}
@@ -134,7 +134,28 @@ def get_dt_general_property(property_name):
     try:
         return config_sm['DT']['dt.' + property_name]
     except KeyError as e:
-        raise CriticalError("The 'general.properties' file in the ConfigMap does not have valid keys.")
+        _logger.warning("The 'general.properties' file does not have the [{}] key in 'DT' section: {}".format('dt.' +property_name, e))
+        return None
+
+def set_dt_general_property(property_name, property_value):
+    """
+    This method sets a new value for a property of the DT. The information is stored in "general.properties" file
+    within "DT" section (with the 'dt.' prefix).
+
+    Args:
+        property_name (str): The name of the property.
+        property_value (str): The new value of the property.
+    """
+    # Read submodels configuration
+    config_prop = configparser.RawConfigParser()
+    config_prop.read(SMIAGeneralInfo.CONFIGURATION_FOLDER_PATH + '/' + SMIAGeneralInfo.CM_GENERAL_PROPERTIES_FILENAME)
+
+    try:
+        config_prop['DT']['dt.' + property_name] = property_value
+        update_properties_file_by_parser(config_prop)
+    except KeyError as e:
+        _logger.error("The 'general.properties' file is not valid regarding 'DT' section.")
+        return None
 
 # --------------------------------------
 # Methods related to ontology information

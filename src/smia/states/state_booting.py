@@ -11,7 +11,7 @@ from spade.behaviour import State
 
 from smia.behaviours.init_aas_model_behaviour import InitAASModelBehaviour
 from smia.logic import inter_smia_interactions_utils, acl_smia_messages_utils
-from smia.utilities import smia_archive_utils
+from smia.utilities import smia_archive_utils, properties_file_utils
 from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
 from smia.utilities.general_utils import SMIAGeneralInfo
 
@@ -55,14 +55,15 @@ class StateBooting(State):
         # If the initialization behaviour has completed, SMIA is in the InitializationReady status
         smia_archive_utils.update_status('InitializationReady')
 
-        # When all initialization tasks have been completed, the SMIA will try to register in the SMIA KB through an
-        # infrastructure service provided by the SMIA ISM
-        if await acl_smia_messages_utils.get_agent_id_from_jid(self.agent.jid) != AASRelatedServicesInfo.SMIA_ISM_ID:
-            # The extracted CSS elements in the self-configuration process will be registered in the SMIA KB
-            await self.send_register_css_elements_acl_msg()
+        # When all initialization tasks have been completed, if the SMIA has been configured to register on the
+        # SMIA-I KB, it will try to register through an infrastructure service provided by the SMIA ISM
+        if properties_file_utils.get_dt_general_property('smia-i-kb-registration') in ('yes', 'true', 't', '1'):
+            if await acl_smia_messages_utils.get_agent_id_from_jid(self.agent.jid) != AASRelatedServicesInfo.SMIA_ISM_ID:
+                # The extracted CSS elements in the self-configuration process will be registered in the SMIA KB
+                await self.send_register_css_elements_acl_msg()
 
-            # The SMIA instance itself will be also registered in the SMIA KB
-            await self.send_register_instance_acl_msg()
+                # The SMIA instance itself will be also registered in the SMIA KB
+                await self.send_register_instance_acl_msg()
 
         # Finished the Boot State the agent can move to the next state
         _logger.info(f"{self.agent.jid} agent has finished it Boot state.")

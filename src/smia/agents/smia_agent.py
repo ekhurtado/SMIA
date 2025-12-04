@@ -94,6 +94,14 @@ class SMIAAgent(Agent):
         """
         _logger.info(f"Setting up {self.jid} SMIA...")
 
+        # TODO BORRAR -> es para obtener los datos para el analisis
+        from smia.utilities import smia_archive_utils, smia_general_info
+        import os
+        metrics_folder = os.environ.get('METRICS_FOLDER')
+        if metrics_folder is None:
+            metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
+        await smia_archive_utils.save_csv_metrics_timestamp(metrics_folder, self.jid, 'SMIA started')
+
         # First, the FSMBehaviour is instantiated
         fsm_behaviour = AASFSMBehaviour()
 
