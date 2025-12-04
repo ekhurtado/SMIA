@@ -220,7 +220,7 @@ class CLIUtils:
         parser.add_argument("-c", "--config")
         parser.add_argument("-a-id", "--aas-id")
         args = parser.parse_args(cli_args)
-        return args.config, args.model
+        return args.config, args.model, args.aas_id
 
     @staticmethod
     def check_and_save_cli_information(init_config, aas_model, aas_id):
@@ -281,6 +281,10 @@ class CLIUtils:
                 config_file_path = AASModelUtils.get_configuration_file_path_from_standard_submodel()
                 # smia_archive_utils.copy_file_into_archive(config_file_path,
                 #                                           SMIAGeneralInfo.CONFIGURATION_FOLDER_PATH)
+                if config_file_path is None:
+                    CriticalError("The CLI information is invalid: the initialization configuration file has not "
+                                  "been specified either in the CLI or inside the AAS model (the Software Nameplate or "
+                                  "ConfigurationPath submodel is not defined).")
                 init_config_file_name = ntpath.split(config_file_path)[1] or ntpath.basename(ntpath.split(config_file_path)[0])
                 # The file must be obtained from the AASX package
                 config_file_bytes = AASModelUtils.get_file_bytes_from_aasx_by_path(config_file_path)

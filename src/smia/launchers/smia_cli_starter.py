@@ -13,6 +13,7 @@ from smia.agents.smia_resource_agent import SMIAResourceAgent
 from smia.utilities import properties_file_utils
 from smia.utilities import smia_archive_utils
 from smia.utilities.general_utils import CLIUtils
+import os
 
 # sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))    # To run in CLI (executing in 'src' folder)
 

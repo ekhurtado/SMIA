@@ -28,7 +28,7 @@ class CapabilitySkillOntologyUtils:
             # The ontology file will be checked if the ontology file is inside the AASX package if the initialization
             # properties file is not added ('inside-aasx' property is '#') or is added and set as such.
             aas_model_serialization_format = properties_file_utils.get_aas_general_property('model.serialization')
-            if aas_model_serialization_format == '.aasx':
+            if aas_model_serialization_format in ['.aasx', 'AASX']:
                 try:
                     with aasx.AASXReader(properties_file_utils.get_aas_model_filepath()) as aasx_reader:
                         for part_name, content_type in aasx_reader.reader.list_parts():
