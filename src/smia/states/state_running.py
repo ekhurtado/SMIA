@@ -31,6 +31,9 @@ class StateRunning(State):
         await smia_archive_utils.save_csv_metrics_timestamp(metrics_folder, self.agent.jid,
                                                             description='SMIA in Running state', file_prefix='ready-')
 
+        await smia_archive_utils.save_csv_metrics_timestamp(metrics_folder, self.agent.jid,
+                                                            'SMIA ready')
+
         _logger.info("## STATE 2: RUNNING ##  (Initial state)")
 
         # SMIA is in the Running status
