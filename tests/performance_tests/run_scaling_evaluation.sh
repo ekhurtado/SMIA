@@ -7,11 +7,12 @@ AAS_ARCHIVE_DIR="/smia_archive/config/aas"
 TESTS_PATH="./tests/scaling_test"
 METRICS_FOLDER="metrics"
 COMPOSE_FILE="docker-compose-generated.yml"
-AASX_FILE_NAME="SMIA_demo_1.aasx"
+AASX_FILE_NAME="SMIA_test_simple.aasx"
 
 # Arrays with test scenarios (e.g., 3 instances, then 5)
-SCENARIOS=(3 5) 
-#SCENARIOS=(3 5) 
+NUM_ITERATIONS=3   # 30
+#SCENARIOS=(1 2 4 8) 
+SCENARIOS=(1 2 4 8 16 32 64) 
 
 
 cleanup_on_interrupt() {
@@ -110,77 +111,85 @@ echo "Generated metrics folder: $AAS_DIR/$METRICS_FOLDER"
 mkdir -p $TESTS_PATH
 echo "Generated metrics persistence folder: $TESTS_PATH"
 
-for N in "${SCENARIOS[@]}"; do
-    echo "=== Preparing scenario with $N SMIA instances ==="
 
-    mkdir -p $TESTS_PATH/test_${N}_instances
-    
-    # 1. Clean previous environment
-    rm -f $AAS_DIR/$METRICS_FOLDER/*
-    
-    # 2. Dynamically generate docker-compose.yml
-    echo "Generating $COMPOSE_FILE..."
-    generate_header
-    
-    for (( i=1; i<=N; i++ )); do
-        add_client_to_yaml "$i"
-    done
+for (( iter=1; iter<=NUM_ITERATIONS; iter++ )); do
+    # The test is performed NUM_ITERATIONS times
+    echo "###################################"
+    echo "Performing scaling test number $iter"
+    echo "###################################"
 
-    # 3. Launch infrastructure
-    echo "Launching containers..."
-    # --remove-orphans is key here because the number of containers changes
-    docker-compose -f $COMPOSE_FILE up -d --remove-orphans
+    for N in "${SCENARIOS[@]}"; do
+        echo "=== Preparing scenario with $N SMIA instances ==="
 
-    # 4. Wait for completion (Sentinel File Logic)
-    echo "Waiting for $N SMIA instances to be ready..."
-    while true; do
-        FINISHED_COUNT=$(ls $AAS_DIR/$METRICS_FOLDER/ready-* 2>/dev/null | wc -l)
+        mkdir -p $TESTS_PATH/test_${N}_instances
         
-        if [ "$FINISHED_COUNT" -ge "$N" ]; then
-            echo ">>> Test finished! ($FINISHED_COUNT/$N)"
-            break
-        fi
-        sleep 2
+        # 1. Clean previous environment
+        rm -f $AAS_DIR/$METRICS_FOLDER/*
+        
+        # 2. Dynamically generate docker-compose.yml
+        echo "Generating $COMPOSE_FILE..."
+        generate_header
+        
+        for (( i=1; i<=N; i++ )); do
+            add_client_to_yaml "$i"
+        done
+
+        # 3. Launch infrastructure
+        echo "Launching containers..."
+        # --remove-orphans is key here because the number of containers changes
+        docker-compose -f $COMPOSE_FILE up -d --remove-orphans
+
+        # 4. Wait for completion (Sentinel File Logic)
+        echo "Waiting for $N SMIA instances to be ready..."
+        while true; do
+            FINISHED_COUNT=$(ls $AAS_DIR/$METRICS_FOLDER/ready-* 2>/dev/null | wc -l)
+            
+            if [ "$FINISHED_COUNT" -ge "$N" ]; then
+                echo ">>> Test finished! ($FINISHED_COUNT/$N)"
+                break
+            fi
+            sleep 2
+        done
+
+        # 5. Shut everything down
+        echo "Stopping scenario..."
+        docker-compose -f $COMPOSE_FILE down
+        rm -f $AAS_DIR/$METRICS_FOLDER/ready-*
+        echo "Scenario $N completed."
+        echo ""
+        sleep 3
+
+        # 6. Copy obtained metrics to persistence folder and remove temporary folder
+        #cp -r "$AAS_DIR/$METRICS_FOLDER"/* "$TESTS_PATH/test_${N}_instances/"
+        full_metrics_file="$TESTS_PATH/test_${N}_instances/full_metrics.csv"
+        for source_file in "$AAS_DIR/$METRICS_FOLDER"/*.csv; do
+            # Verify file exists (in case glob * fails)
+            [ -e "$source_file" ] || continue
+
+            # Extract only the name (e.g., app-1-metrics.csv)
+            filename=$(basename "$source_file")
+            dest_file="$TESTS_PATH/test_${N}_instances/$filename"
+
+            if [ -f "$dest_file" ]; then
+                # CASE A: File ALREADY EXISTS -> Append
+                # Use 'tail -n +2' to print from line 2 to the end
+                # (skipping the header) and append it (>>) to the destination.
+                tail -n +2 "$source_file" >> "$dest_file"
+            else
+                # CASE B: File DOES NOT EXIST -> Copy normally
+                cp "$source_file" "$dest_file"
+            fi
+
+            # --- B. FULL FILE ---
+            if [ ! -f "$full_metrics_file" ]; then
+                head -n 1 "$source_file" > "$full_metrics_file"
+            fi
+            # Append content of current to global (always WITHOUT header)
+            tail -n +2 "$source_file" >> "$full_metrics_file"
+
+        done
+        echo "Metrics files copied to persistence folder $TESTS_PATH/test_${N}_instances"
+        
+        #rm -rf "$AAS_DIR/$METRICS_FOLDER"
     done
-
-    # 5. Shut everything down
-    echo "Stopping scenario..."
-    docker-compose -f $COMPOSE_FILE down
-    rm -f $AAS_DIR/$METRICS_FOLDER/ready-*
-    echo "Scenario $N completed."
-    echo ""
-    sleep 3
-
-    # 6. Copy obtained metrics to persistence folder and remove temporary folder
-    #cp -r "$AAS_DIR/$METRICS_FOLDER"/* "$TESTS_PATH/test_${N}_instances/"
-    full_metrics_file="$TESTS_PATH/test_${N}_instances/full_metrics.csv"
-    for source_file in "$AAS_DIR/$METRICS_FOLDER"/*.csv; do
-        # Verify file exists (in case glob * fails)
-        [ -e "$source_file" ] || continue
-
-        # Extract only the name (e.g., app-1-metrics.csv)
-        filename=$(basename "$source_file")
-        dest_file="$TESTS_PATH/test_${N}_instances/$filename"
-
-        if [ -f "$dest_file" ]; then
-            # CASE A: File ALREADY EXISTS -> Append
-            # Use 'tail -n +2' to print from line 2 to the end
-            # (skipping the header) and append it (>>) to the destination.
-            tail -n +2 "$source_file" >> "$dest_file"
-        else
-            # CASE B: File DOES NOT EXIST -> Copy normally
-            cp "$source_file" "$dest_file"
-        fi
-
-        # --- B. FULL FILE ---
-        if [ ! -f "$full_metrics_file" ]; then
-            head -n 1 "$source_file" > "$full_metrics_file"
-        fi
-        # Append content of current to global (always WITHOUT header)
-        tail -n +2 "$source_file" >> "$full_metrics_file"
-
-    done
-    echo "Metrics files copied to persistence folder $TESTS_PATH/test_${N}_instances"
-    
-    #rm -rf "$AAS_DIR/$METRICS_FOLDER"
 done

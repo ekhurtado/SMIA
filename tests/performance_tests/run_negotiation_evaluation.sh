@@ -11,8 +11,9 @@ AASX_REQUESTER_FILE="SMIA_demo_1.aasx"
 AASX_RECEIVER_FILE="SMIA_TransportRobot_1.aasx"
 
 # Arrays with test scenarios (e.g., 3 instances, then 5)
-SCENARIOS=(3 5 10) 
-#SCENARIOS=(3 5) 
+NUM_NEGOTIATIONS=3   # 30
+SCENARIOS=(1 2 4 8) 
+#SCENARIOS=(1 2 4 8 16 32 64) 
 
 
 cleanup_on_interrupt() {
@@ -88,7 +89,7 @@ services:
       - AGENT_ID=smia-negotiation-requester@ejabberd
       - AGENT_PSSWD=gcis1234
       - METRICS_FOLDER=$AAS_ARCHIVE_DIR/$METRICS_FOLDER
-      - NUM_NEGOTIATIONS=5
+      - NUM_NEGOTIATIONS=$NUM_NEGOTIATIONS
       - TARGET_IDS=$target_ids_string
     depends_on:
       xmpp-server:
@@ -156,7 +157,7 @@ for N in "${SCENARIOS[@]}"; do
     docker-compose -f $COMPOSE_FILE up -d --remove-orphans
 
     # 4. Wait for completion (Sentinel File Logic)
-    echo "Waiting for negotiations to complete with $N SMIA instances..."
+    echo "Waiting for $NUM_NEGOTIATIONS negotiations to be completed by $N SMIA instances..."
     while true; do
         FINISHED_COUNT=$(ls $AAS_DIR/$METRICS_FOLDER/ready-* 2>/dev/null | wc -l)
         if [ -f "$AAS_DIR/$METRICS_FOLDER/ready-smia-negotiation-requester-metrics.csv" ]; then
