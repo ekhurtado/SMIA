@@ -4,15 +4,16 @@
 IMAGE_NAME="ekhurtado/smia-use-cases:latest-smia-performance-test"
 AAS_DIR="./aas"
 AAS_ARCHIVE_DIR="/smia_archive/config/aas"
-TESTS_PATH="./tests/aas_size_test"      # "./tests/css_size_test"
+TESTS_PATH="./tests/css_size_test"      # "./tests/css_size_test     aas_size_test"
 METRICS_FOLDER="metrics"
 COMPOSE_FILE="docker-compose-generated.yml"
 
 # Arrays with different AAS models
 NUM_INSTANCES=5
 NUM_ITERATIONS=3   # 30
-AAS_MODELS=("SMIA_test_simple.aasx" "SMIA_test_10_sm.aasx") 
-#AAS_MODELS=("SMIA_test_simple.aasx" "SMIA_test_10_sm.aasx" "SMIA_test_20_sm.aasx" "SMIA_test_50_sm.aasx") 
+AAS_MODELS=("SMIA_test_1_css.aasx" "SMIA_test_2_css.aasx" "SMIA_test_4_css.aasx") 
+#AAS_MODELS=("SMIA_test_1_sm.aasx" "SMIA_test_2_sm.aasx" "SMIA_test_4_sm.aasx" "SMIA_test_8_sm.aasx" "SMIA_test_16_sm.aasx" "SMIA_test_32_sm.aasx" "SMIA_test_64_sm.aasx") 
+#AAS_MODELS=("SMIA_test_1_css.aasx" "SMIA_test_2_css.aasx" "SMIA_test_4_css.aasx" "SMIA_test_8_css.aasx" "SMIA_test_16_css.aasx" "SMIA_test_32_css.aasx" "SMIA_test_64_css.aasx") 
 
 
 cleanup_on_interrupt() {

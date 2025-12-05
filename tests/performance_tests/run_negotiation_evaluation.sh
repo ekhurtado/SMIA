@@ -7,8 +7,8 @@ AAS_ARCHIVE_DIR="/smia_archive/config/aas"
 TESTS_PATH="./tests/negotiation_test"
 METRICS_FOLDER="metrics"
 COMPOSE_FILE="docker-compose-generated.yml"
-AASX_REQUESTER_FILE="SMIA_demo_1.aasx"
-AASX_RECEIVER_FILE="SMIA_TransportRobot_1.aasx"
+AASX_REQUESTER_FILE="SMIA_test_simple.aasx"
+AASX_RECEIVER_FILE="SMIA_test_simple.aasx"
 
 # Arrays with test scenarios (e.g., 3 instances, then 5)
 NUM_NEGOTIATIONS=3   # 30
