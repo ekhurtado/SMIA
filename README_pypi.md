@@ -2,6 +2,11 @@
 
 [![Python versions](https://img.shields.io/pypi/pyversions/smia.svg)](https://pypi.org/project/smia/) [![Docker badge](https://img.shields.io/docker/pulls/ekhurtado/smia.svg)](https://hub.docker.com/r/ekhurtado/smia/) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/ekhurtado/SMIA?sort=semver) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e87506fff1bb4a438c20e11bb7295f51)](https://app.codacy.com/gh/ekhurtado/SMIA/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) [![Documentation Status](https://readthedocs.org/projects/smia/badge/?version=latest)](https://smia.readthedocs.io/en/latest/)
 
+[![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ekhurtado/SMIA) [![Read the Docs](https://img.shields.io/badge/readthedocs-%238CA1AF.svg?style=for-the-badge&logo=readthedocs&logoColor=white)](https://smia.readthedocs.io/en/latest/) [![DockerHub](https://img.shields.io/badge/dockerhub-%233775A9.svg?style=for-the-badge&logo=docker&logoColor=white)](https://hub.docker.com/r/ekhurtado/smia) [![YouTube](https://img.shields.io/badge/YouTube-%23FF0000.svg?style=for-the-badge&logo=YouTube&logoColor=white)](https://www.youtube.com/playlist?list=PLs6bFF_iqW3GB_8bUMn1QqoiXcQDXPvJh) [![DOI](https://img.shields.io/badge/Paper-%23fab608.svg?style=for-the-badge&logo=doi&logoColor=white)](https://doi.org/10.1016/j.jii.2025.100915)
+
+[//]: # ([![PyPI]&#40;https://img.shields.io/badge/pypi-%23008bdd.svg?style=for-the-badge&logo=pypi&logoColor=white&#41;]&#40;https://pypi.org/project/smia/&#41;)
+
+---
 
 ![SMIA Logo](https://raw.githubusercontent.com/ekhurtado/SMIA/refs/heads/main/images/SMIA_logo_positive.png "SMIA main logo")
 
