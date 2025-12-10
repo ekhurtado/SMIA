@@ -1,6 +1,34 @@
 Getting Started
 ===============
 
+|github| |readthedocs| |pypi| |dockerhub| |youtube| |doi|
+
+----
+
+.. |github| image:: https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white
+   :target: https://github.com/ekhurtado/SMIA
+   :alt: GitHub
+
+.. |readthedocs| image:: https://img.shields.io/badge/readthedocs-%238CA1AF.svg?style=for-the-badge&logo=readthedocs&logoColor=white
+   :target: https://smia.readthedocs.io/en/latest/
+   :alt: Read the Docs
+
+.. |pypi| image:: https://img.shields.io/badge/pypi-%23008bdd.svg?style=for-the-badge&logo=pypi&logoColor=white
+   :target: https://pypi.org/project/smia/
+   :alt: PyPI
+
+.. |dockerhub| image:: https://img.shields.io/badge/dockerhub-%233775A9.svg?style=for-the-badge&logo=docker&logoColor=white
+   :target: https://hub.docker.com/r/ekhurtado/smia
+   :alt: DockerHub
+
+.. |youtube| image:: https://img.shields.io/badge/YouTube-%23FF0000.svg?style=for-the-badge&logo=YouTube&logoColor=white
+   :target: https://www.youtube.com/playlist?list=PLs6bFF_iqW3GB_8bUMn1QqoiXcQDXPvJh
+   :alt: YouTube
+
+.. |doi| image:: https://img.shields.io/badge/Paper-%23fab608.svg?style=for-the-badge&logo=doi&logoColor=white
+   :target: https://doi.org/10.1016/j.jii.2025.100915
+   :alt: DOI
+
 SMIA is a software that implements an AAS-compliant Digital Twin (DT) that is based on a flexible manufacturing-centered ontology.
 
 .. image:: _static/images/SMIA_logo_positive.png
