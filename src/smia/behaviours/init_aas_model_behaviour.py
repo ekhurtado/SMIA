@@ -89,15 +89,6 @@ class InitAASModelBehaviour(OneShotBehaviour):
         self.progress_bar.close()
         await asyncio.sleep(.5)
 
-        # TODO BORRAR -> es para obtener los datos para el analisis
-        from smia.utilities import smia_archive_utils, smia_general_info
-        import os
-        metrics_folder = os.environ.get('METRICS_FOLDER')
-        if metrics_folder is None:
-            metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
-        await smia_archive_utils.save_csv_metrics_timestamp(metrics_folder, self.myagent.jid,
-                                                            'SMIA self-configuration completed')
-
         # The final results of the analysis are shown
         await self.print_analysis_result()
 
