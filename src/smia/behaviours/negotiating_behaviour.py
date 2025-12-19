@@ -2,6 +2,7 @@ import json
 import logging
 from json import JSONDecodeError
 
+from smia import GeneralUtils
 from spade.behaviour import CyclicBehaviour
 
 from smia.behaviours.specific_handle_behaviours.handle_negotiation_behaviour import HandleNegotiationBehaviour
@@ -78,10 +79,13 @@ class NegotiatingBehaviour(CyclicBehaviour):
 
             # When the message content has been validated, the specific behavior will be added to the agent to handle
             # the required actions within the FIPA-CNP protocol
-            #               handle_neg_template = SMIAInteractionInfo.NEG_STANDARD_ACL_TEMPLATE_PROPOSE
-            #               handle_neg_template.thread = msg.thread
+            handle_neg_template = GeneralUtils.create_acl_template(
+                performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_PROPOSE,
+                protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL, thread=msg.thread)
+            # handle_neg_template = SMIAInteractionInfo.NEG_STANDARD_ACL_TEMPLATE_PROPOSE
+            # handle_neg_template.thread = msg.thread
             specific_neg_handling_behaviour = HandleNegotiationBehaviour(self.agent, received_acl_msg=msg)
-            self.myagent.add_behaviour(specific_neg_handling_behaviour)
+            self.myagent.add_behaviour(specific_neg_handling_behaviour, handle_neg_template)
             _logger.info("Specific behaviour added to the agent to handle the message with thread [{}].".format(
                 msg.thread))
 
