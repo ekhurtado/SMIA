@@ -50,6 +50,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         self.targets_processed = set()
         self.neg_value = 0.0
         self.myagent.tie_break = True   # In case of equal value neg is set as tie-breaker TODO check these cases (which need to be tie-breaker?)
+        self.iterations_pending = 0
 
         self.requested_timestamp = GeneralUtils.get_current_timestamp()
 
@@ -106,21 +107,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
 
                 # Once the negotiation value is reached, the negotiation management can begin. The first step is to send the
                 # PROPOSE message with your own value to the other participants in the negotiation.
-                propose_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
-                    'N/A', self.received_acl_msg.thread,
-                    # 'N/A', await acl_smia_messages_utils.create_random_thread(self.myagent),
-                    FIPAACLInfo.FIPA_ACL_PERFORMATIVE_PROPOSE,
-                    self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB),
-                    protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
-                    msg_body={**self.received_body_json, **{'negValue': self.neg_value}})
-                # This PROPOSE FIPA-ACL message is sent to all participants of the negotiation (except for this SMIA)
-                for jid_target in self.received_body_json['negTargets']:
-                    if jid_target != str(self.agent.jid):
-                        propose_acl_message.to = jid_target
-                        await self.send(propose_acl_message)
-                        _logger.aclinfo("ACL PROPOSE negotiation message sent to " + jid_target +
-                                        "with neg value " + str(self.neg_value) +
-                                        " on negotiation with thread [" + self.received_acl_msg.thread + "]")
+                await self.send_propose_acl_msgs()
 
                 _logger.assetinfo("######### TIMESTAMP [{}] PROPOSE SENT {}".format(self.received_acl_msg.thread, GeneralUtils.get_current_timestamp()))   # TODO BORRAR BUG TEST
             except (CapabilityRequestExecutionError, AssetConnectionError) as cap_neg_error:
@@ -132,7 +119,6 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
 
                 await cap_neg_error.handle_capability_execution_error_old()
                 return  # killing a behaviour does not cancel its current run loop
-
 
     async def run(self):
         """
@@ -149,6 +135,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 _logger.aclinfo("         + PROPOSE Message received on SMIA Agent (HandleNegotiationBehaviour "
                                 "in charge of the negotiation with thread [" + self.received_acl_msg.thread + "])")
                 _logger.aclinfo("                 |___ Message received with content: {}".format(msg.body))
+
+                self.iterations_pending = 0     # The iterations that the agent is pending for PROPOSE messages are reset
 
                 # The msg body will be parsed to a JSON object
                 propose_msg_body_json = acl_smia_messages_utils.get_parsed_body_from_acl_msg(msg)
@@ -195,7 +183,15 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                     return
 
         else:
-            _logger.info("         - No message received within 10 seconds on SMIA Agent (HandleNegotiationBehaviour)")
+            _logger.info("         - No message received within 10 seconds on SMIA Agent (HandleNegotiationBehaviour "
+                         "[{}])".format(self.received_acl_msg.thread))
+
+            self.iterations_pending += 1  # The iterations that the agent is pending for PROPOSE messages is increased
+            if self.iterations_pending >= 10:
+                # In this case, the other agents may have failed, so the PROPOSE messages will be resent.
+                await self.send_propose_acl_msgs()
+                self.iterations_pending = 0 # The iterations pending are also reset
+
 
     async def get_neg_value_with_criteria(self):
         """
@@ -269,6 +265,23 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 # Normalize within 0.0 and 100.0 range
                 current_neg_value = (current_neg_value - 0.0) / 100.0
             self.neg_value = current_neg_value
+
+    async def send_propose_acl_msgs(self):
+        propose_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
+            'N/A', self.received_acl_msg.thread,
+            # 'N/A', await acl_smia_messages_utils.create_random_thread(self.myagent),
+            FIPAACLInfo.FIPA_ACL_PERFORMATIVE_PROPOSE,
+            self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB),
+            protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
+            msg_body={**self.received_body_json, **{'negValue': self.neg_value}})
+        # This PROPOSE FIPA-ACL message is sent to all participants of the negotiation (except for this SMIA)
+        for jid_target in self.received_body_json['negTargets']:
+            if jid_target != str(self.agent.jid):
+                propose_acl_message.to = jid_target
+                await self.send(propose_acl_message)
+                _logger.aclinfo("ACL PROPOSE negotiation message sent to " + jid_target +
+                                "with neg value " + str(self.neg_value) +
+                                " on negotiation with thread [" + self.received_acl_msg.thread + "]")
 
     async def handle_neg_values_tie(self, received_agent_id, received_neg_value):
         """
