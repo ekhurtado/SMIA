@@ -104,8 +104,6 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 #  managing the negotiation until you get the answer to that request (together with the requested value).
                 await self.get_neg_value_with_criteria()
 
-                _logger.assetinfo(" ----- The neg value for thread [{}] is [{}]".format(self.received_acl_msg.thread, self.neg_value))      # TODO BORRAR
-
                 # Once the negotiation value is reached, the negotiation management can begin. The first step is to send the
                 # PROPOSE message with your own value to the other participants in the negotiation.
                 propose_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
@@ -121,6 +119,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                         propose_acl_message.to = jid_target
                         await self.send(propose_acl_message)
                         _logger.aclinfo("ACL PROPOSE negotiation message sent to " + jid_target +
+                                        "with neg value " + str(self.neg_value) +
                                         " on negotiation with thread [" + self.received_acl_msg.thread + "]")
             except (CapabilityRequestExecutionError, AssetConnectionError) as cap_neg_error:
                 if isinstance(cap_neg_error, AssetConnectionError):
@@ -155,7 +154,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 sender_agent_neg_value = propose_msg_body_json['negValue']
 
                 _logger.assetinfo("Thread [{}] Received neg value from [{}]: [{}] and my value is [{}]".format(
-                    msg.thread, msg.sender, sender_agent_neg_value, self.neg_value))  # TODO BORRAR
+                    msg.thread, msg.sender, sender_agent_neg_value, self.neg_value))  # TODO BORRAR BUG TEST
 
                 # The value of this SMIA and the received value are compared
                 if float(sender_agent_neg_value) > self.neg_value:
@@ -291,10 +290,10 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         scores_dict_disturbed = {opt: scores_dict[opt] * (1 + perturbations[opt])
                                  for opt in perturbations}
 
-        _logger.assetinfo("Received value [{}] from [{}] to be compared with my value [{}]".format(
-            received_agent_id, received_neg_value, self.neg_value))  # TODO BORRAR
-        _logger.assetinfo("The SMIA has a negotiation tie with thread [{}], with values [{}]".format(
-            self.received_acl_msg.thread, scores_dict_disturbed))  # TODO BORRAR
+        # _logger.assetinfo("Received value [{}] from [{}] to be compared with my value [{}]".format(
+        #     received_agent_id, received_neg_value, self.neg_value))  # TODO BORRAR BUG TEST
+        # _logger.assetinfo("The SMIA has a negotiation tie with thread [{}], with values [{}]".format(
+        #     self.received_acl_msg.thread, scores_dict_disturbed))  # TODO BORRAR BUG TEST
 
         if max(scores_dict_disturbed, key=lambda k: scores_dict_disturbed[k]) != str(self.myagent.jid):
             # In this case the SMIA instance has loosened the negotiation, so a False is returned
@@ -314,7 +313,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         """
         _logger.assetinfo("The SMIA has finished the negotiation with thread [{}], with the value [{}]"
                           ", so the result is {}".format(
-            self.received_acl_msg.thread, self.neg_value, is_winner)) # TODO BORRAR
+            self.received_acl_msg.thread, self.neg_value, is_winner)) # TODO BORRAR BUG TEST
 
         if is_winner:
             _logger.info("The SMIA has finished the negotiation with thread [" + self.received_acl_msg.thread +
