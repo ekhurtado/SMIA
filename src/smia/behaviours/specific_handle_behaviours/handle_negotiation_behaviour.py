@@ -160,6 +160,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                     # In this case the negotiation is tied, so it must be managed
                     if not await self.handle_neg_values_tie(acl_smia_messages_utils.get_sender_from_acl_msg(msg),
                                                             float(sender_agent_neg_value)):
+                        _logger.assetinfo("The SMIA has not won  the negotiation tie")  # TODO BORRAR
                         await self.exit_negotiation(is_winner=False)
                         return  # killing a behaviour does not cancel its current run loop
                 # The target is added as processed in the local object (as it is a Python 'set' object there is no problem
@@ -284,6 +285,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         scores_dict_disturbed = {opt: scores_dict[opt] * (1 + perturbations[opt])
                                  for opt in perturbations}
 
+        _logger.assetinfo("Received value [{}] from [{}] to be compared with my value [{}]".format(
+            received_agent_id, received_neg_value, self.neg_value))  # TODO BORRAR
         _logger.assetinfo("The SMIA has a negotiation tie with thread [{}], with values [{}]".format(
             self.received_acl_msg.thread, scores_dict_disturbed))  # TODO BORRAR
 
