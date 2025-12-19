@@ -104,6 +104,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 #  managing the negotiation until you get the answer to that request (together with the requested value).
                 await self.get_neg_value_with_criteria()
 
+                _logger.assetinfo(" ----- The neg value for thread [{}] is [{}]".format(self.received_acl_msg.thread, self.neg_value))      # TODO BORRAR
+
                 # Once the negotiation value is reached, the negotiation management can begin. The first step is to send the
                 # PROPOSE message with your own value to the other participants in the negotiation.
                 propose_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
@@ -150,6 +152,9 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 # The negotiation information is obtained from the message
                 # criteria = msg_json_body['serviceData']['serviceParams']['criteria']
                 sender_agent_neg_value = propose_msg_body_json['negValue']
+
+                _logger.assetinfo(" Received neg value from [{}]: [{}] and my value is [{}]".format(
+                    msg.sender, sender_agent_neg_value, self.neg_value))  # TODO BORRAR
 
                 # The value of this SMIA and the received value are compared
                 if float(sender_agent_neg_value) > self.neg_value:
