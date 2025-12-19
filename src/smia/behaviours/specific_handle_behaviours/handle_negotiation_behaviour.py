@@ -284,6 +284,9 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         scores_dict_disturbed = {opt: scores_dict[opt] * (1 + perturbations[opt])
                                  for opt in perturbations}
 
+        _logger.assetinfo("The SMIA has a negotiation tie with thread [{}], with values [{}]".format(
+            self.received_acl_msg.thread, scores_dict_disturbed))  # TODO BORRAR
+
         if max(scores_dict_disturbed, key=lambda k: scores_dict_disturbed[k]) != str(self.myagent.jid):
             # In this case the SMIA instance has loosened the negotiation, so a False is returned
             return False
