@@ -1,4 +1,5 @@
 import asyncio
+import random
 import types
 
 import psutil
@@ -29,7 +30,9 @@ class AgentServices:
         # The Lock object is used to manage the access to global service dictionary
         self.lock = asyncio.Lock()
 
+        # Agent services for all SMIA instances
         asyncio.run(self.save_agent_service('RAM_memory_function', self.get_software_ram_memory))   # TODO no hacerlo asi, rellenarlo de otra forma (p.e. por metodos de extension)
+        asyncio.run(self.save_agent_service('random_float_function', self.get_random_float_value))   # TODO no hacerlo asi, rellenarlo de otra forma (p.e. por metodos de extension)
 
     # ------------------------
     # Services general methods
@@ -102,5 +105,14 @@ class AgentServices:
             float: the current used RAM memory of the software.
         """
         return psutil.virtual_memory().percent
+
+    async def get_random_float_value(self):
+        """
+        This agent service gets the current used RAM memory of the software.
+
+        Returns:
+            float: the current used RAM memory of the software.
+        """
+        return round(random.uniform(0, 100), 4)
 
 

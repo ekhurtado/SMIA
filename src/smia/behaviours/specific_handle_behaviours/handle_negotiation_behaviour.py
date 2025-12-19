@@ -300,6 +300,10 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
             is_winner (bool): it determines whether the SMIA has been the winner of the negotiation.
 
         """
+        _logger.assetinfo("The SMIA has finished the negotiation with thread [{}], with the value [{}]"
+                          ", so the result is {}".format(
+            self.received_acl_msg.thread, self.neg_value, is_winner)) # TODO BORRAR
+
         if is_winner:
             _logger.info("The SMIA has finished the negotiation with thread [" + self.received_acl_msg.thread +
                          "] as the winner")
