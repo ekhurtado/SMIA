@@ -109,7 +109,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 # Once the negotiation value is reached, the negotiation management can begin. The first step is to send the
                 # PROPOSE message with your own value to the other participants in the negotiation.
                 propose_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
-                    'N/A', await acl_smia_messages_utils.create_random_thread(self.myagent),
+                    'N/A', self.received_acl_msg.thread,
+                    # 'N/A', await acl_smia_messages_utils.create_random_thread(self.myagent),
                     FIPAACLInfo.FIPA_ACL_PERFORMATIVE_PROPOSE,
                     self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB),
                     protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
