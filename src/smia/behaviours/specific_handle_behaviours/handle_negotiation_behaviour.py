@@ -96,7 +96,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         else:
             # In this case, there are multiple participants, so it will execute the FIPA-SMIA-CNP protocol
 
-            await asyncio.sleep(1)  # Wait to ensure that other agents are ready to negotiate
+            await asyncio.sleep(3)  # Wait to ensure that other agents are ready to negotiate
             try:
                 #  The value of the criterion must be obtained just before starting to manage the negotiation, so that at the
                 #  time of sending the PROPOSE and receiving that of the others it will be the same value. Therefore, if to
