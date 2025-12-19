@@ -153,8 +153,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 # criteria = msg_json_body['serviceData']['serviceParams']['criteria']
                 sender_agent_neg_value = propose_msg_body_json['negValue']
 
-                _logger.assetinfo(" Received neg value from [{}]: [{}] and my value is [{}]".format(
-                    msg.sender, sender_agent_neg_value, self.neg_value))  # TODO BORRAR
+                _logger.assetinfo("Thread [{}] Received neg value from [{}]: [{}] and my value is [{}]".format(
+                    msg.thread, msg.sender, sender_agent_neg_value, self.neg_value))  # TODO BORRAR
 
                 # The value of this SMIA and the received value are compared
                 if float(sender_agent_neg_value) > self.neg_value:
