@@ -189,6 +189,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
             self.iterations_pending += 1  # The iterations that the agent is pending for PROPOSE messages is increased
             if self.iterations_pending >= 10:
                 # In this case, the other agents may have failed, so the PROPOSE messages will be resent.
+                _logger.info("The negotiation with thread [{}] has not been resolved in 10 iterations, so the proposal "
+                             "messages will be sent again to try to resolve it.".format(self.received_acl_msg.thread))
                 await self.send_propose_acl_msgs()
                 self.iterations_pending = 0 # The iterations pending are also reset
 
