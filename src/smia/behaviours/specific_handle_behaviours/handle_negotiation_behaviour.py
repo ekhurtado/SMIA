@@ -96,7 +96,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         else:
             # In this case, there are multiple participants, so it will execute the FIPA-SMIA-CNP protocol
 
-            await asyncio.sleep(3)  # Wait to ensure that other agents are ready to negotiate
+            await asyncio.sleep(10)  # Wait to ensure that other agents are ready to negotiate
             try:
                 #  The value of the criterion must be obtained just before starting to manage the negotiation, so that at the
                 #  time of sending the PROPOSE and receiving that of the others it will be the same value. Therefore, if to
@@ -121,6 +121,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                         _logger.aclinfo("ACL PROPOSE negotiation message sent to " + jid_target +
                                         "with neg value " + str(self.neg_value) +
                                         " on negotiation with thread [" + self.received_acl_msg.thread + "]")
+
+                _logger.assetinfo("######### TIMESTAMP [{}] PROPOSE SENT {}".format(self.received_acl_msg.thread, GeneralUtils.get_current_timestamp()))   # TODO BORRAR BUG TEST
             except (CapabilityRequestExecutionError, AssetConnectionError) as cap_neg_error:
                 if isinstance(cap_neg_error, AssetConnectionError):
                     cap_neg_error = CapabilityRequestExecutionError(self.received_acl_msg.thread,'Negotiation',
@@ -137,6 +139,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         This method implements the logic of the behaviour.
         """
 
+        _logger.assetinfo(
+            "######### TIMESTAMP [{}] READY {}".format(self.received_acl_msg.thread, GeneralUtils.get_current_timestamp()))  # TODO BORRAR BUG TEST
         # Wait for a message with the standard ACL template for negotiating to arrive.
         msg = await self.receive(timeout=10)  # Timeout set to 10s so as not to continuously execute the behavior
         if msg:
