@@ -115,7 +115,7 @@ def create_neg_response_msg(receiver, thread, service_id, service_type, winner):
     return response_msg
 
 
-def create_neg_json_to_store(neg_requester_jid, participants, neg_criteria, is_winner):
+def create_neg_json_to_store(neg_requester_jid, participants, neg_criteria, neg_value, is_winner):
     """
     This method creates the JSON object to be stored in the global object of the SMIA for the information of all
     negotiations in which it has participated.
@@ -124,6 +124,7 @@ def create_neg_json_to_store(neg_requester_jid, participants, neg_criteria, is_w
         neg_requester_jid (str):  the JID of the SPADE agent that has requested the negotiation.
         participants (str): JIDs of the SPADE agents that have participated in the negotiation. Is it a string that has the JIDs divided by ','
         neg_criteria (str): criteria of the negotiation.
+        neg_value (float): current value of the negotiation.
         is_winner (bool): it determines whether the SMIA has been the winner of the negotiation.
 
     Returns:
@@ -133,6 +134,7 @@ def create_neg_json_to_store(neg_requester_jid, participants, neg_criteria, is_w
         'neg_requester_jid': neg_requester_jid,
         'participants': participants,
         'neg_criteria': neg_criteria,
+        'neg_value': neg_value,
         'is_winner': str(is_winner)
     }
 

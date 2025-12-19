@@ -311,7 +311,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         neg_data_json = negotiation_utils.create_neg_json_to_store(neg_requester_jid=self.received_body_json['negRequester'],
                                                                    participants=self.received_body_json['negTargets'],
                                                                    neg_criteria=self.received_body_json['negCriterion'],
-                                                                   is_winner=is_winner)
+                                                                   neg_value=self.neg_value, is_winner=is_winner)
         await self.myagent.save_negotiation_data(thread=self.received_acl_msg.thread, neg_data=neg_data_json)
 
         # The information will be stored in the log
