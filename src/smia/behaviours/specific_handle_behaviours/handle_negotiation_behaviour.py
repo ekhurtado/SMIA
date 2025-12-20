@@ -108,8 +108,6 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 # Once the negotiation value is reached, the negotiation management can begin. The first step is to send the
                 # PROPOSE message with your own value to the other participants in the negotiation.
                 await self.send_propose_acl_msgs()
-
-                _logger.assetinfo("######### TIMESTAMP [{}] PROPOSE SENT {}".format(self.received_acl_msg.thread, GeneralUtils.get_current_timestamp()))   # TODO BORRAR BUG TEST
             except (CapabilityRequestExecutionError, AssetConnectionError) as cap_neg_error:
                 if isinstance(cap_neg_error, AssetConnectionError):
                     cap_neg_error = CapabilityRequestExecutionError(self.received_acl_msg.thread,'Negotiation',
@@ -125,8 +123,6 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         This method implements the logic of the behaviour.
         """
 
-        _logger.assetinfo(
-            "######### TIMESTAMP [{}] READY {}".format(self.received_acl_msg.thread, GeneralUtils.get_current_timestamp()))  # TODO BORRAR BUG TEST
         # Wait for a message with the standard ACL template for negotiating to arrive.
         msg = await self.receive(timeout=10)  # Timeout set to 10s so as not to continuously execute the behavior
         if msg:
@@ -157,12 +153,15 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                     # In this case the negotiation is tied, so it must be managed
                     if not await self.handle_neg_values_tie(acl_smia_messages_utils.get_sender_from_acl_msg(msg),
                                                             float(sender_agent_neg_value)):
-                        _logger.assetinfo("The SMIA has not won  the negotiation tie")  # TODO BORRAR
                         await self.exit_negotiation(is_winner=False)
                         return  # killing a behaviour does not cancel its current run loop
                 # The target is added as processed in the local object (as it is a Python 'set' object there is no problem
                 # of duplicate agents)
                 self.targets_processed.add(acl_smia_messages_utils.get_sender_from_acl_msg(msg))
+
+                _logger.assetinfo("Thread [{}] Processed agents [{}]".format(
+                    msg.thread, self.targets_processed))  # TODO BORRAR BUG TEST
+
                 if len(self.targets_processed) == len(self.received_body_json['negTargets']) - 1:
                     # In this case all the values have already been received, so the value of this SMIA is the best
                     _logger.info("The SMIA has won the negotiation with thread [" + msg.thread + "]")
