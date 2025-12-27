@@ -193,7 +193,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                          "[{}])".format(self.received_acl_msg.thread))
 
             self.iterations_pending += 1  # The iterations that the agent is pending for PROPOSE messages is increased
-            if self.iterations_pending == 10:
+            if self.iterations_pending in {5, 10, 15}:
                 # In this case, the other agents may have failed, so the PROPOSE messages will be resent.
                 _logger.info("The negotiation with thread [{}] has not been resolved in 10 iterations, so the proposal "
                              "messages will be sent again to try to resolve it.".format(self.received_acl_msg.thread))
@@ -297,7 +297,15 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 current_neg_value = (current_neg_value - 0.0) / 100.0
             self.neg_value = current_neg_value
 
-    async def send_propose_acl_msgs(self):
+    async def send_propose_acl_msgs(self, targets=None):
+        """
+        This method sends the FIPA-ACL messages with the PROPOSE performative in order to offer the negotiation value.
+
+        Args:
+            targets (list, optional): the targets to whom the proposal message should be sent.
+        """
+        if targets is None:
+            targets = self.received_body_json['negTargets']
         propose_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
             'N/A', self.received_acl_msg.thread,
             # 'N/A', await acl_smia_messages_utils.create_random_thread(self.myagent),
@@ -306,8 +314,29 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
             protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
             msg_body={**self.received_body_json, **{'negValue': self.neg_value}})
         # This PROPOSE FIPA-ACL message is sent to all participants of the negotiation (except for this SMIA)
-        for jid_target in self.received_body_json['negTargets']:
+        for jid_target in targets:
             if jid_target != str(self.agent.jid):
+                propose_acl_message.to = jid_target
+                await self.send(propose_acl_message)
+                _logger.aclinfo("ACL PROPOSE negotiation message sent to " + jid_target +
+                                "with neg value " + str(self.neg_value) +
+                                " on negotiation with thread [" + self.received_acl_msg.thread + "]")
+
+    async def request_remaining_propose_acl_msgs(self):
+        """
+        This method sends the FIPA-ACL messages with a request for the PROPOSE message in order to obtain their
+        negotiation value.
+        """
+        propose_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
+            'N/A', self.received_acl_msg.thread,
+            # 'N/A', await acl_smia_messages_utils.create_random_thread(self.myagent),
+            FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST,
+            self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB),
+            protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
+            msg_body={'requestedData': 'negValue'})
+        # This PROPOSE FIPA-ACL message is sent to all participants of the negotiation (except for this SMIA)
+        for jid_target in self.received_body_json['negTargets']:
+            if (jid_target not in self.targets_processed) and (jid_target != str(self.agent.jid)):
                 propose_acl_message.to = jid_target
                 await self.send(propose_acl_message)
                 _logger.aclinfo("ACL PROPOSE negotiation message sent to " + jid_target +

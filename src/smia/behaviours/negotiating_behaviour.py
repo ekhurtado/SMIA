@@ -79,9 +79,13 @@ class NegotiatingBehaviour(CyclicBehaviour):
 
             # When the message content has been validated, the specific behavior will be added to the agent to handle
             # the required actions within the FIPA-CNP protocol
-            handle_neg_template = GeneralUtils.create_acl_template(
+            handle_neg_template_propose = GeneralUtils.create_acl_template(
                 performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_PROPOSE,
                 protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL, thread=msg.thread)
+            handle_neg_template_request = GeneralUtils.create_acl_template(
+                performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST,
+                protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL, thread=msg.thread)
+            handle_neg_template = handle_neg_template_propose | handle_neg_template_request
             # handle_neg_template = SMIAInteractionInfo.NEG_STANDARD_ACL_TEMPLATE_PROPOSE
             # handle_neg_template.thread = msg.thread
             specific_neg_handling_behaviour = HandleNegotiationBehaviour(self.agent, received_acl_msg=msg)
