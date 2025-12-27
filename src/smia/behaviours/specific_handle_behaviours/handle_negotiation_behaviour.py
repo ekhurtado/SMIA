@@ -2,7 +2,6 @@ import asyncio
 import logging
 import random
 
-from smia.css_ontology.css_ontology_utils import CapabilitySkillACLInfo
 from spade.behaviour import CyclicBehaviour
 
 from smia import GeneralUtils
@@ -211,23 +210,19 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                     return  # killing a behaviour does not cancel its current run loop
                 else:
                     # In this case  the negotiation is not resolved, so a failure message is sent to the requester
-                    # failure_acl_msg = await inter_smia_interactions_utils.create_acl_smia_message(
-                    #     self.received_body_json['negRequester'], self.received_acl_msg.thread,
-                    #     FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE,
-                    #     self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB),
-                    #     protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
-                    #     msg_body={'reason': 'Negotiation not resolved (all propose messages are not received).',
-                    #               'exceptionType': 'CapabilityRequestExecutionError',
-                    #               'affectedElement': self.received_body_json['capabilityIRI']})
-                    # await self.send(failure_acl_msg)
+                    failure_acl_msg = await inter_smia_interactions_utils.create_acl_smia_message(
+                        self.received_body_json['negRequester'], self.received_acl_msg.thread,
+                        FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE,
+                        self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB),
+                        # protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
+                        msg_body={'reason': 'Negotiation not resolved (all propose messages are not received).',
+                                  'exceptionType': 'CapabilityRequestExecutionError',
+                                  'affectedElement': self.received_body_json['capabilityIRI']})
+                    await self.send(failure_acl_msg)
                     _logger.aclinfo("ACL failure message sent for the negotiation request with thread ["
                                     + msg.thread + "]")
-                    raise CapabilityRequestExecutionError(
-                        self.received_acl_msg.thread,self.received_body_json[CapabilitySkillACLInfo.ATTRIB_CAPABILITY_IRI],
-                        f"Negotiation with thread {self.received_acl_msg.thread} not resolved (all propose "
-                        f"messages are not received).", self)
-                    # await self.exit_negotiation(is_winner=False)
-                    # return  # killing a behaviour does not cancel its current run loop
+                    await self.exit_negotiation(is_winner=False)
+                    return  # killing a behaviour does not cancel its current run loop
 
     async def get_neg_value_with_criteria(self):
         """
