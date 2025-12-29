@@ -217,7 +217,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 # await self.send_propose_acl_msgs()
                 await self.request_remaining_propose_acl_msgs()
 
-            if self.iterations_pending == 20:
+            if self.iterations_pending == 25:
                 _logger.info("The negotiation with thread [{}] has not been resolved in 20 iterations, so the behavior "
                              "is killed if the negotiation has been resolved, or sends a 'FAILURE' message to the "
                              "requester if it has not been resolved.".format(self.received_acl_msg.thread))
@@ -332,9 +332,6 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
             protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
             msg_body={**self.received_body_json, **{'negValue': self.neg_value}})
 
-        _logger.assetinfo("Thread [{}] PROPOSE MESSAGE TEMPLATE [{}]".format(
-            self.received_acl_msg.thread, propose_acl_message))  # TODO BORRAR BUG TEST
-
         # This PROPOSE FIPA-ACL message is sent to all participants of the negotiation (except for this SMIA)
         for jid_target in targets:
             if jid_target != str(self.agent.jid):
@@ -359,8 +356,6 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
 
         _logger.assetinfo("Thread [{}] Processed agents (do not need to request) [{}]".format(
             self.received_acl_msg.thread, self.targets_processed))  # TODO BORRAR BUG TEST
-        _logger.assetinfo("Thread [{}] REQUEST MESSAGE TEMPLATE [{}]".format(
-            self.received_acl_msg.thread, request_acl_message))  # TODO BORRAR BUG TEST
 
         # This PROPOSE FIPA-ACL message is sent to all participants of the negotiation (except for this SMIA)
         for jid_target in self.received_body_json['negTargets']:
