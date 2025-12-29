@@ -47,6 +47,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 self.received_acl_msg)
 
         # Negotiation-related variables are also initialized
+        self.neg_thread = self.received_acl_msg.thread
         self.targets_processed = set()
         self.neg_value = 0.0
         self.myagent.tie_break = True   # In case of equal value neg is set as tie-breaker TODO check these cases (which need to be tie-breaker?)
@@ -118,6 +119,10 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
 
                 await cap_neg_error.handle_capability_execution_error_old()
                 return  # killing a behaviour does not cancel its current run loop
+
+        # Since this behavior is specific to the messages in this thread, it reserves it so that the generic
+        # ACLHandlingBehavior does not process them.
+        await self.myagent.add_reserved_thread(self.neg_thread)
 
     async def run(self):
         """
@@ -434,6 +439,10 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         smia_archive_utils.save_completed_svc_log_info(self.requested_timestamp, resolved_timestamp,
                                                        await inter_smia_interactions_utils.acl_message_to_json(self.received_acl_msg), {'winner': is_winner},
                                                        self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB))
+
+        # Since this behavior is specific to the messages in this thread, it releases it so that the generic
+        # ACLHandlingBehavior can process them in the future.
+        await self.myagent.remove_reserved_thread(self.neg_thread)
 
         # In order to correctly complete the negotiation process, this behavior is removed from the agent.
         self.kill(exit_code=10)

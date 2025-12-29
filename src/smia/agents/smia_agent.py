@@ -65,6 +65,7 @@ class SMIAAgent(Agent):
         self.acl_messages_id = 0  # It is reset
         self.acl_svc_requests = {}
         self.acl_svc_responses = {}
+        self.reserved_threads = set()
 
         # Object to store the information related to negotiations is initialized
         self.negotiations_data = {}
@@ -141,6 +142,17 @@ class SMIAAgent(Agent):
         async with self.lock:  # safe access to a shared object of the agent
             self.acl_svc_responses[thread] = response_data
 
+    async def add_reserved_thread(self, thread):
+        """
+        This method adds a specific thread to the global dictionary of threads that are reserved by other SMIA
+        behaviours rather than by the generic ACLHandlingBehavior behavior.
+
+        Args:
+            thread (str): thread to be reserved
+        """
+        async with self.lock:  # safe access to a shared object of the agent
+            self.reserved_threads.add(thread)
+
     async def remove_acl_svc_request(self, thread):
         """
         This method removes an ACL Service Request from the global acl service requests dictionary of the SMIA.
@@ -150,6 +162,17 @@ class SMIAAgent(Agent):
         """
         async with self.lock:  # safe access to a shared object of the agent
             self.acl_svc_requests.pop(thread, None)
+
+    async def remove_reserved_thread(self, thread):
+        """
+        This method removes a specific thread to the global dictionary of threads that are reserved by other SMIA
+        behaviours rather than by the generic ACLHandlingBehavior behavior.
+
+        Args:
+            thread (str): thread to be released (no longer reserved)
+        """
+        async with self.lock:  # safe access to a shared object of the agent
+            self.reserved_threads.remove(thread)
 
     async def get_acl_svc_request(self, thread):
         """
