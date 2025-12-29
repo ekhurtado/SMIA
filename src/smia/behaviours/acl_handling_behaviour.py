@@ -60,6 +60,9 @@ class ACLHandlingBehaviour(CyclicBehaviour):
                     self, msg, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_NOT_UNDERSTOOD)
                 return  # The run method is terminated to restart checking for new messages
 
+            _logger.warning("RESERVED THREADS {}".format(self.myagent.reserved_threads))  # TODO BORRAR BUG TEST
+            _logger.warning("RECEIVED THREAD: {}".format(msg.thread))  # TODO BORRAR BUG TEST
+
             # Only if the thread is not reserved it needs to be processed
             if msg.thread not in self.myagent.reserved_threads:
                 # First, the message body will be checked against the associated ontology JSON Schema (only if it is not an
