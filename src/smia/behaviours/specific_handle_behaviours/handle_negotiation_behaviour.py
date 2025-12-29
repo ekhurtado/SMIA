@@ -326,6 +326,10 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
             self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB),
             protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
             msg_body={**self.received_body_json, **{'negValue': self.neg_value}})
+
+        _logger.assetinfo("Thread [{}] PROPOSE MESSAGE TEMPLATE [{}]".format(
+            self.received_acl_msg.thread, propose_acl_message))  # TODO BORRAR BUG TEST
+
         # This PROPOSE FIPA-ACL message is sent to all participants of the negotiation (except for this SMIA)
         for jid_target in targets:
             if jid_target != str(self.agent.jid):
@@ -340,7 +344,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         This method sends the FIPA-ACL messages with a request for the PROPOSE message in order to obtain their
         negotiation value.
         """
-        propose_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
+        request_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
             'N/A', self.received_acl_msg.thread,
             # 'N/A', await acl_smia_messages_utils.create_random_thread(self.myagent),
             FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST,
@@ -350,12 +354,14 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
 
         _logger.assetinfo("Thread [{}] Processed agents (do not need to request) [{}]".format(
             self.received_acl_msg.thread, self.targets_processed))  # TODO BORRAR BUG TEST
+        _logger.assetinfo("Thread [{}] REQUEST MESSAGE TEMPLATE [{}]".format(
+            self.received_acl_msg.thread, request_acl_message))  # TODO BORRAR BUG TEST
 
         # This PROPOSE FIPA-ACL message is sent to all participants of the negotiation (except for this SMIA)
         for jid_target in self.received_body_json['negTargets']:
             if (jid_target not in self.targets_processed) and (jid_target != str(self.agent.jid)):
-                propose_acl_message.to = jid_target
-                await self.send(propose_acl_message)
+                request_acl_message.to = jid_target
+                await self.send(request_acl_message)
                 _logger.aclinfo("ACL REQUEST negotiation message sent to " + jid_target +
                                 "requesting the neg value on thread [" + self.received_acl_msg.thread + "]")
 
