@@ -99,7 +99,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         else:
             # In this case, there are multiple participants, so it will execute the FIPA-SMIA-CNP protocol
 
-            await asyncio.sleep(10)  # Wait to ensure that other agents are ready to negotiate
+            await asyncio.sleep(random.uniform(1.0, 5.0))  # Random wait to ensure that other agents are ready to negotiate
             try:
                 #  The value of the criterion must be obtained just before starting to manage the negotiation, so that at the
                 #  time of sending the PROPOSE and receiving that of the others it will be the same value. Therefore, if to
@@ -197,10 +197,11 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 # In this case some action is requested within the negotiation
                 request_msg_body_json = acl_smia_messages_utils.get_parsed_body_from_acl_msg(msg)
                 if request_msg_body_json['requestedData'] == 'negValue':
-                    _logger.aclinfo("         + REQUEST Message received on SMIA Agent (HandleNegotiationBehaviour "
-                                    "with thread [" + self.received_acl_msg.thread + "]) requesting the neg value")
-                    # The neg value is sent with a PROPOSE message
                     sender_agent_jid = acl_smia_messages_utils.get_sender_from_acl_msg(msg)
+                    _logger.aclinfo("         + REQUEST Message received on SMIA Agent (HandleNegotiationBehaviour) "
+                                    "from " + sender_agent_jid + " with thread ["
+                                    + self.received_acl_msg.thread + "]) requesting the neg value")
+                    # The neg value is sent with a PROPOSE message
                     await self.send_propose_acl_msgs(targets=[sender_agent_jid])
                     _logger.info("PROPOSE message sent with the requested neg value within thread [{}] to {}".format(
                         self.received_acl_msg.thread, sender_agent_jid))
@@ -217,8 +218,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 # await self.send_propose_acl_msgs()
                 await self.request_remaining_propose_acl_msgs()
 
-            if self.iterations_pending == 25:
-                _logger.info("The negotiation with thread [{}] has not been resolved in 20 iterations, so the behavior "
+            if self.iterations_pending == 30:
+                _logger.info("The negotiation with thread [{}] has not been resolved in 30 iterations, so the behavior "
                              "is killed if the negotiation has been resolved, or sends a 'FAILURE' message to the "
                              "requester if it has not been resolved.".format(self.received_acl_msg.thread))
                 if self.negotiation_result is not None:
@@ -228,14 +229,19 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                     return  # killing a behaviour does not cancel its current run loop
                 else:
                     # In this case  the negotiation is not resolved, so a failure message is sent to the requester
+                    missing_msgs = sum(
+                        1 for jid_target in self.received_body_json['negTargets']
+                        if jid_target not in self.targets_processed and jid_target != str(self.agent.jid)
+                    )
+
                     failure_acl_msg = await inter_smia_interactions_utils.create_acl_smia_message(
                         self.received_body_json['negRequester'], self.received_acl_msg.thread,
                         FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE,
                         self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB),
                         # protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
-                        msg_body={'reason': 'Negotiation not resolved (all propose messages are not received).',
-                                  'exceptionType': 'CapabilityRequestExecutionError',
-                                  'affectedElement': self.received_body_json['capabilityIRI']})
+                        msg_body={'reason': "Negotiation not resolved ({} propose messages are not received).".format(
+                            missing_msgs), 'exceptionType': 'CapabilityRequestExecutionError',
+                            'affectedElement': self.received_body_json['capabilityIRI']})
                     await self.send(failure_acl_msg)
                     _logger.aclinfo("ACL failure message sent for the negotiation request with thread ["
                                     + msg.thread + "]")
