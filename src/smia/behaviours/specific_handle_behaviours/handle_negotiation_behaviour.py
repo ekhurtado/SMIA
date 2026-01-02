@@ -99,7 +99,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         else:
             # In this case, there are multiple participants, so it will execute the FIPA-SMIA-CNP protocol
 
-            await asyncio.sleep(random.uniform(1.0, 5.0))  # Random wait to ensure that other agents are ready to negotiate
+            await asyncio.sleep(random.uniform(5.0, 10.0))  # Random wait to ensure that other agents are ready to negotiate
             try:
                 #  The value of the criterion must be obtained just before starting to manage the negotiation, so that at the
                 #  time of sending the PROPOSE and receiving that of the others it will be the same value. Therefore, if to
@@ -211,14 +211,16 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                          "[{}])".format(self.neg_thread))
 
             self.iterations_pending += 1  # The iterations that the agent is pending for PROPOSE messages is increased
-            if self.iterations_pending in {5, 10, 15}:
+            if self.iterations_pending in {5, 10, 15, 20, 25, 30}:
+            # if self.iterations_pending in {5, 10, 15}:
                 # In this case, the other agents may have failed, so the PROPOSE messages will be resent.
                 # _logger.info("The negotiation with thread [{}] has not been resolved in 10 iterations, so the proposal "
                 #              "messages will be sent again to try to resolve it.".format(self.received_acl_msg.thread))
                 # await self.send_propose_acl_msgs()
-                await self.request_remaining_propose_acl_msgs()
+                await self.request_remaining_neg_acl_msgs()
 
-            if self.iterations_pending == 30:
+            if self.iterations_pending == 100:
+            # if self.iterations_pending == 30:
                 _logger.info("The negotiation with thread [{}] has not been resolved in 30 iterations, so the behavior "
                              "is killed if the negotiation has been resolved, or sends a 'FAILURE' message to the "
                              "requester if it has not been resolved.".format(self.neg_thread))
@@ -347,10 +349,10 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                                 "with neg value " + str(self.neg_value) +
                                 " on negotiation with thread [" + self.neg_thread + "]")
 
-                await asyncio.sleep(0.1*len(targets))   # It waits 0.1 second for each agent involved (the more agents,
-                                                        # the longer the wait to avoid crashing the XMPP server)
+                # await asyncio.sleep(0.1*len(targets))   # It waits 0.1 second for each agent involved (the more agents,
+                #                                         # the longer the wait to avoid crashing the XMPP server)
 
-    async def request_remaining_propose_acl_msgs(self):
+    async def request_remaining_neg_acl_msgs(self):
         """
         This method sends the FIPA-ACL messages with a request for the PROPOSE message in order to obtain their
         negotiation value.
