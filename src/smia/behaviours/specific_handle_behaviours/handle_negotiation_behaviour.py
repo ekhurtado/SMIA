@@ -349,8 +349,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                                 "with neg value " + str(self.neg_value) +
                                 " on negotiation with thread [" + self.neg_thread + "]")
 
-                # await asyncio.sleep(0.1*len(targets))   # It waits 0.1 second for each agent involved (the more agents,
-                #                                         # the longer the wait to avoid crashing the XMPP server)
+                await asyncio.sleep(0.1*len(targets))   # It waits 0.1 second for each agent involved (the more agents,
+                                                        # the longer the wait to avoid crashing the XMPP server)
 
     async def request_remaining_neg_acl_msgs(self):
         """
@@ -375,6 +375,9 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 await self.send(request_acl_message)
                 _logger.aclinfo("ACL REQUEST negotiation message sent to " + jid_target +
                                 "requesting the neg value on thread [" + self.neg_thread + "]")
+
+                # It waits 0.1 second for each agent involved (longer the wait to avoid crashing the XMPP server)
+                await asyncio.sleep(0.1*len(self.received_body_json['negTargets']))
 
     async def handle_neg_values_tie(self, received_agent_id, received_neg_value):
         """
