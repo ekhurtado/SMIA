@@ -172,7 +172,11 @@ class SMIAAgent(Agent):
             thread (str): thread to be released (no longer reserved)
         """
         async with self.lock:  # safe access to a shared object of the agent
-            self.reserved_threads.remove(thread)
+            if thread not in self.reserved_threads:
+                _logger.warning("The thread [{}] cannot be removed from the reserved list because it does not "
+                                "exist.".format(thread))
+            else:
+                self.reserved_threads.remove(thread)
 
     async def get_acl_svc_request(self, thread):
         """
