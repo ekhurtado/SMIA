@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import random
+import math
 
 from spade.behaviour import CyclicBehaviour
 
@@ -51,8 +52,19 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         self.targets_processed = set()
         self.neg_value = 0.0
         self.myagent.tie_break = True   # In case of equal value neg is set as tie-breaker TODO check these cases (which need to be tie-breaker?)
-        self.iterations_pending = 0
         self.negotiation_result = None
+
+        # The processing iterations of this behavior are set depending on the number of participants in the negotiation.
+        # If not all proposals have been received, three iterations are set to request them again (using request),
+        # which are between 20 and 60% of the total iterations to ensure that the other agents can send their values.
+        self.iterations_pending = 0
+        # The total number of iterations is at least 5 or the number of targets plus 3
+        self.final_iteration = max(5, len(self.received_body_json['negTargets']) + 3)
+        requests_start = math.ceil(self.final_iteration * 0.20)
+        requests_end = math.floor(self.final_iteration * 0.60)
+        # Iterations where negotiation values are requested again are generated randomly between the range of 20-60%,
+        # so that each agent processes them at a different iteration.
+        self.requests_iterations= sorted(random.sample(range(requests_start, requests_end + 1), 3))
 
         self.requested_timestamp = GeneralUtils.get_current_timestamp()
 
@@ -99,7 +111,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         else:
             # In this case, there are multiple participants, so it will execute the FIPA-SMIA-CNP protocol
 
-            await asyncio.sleep(random.uniform(5.0, 10.0))  # Random wait to ensure that other agents are ready to negotiate
+            await asyncio.sleep(random.uniform(1.0, 5.0))  # Random wait to ensure that other agents are ready to negotiate
             try:
                 #  The value of the criterion must be obtained just before starting to manage the negotiation, so that at the
                 #  time of sending the PROPOSE and receiving that of the others it will be the same value. Therefore, if to
@@ -211,7 +223,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                          "[{}])".format(self.neg_thread))
 
             self.iterations_pending += 1  # The iterations that the agent is pending for PROPOSE messages is increased
-            if self.iterations_pending in {5, 10, 15, 20, 25, 30}:
+            if self.iterations_pending in self.requests_iterations:
+            # if self.iterations_pending in {5, 10, 15, 20, 25, 30}:
             # if self.iterations_pending in {5, 10, 15}:
                 # In this case, the other agents may have failed, so the PROPOSE messages will be resent.
                 # _logger.info("The negotiation with thread [{}] has not been resolved in 10 iterations, so the proposal "
@@ -219,17 +232,22 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 # await self.send_propose_acl_msgs()
                 await self.request_remaining_neg_acl_msgs()
 
-            if self.iterations_pending == 100:
+            if self.iterations_pending == self.final_iteration:
+            # if self.iterations_pending == 100:
             # if self.iterations_pending == 30:
-                _logger.info("The negotiation with thread [{}] has not been resolved in 30 iterations, so the behavior "
-                             "is killed if the negotiation has been resolved, or sends a 'FAILURE' message to the "
-                             "requester if it has not been resolved.".format(self.neg_thread))
+
                 if self.negotiation_result is not None:
+                    _logger.info("The negotiation with thread [{}] is resolved, so the behavior is killed"
+                                 .format(self.neg_thread))
                     # In this case the negotiation is resolved, so the behaviour can be killed
                     await self.exit_negotiation(is_winner=self.negotiation_result['winner'],
                                                 resolved_timestamp=self.negotiation_result['timestamp'])
                     return  # killing a behaviour does not cancel its current run loop
                 else:
+                    _logger.info("The negotiation with thread [{}] has not been resolved in {} iterations, so the "
+                                 "behavior is sending a 'FAILURE' message to the requester if it has not been resolved."
+                                 .format(self.neg_thread, self.final_iteration))
+
                     # In this case  the negotiation is not resolved, so a failure message is sent to the requester
                     missing_msgs = sum(
                         1 for jid_target in self.received_body_json['negTargets']
