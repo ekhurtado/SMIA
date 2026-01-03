@@ -66,6 +66,9 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         # so that each agent processes them at a different iteration.
         self.requests_iterations= sorted(random.sample(range(requests_start, requests_end + 1), 3))
 
+        _logger.warning("Final iteration: {}".format(self.final_iteration))     # TODO BORRAR BUG TEST
+        _logger.warning("Request iterations: {}".format(self.requests_iterations))  # TODO BORRAR BUG TEST
+
         self.requested_timestamp = GeneralUtils.get_current_timestamp()
 
     async def on_start(self):
