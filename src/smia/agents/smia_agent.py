@@ -57,6 +57,8 @@ class SMIAAgent(Agent):
 
         self.initialize_smia_attributes()
 
+        self.verify_security = False    # TODO BORRAR PRUEBA PARA RENDIMIENTO ALGORITMO NEGOCIACION
+
     def initialize_smia_attributes(self):
         """
         This method initializes all the attributes of the SMIA.
