@@ -64,8 +64,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         requests_end = math.floor(self.final_iteration * 0.60)
         # Iterations where negotiation values are requested again are generated randomly between the range of 20-60%,
         # so that each agent processes them at a different iteration.
-        self.requests_iterations= sorted(random.sample(range(requests_start, requests_end + 1), 5)) # TODO PRUEBA CON 5 VECES SOLICITANDO LOS REQUESTS
-        # self.requests_iterations= sorted(random.sample(range(requests_start, requests_end + 1), 3))
+        self.requests_iterations= sorted(random.sample(range(requests_start, requests_end + 1), 3))
 
         _logger.warning("Final iteration: {}".format(self.final_iteration))     # TODO BORRAR BUG TEST
         _logger.warning("Request iterations: {}".format(self.requests_iterations))  # TODO BORRAR BUG TEST
@@ -371,8 +370,10 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                                 "with neg value " + str(self.neg_value) +
                                 " on negotiation with thread [" + self.neg_thread + "]")
 
-                await asyncio.sleep(0.1*len(targets))   # It waits 0.1 second for each agent involved (the more agents,
-                                                        # the longer the wait to avoid crashing the XMPP server)
+                # await asyncio.sleep(0.1*len(targets))   # It waits 0.1 second for each agent involved (the more agents,
+                #                                         # the longer the wait to avoid crashing the XMPP server)
+                await asyncio.sleep(
+                    random.uniform(0.5, 3.0))  # TODO Random wait para que cada agente envie en momento diferentes
 
     async def request_remaining_neg_acl_msgs(self):
         """
@@ -399,7 +400,9 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                                 "requesting the neg value on thread [" + self.neg_thread + "]")
 
                 # It waits 0.1 second for each agent involved (longer the wait to avoid crashing the XMPP server)
-                await asyncio.sleep(0.1*len(self.received_body_json['negTargets']))
+                # await asyncio.sleep(0.1*len(self.received_body_json['negTargets']))
+                await asyncio.sleep(
+                    random.uniform(0.5, 3.0))  # TODO Random wait para que cada agente envie en momento diferentes
 
     async def handle_neg_values_tie(self, received_agent_id, received_neg_value):
         """
