@@ -64,7 +64,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         requests_end = math.floor(self.final_iteration * 0.60)
         # Iterations where negotiation values are requested again are generated randomly between the range of 20-60%,
         # so that each agent processes them at a different iteration.
-        self.requests_iterations= sorted(random.sample(range(requests_start, requests_end + 1), 3))
+        self.requests_iterations= sorted(random.sample(range(requests_start, requests_end + 1), 5)) # TODO PRUEBA CON 5 VECES SOLICITANDO LOS REQUESTS
+        # self.requests_iterations= sorted(random.sample(range(requests_start, requests_end + 1), 3))
 
         _logger.warning("Final iteration: {}".format(self.final_iteration))     # TODO BORRAR BUG TEST
         _logger.warning("Request iterations: {}".format(self.requests_iterations))  # TODO BORRAR BUG TEST
