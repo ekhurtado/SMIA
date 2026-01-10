@@ -59,7 +59,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         # which are between 20 and 60% of the total iterations to ensure that the other agents can send their values.
         self.iterations_pending = 0
         # The total number of iterations is at least 5 or the number of targets plus 3
-        self.final_iteration = max(5, len(self.received_body_json['negTargets']) + 3)
+        self.final_iteration = max(5, (len(self.received_body_json['negTargets']) + 3) // 2)
+        # self.final_iteration = max(5, len(self.received_body_json['negTargets']) + 3)
         requests_start = math.ceil(self.final_iteration * 0.20)
         requests_end = math.floor(self.final_iteration * 0.60)
         # Iterations where negotiation values are requested again are generated randomly between the range of 20-60%,
@@ -370,10 +371,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                                 "with neg value " + str(self.neg_value) +
                                 " on negotiation with thread [" + self.neg_thread + "]")
 
-                # await asyncio.sleep(0.1*len(targets))   # It waits 0.1 second for each agent involved (the more agents,
-                #                                         # the longer the wait to avoid crashing the XMPP server)
-                await asyncio.sleep(
-                    random.uniform(0.5, 3.0))  # TODO Random wait para que cada agente envie en momento diferentes
+                await asyncio.sleep(0.5)   # It waits 0.5 second for each agent involved
 
     async def request_remaining_neg_acl_msgs(self):
         """
@@ -399,10 +397,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 _logger.aclinfo("ACL REQUEST negotiation message sent to " + jid_target +
                                 "requesting the neg value on thread [" + self.neg_thread + "]")
 
-                # It waits 0.1 second for each agent involved (longer the wait to avoid crashing the XMPP server)
-                # await asyncio.sleep(0.1*len(self.received_body_json['negTargets']))
-                await asyncio.sleep(
-                    random.uniform(0.5, 3.0))  # TODO Random wait para que cada agente envie en momento diferentes
+                await asyncio.sleep(0.5)    # It waits 0.5 second for each agent involved
 
     async def handle_neg_values_tie(self, received_agent_id, received_neg_value):
         """
