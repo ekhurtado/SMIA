@@ -49,6 +49,8 @@ class SMIAAgent(Agent):
         if password is None:
             password = properties_file_utils.get_dt_general_property('password')
 
+        kwargs['verify_security'] = False  # TODO BORRAR PRUEBA PARA RENDIMIENTO ALGORITMO NEGOCIACION
+
         super().__init__(jid, password, *args, **kwargs)
         # super().__init__(jid, password, port, verify_security)      # For v4.0.0 and more
 
@@ -57,7 +59,10 @@ class SMIAAgent(Agent):
 
         self.initialize_smia_attributes()
 
-        self.verify_security = False    # TODO BORRAR PRUEBA PARA RENDIMIENTO ALGORITMO NEGOCIACION
+        self.verify_security = False  # TODO BORRAR PRUEBA PARA RENDIMIENTO ALGORITMO NEGOCIACION
+        self.client.use_tls = False  # TODO BORRAR PRUEBA PARA RENDIMIENTO ALGORITMO NEGOCIACION
+        self.client.plugin['feature_mechanisms'].unencrypted_plain = True  # TODO BORRAR PRUEBA PARA RENDIMIENTO ALGORITMO NEGOCIACION
+
 
     def initialize_smia_attributes(self):
         """
