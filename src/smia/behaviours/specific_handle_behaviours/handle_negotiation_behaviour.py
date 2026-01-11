@@ -59,8 +59,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         # which are between 20 and 60% of the total iterations to ensure that the other agents can send their values.
         self.iterations_pending = 0
         # The total number of iterations is at least 5 or the number of targets plus 3
-        self.final_iteration = max(5, len(self.received_body_json['negTargets']) + 13) # TODO BORRAR BUG TEST
-        # self.final_iteration = max(5, len(self.received_body_json['negTargets']) + 3)
+        self.final_iteration = max(5, len(self.received_body_json['negTargets']) + 3)
         requests_start = math.ceil(self.final_iteration * 0.20)
         requests_end = math.floor(self.final_iteration * 0.60)
         # Iterations where negotiation values are requested again are generated randomly between the range of 20-60%,
