@@ -57,7 +57,7 @@ class StateBooting(State):
 
         # When all initialization tasks have been completed, if the SMIA has been configured to register on the
         # SMIA-I KB, it will try to register through an infrastructure service provided by the SMIA ISM
-        if properties_file_utils.get_dt_general_property('smia-i-kb-registration') in ('yes', 'true', 't', '1'):
+        if properties_file_utils.get_dt_general_property('smia-i-kb-registration').lower() in ('yes', 'true', 't', '1'):
             if await acl_smia_messages_utils.get_agent_id_from_jid(self.agent.jid) != AASRelatedServicesInfo.SMIA_ISM_ID:
                 # The extracted CSS elements in the self-configuration process will be registered in the SMIA KB
                 await self.send_register_css_elements_acl_msg()
