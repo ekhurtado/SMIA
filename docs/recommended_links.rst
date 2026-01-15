@@ -8,9 +8,13 @@ This page contains various documents of interest, articles related to this proje
 SMIA own links
 --------------
 
-The SMIA software is developed as part of scientific research. The SMIA approach is presented in the following article:
+The SMIA software is developed as part of scientific research. The scientific SMIA approach is presented in the following article:
 
     E. Hurtado, A. Burgos, A. Armentia, and O. Casquero, *Self-configurable Manufacturing Industrial Agents (SMIA): a standardized approach for digitizing manufacturing assets*, Journal of Industrial Information Integration, vol. 47, p. 100915, Sept. 2025, doi: `10.1016/j.jii.2025.100915 <https://doi.org/10.1016/j.jii.2025.100915>`_
+
+Furthermore, the SMIA software is detailed in the following article:
+
+    E. Hurtado, I. Sarachaga, A. Armentia, and O. Casquero, *An open-source reference framework for the implementation of type 3 Asset Administration Shells*, Software Impacts, vol. 27, p. 100807, Apr. 2026, doi: `10.1016/j.simpa.2025.100807 <https://doi.org/10.1016/j.simpa.2025.100807>`_
 
 Additionally, the following links refer to all the own resources of the SMIA approach.
 
@@ -18,19 +22,19 @@ Additionally, the following links refer to all the own resources of the SMIA app
             :color: primary
             :outline:
 
-            :octicon:`package;1em` Official SMIA GitHub repository.
+            :octicon:`package;1em` Official SMIA GitHub repository
 
 .. button-link:: https://pypi.org/project/smia/
             :color: primary
             :outline:
 
-            :octicon:`mark-github;1em` Official SMIA PyPI project.
+            :octicon:`mark-github;1em` Official SMIA PyPI project
 
 .. button-link:: https://hub.docker.com/r/ekhurtado/smia
             :color: primary
             :outline:
 
-            :octicon:`container;1em` Official SMIA Docker Hub repository.
+            :octicon:`container;1em` Official SMIA Docker Hub repository
 
 External links
 --------------

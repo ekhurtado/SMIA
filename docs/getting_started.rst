@@ -1,7 +1,9 @@
 Getting Started
 ===============
 
-|github| |readthedocs| |pypi| |dockerhub| |youtube| |doi|
+|github| |pypi| |dockerhub| |youtube|
+
+|doiScientific| |doiSW|
 
 ----
 
@@ -22,12 +24,16 @@ Getting Started
    :alt: DockerHub
 
 .. |youtube| image:: https://img.shields.io/badge/YouTube-%23FF0000.svg?style=for-the-badge&logo=YouTube&logoColor=white
-   :target: https://www.youtube.com/playlist?list=PLs6bFF_iqW3GB_8bUMn1QqoiXcQDXPvJh
+   :target: https://youtube.com/playlist?list=PLs6bFF_iqW3HEwYAFOMHvW0xEngXnVF9K&si=UqWwelA3RO8C2A1u
    :alt: YouTube
 
-.. |doi| image:: https://img.shields.io/badge/Paper-%23fab608.svg?style=for-the-badge&logo=doi&logoColor=white
+.. |doiScientific| image:: https://img.shields.io/badge/Paper-Scientific-%23fab608.svg?style=for-the-badge&logo=doi&logoColor=white
    :target: https://doi.org/10.1016/j.jii.2025.100915
-   :alt: DOI
+   :alt: DOIscientific
+
+.. |doiSW| image:: https://img.shields.io/badge/Paper-Software-%23fab608.svg?style=for-the-badge&logo=doi&logoColor=white
+   :target: https://doi.org/10.1016/j.simpa.2025.100807
+   :alt: DOIsoftware
 
 SMIA is a software that implements an AAS-compliant Digital Twin (DT) that is based on a flexible manufacturing-centered ontology.
 
@@ -45,6 +51,23 @@ The features of the SMIA approach include:
     - self-configuration at software startup
     - easy to start-up
     - containerized solution
+
+.. important::
+
+    The SMIA software is developed as part of scientific research. If you use SMIA in scientific works, please cite the following articles.
+
+    ``Scientific contribution``
+
+    .. code:: text
+
+        E. Hurtado, A. Burgos, A. Armentia, and O. Casquero, Self-configurable Manufacturing Industrial Agents (SMIA): a standardized approach for digitizing manufacturing assets, Journal of Industrial Information Integration, vol. 47, p. 100915, Sept. 2025, doi: 10.1016/j.jii.2025.100915
+
+    ``Software contribution``
+
+    .. code:: text
+
+        E. Hurtado, I. Sarachaga, A. Armentia, and O. Casquero, An open-source reference framework for the implementation of type 3 Asset Administration Shells, Software Impacts, vol. 27, p. 100807, Apr. 2026, doi: 10.1016/j.simpa.2025.100807
+
 
 Documentation project structure
 -------------------------------
