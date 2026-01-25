@@ -20,6 +20,9 @@ Upon completing this practice, you will have achieved the following:
 2. **Extend:** Develop the logic that allows adding augmented autonomy to the SMIA agent, as well as injecting it into the software via its extension mechanisms.
 3. **Validate:** Test and validate the new autonomous capabilities through peer-to-peer interaction between agents. The **SMIA Operator** agent will be used to make requests via an intuitive graphical interface (abstracting the underlying implementation using I4.0 Language).
 
+> [!IMPORTANT]
+> Although the final code and valid CSS-enriched AAS model file are provided, it is recommended to follow the tutorial to understand the potential of the SMIA approach.
+
 ### Development Environment
 
 Before starting the code development part of the tutorial, it is necessary to verify that all resources are ready:
@@ -38,16 +41,16 @@ In the first phase, we will generate the CSS-enriched AAS model that will serve 
     1. Add the submodel with the ontological identifiers of the CSS model: `Workspace > Create ... > New submodel from plugin > AasxPluginGenericForms | GCIS/SubmodelWithCapabilitySkillOntology`. 
     2. From the submodel, generate the ConceptDescriptions with ontological identifiers of the CSS model: button `Create <- SMEs (all)`. Within *ConceptDescriptions*, all elements will have been generated. The submodel can now be deleted (button `Delete`), as well as its ConceptDescription (*SubmodelWithCapabilitySkillOntology*) so that it does not present errors later (since it generates it with an empty id).
 
-    > [!NOTE]
-    > As of v2025-03-25, ConceptDescriptions are generated via the `SMEs (all)` functionality, but this is not capable of generating all information from the plugin for the CSS model. If you do not wish to fill in all the remaining information (e.g., *shortName* of each concept), it is possible to obtain them from the base resource for the development of the CSS-enriched AAS model. To do this, you can open a new window of the `AASX Package Explorer` tool, open the file `CSS_AAS_model_base.aasx` offered in this tutorial's folder, select and copy all ConceptDescriptions using the `Copy` button, and in our AAS, `Paste into`.
+> [!NOTE]
+> As of v2025-03-25, ConceptDescriptions are generated via the `SMEs (all)` functionality, but this is not capable of generating all information from the plugin for the CSS model. If you do not wish to fill in all the remaining information (e.g., *shortName* of each concept), it is possible to obtain them from the base resource for the development of the CSS-enriched AAS model. To do this, you can open a new window of the `AASX Package Explorer` tool, open the file `CSS_AAS_model_base.aasx` offered in this tutorial's folder, select and copy all ConceptDescriptions using the `Copy` button, and in our AAS, `Paste into`.
 
 
 4. Add the submodel for defining the SMIA software: `Workspace > Create ... > New submodel from plugin > AasxPluginGenericForms | Nameplate for Software in Manufacturing (IDTA) V1.0`.
    1. Delete the SubmodelElement `SoftwareNameplateType` and modify the `SoftwareNameplateInstance`: remove all occurrences of *{0:00}*. 
    2. Specify the agent identifier in `SoftwareNameplateInstance/InstanceName[value]` (the same one that will later be defined in the JID in the code, although in this case without the XMPP server, i.e., only the identifier before "@"), and the agent version in `SoftwareNameplateInstance/InstalledVersion[value]` (e.g., "0.3.1"). In addition to this mandatory data, the others are optional. You can add any data you wish to define the SMIA software in more depth (installed modules, OS on which it is deployed, etc.).
 
-    > [!NOTE]
-    > If you do not want to modify the submodel, you can obtain a valid submodel with the following process: open a new window of the `AASX Package Explorer` tool, open the file `CSS_AAS_model_base.aasx` offered in this tutorial's folder, copy the "SoftwareNameplate" submodel using the `Copy` button, and in our AAS, `Paste into`.
+> [!NOTE]
+> If you do not want to modify the submodel, you can obtain a valid submodel with the following process: open a new window of the `AASX Package Explorer` tool, open the file `CSS_AAS_model_base.aasx` offered in this tutorial's folder, copy the "SoftwareNameplate" submodel using the `Copy` button, and in our AAS, `Paste into`.
 
 
 

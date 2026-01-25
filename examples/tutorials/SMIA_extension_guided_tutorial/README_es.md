@@ -19,6 +19,9 @@ Al finalizar esta práctica, habrás logrado:
 2.  **Extender:** Desarrollar la lógica que permite añadir autonomía aumentada al agente SMIA, así como inyectarla en el software mediante sus mecanismos de extensiones.
 3.  **Validar:** Probar y validar las nuevas capacidades autónomas mediante interacción peer-to-peer entre agentes. Se utilizará el agente **SMIA Operator** para realizar solicitudes a través de una interfaz gráfica intuitiva (abstrayendo la implementación subyacente mediante Lenguaje I4.0).
 
+> [!IMPORTANT]
+> Aunque se ofrezca el código final y el fichero CSS-enriched AAS model válido se recomienda seguir el tutorial para comprender el potencial del enfoque SMIA.
+
 ### Entorno de desarrollo
 
 Antes de comenzar la parte del tutorial de desarrollo del código, es necesario comprobar que se tienen todos los recursos listos:
