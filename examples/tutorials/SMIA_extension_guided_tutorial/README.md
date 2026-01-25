@@ -49,7 +49,7 @@ In the first phase, we will generate the CSS-enriched AAS model that will serve 
    1. Delete the SubmodelElement `SoftwareNameplateType` and modify the `SoftwareNameplateInstance`: remove all occurrences of *{0:00}*. 
    2. Specify the agent identifier in `SoftwareNameplateInstance/InstanceName[value]` (the same one that will later be defined in the JID in the code, although in this case without the XMPP server, i.e., only the identifier before "@"), and the agent version in `SoftwareNameplateInstance/InstalledVersion[value]` (e.g., "0.3.1"). In addition to this mandatory data, the others are optional. You can add any data you wish to define the SMIA software in more depth (installed modules, OS on which it is deployed, etc.).
 
-> [!NOTE]
+> [!TIP]
 > If you do not want to modify the submodel, you can obtain a valid submodel with the following process: open a new window of the `AASX Package Explorer` tool, open the file `CSS_AAS_model_base.aasx` offered in this tutorial's folder, copy the "SoftwareNameplate" submodel using the `Copy` button, and in our AAS, `Paste into`.
 
 
@@ -62,7 +62,7 @@ In the first phase, we will generate the CSS-enriched AAS model that will serve 
     3. To test and validate an asset service, the first element of *InteractionMetadata/properties/* will be modified. Modify its *idShort* (e.g., *ExtendedAssetService*) and the value of its datapoint in *forms/href/* (e.g., */extendedservice*).
     4. To test access to an asset datum through an extended agent capability (developed later in this tutorial), copy the element from *InteractionMetadata/properties/* and modify its *idShort* (e.g., *AssetSpecificData*) and the value of its datapoint in *forms/href/* (e.g., */assetdata*).
 
-> [!NOTE]
+> [!TIP]
 > The submodel must be completely defined so that it does not present errors during the SMIA startup. If you wish to modify a valid submodel, you can open a new window of the `AASX Package Explorer` tool, open the file `CSS_AAS_model_base.aasx` offered in this tutorial's folder, copy the "AssetInterfacesDescription" submodel using the `Copy` button, and in our AAS, `Paste into`.
 
 

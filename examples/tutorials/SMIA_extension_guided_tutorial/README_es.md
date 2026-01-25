@@ -49,7 +49,7 @@ En la primera fase generaremos el CSS-enriched AAS model que servirá al agente 
 	1. Eliminar el SubmodelElement ``SoftwareNameplateType`` y modificar el ``SoftwareNameplateInstance``: eliminar todas las apariciones de _{0:00}_.
 	2. Especificar el identificador del agente en ``SoftwareNameplateInstance/InstanceName[value]`` (el mismo que después se definirá en el JID en código, aunque en este caso sin el servidor XMPP, es decir, solamente el identificador antes de "@"), y la versión del agente en ``SoftwareNameplateInstance/InstalledVersion[value]`` (p.e. "0.3.1"). Además de este dato obligatorio, los demás son opcionales. Se pueden añadir los datos que se quieran para definir en más profundidad el software SMIA (módulos instalados, OS en el que se despliega, etc.).
 
-> [!NOTE]
+> [!TIP]
 > Si no se quiere modificar el submodelo, se puede obtener un submodelo válido con el siguiente proceso: abrir una nueva ventana de la herramienta ``AASX Package Explorer``, abrir el fichero ``CSS_AAS_model_base.aasx`` que se ofrece en la carpeta de este tutorial y copiar el submodelo "SoftwareNameplate" usando el botón ``Copy`` y en nuestro AAS ``Paste into``.
 
 _El paso 5 solo hay que realizarlo si el agente requiere conexión con el activo._
@@ -61,7 +61,7 @@ _El paso 5 solo hay que realizarlo si el agente requiere conexión con el activo
 	3. Para probar y validar un asset service, se modificará el primer elemento de _InteractionMetadata/properties/_. Se modificará su _idShort_ (p.e. _ExtendedAssetService_) y el valor de su datapoint en _forms/href/_ (p.e. _/extendedservice_).
 	4. Para probar el acceso a un dato del activo a través de una capacidad de agente extendida (desarrollada más adelante en este tutorial), se copiará el elemento de _InteractionMetadata/properties/_ y se modificará su _idShort_ (p.e. _AssetSpecificData_) y el valor de su datapoint en _forms/href/_ (p.e. _/assetdata_).
 
-> [!NOTE]
+> [!TIP]
 > El submodelo hay que definirlo completamente para que no presente errores durante el arranque de SMIA. Si se desea modificar un submodelo válido se puede abrir una nueva ventana de la herramienta ``AASX Package Explorer``, abrir el fichero ``CSS_AAS_model_base.aasx`` que se ofrece en la carpeta de este tutorial y copiar el submodelo "AssetInterfacesDescription" usando el botón ``Copy`` y en nuestro AAS ``Paste into``.
 
 6. Definir los submodelos con la información del activo. Para ello, creamos los submodelos en el AAS mediante ``Create new Submodel of kind Instance``. Para este tutorial vamos a definir dos submodelos para distinguir la información del activo y su representante (agente SMIA), y las relaciones ontológicas de los CSS-enriched elements: ``AssetFunctionalInformation`` y ``AgentFunctionalInformation``, y ``FunctionalRelationships``.
