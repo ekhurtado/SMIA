@@ -1,6 +1,6 @@
 .. _Guided tutorial extension:
 
-Step-by-step tutorials: Extension
+Step-by-step tutorial: Extension
 =================================
 
 
