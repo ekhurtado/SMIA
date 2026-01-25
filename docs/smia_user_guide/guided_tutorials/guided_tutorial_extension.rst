@@ -1,7 +1,8 @@
+.. _Guided tutorial extension:
+
 Step-by-step tutorials: Extension
 =================================
 
-.. _Guided tutorial extension:
 
 This document contains a step-by-step guide to building a SMIA agent and endowing it with intelligence and extended autonomy. It offers detailed steps to follow, as well as source code for specific parts, to successfully reproduce the development tutorial.
 
@@ -20,14 +21,14 @@ Tutorial Description
 
 The tutorial consists of three phases. It starts by generating the necessary pre-configuration, such as the CSS-enriched AAS model for the SMIA instance. Next, the logic is developed, and the agent is extended with said autonomy. Finally, the developed agent is tested and validated. The three phases are illustrated in the following figure:
 
-.. figure:: ../../../docs/_static/images/guides_images/SMIA_guided_tutorial_steps.jpg
+.. figure:: ../../_static/images/guides_images/SMIA_guided_tutorial_steps.jpg
    :alt: SMIA extension guided tutorial steps
 
    SMIA extension guided tutorial steps
 
 The objective is to increase the agent's autonomy using the three extension mechanisms it offers: adding an agent service, adding an agent capability, and adding an asset interface (asset connection). The explanation of each extension, as well as the CSS-enriched AAS elements of the asset to be defined, are presented in the following figure:
 
-.. figure:: ../../../docs/_static/images/guides_images/SMIA_guided_tutorial_asset_info.jpg
+.. figure:: ../../_static/images/guides_images/SMIA_guided_tutorial_asset_info.jpg
    :alt: SMIA extension guided tutorial asset info
 
    SMIA extension guided tutorial asset info
