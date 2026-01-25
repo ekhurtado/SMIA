@@ -18,6 +18,7 @@ def main():
     aas_model_path = DockerUtils.get_aas_model_from_env_var()
 
     # When the AAS model path has been obtained, it is added to SMIA
+    # smia.load_aas_model('SMIA_operator.aasx')
     smia.load_aas_model(aas_model_path)
 
     # The jid and password can also be set as environmental variables. In case they are not set, the values are obtained

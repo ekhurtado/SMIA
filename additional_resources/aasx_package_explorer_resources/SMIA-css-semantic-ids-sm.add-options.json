@@ -149,11 +149,11 @@
           },
           {
             "$type": "FormProperty",
-            "FormTitle": "SkillAccesibleThrough",
+            "FormTitle": "SkillAccessibleThrough",
             "FormInfo": "relationship between the description of the skill and the skill interface that implements the skill",
             "FormEditIdShort": false,
             "FormEditDescription": false,
-            "PresetIdShort": "SkillAccesibleThrough",
+            "PresetIdShort": "SkillAccessibleThrough",
             "PresetCategory": "",
             "KeySemanticId": {
               "type": "GlobalReference",
@@ -168,15 +168,15 @@
           },
           {
             "$type": "FormProperty",
-            "FormTitle": "SkillAccesibleThroughAgentService",
+            "FormTitle": "SkillAccessibleThroughAgentService",
             "FormInfo": "relationship between the description of the skill and the skill interface that implements the skill through an agent service",
             "FormEditIdShort": false,
             "FormEditDescription": false,
-            "PresetIdShort": "SkillAccesibleThroughAgentService",
+            "PresetIdShort": "SkillAccessibleThroughAgentService",
             "PresetCategory": "",
             "KeySemanticId": {
               "type": "GlobalReference",
-              "value": "http://www.w3id.org/upv-ehu/gcis/css-smia#accesibleThroughAgentService"
+              "value": "http://www.w3id.org/upv-ehu/gcis/css-smia#AccessibleThroughAgentService"
             },
             "Multiplicity": "One",
             "IsReadOnly": false,
@@ -187,15 +187,15 @@
           },
           {
             "$type": "FormProperty",
-            "FormTitle": "SkillAccesibleThroughAssetService",
+            "FormTitle": "SkillAccessibleThroughAssetService",
             "FormInfo": "relationship between the description of the skill and the skill interface that implements the skill through an asset service",
             "FormEditIdShort": false,
             "FormEditDescription": false,
-            "PresetIdShort": "SkillAccesibleThroughAssetService",
+            "PresetIdShort": "SkillAccessibleThroughAssetService",
             "PresetCategory": "",
             "KeySemanticId": {
               "type": "GlobalReference",
-              "value": "http://www.w3id.org/upv-ehu/gcis/css-smia#accesibleThroughAssetService"
+              "value": "http://www.w3id.org/upv-ehu/gcis/css-smia#AccessibleThroughAssetService"
             },
             "Multiplicity": "One",
             "IsReadOnly": false,
@@ -652,7 +652,7 @@
         },
         {
           "$type": "AasCore.Aas3_0.ConceptDescription, AasCore.Aas3_0",
-          "IdShort": "SkillAccesibleThrough",
+          "IdShort": "SkillAccessibleThrough",
           "Administration": {
             "$type": "AasCore.Aas3_0.AdministrativeInformation, AasCore.Aas3_0",
             "Version": "1",
@@ -677,7 +677,7 @@
                   {
                     "$type": "AasCore.Aas3_0.LangStringPreferredNameTypeIec61360, AasCore.Aas3_0",
                     "Language": "en",
-                    "Text": "SkillAccesibleThrough"
+                    "Text": "SkillAccessibleThrough"
                   }
                 ],
                 "DataType": "STRING",
@@ -699,13 +699,13 @@
         },
         {
           "$type": "AasCore.Aas3_0.ConceptDescription, AasCore.Aas3_0",
-          "IdShort": "SkillAccesibleThroughAgentService",
+          "IdShort": "SkillAccessibleThroughAgentService",
           "Administration": {
             "$type": "AasCore.Aas3_0.AdministrativeInformation, AasCore.Aas3_0",
             "Version": "1",
             "Revision": "1"
           },
-          "Id": "http://www.w3id.org/upv-ehu/gcis/css-smia#accesibleThroughAgentService",
+          "Id": "http://www.w3id.org/upv-ehu/gcis/css-smia#AccessibleThroughAgentService",
           "EmbeddedDataSpecifications": [
             {
               "$type": "AasCore.Aas3_0.EmbeddedDataSpecification, AasCore.Aas3_0",
@@ -724,7 +724,7 @@
                   {
                     "$type": "AasCore.Aas3_0.LangStringPreferredNameTypeIec61360, AasCore.Aas3_0",
                     "Language": "en",
-                    "Text": "SkillAccesibleThroughAgentService"
+                    "Text": "SkillAccessibleThroughAgentService"
                   }
                 ],
                 "DataType": "STRING",
@@ -746,13 +746,13 @@
         },
         {
           "$type": "AasCore.Aas3_0.ConceptDescription, AasCore.Aas3_0",
-          "IdShort": "SkillAccesibleThroughAssetService",
+          "IdShort": "SkillAccessibleThroughAssetService",
           "Administration": {
             "$type": "AasCore.Aas3_0.AdministrativeInformation, AasCore.Aas3_0",
             "Version": "1",
             "Revision": "1"
           },
-          "Id": "http://www.w3id.org/upv-ehu/gcis/css-smia#accesibleThroughAssetService",
+          "Id": "http://www.w3id.org/upv-ehu/gcis/css-smia#AccessibleThroughAssetService",
           "EmbeddedDataSpecifications": [
             {
               "$type": "AasCore.Aas3_0.EmbeddedDataSpecification, AasCore.Aas3_0",
@@ -771,7 +771,7 @@
                   {
                     "$type": "AasCore.Aas3_0.LangStringPreferredNameTypeIec61360, AasCore.Aas3_0",
                     "Language": "en",
-                    "Text": "SkillAccesibleThroughAssetService"
+                    "Text": "SkillAccessibleThroughAssetService"
                   }
                 ],
                 "DataType": "STRING",
