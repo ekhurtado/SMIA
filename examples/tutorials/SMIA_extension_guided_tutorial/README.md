@@ -62,8 +62,8 @@ In the first phase, we will generate the CSS-enriched AAS model that will serve 
     3. To test and validate an asset service, the first element of *InteractionMetadata/properties/* will be modified. Modify its *idShort* (e.g., *ExtendedAssetService*) and the value of its datapoint in *forms/href/* (e.g., */extendedservice*).
     4. To test access to an asset datum through an extended agent capability (developed later in this tutorial), copy the element from *InteractionMetadata/properties/* and modify its *idShort* (e.g., *AssetSpecificData*) and the value of its datapoint in *forms/href/* (e.g., */assetdata*).
 
-    > [!NOTE]
-    > The submodel must be completely defined so that it does not present errors during the SMIA startup. If you wish to modify a valid submodel, you can open a new window of the `AASX Package Explorer` tool, open the file `CSS_AAS_model_base.aasx` offered in this tutorial's folder, copy the "AssetInterfacesDescription" submodel using the `Copy` button, and in our AAS, `Paste into`.
+> [!NOTE]
+> The submodel must be completely defined so that it does not present errors during the SMIA startup. If you wish to modify a valid submodel, you can open a new window of the `AASX Package Explorer` tool, open the file `CSS_AAS_model_base.aasx` offered in this tutorial's folder, copy the "AssetInterfacesDescription" submodel using the `Copy` button, and in our AAS, `Paste into`.
 
 
 6. Define the submodels with the asset information. To do this, create the submodels in the AAS via `Create new Submodel of kind Instance`. For this tutorial, we will define two submodels to distinguish the information of the asset and its representative (SMIA agent), and the ontological relations of the CSS-enriched elements: `AssetFunctionalInformation` and `AgentFunctionalInformation`, and `FunctionalRelationships`.
@@ -89,8 +89,8 @@ To develop and test the extended SMIA agent, an environment with access to the P
 2. Create a folder to add the source code to be developed (e.g., `src/`).
 3. Inside the generated folder (`src/`), create a launcher file to serve as the startup for the SMIA agent. Following the [SMIA extension guide](https://smia.readthedocs.io/en/latest/smia_user_guide/extension_guide.html), add the code offered with an `ExtensibleSMIAAgent`. In the line loading the AAS model, define the AASX file we just generated (if it is in the main folder, add *'../'*).
 
-    > [!NOTE]
-    > SMIA offers different deployment mechanisms. It is recommended to deploy SMIA using Docker containers to ensure its operation in any environment. However, to perform the tests in this tutorial, it will be executed locally. For this, it is necessary to enable connection with the XMPP server, either a local one or an Internet server such as xmpp.jp (requires registering the JID and password beforehand at [https://www.xmpp.jp/](https://www.xmpp.jp/)). Therefore, the final code looks like this:
+> [!NOTE]
+> SMIA offers different deployment mechanisms. It is recommended to deploy SMIA using Docker containers to ensure its operation in any environment. However, to perform the tests in this tutorial, it will be executed locally. For this, it is necessary to enable connection with the XMPP server, either a local one or an Internet server such as xmpp.jp (requires registering the JID and password beforehand at [https://www.xmpp.jp/](https://www.xmpp.jp/)). Therefore, the final code looks like this:
 
 
 ```python
@@ -116,8 +116,8 @@ if __name__ == '__main__':
 
 4. Start the SMIA agent by executing the `launcher.py` file. The SMIA agent will generate a `smia_archive` folder with the configuration files, along with the defined CSS-enriched AAS model.
 
-    > [!NOTE]
-    > During startup it will fail, because it does not have the OWL file with the definition of the CSS model ontology. This file can be obtained from the [GitHub repository](https://github.com/ekhurtado/SMIA/blob/main/additional_resources/css_smia_ontology/CSS-ontology-smia.owl) and must be copied into `smia_archive/config/`. After copying the OWL file, you can run `launcher.py` again and this time the SMIA agent will start perfectly.
+> [!NOTE]
+> During startup it will fail, because it does not have the OWL file with the definition of the CSS model ontology. This file can be obtained from the [GitHub repository](https://github.com/ekhurtado/SMIA/blob/main/additional_resources/css_smia_ontology/CSS-ontology-smia.owl) and must be copied into `smia_archive/config/`. After copying the OWL file, you can run `launcher.py` again and this time the SMIA agent will start perfectly.
 
 ### Development of the Extended Agent Service
 

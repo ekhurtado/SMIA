@@ -41,16 +41,16 @@ En la primera fase generaremos el CSS-enriched AAS model que servirá al agente 
 	1. Añadir el submodelo con los identificadores ontológicos del modelo CSS: ``Workspace > Create ... > New submodel from plugin > AasxPluginGenericForms | GCIS/SubmodelWithCapabilitySkillOntology``.
 	2. Desde el submodelo generar los ConceptDescriptions con identificadores ontológicos del modelo CSS: botón ``Create <- SMEs (all)``. Dentro de _ConceptDescriptions_ se habrán generado todos los elementos. El submodelo ya se podría eliminar (botón ``Delete``), así como su ConceptDescription (_SubmodelWithCapabilitySkillOntology_) para que no presente errores más adelante (ya que lo genera con id vacío).
 
-	> [!NOTE]
-	> A partir de la v2025-03-25 las ConceptDescriptions se generan mediante la funcionalidad ``SMEs (all)``, pero esta no es capaz de generar toda la información desde el plugin para el modelo CSS. Si no se desea rellenar toda la información restante (p.e. _shortName_ de cada concepto), es posible obtenerlos desde el recurso base para el desarrollo del CSS-enriched AAS model. Para ello, se puede abrir una nueva ventana de la herramienta ``AASX Package Explorer``, abrir el fichero ``CSS_AAS_model_base.aasx`` que se ofrece en la carpeta de este tutorial, seleccionar y copiar todos los ConceptDescriptions usando el botón ``Copy`` y en nuestro AAS ``Paste into``.
+> [!NOTE]
+> A partir de la v2025-03-25 las ConceptDescriptions se generan mediante la funcionalidad ``SMEs (all)``, pero esta no es capaz de generar toda la información desde el plugin para el modelo CSS. Si no se desea rellenar toda la información restante (p.e. _shortName_ de cada concepto), es posible obtenerlos desde el recurso base para el desarrollo del CSS-enriched AAS model. Para ello, se puede abrir una nueva ventana de la herramienta ``AASX Package Explorer``, abrir el fichero ``CSS_AAS_model_base.aasx`` que se ofrece en la carpeta de este tutorial, seleccionar y copiar todos los ConceptDescriptions usando el botón ``Copy`` y en nuestro AAS ``Paste into``.
 
 4. Añadir el submodelo para definición del software SMIA: ``Workspace > Create ... > New submodel from plugin > AasxPluginGenericForms | Nameplate for Software in Manufacturing (IDTA) V1.0``.
 
 	1. Eliminar el SubmodelElement ``SoftwareNameplateType`` y modificar el ``SoftwareNameplateInstance``: eliminar todas las apariciones de _{0:00}_.
 	2. Especificar el identificador del agente en ``SoftwareNameplateInstance/InstanceName[value]`` (el mismo que después se definirá en el JID en código, aunque en este caso sin el servidor XMPP, es decir, solamente el identificador antes de "@"), y la versión del agente en ``SoftwareNameplateInstance/InstalledVersion[value]`` (p.e. "0.3.1"). Además de este dato obligatorio, los demás son opcionales. Se pueden añadir los datos que se quieran para definir en más profundidad el software SMIA (módulos instalados, OS en el que se despliega, etc.).
 
-	> [!NOTE]
-	> Si no se quiere modificar el submodelo, se puede obtener un submodelo válido con el siguiente proceso: abrir una nueva ventana de la herramienta ``AASX Package Explorer``, abrir el fichero ``CSS_AAS_model_base.aasx`` que se ofrece en la carpeta de este tutorial y copiar el submodelo "SoftwareNameplate" usando el botón ``Copy`` y en nuestro AAS ``Paste into``.
+> [!NOTE]
+> Si no se quiere modificar el submodelo, se puede obtener un submodelo válido con el siguiente proceso: abrir una nueva ventana de la herramienta ``AASX Package Explorer``, abrir el fichero ``CSS_AAS_model_base.aasx`` que se ofrece en la carpeta de este tutorial y copiar el submodelo "SoftwareNameplate" usando el botón ``Copy`` y en nuestro AAS ``Paste into``.
 
 _El paso 5 solo hay que realizarlo si el agente requiere conexión con el activo._
 
@@ -61,8 +61,8 @@ _El paso 5 solo hay que realizarlo si el agente requiere conexión con el activo
 	3. Para probar y validar un asset service, se modificará el primer elemento de _InteractionMetadata/properties/_. Se modificará su _idShort_ (p.e. _ExtendedAssetService_) y el valor de su datapoint en _forms/href/_ (p.e. _/extendedservice_).
 	4. Para probar el acceso a un dato del activo a través de una capacidad de agente extendida (desarrollada más adelante en este tutorial), se copiará el elemento de _InteractionMetadata/properties/_ y se modificará su _idShort_ (p.e. _AssetSpecificData_) y el valor de su datapoint en _forms/href/_ (p.e. _/assetdata_).
 
-	> [!NOTE]
-	> El submodelo hay que definirlo completamente para que no presente errores durante el arranque de SMIA. Si se desea modificar un submodelo válido se puede abrir una nueva ventana de la herramienta ``AASX Package Explorer``, abrir el fichero ``CSS_AAS_model_base.aasx`` que se ofrece en la carpeta de este tutorial y copiar el submodelo "AssetInterfacesDescription" usando el botón ``Copy`` y en nuestro AAS ``Paste into``.
+> [!NOTE]
+> El submodelo hay que definirlo completamente para que no presente errores durante el arranque de SMIA. Si se desea modificar un submodelo válido se puede abrir una nueva ventana de la herramienta ``AASX Package Explorer``, abrir el fichero ``CSS_AAS_model_base.aasx`` que se ofrece en la carpeta de este tutorial y copiar el submodelo "AssetInterfacesDescription" usando el botón ``Copy`` y en nuestro AAS ``Paste into``.
 
 6. Definir los submodelos con la información del activo. Para ello, creamos los submodelos en el AAS mediante ``Create new Submodel of kind Instance``. Para este tutorial vamos a definir dos submodelos para distinguir la información del activo y su representante (agente SMIA), y las relaciones ontológicas de los CSS-enriched elements: ``AssetFunctionalInformation`` y ``AgentFunctionalInformation``, y ``FunctionalRelationships``.
 
@@ -90,8 +90,8 @@ Para desarrollar y probar el agente SMIA extendido se debe habilitar un entorno 
 2. Crear una carpeta para añadir el código fuente a desarrollar (p.e. ``src/``).
 3. Dentro de la carpeta generada (``src/``), crear un fichero launcher que sirva de arranque del agente SMIA. Siguiendo la [guía de extensión de SMIA](https://smia.readthedocs.io/en/latest/smia_user_guide/extension_guide.html), añade el código ofrecido con un ``ExtensibleSMIAAgent``. En la línea de cargar el modelo AAS, define el fichero AASX que acabamos de generar (si está en la carpeta principal, añade _'../'_). 
 
-	> [!NOTE]
-	> SMIA ofrece diferentes mecanismos de despliegue. Se recomienda desplegar SMIA usando contenedores Docker para asegurar su funcionamiento en cualquier entorno. Sin embargo, para realizar las pruebas en este tutorial, se ejecutará en local. Para ello es necesario habilitar la conexión con el servidor XMPP, ya sea uno local o un servidor en Internet como p.e. xmpp.jp (requiere registrar el JID y la contraseña previamente en [https://www.xmpp.jp/](https://www.xmpp.jp/)). Por lo tanto, el código final queda de esta manera:
+> [!NOTE]
+> SMIA ofrece diferentes mecanismos de despliegue. Se recomienda desplegar SMIA usando contenedores Docker para asegurar su funcionamiento en cualquier entorno. Sin embargo, para realizar las pruebas en este tutorial, se ejecutará en local. Para ello es necesario habilitar la conexión con el servidor XMPP, ya sea uno local o un servidor en Internet como p.e. xmpp.jp (requiere registrar el JID y la contraseña previamente en [https://www.xmpp.jp/](https://www.xmpp.jp/)). Por lo tanto, el código final queda de esta manera:
 
 ```python
 import smia
@@ -114,8 +114,8 @@ if __name__ == '__main__':
 
 4. Arrancar el agente SMIA ejecutando el fichero ``launcher.py``. El agente SMIA generará una carpeta ``smia_archive`` con los ficheros de configuración, junto al CSS-enriched AAS model definido. 
 
-	> [!NOTE]
-	> Durante el arranque fallará, debido a que no dispone del fichero OWL con la definición de la ontología del modelo CSS. Este fichero se puede obtener del [repositorio de GitHub](https://github.com/ekhurtado/SMIA/blob/main/additional_resources/css_smia_ontology/CSS-ontology-smia.owl) y se debe copiar en ``smia_archive/config/``. Después de copiar el fichero OWL, se puede volver a ejecutar el ``launcher.py`` y esta vez el agente SMIA arrancará perfectamente.
+> [!NOTE]
+> Durante el arranque fallará, debido a que no dispone del fichero OWL con la definición de la ontología del modelo CSS. Este fichero se puede obtener del [repositorio de GitHub](https://github.com/ekhurtado/SMIA/blob/main/additional_resources/css_smia_ontology/CSS-ontology-smia.owl) y se debe copiar en ``smia_archive/config/``. Después de copiar el fichero OWL, se puede volver a ejecutar el ``launcher.py`` y esta vez el agente SMIA arrancará perfectamente.
 
 
 ### Desarrollo del servicio de agente extendido
