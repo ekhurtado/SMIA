@@ -16,6 +16,9 @@ This document contains a step-by-step guide to building a SMIA agent and endowin
 
             :octicon:`container;1em` Step-by-step tutorial GitHub resources
 
+Introduction
+------------
+
 Tutorial Description
 ~~~~~~~~~~~~~~~~~~~~
 
