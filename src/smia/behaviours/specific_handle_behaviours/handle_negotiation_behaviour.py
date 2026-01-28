@@ -77,6 +77,10 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         """
         _logger.info("HandleNegotiationBehaviour starting...")
 
+        # Since this behavior is specific to the messages in this thread, it reserves it so that the generic
+        # ACLHandlingBehavior does not process them.
+        await self.myagent.add_reserved_thread(self.neg_thread)
+
         # Before starting, if the FIPA-CNP protocol is related to a CSS service, it will perform the capability checking
         if (self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB) ==
                 ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE):
@@ -135,9 +139,6 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 await cap_neg_error.handle_capability_execution_error_old()
                 return  # killing a behaviour does not cancel its current run loop
 
-        # Since this behavior is specific to the messages in this thread, it reserves it so that the generic
-        # ACLHandlingBehavior does not process them.
-        await self.myagent.add_reserved_thread(self.neg_thread)
 
     async def run(self):
         """
