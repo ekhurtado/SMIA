@@ -1,0 +1,372 @@
+/* Container styling matching Furo */
+.smia-wizard-container {
+    background-color: var(--color-background-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Progress Bar */
+.smia-progress-bar {
+    background-color: var(--color-background-primary);
+    border-radius: 4px;
+    height: 8px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.progress-fill {
+    background-color: var(--color-brand-primary);
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+/* Step Visibility */
+.smia-step {
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+.smia-step.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.smia-input {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid var(--color-gray);
+    border-radius: 4px;
+    background-color: var(--color-background-primary);
+    color: var(--color-foreground-primary);
+    margin-top: 0.5rem;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+/* Asset Cards */
+.asset-card {
+    border: 1px solid var(--color-border);
+    background-color: var(--color-background-primary);
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    position: relative;
+    border-left: 4px solid var(--color-brand-primary);
+}
+
+.asset-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+/* Buttons */
+.smia-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    border-top: 1px solid var(--color-border);
+    padding-top: 1rem;
+}
+
+.smia-btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.smia-btn.primary {
+    background-color: var(--color-brand-primary);
+    color: var(--color-background-primary);
+}
+
+.smia-btn.secondary {
+    background-color: transparent;
+    border: 1px solid var(--color-brand-primary);
+    color: var(--color-brand-primary);
+}
+
+.btn-text-danger {
+    background: none;
+    border: none;
+    color: var(--color-problematic); /* Furo's red */
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+/* Info Box */
+.info-box {
+    background-color: var(--color-admonition-background);
+    border-left: 4px solid var(--color-brand-content);
+    padding: 0.8rem;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+}
+
+/* --- NUEVO: Paso 0 (Pantalla de Bienvenida) --- */
+.smia-welcome-screen {
+    text-align: center;
+    padding: 3rem 1rem;
+    animation: fadeIn 0.5s ease;
+}
+
+.welcome-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
+.welcome-title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: var(--color-foreground-primary);
+}
+
+.welcome-text {
+    font-size: 1.1rem;
+    color: var(--color-foreground-secondary);
+    max-width: 600px;
+    margin: 0 auto 2rem auto;
+}
+
+.btn-large {
+    font-size: 1.2rem;
+    padding: 0.8rem 2rem;
+    border-radius: 50px; /* Estilo píldora */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* --- NUEVO: Estilo Grid Cards para Paso 1 --- */
+.env-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.env-card {
+    background: var(--color-background-secondary);
+    border: 2px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.env-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-color: var(--color-brand-primary);
+}
+
+.env-card.selected {
+    border-color: var(--color-brand-primary);
+    background-color: var(--color-background-primary);
+    box-shadow: 0 0 0 2px var(--color-brand-primary); /* Doble borde visual */
+}
+
+.env-card.selected::after {
+    content: "✓";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: var(--color-brand-primary);
+    font-weight: bold;
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.card-title {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.card-desc {
+    font-size: 0.85rem;
+    color: var(--color-foreground-secondary);
+}
+
+
+/* --- GESTIÓN DE PANTALLAS (FIX BUG STEP 0) --- */
+/* Por defecto, todas las pantallas (steps y welcome) están ocultas */
+.smia-welcome-screen, .smia-step {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+/* --- GESTIÓN DE PANTALLAS (FIX BUG STEP 0) --- */
+/* Por defecto, todas las pantallas (steps y welcome) están ocultas */
+.smia-welcome-screen, .smia-step {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Solo la clase active las muestra */
+.smia-welcome-screen.active, .smia-step.active {
+    display: block;
+    opacity: 1;
+    animation: slideUp 0.4s ease forwards;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- MODERNIZACIÓN DE UI --- */
+
+/* 1. Custom File Upload (Botón ancho con icono) */
+.file-upload-wrapper {
+    position: relative;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.file-upload-input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.file-upload-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-background-secondary);
+    border: 2px dashed var(--color-border); /* Borde punteado moderno */
+    border-radius: 6px;
+    padding: 0.8rem 1.2rem;
+    color: var(--color-foreground-secondary);
+    font-weight: 500;
+    transition: all 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.file-upload-input:hover + .file-upload-label {
+    border-color: var(--color-brand-primary);
+    background-color: var(--color-background-hover);
+    color: var(--color-brand-primary);
+}
+
+.file-upload-label .icon {
+    font-size: 1.2rem;
+    margin-left: 10px;
+}
+
+/* Estado cuando hay fichero seleccionado (controlado por JS) */
+.file-upload-label.has-file {
+    border-style: solid;
+    background-color: rgba(0, 200, 83, 0.1); /* Verde muy suave */
+    border-color: #00c853;
+    color: #00c853;
+}
+
+/* 2. Modern Checkboxes */
+.modern-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    padding: 0.5rem 0;
+}
+
+.modern-checkbox input {
+    display: none; /* Ocultar el checkbox nativo */
+}
+
+.checkmark {
+    height: 20px;
+    width: 20px;
+    background-color: var(--color-background-secondary);
+    border: 2px solid var(--color-gray);
+    border-radius: 4px;
+    margin-right: 12px;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.modern-checkbox:hover .checkmark {
+    border-color: var(--color-brand-primary);
+}
+
+.modern-checkbox input:checked ~ .checkmark {
+    background-color: var(--color-brand-primary);
+    border-color: var(--color-brand-primary);
+}
+
+/* El "tick" del checkbox */
+.modern-checkbox .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.modern-checkbox input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* 3. Botón Eliminar Minimalista (Trash Icon) */
+.btn-icon-danger {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-problematic); /* Rojo de Furo */
+    transition: all 0.2s;
+}
+
+.btn-icon-danger:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+    border-color: var(--color-problematic);
+}
+
+.btn-icon-danger svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}

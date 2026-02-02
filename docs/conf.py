@@ -45,7 +45,7 @@ extensions = [
     'myst_parser',  # To be able to add Markdown files (.md)
     'sphinx_copybutton',
     'notfound.extension',
-    'sphinx_design',
+    'sphinx_design',    # For cards, grids, dropdowns, etc.
     'sphinxembeddedvideos.youtube',  # To be able to add Youtube videos
     'sphinx_new_tab_link'   # To open the links a new tab
 ]
@@ -114,6 +114,16 @@ html_theme_options = {
         "color-api-background-hover": "#5e5e5e",
     },
 }
+
+html_css_files = [
+    'css/smia-environment-builder-style.css',
+]
+
+html_js_files = [
+    'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js',
+    'js/smia-environment-builder.js',
+]
 
 pygments_dark_style = "monokai"
 
