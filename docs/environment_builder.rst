@@ -25,6 +25,11 @@ Use the wizard builder below to configure your SMIA environment. The tool will g
 3. **Asset Management**: Configure manufacturing plans and production assets as SMIA instances.
 4. **Review & Generate**: Review your configuration and download the deployment package.
 
+.. important::
+
+    This application runs entirely in your browser (client-side) and **does not store any data on the server**.
+    Refreshing the page will reset the application to its initial state. Please ensure you download your configuration ZIP before leaving.
+
 Environment Builder
 -------------------
 
