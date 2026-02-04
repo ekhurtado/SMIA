@@ -361,7 +361,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         if targets is None:
             if len(self.targets_remaining_propose) == 0:
                 return
-            targets = self.targets_remaining_propose.pop()
+            targets = [self.targets_remaining_propose.pop()]
 
         propose_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
             'N/A', self.neg_thread,
