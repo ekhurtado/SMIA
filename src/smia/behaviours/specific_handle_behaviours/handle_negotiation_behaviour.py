@@ -205,7 +205,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 _logger.assetinfo("Thread [{}] Processed agents [{}]".format(
                     msg.thread, self.targets_processed))  # TODO BORRAR BUG TEST
 
-                if len(self.targets_processed) == len(self.all_targets_list):
+                if (len(self.targets_processed) == len(self.all_targets_list)) and self.negotiation_result is None:
                     # In this case all the values have already been received, so the value of this SMIA is the best
                     _logger.info("The SMIA has won the negotiation with thread [" + msg.thread + "]")
 
