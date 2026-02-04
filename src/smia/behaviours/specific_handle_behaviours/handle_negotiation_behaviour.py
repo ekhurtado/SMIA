@@ -75,7 +75,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         """
         This method implements the initialization process of this behaviour.
         """
-        _logger.info("HandleNegotiationBehaviour starting...")
+        _logger.info("HandleNegotiationBehaviour starting for [{}]...".format(self.neg_thread))
 
         # Since this behavior is specific to the messages in this thread, it reserves it so that the generic
         # ACLHandlingBehavior does not process them.
@@ -128,7 +128,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
 
                 # Once the negotiation value is reached, the negotiation management can begin. The first step is to send the
                 # PROPOSE message with your own value to the other participants in the negotiation.
-                await self.send_propose_acl_msgs()
+                # await self.send_propose_acl_msgs()        # TODO COMENTADO PARA PRUEBAS
             except (CapabilityRequestExecutionError, AssetConnectionError) as cap_neg_error:
                 if isinstance(cap_neg_error, AssetConnectionError):
                     cap_neg_error = CapabilityRequestExecutionError(self.neg_thread,'Negotiation',
@@ -225,6 +225,10 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         else:
             _logger.info("         - No message received within 10 seconds on SMIA Agent (HandleNegotiationBehaviour "
                          "[{}])".format(self.neg_thread))
+
+            if self.iterations_pending == 0:
+                await self.send_propose_acl_msgs()  # Envia los propose en la primera iteracion de espera
+                return
 
             self.iterations_pending += 1  # The iterations that the agent is pending for PROPOSE messages is increased
             if self.iterations_pending in self.requests_iterations:
@@ -397,7 +401,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 _logger.aclinfo("ACL REQUEST negotiation message sent to " + jid_target +
                                 "requesting the neg value on thread [" + self.neg_thread + "]")
 
-                await asyncio.sleep(0.5)    # It waits 0.5 second for each agent involved
+                await asyncio.sleep(0.01)    # It waits 0.01 second for each agent involved
 
     async def handle_neg_values_tie(self, received_agent_id, received_neg_value):
         """
