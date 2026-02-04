@@ -234,7 +234,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                                     "from " + sender_agent_jid + " with thread ["
                                     + self.neg_thread + "]) requesting the neg value")
                     # The neg value is sent with a PROPOSE message
-                    await self.send_propose_acl_msgs(targets=[sender_agent_jid])
+                    # await self.send_propose_acl_msgs(targets=[sender_agent_jid])
+                    self.targets_remaining.add(sender_agent_jid)
                     _logger.info("PROPOSE message sent with the requested neg value within thread [{}] to {}".format(
                         self.neg_thread, sender_agent_jid))
 
@@ -246,6 +247,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 if len(self.targets_processed) < len(self.all_targets_list):
                     if self.current_retries < self.max_retries:
                         # En este caso no se han procesado todos los agentes, se esperará 5 segundos a que se puedan recibir mensajes
+                        _logger.assetinfo("MENSAJE: Voy a hacer un reintento (enviar REQUEST)."
+                                     .format(self.neg_thread, self.current_retries))
                         await asyncio.sleep(25.0)
                         # Se actualiza la lista restantes
                         _logger.info("The negotiation with thread [{}] has not been resolved yet. Retry number {} "
