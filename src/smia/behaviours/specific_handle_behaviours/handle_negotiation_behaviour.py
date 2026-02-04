@@ -50,8 +50,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         # Negotiation-related variables are also initialized
         self.neg_thread = self.received_acl_msg.thread
         self.all_targets_list = set(self.received_body_json['negTargets'])
-        if str(self.agent.jid) in self.all_targets_list:
-            self.all_targets_list.remove(str(self.agent.jid))   # Se quita el JID propio
+        if str(self.myagent.jid) in self.all_targets_list:
+            self.all_targets_list.remove(str(self.myagent.jid))   # Se quita el JID propio
         self.targets_processed = set()
         self.targets_remaining = set(self.received_body_json['negTargets'])
         self.neg_value = 0.0
@@ -401,7 +401,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
 
         # This PROPOSE FIPA-ACL message is sent to all participants of the negotiation (except for this SMIA)
         for jid_target in targets:
-            if jid_target != str(self.agent.jid):
+            if jid_target != str(self.myagent.jid):
                 propose_acl_message.to = jid_target
                 await self.send(propose_acl_message)
                 _logger.aclinfo("ACL PROPOSE negotiation message sent to " + jid_target +
@@ -428,7 +428,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
 
         # This PROPOSE FIPA-ACL message is sent to all participants of the negotiation (except for this SMIA)
         for jid_target in self.all_targets_list:
-            if (jid_target not in self.targets_processed) and (jid_target != str(self.agent.jid)):
+            if (jid_target not in self.targets_processed) and (jid_target != str(self.myagent.jid)):
                 request_acl_message.to = jid_target
                 await self.send(request_acl_message)
                 _logger.aclinfo("ACL REQUEST negotiation message sent to " + jid_target +
@@ -442,7 +442,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         """
         # This PROPOSE FIPA-ACL message is sent to all participants of the negotiation (except for this SMIA)
         for jid_target in self.all_targets_list:
-            if (jid_target not in self.targets_processed) and (jid_target != str(self.agent.jid)):
+            if (jid_target not in self.targets_processed) and (jid_target != str(self.myagent.jid)):
                 self.targets_remaining.add(jid_target)
 
     async def handle_neg_values_tie(self, received_agent_id, received_neg_value):
