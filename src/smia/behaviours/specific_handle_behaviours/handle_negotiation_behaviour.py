@@ -50,9 +50,12 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         # Negotiation-related variables are also initialized
         self.neg_thread = self.received_acl_msg.thread
         self.targets_processed = set()
+        self.targets_remaining_propose = set(self.received_body_json['negTargets'])
         self.neg_value = 0.0
         self.myagent.tie_break = True   # In case of equal value neg is set as tie-breaker TODO check these cases (which need to be tie-breaker?)
         self.negotiation_result = None
+
+        self.initial_propose_sent = False
 
         # The processing iterations of this behavior are set depending on the number of participants in the negotiation.
         # If not all proposals have been received, three iterations are set to request them again (using request),
@@ -118,7 +121,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         else:
             # In this case, there are multiple participants, so it will execute the FIPA-SMIA-CNP protocol
 
-            await asyncio.sleep(random.uniform(1.0, 3.0))  # Random wait to ensure that other agents are ready to negotiate
+            # await asyncio.sleep(random.uniform(1.0, 3.0))  # Random wait to ensure that other agents are ready to negotiate
             try:
                 #  The value of the criterion must be obtained just before starting to manage the negotiation, so that at the
                 #  time of sending the PROPOSE and receiving that of the others it will be the same value. Therefore, if to
@@ -145,8 +148,10 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         This method implements the logic of the behaviour.
         """
 
+        await self.send_propose_acl_msgs()  # Envia los propose en la primera iteracion de espera
+
         # Wait for a message with the standard ACL template for negotiating to arrive.
-        msg = await self.receive(timeout=10)  # Timeout set to 10s so as not to continuously execute the behavior
+        msg = await self.receive(timeout=0.01)  # Timeout set to 10s so as not to continuously execute the behavior
         if msg:
             if msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB) == FIPAACLInfo.FIPA_ACL_PERFORMATIVE_PROPOSE:
                 # A PROPOSE ACL message has been received by the agent
@@ -225,10 +230,6 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         else:
             _logger.info("         - No message received within 10 seconds on SMIA Agent (HandleNegotiationBehaviour "
                          "[{}])".format(self.neg_thread))
-
-            if self.iterations_pending == 0:
-                await self.send_propose_acl_msgs()  # Envia los propose en la primera iteracion de espera
-                return
 
             self.iterations_pending += 1  # The iterations that the agent is pending for PROPOSE messages is increased
             if self.iterations_pending in self.requests_iterations:
@@ -356,8 +357,12 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         Args:
             targets (list, optional): the targets to whom the proposal message should be sent.
         """
+
         if targets is None:
-            targets = self.received_body_json['negTargets']
+            if len(self.targets_remaining_propose) == 0:
+                return
+            targets = self.targets_remaining_propose.pop()
+
         propose_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
             'N/A', self.neg_thread,
             # 'N/A', await acl_smia_messages_utils.create_random_thread(self.myagent),
