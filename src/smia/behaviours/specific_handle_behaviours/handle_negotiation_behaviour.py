@@ -241,10 +241,9 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         else:
             # _logger.info("         - No message received within 10 seconds on SMIA Agent (HandleNegotiationBehaviour "
             #              "[{}])".format(self.neg_thread))
-
-            if len(self.targets_processed) < len(self.all_targets_list):
-                if len(self.targets_remaining) == 0:
-                    # En este caso se han enviado todos los PROPOSE
+            if len(self.targets_remaining) == 0:
+            # En este caso se han enviado todos los PROPOSE
+                if len(self.targets_processed) < len(self.all_targets_list):
                     if self.current_retries < self.max_retries:
                         # En este caso no se han procesado todos los agentes, se esperará 5 segundos a que se puedan recibir mensajes
                         await asyncio.sleep(5.0)
@@ -253,19 +252,24 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                                      "requesting the negotiation value from the remaining targets."
                                      .format(self.neg_thread, self.current_retries))
                         await self.request_remaining_neg_acl_msgs()
+                        _logger.assetinfo("MENSAJE: Se han enviado todos los mensajes, y se han procesado {}, ahora se va"
+                                          "a reintentar con los {} restantes.".format(len(self.targets_processed), len(self.targets_remaining)))  # TODO BORRAR
                         self.current_retries += 1
-            else:
-                # En este caso se han procesado todos los agentes, por lo que este agente ha resuelto la negociacion
-                # if self.safe_iterations > 0:
-                #     # En 5 iteraciones se espera 1 segundo por si es necesario enviar el PROPOSE a algun agente que no haya procesado todos los agentes
-                #     await asyncio.sleep(1.0)
-                #     self.safe_iterations -= 1
-                # In this case the negotiation is resolved, so the behaviour can be killed
-                _logger.info("The negotiation with thread [{}] is resolved, so the behavior is killed"
-                             .format(self.neg_thread))
-                await self.exit_negotiation(is_winner=self.negotiation_result['winner'],
-                                            resolved_timestamp=self.negotiation_result['timestamp'])
-                return  # killing a behaviour does not cancel its current run loop
+                else:
+                    # En este caso se han procesado todos los agentes, por lo que este agente ha resuelto la negociacion
+                    # if self.safe_iterations > 0:
+                    #     # En 5 iteraciones se espera 1 segundo por si es necesario enviar el PROPOSE a algun agente que no haya procesado todos los agentes
+                    #     await asyncio.sleep(1.0)
+                    #     self.safe_iterations -= 1
+                    _logger.assetinfo("MENSAJE: Se han enviado y procesado todos los mensajes, finalizada negociacion "
+                                      "con thread {} con resultado {}.".format(self.neg_thread,
+                                                                                  self.negotiation_result['winner']))  # TODO BORRAR
+                    # In this case the negotiation is resolved, so the behaviour can be killed
+                    _logger.info("The negotiation with thread [{}] is resolved, so the behavior is killed"
+                                 .format(self.neg_thread))
+                    await self.exit_negotiation(is_winner=self.negotiation_result['winner'],
+                                                resolved_timestamp=self.negotiation_result['timestamp'])
+                    return  # killing a behaviour does not cancel its current run loop
 
 
                 # else:
