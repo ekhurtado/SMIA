@@ -260,10 +260,10 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                         self.current_retries += 1
                 else:
                     # En este caso se han procesado todos los agentes, por lo que este agente ha resuelto la negociacion
-                    # if self.safe_iterations > 0:
-                    #     # En 5 iteraciones se espera 1 segundo por si es necesario enviar el PROPOSE a algun agente que no haya procesado todos los agentes
-                    #     await asyncio.sleep(1.0)
-                    #     self.safe_iterations -= 1
+                    if self.safe_iterations > 0:
+                        # En 5 iteraciones se espera 1 segundo por si es necesario enviar el PROPOSE a algun agente que no haya procesado todos los agentes
+                        await asyncio.sleep(10.0)
+                        self.safe_iterations -= 1
                     _logger.assetinfo("MENSAJE: Se han enviado y procesado todos los mensajes, finalizada negociacion "
                                       "con thread {} con resultado {}.".format(self.neg_thread,
                                                                                   self.negotiation_result['winner']))  # TODO BORRAR
