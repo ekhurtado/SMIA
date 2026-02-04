@@ -118,7 +118,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         else:
             # In this case, there are multiple participants, so it will execute the FIPA-SMIA-CNP protocol
 
-            await asyncio.sleep(random.uniform(1.0, 5.0))  # Random wait to ensure that other agents are ready to negotiate
+            await asyncio.sleep(random.uniform(1.0, 3.0))  # Random wait to ensure that other agents are ready to negotiate
             try:
                 #  The value of the criterion must be obtained just before starting to manage the negotiation, so that at the
                 #  time of sending the PROPOSE and receiving that of the others it will be the same value. Therefore, if to
@@ -371,7 +371,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                                 "with neg value " + str(self.neg_value) +
                                 " on negotiation with thread [" + self.neg_thread + "]")
 
-                await asyncio.sleep(0.5)   # It waits 0.5 second for each agent involved
+                await asyncio.sleep(0.01)   # It waits 0.01 second for each agent involved
 
     async def request_remaining_neg_acl_msgs(self):
         """
