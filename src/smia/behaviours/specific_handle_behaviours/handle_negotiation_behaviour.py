@@ -246,7 +246,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 if len(self.targets_processed) < len(self.all_targets_list):
                     if self.current_retries < self.max_retries:
                         # En este caso no se han procesado todos los agentes, se esperará 5 segundos a que se puedan recibir mensajes
-                        await asyncio.sleep(5.0)
+                        await asyncio.sleep(25.0)
                         # Se actualiza la lista restantes
                         _logger.info("The negotiation with thread [{}] has not been resolved yet. Retry number {} "
                                      "requesting the negotiation value from the remaining targets."
