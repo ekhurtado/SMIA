@@ -382,7 +382,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 _logger.aclinfo("ACL PROPOSE negotiation message sent to " + jid_target +
                                 "with neg value " + str(self.neg_value) +
                                 " on negotiation with thread [" + self.neg_thread + "]")
-                # await asyncio.sleep(0.01)   # It waits 0.01 second for each agent involved
+                await asyncio.sleep(0.01)   # It waits 0.01 second for each agent involved
 
     async def request_remaining_neg_acl_msgs(self):
         """
