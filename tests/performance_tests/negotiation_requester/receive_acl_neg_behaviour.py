@@ -34,11 +34,11 @@ class ReceiveACLNegBehaviour(CyclicBehaviour):
         """
         _logger.info("ReceiveACLNegBehaviour starting...")
 
-        self.num_negotiations = DockerUtils.get_env_var('NUM_NEGOTIATIONS')
-        if self.num_negotiations is None:
-            self.num_negotiations = 1
+        self.num_iterations = DockerUtils.get_env_var('NUM_ITERATIONS')
+        if self.num_iterations is None:
+            self.num_iterations = 1
         else:
-            self.num_negotiations = int(self.num_negotiations)
+            self.num_iterations = int(self.num_iterations)
         self.received_negs = 0
 
         self.myagent.received_negs_threads = set()
@@ -70,28 +70,30 @@ class ReceiveACLNegBehaviour(CyclicBehaviour):
                     metrics_folder = DockerUtils.get_env_var('METRICS_FOLDER')
                     if metrics_folder is None:
                         metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
-                    await save_csv_neg_metrics_timestamp(metrics_folder, self.myagent.jid, neg_thread=msg.thread,
-                                                         description='Negotiation error with thread [{}]: reason [{}]'
-                                                         .format(msg.thread, msg_parsed_body['reason']))
+                    await save_csv_neg_metrics_timestamp(
+                        metrics_folder, self.myagent.jid, iteration=self.myagent.requested_negs_dict[msg.thread],
+                        neg_thread=msg.thread, description='Negotiation error with thread [{}]: reason '
+                                                           '[{}]'.format(msg.thread, msg_parsed_body['reason']))
                 else:
                     winner_jid = acl_smia_messages_utils.get_sender_from_acl_msg(msg)
-                    _logger.aclinfo("--> Received negotiation winner for thread [{}]: {}".format(
-                        msg.thread, winner_jid))
+                    _logger.assetinfo("--> Received negotiation winner for thread [{}]: {}".format(msg.thread,
+                                                                                                   winner_jid))
 
                     # TODO BORRAR -> es para obtener los datos para el analisis
                     from smia.utilities import smia_archive_utils, smia_general_info
                     metrics_folder = DockerUtils.get_env_var('METRICS_FOLDER')
                     if metrics_folder is None:
                         metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
-                    await save_csv_neg_metrics_timestamp(metrics_folder, self.myagent.jid, neg_thread=msg.thread,
-                                                         description='Negotiation completed with thread [{}]: winner '
-                                                                     '[{}]'.format(msg.thread, winner_jid))
+                    await save_csv_neg_metrics_timestamp(
+                        metrics_folder, self.myagent.jid, iteration=self.myagent.requested_negs_dict[msg.thread],
+                        neg_thread=msg.thread, description='Negotiation completed with thread [{}]: winner '
+                                                           '[{}]'.format(msg.thread, winner_jid))
 
                 self.received_negs += 1
                 self.myagent.received_negs_threads.add(msg.thread)
 
-            if len(self.myagent.received_negs_threads) == self.num_negotiations:
-                _logger.info("--> ALL NEGOTIATION WINNERS RECEIVED")
+            if len(self.myagent.received_negs_threads) == self.num_iterations:
+                _logger.assetinfo("#### ALL NEGOTIATION WINNERS RECEIVED ####")
 
                 # TODO BORRAR -> es para obtener los datos para el analisis
                 from smia.utilities import smia_archive_utils, smia_general_info

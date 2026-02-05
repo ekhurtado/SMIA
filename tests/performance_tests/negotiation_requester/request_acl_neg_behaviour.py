@@ -45,11 +45,11 @@ class RequestACLNegBehaviour(CyclicBehaviour):
             metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
         await save_csv_neg_metrics_timestamp(metrics_folder, self.myagent.jid, description='SMIA NR started')
 
-        self.num_negotiations = DockerUtils.get_env_var('NUM_NEGOTIATIONS')
-        if self.num_negotiations is None:
-            self.num_negotiations = 1
+        self.num_iterations = DockerUtils.get_env_var('NUM_ITERATIONS')
+        if self.num_iterations is None:
+            self.num_iterations = 1
         else:
-            self.num_negotiations = int(self.num_negotiations)
+            self.num_iterations = int(self.num_iterations)
 
         self.req_cycle_time = DockerUtils.get_env_var('REQUEST_CYCLE_TIME')
         if self.req_cycle_time is None:
@@ -57,14 +57,15 @@ class RequestACLNegBehaviour(CyclicBehaviour):
         else:
             self.req_cycle_time = float(self.req_cycle_time)
 
-        self.requested_negs = 0
         self.smia_instances_ids = DockerUtils.get_env_var('TARGET_IDS')
         if self.smia_instances_ids is None:
             CriticalError("The SMIA Negotiation Requester needs the identifiers of SMIA instances to request the negotiations.")
         else:
             self.smia_instances_ids = [item.strip() for item in self.smia_instances_ids.split(',') if item.strip()]
 
+        self.requested_negs_num = 0
         self.myagent.requested_negs_threads = set()
+        self.myagent.requested_negs_dict = {}
 
         _logger.info("Waiting {} seconds until the target instances are ready..."
                      "".format(0.5*len(self.smia_instances_ids)))
@@ -76,7 +77,7 @@ class RequestACLNegBehaviour(CyclicBehaviour):
         This method implements the logic of the behaviour.
         """
 
-        if self.requested_negs < self.num_negotiations:
+        if self.requested_negs_num < self.num_iterations:
 
             cfp_thread = await acl_smia_messages_utils.create_random_thread(self.myagent)
 
@@ -100,6 +101,7 @@ class RequestACLNegBehaviour(CyclicBehaviour):
             _logger.aclinfo("FIPA-CNP to thread [{}] initiated with SMIA candidates {}"
                             .format(cfp_thread, self.smia_instances_ids))
             self.myagent.requested_negs_threads.add(cfp_thread)
+            self.myagent.requested_negs_dict[cfp_thread] = self.requested_negs_num
 
             # TODO BORRAR -> es para obtener los datos para el analisis
             from smia.utilities import smia_general_info
@@ -107,13 +109,13 @@ class RequestACLNegBehaviour(CyclicBehaviour):
             if metrics_folder is None:
                 metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
             await save_csv_neg_metrics_timestamp(
-                metrics_folder, self.myagent.jid, neg_num=self.requested_negs, neg_thread=cfp_thread,
-                description='Negotiation requested with thread [{}]'.format(cfp_thread))
+                metrics_folder, self.myagent.jid, iteration=self.myagent.requested_negs_dict[cfp_thread],
+                neg_thread=cfp_thread, description='Negotiation requested with thread [{}]'.format(cfp_thread))
 
             await asyncio.sleep(self.req_cycle_time)
             #await asyncio.sleep(120)
 
-            self.requested_negs += 1
+            self.requested_negs_num += 1
 
         else:
             _logger.info("All the negotiations have been sent.")
