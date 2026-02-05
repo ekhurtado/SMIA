@@ -10,9 +10,8 @@ _logger = logging.getLogger(__name__)
 
 class ReceiveACLNegBehaviour(CyclicBehaviour):
     """
-    This class implements the behaviour that handles all the ACL messages that the SMIA PE will receive from the
-    others SMIAs in the I4.0 System. If some of these messages are responses to previous SMIA PE requests, the associated
-    BPMNPerformerBehaviour will be unlocked to continue execution of the production plan.
+    This class implements the behaviour that handles all the ACL messages that the SMIA NR (Negotiation Requester) will
+     receive about completed negotiations between others SMIAs in the I4.0 System.
     """
 
     def __init__(self, agent_object):
@@ -70,6 +69,10 @@ class ReceiveACLNegBehaviour(CyclicBehaviour):
                     metrics_folder = DockerUtils.get_env_var('METRICS_FOLDER')
                     if metrics_folder is None:
                         metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
+                    # await save_csv_neg_metrics_timestamp(
+                    #     metrics_folder, self.myagent.jid, iteration=self.myagent.requested_negs_dict[msg.thread],
+                    #     neg_thread=msg.thread, description='Negotiation error with thread [{}]: reason '
+                    #                                        '[{}]'.format(msg.thread, msg_parsed_body['reason']))
                     await save_csv_neg_metrics_timestamp(
                         metrics_folder, self.myagent.jid, iteration=self.myagent.requested_negs_dict[msg.thread],
                         neg_thread=msg.thread, description='Negotiation error with thread [{}]: reason '

@@ -4,7 +4,7 @@ import os
 
 from spade.behaviour import CyclicBehaviour
 
-from neg_requester_utils import save_csv_neg_metrics_timestamp
+from neg_requester_utils import save_csv_neg_metrics_timestamp, get_safe_env_var
 from smia import CriticalError
 from smia.logic import acl_smia_messages_utils, inter_smia_interactions_utils
 from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo, ACLSMIAJSONSchemas
@@ -14,9 +14,8 @@ _logger = logging.getLogger(__name__)
 
 class RequestACLNegBehaviour(CyclicBehaviour):
     """
-    This class implements the behaviour that handles all the ACL messages that the SMIA PE will receive from the
-    others SMIAs in the I4.0 System. If some of these messages are responses to previous SMIA PE requests, the associated
-    BPMNPerformerBehaviour will be unlocked to continue execution of the production plan.
+    This class implements the behaviour that handles all the ACL messages that the SMIA NR (Negotiation Requester) will
+     send to start negotiations between others SMIAs in the I4.0 System.
     """
 
     def __init__(self, agent_object):
@@ -45,17 +44,23 @@ class RequestACLNegBehaviour(CyclicBehaviour):
             metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
         await save_csv_neg_metrics_timestamp(metrics_folder, self.myagent.jid, description='SMIA NR started')
 
-        self.num_iterations = DockerUtils.get_env_var('NUM_ITERATIONS')
-        if self.num_iterations is None:
-            self.num_iterations = 1
-        else:
-            self.num_iterations = int(self.num_iterations)
+        # try:
+        #     self.num_iterations = int(DockerUtils.get_env_var('NUM_ITERATIONS'))
+        # except (TypeError, ValueError):
+        #     self.num_iterations = 1
+        # try:
+        #     self.parallel_negotiations = int(DockerUtils.get_env_var('PARALLEL_NEGOTIATIONS'))
+        # except (TypeError, ValueError):
+        #     self.parallel_negotiations = 1
+        #
+        # try:
+        #     self.req_cycle_time = float(DockerUtils.get_env_var('REQUEST_CYCLE_TIME'))
+        # except (TypeError, ValueError):
+        #     self.req_cycle_time = 5.0
 
-        self.req_cycle_time = DockerUtils.get_env_var('REQUEST_CYCLE_TIME')
-        if self.req_cycle_time is None:
-            self.req_cycle_time = 5.0
-        else:
-            self.req_cycle_time = float(self.req_cycle_time)
+        self.num_iterations = get_safe_env_var('NUM_ITERATIONS', default=1, var_type=int)
+        self.parallel_negotiations = get_safe_env_var('PARALLEL_NEGOTIATIONS', default=1, var_type=int)
+        self.req_cycle_time = get_safe_env_var('REQUEST_CYCLE_TIME', default=5.0, var_type=float)
 
         self.smia_instances_ids = DockerUtils.get_env_var('TARGET_IDS')
         if self.smia_instances_ids is None:
@@ -79,43 +84,46 @@ class RequestACLNegBehaviour(CyclicBehaviour):
 
         if self.requested_negs_num < self.num_iterations:
 
-            cfp_thread = await acl_smia_messages_utils.create_random_thread(self.myagent)
+            for neg_num in self.parallel_negotiations:
+                cfp_thread = await acl_smia_messages_utils.create_random_thread(self.myagent)
+                cfp_thread += f":{self.requested_negs_num}:{neg_num}"
 
-            # Since this behavior is specific to the messages with these threads, it reserves it so that the generic
-            # ACLHandlingBehavior does not process them.
-            await self.myagent.add_reserved_thread(cfp_thread)
+                # Since this behavior is specific to the messages with these threads, it reserves it so that the generic
+                # ACLHandlingBehavior does not process them.
+                await self.myagent.add_reserved_thread(cfp_thread)
 
-            for smia_instance_id in self.smia_instances_ids:
-                # await asyncio.sleep(1)  # Wait 1 second between negotiation requests
-                cfp_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
-                    smia_instance_id, cfp_thread, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_CFP,
-                    ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE, protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
-                    msg_body=await acl_smia_messages_utils.generate_json_from_schema(
-                        ACLSMIAJSONSchemas.JSON_SCHEMA_CSS_SERVICE,
-                        capabilityIRI='http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation',
-                        skillIRI='http://www.w3id.org/hsu-aut/css#NegotiationBasedOnRAM',
-                        negCriterion='http://www.w3id.org/hsu-aut/css#NegotiationBasedOnRAM',
-                        negRequester=str(self.myagent.jid), negTargets=self.smia_instances_ids))
-                await self.send(cfp_acl_message)
+                for smia_instance_id in self.smia_instances_ids:
+                    # await asyncio.sleep(1)  # Wait 1 second between negotiation requests
+                    cfp_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
+                        smia_instance_id, cfp_thread, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_CFP,
+                        ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE, protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
+                        msg_body=await acl_smia_messages_utils.generate_json_from_schema(
+                            ACLSMIAJSONSchemas.JSON_SCHEMA_CSS_SERVICE,
+                            capabilityIRI='http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation',
+                            skillIRI='http://www.w3id.org/hsu-aut/css#NegotiationBasedOnRAM',
+                            negCriterion='http://www.w3id.org/hsu-aut/css#NegotiationBasedOnRAM',
+                            negRequester=str(self.myagent.jid), negTargets=self.smia_instances_ids))
+                    await self.send(cfp_acl_message)
 
-            _logger.aclinfo("FIPA-CNP to thread [{}] initiated with SMIA candidates {}"
-                            .format(cfp_thread, self.smia_instances_ids))
-            self.myagent.requested_negs_threads.add(cfp_thread)
-            self.myagent.requested_negs_dict[cfp_thread] = self.requested_negs_num
+                _logger.aclinfo("FIPA-CNP to thread [{}] initiated with SMIA candidates {}"
+                                .format(cfp_thread, self.smia_instances_ids))
+                self.myagent.requested_negs_threads.add(cfp_thread)
+                self.myagent.requested_negs_dict[cfp_thread] = {'iteration': self.requested_negs_num,
+                                                                'neg_num': neg_num}
 
-            # TODO BORRAR -> es para obtener los datos para el analisis
-            from smia.utilities import smia_general_info
-            metrics_folder = DockerUtils.get_env_var('METRICS_FOLDER')
-            if metrics_folder is None:
-                metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
-            await save_csv_neg_metrics_timestamp(
-                metrics_folder, self.myagent.jid, iteration=self.myagent.requested_negs_dict[cfp_thread],
-                neg_thread=cfp_thread, description='Negotiation requested with thread [{}]'.format(cfp_thread))
+                # # TODO BORRAR -> es para obtener los datos para el analisis
+                # from smia.utilities import smia_general_info
+                # metrics_folder = DockerUtils.get_env_var('METRICS_FOLDER')
+                # if metrics_folder is None:
+                #     metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
+                # await save_csv_neg_metrics_timestamp(
+                #     metrics_folder, self.myagent.jid, iteration=self.myagent.requested_negs_dict[cfp_thread],
+                #     neg_thread=cfp_thread, description='Negotiation requested with thread [{}]'.format(cfp_thread))
 
             await asyncio.sleep(self.req_cycle_time)
             #await asyncio.sleep(120)
 
-            self.requested_negs_num += 1
+                self.requested_negs_num += 1
 
         else:
             _logger.info("All the negotiations have been sent.")
