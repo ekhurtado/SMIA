@@ -135,11 +135,11 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         """
         This method implements the logic of the behaviour.
         """
-        if self.initial_iteration:
-            # In the first iteration, each agent waits for a set amount of time relative to the number of participants
-            # in the negotiation to ensure that everyone has arrived at their run method.
-            await asyncio.sleep(max(3.0, 0.05*len(self.all_targets_list)))
-            self.initial_iteration = False
+        # if self.initial_iteration:
+        #     # In the first iteration, each agent waits for a set amount of time relative to the number of participants
+        #     # in the negotiation to ensure that everyone has arrived at their run method.
+        #     await asyncio.sleep(max(3, 0.05*len(self.all_targets_list)))
+        #     self.initial_iteration = False
 
         # The first step in each iteration is to send the PROPOSE message with your own value to the other participants
         # in the negotiation. In this case, one iteration is performed to distribute the communication load.
@@ -382,7 +382,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 _logger.aclinfo("ACL PROPOSE negotiation message sent to " + jid_target +
                                 "with neg value " + str(self.neg_value) +
                                 " on negotiation with thread [" + self.neg_thread + "]")
-                await asyncio.sleep(0.01)   # It waits 0.01 second for each agent involved
+                # await asyncio.sleep(0.01)   # It waits 0.01 second for each agent involved
 
     async def request_remaining_neg_acl_msgs(self):
         """
