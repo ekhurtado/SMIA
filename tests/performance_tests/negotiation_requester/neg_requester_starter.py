@@ -6,6 +6,7 @@ from smia.agents.extensible_smia_agent import ExtensibleSMIAAgent
 from smia.utilities.general_utils import DockerUtils
 
 from request_acl_neg_behaviour import RequestACLNegBehaviour
+from receive_acl_neg_behaviour import ReceiveACLNegBehaviour
 
 _logger = logging.getLogger(__name__)
 
@@ -31,8 +32,11 @@ def main():
     smia_agent = ExtensibleSMIAAgent(smia_jid, smia_psswd)
 
     # The behavior to request all ACL negotiations
-    receive_acl_behaviour = RequestACLNegBehaviour(smia_agent)
-    smia_agent.add_new_agent_capability(receive_acl_behaviour)
+    req_acl_behaviour = RequestACLNegBehaviour(smia_agent)
+    smia_agent.add_new_agent_capability(req_acl_behaviour)
+
+    recv_acl_behaviour = ReceiveACLNegBehaviour(smia_agent)
+    smia_agent.add_new_agent_capability(recv_acl_behaviour)
 
     smia.run(smia_agent)
 

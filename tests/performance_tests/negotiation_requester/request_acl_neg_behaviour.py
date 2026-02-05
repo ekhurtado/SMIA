@@ -58,8 +58,11 @@ class RequestACLNegBehaviour(CyclicBehaviour):
         else:
             self.smia_instances_ids = [item.strip() for item in self.smia_instances_ids.split(',') if item.strip()]
 
+        self.myagent.requested_negs_threads = set()
+
         _logger.info("Waiting 10 seconds until the target instances are ready...")
-        await asyncio.sleep(10)  # Wait until the target instances are ready
+        #await asyncio.sleep(5)
+        await asyncio.sleep(0.5*len(self.smia_instances_ids))  # Wait until the target instances are ready (2 seconds for each instance)
 
 
 
@@ -73,6 +76,7 @@ class RequestACLNegBehaviour(CyclicBehaviour):
 
             cfp_thread = await acl_smia_messages_utils.create_random_thread(self.myagent)
             for smia_instance_id in self.smia_instances_ids:
+                # await asyncio.sleep(1)  # Wait 1 second between negotiation requests
                 cfp_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
                     smia_instance_id, cfp_thread, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_CFP,
                     ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE, protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
@@ -83,8 +87,14 @@ class RequestACLNegBehaviour(CyclicBehaviour):
                         negRequester=str(self.myagent.jid), negTargets=self.smia_instances_ids))
                 await self.send(cfp_acl_message)
 
-            _logger.aclinfo("FIPA-CNP initiated with SMIA candidates {}".format(self.smia_instances_ids))
-            self.requested_negs += 1
+            _logger.aclinfo("FIPA-CNP to thread [{}] initiated with SMIA candidates {}".format(cfp_thread, self.smia_instances_ids))
+            
+
+            self.myagent.requested_negs_threads.add(cfp_thread)
+
+            # Since this behavior is specific to the messages with these threads, it reserves it so that the generic
+            # ACLHandlingBehavior does not process them.
+            await self.myagent.add_reserved_thread(cfp_thread)
 
             # TODO BORRAR -> es para obtener los datos para el analisis
             from smia.utilities import smia_archive_utils, smia_general_info
@@ -95,43 +105,60 @@ class RequestACLNegBehaviour(CyclicBehaviour):
             await smia_archive_utils.save_csv_metrics_timestamp(
                 metrics_folder, self.myagent.jid, 'Negotiation requested with thread [{}]'.format(cfp_thread))
 
-            # Wait for a message with the standard ACL template to arrive.
-            msg = await self.receive(
-                timeout=10)  # Timeout set to 10 seconds so as not to continuously execute the behavior.
-            if msg:
-                # This method will receive all ACL messages to the SMIA NR, so it will check if some of them are responses to
-                # previous SMIA NR requests
-                _logger.aclinfo("Analyzing ACL message... Checking if it is a response from previous SMIA NR message... "
-                                "Unlocking SMIA NR...")
-                _logger.aclinfo(msg)
-                msg_parsed_body = acl_smia_messages_utils.get_parsed_body_from_acl_msg(msg)
-                _logger.aclinfo(msg_parsed_body)
-                if 'winner' in msg_parsed_body:
-                    winner_jid = acl_smia_messages_utils.get_sender_from_acl_msg(msg)
-                    _logger.aclinfo("Received negotiation winner for thread [{}]: {}".format(
-                        cfp_thread, winner_jid))
+            await asyncio.sleep(5)
+            #await asyncio.sleep(120)
 
-                    # TODO BORRAR -> es para obtener los datos para el analisis
-                    from smia.utilities import smia_archive_utils, smia_general_info
-                    import os
-                    metrics_folder = os.environ.get('METRICS_FOLDER')
-                    if metrics_folder is None:
-                        metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
-                    await smia_archive_utils.save_csv_metrics_timestamp(
-                        metrics_folder, self.myagent.jid,
-                        'Negotiation completed with thread [{}]: winner [{}]'.format(cfp_thread, winner_jid))
-            else:
-                _logger.info("         - No message received within 10 seconds on SMIA NR (RequestACLNegBehaviour)")
+            self.requested_negs += 1
+
+            # # Wait for a message with the standard ACL template to arrive.
+            # msg = await self.receive(
+            #     timeout=10)  # Timeout set to 10 seconds so as not to continuously execute the behavior.
+            # if msg:
+            #     _logger.assetinfo("\n --------------- OLD BEHAVIOUR MSG RECEIVED --------------\nmsg: {}\n".format(msg))    # TODO BORRAR !!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+            #     # This method will receive all ACL messages to the SMIA NR, so it will check if some of them are responses to
+            #     # previous SMIA NR requests
+            #     _logger.aclinfo("Analyzing ACL message... Checking if it is a response from previous SMIA NR message... "
+            #                     "Unlocking SMIA NR...")
+            #     _logger.aclinfo(msg)
+            #     msg_parsed_body = acl_smia_messages_utils.get_parsed_body_from_acl_msg(msg)
+            #     _logger.aclinfo(msg_parsed_body)
+
+            #     _logger.assetinfo("\n --------------- Parsed msg: {}\n".format(msg_parsed_body))    # TODO BORRAR !!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+            #     if 'winner' in msg_parsed_body:
+
+            #         _logger.assetinfo("\n --------------- Winner of {} ".format(msg.thread))    # TODO BORRAR !!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+            #         winner_jid = acl_smia_messages_utils.get_sender_from_acl_msg(msg)
+
+            #         _logger.assetinfo("\n ---------------   + {} ".format(winner_jid))    # TODO BORRAR !!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+            #         _logger.aclinfo("Received negotiation winner for thread [{}]: {}".format(
+            #             msg.thread, winner_jid))
+
+            #         # TODO BORRAR -> es para obtener los datos para el analisis
+            #         from smia.utilities import smia_archive_utils, smia_general_info
+            #         import os
+            #         metrics_folder = os.environ.get('METRICS_FOLDER')
+            #         if metrics_folder is None:
+            #             metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
+            #         await smia_archive_utils.save_csv_metrics_timestamp(
+            #             metrics_folder, self.myagent.jid,
+            #             'Negotiation completed with thread [{}]: winner [{}]'.format(msg.thread, winner_jid))
+            # else:
+            #     _logger.info("         - No message received within 10 seconds on SMIA NR (RequestACLNegBehaviour)")
         else:
             _logger.info("All the negotiations have been sent.")
 
-            # TODO BORRAR -> es para obtener los datos para el analisis
-            from smia.utilities import smia_archive_utils, smia_general_info
-            import os
-            metrics_folder = os.environ.get('METRICS_FOLDER')
-            if metrics_folder is None:
-                metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
-            await self.save_ready_csv_metrics_timestamp(metrics_folder)
+            # # TODO BORRAR -> es para obtener los datos para el analisis
+            # from smia.utilities import smia_archive_utils, smia_general_info
+            # import os
+            # metrics_folder = os.environ.get('METRICS_FOLDER')
+            # if metrics_folder is None:
+            #     metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
+            # await self.save_ready_csv_metrics_timestamp(metrics_folder)
 
             await asyncio.sleep(10)
 

@@ -2,6 +2,7 @@ FROM ekhurtado/smia:latest-alpine-base
 
 COPY neg_requester_starter.py /
 COPY request_acl_neg_behaviour.py /
+COPY receive_acl_neg_behaviour.py /
 
 WORKDIR /
 
