@@ -4,7 +4,7 @@ from smia.utilities.general_utils import DockerUtils
 from spade.behaviour import CyclicBehaviour
 
 from smia.logic import acl_smia_messages_utils
-from neg_requester_utils import save_ready_csv_metrics_timestamp, save_csv_neg_metrics_timestamp
+from neg_requester_utils import save_prefix_csv_metrics_timestamp, save_csv_neg_metrics_timestamp
 
 _logger = logging.getLogger(__name__)
 
@@ -98,7 +98,7 @@ class ReceiveACLNegBehaviour(CyclicBehaviour):
                 metrics_folder = DockerUtils.get_env_var('METRICS_FOLDER')
                 if metrics_folder is None:
                     metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
-                await save_ready_csv_metrics_timestamp(metrics_folder)
+                await save_prefix_csv_metrics_timestamp(metrics_folder, self.myagent.jid, 'ready-')
 
             else:
                 _logger.info("There are yet negotiations that are not completed.")

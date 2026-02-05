@@ -10,8 +10,8 @@ async def save_csv_neg_metrics_timestamp(folder_path, agent_jid, neg_num=None, n
 
     agent_jid = await acl_smia_messages_utils.get_agent_id_from_jid(agent_jid)
     # Add ‘N/A’ if optional variables have not been specified
-    neg_num, neg_thread, description, file_prefix = [v if v is not None else "N/A" for v in
-                                                     (neg_num, neg_thread, description, file_prefix)]
+    neg_num, neg_thread, description = [v if v is not None else "N/A" for v in (neg_num, neg_thread, description)]
+    file_prefix = file_prefix or ''
 
     if not os.path.exists(folder_path):
         os.mkdir(folder_path)  # If necessary, the folder is created
@@ -27,14 +27,15 @@ async def save_csv_neg_metrics_timestamp(folder_path, agent_jid, neg_num=None, n
     except Exception as e:
         print(f"Error writing to file: {e}")
 
-async def save_ready_csv_metrics_timestamp(self, folder_path):
+async def save_prefix_csv_metrics_timestamp(folder_path, agent_jid, file_prefix=None):
+    file_prefix = file_prefix or ''
 
-    agent_jid = await acl_smia_messages_utils.get_agent_id_from_jid(self.myagent.jid)
+    agent_jid = await acl_smia_messages_utils.get_agent_id_from_jid(agent_jid)
     description = 'SMIA NR all negotiations requested'
     if not os.path.exists(folder_path):
         os.mkdir(folder_path)  # If necessary, the folder is created
 
-    file_path = f"{folder_path}/ready-{agent_jid}-metrics.csv"
+    file_path = f"{folder_path}/{file_prefix}{agent_jid}-metrics.csv"
     try:
         with open(file_path, 'a', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
