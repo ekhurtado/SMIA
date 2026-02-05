@@ -138,7 +138,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         if self.initial_iteration:
             # In the first iteration, each agent waits for a set amount of time relative to the number of participants
             # in the negotiation to ensure that everyone has arrived at their run method.
-            await asyncio.sleep(max(5.0, 0.1*len(self.all_targets_list)))
+            await asyncio.sleep(max(3.0, 0.05*len(self.all_targets_list)))
             self.initial_iteration = False
 
         # The first step in each iteration is to send the PROPOSE message with your own value to the other participants
@@ -220,7 +220,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                         _logger.assetinfo("MENSAJE: Voy a hacer un reintento (enviar REQUEST)."
                                      .format(self.neg_thread, self.current_retries))      # TODO BORRAR
                         _logger.assetinfo(
-                            "MENSAJE: Se han enviado todos los mensajes, y se han procesado {}, ahora se va"
+                            "MENSAJE: Se han enviado todos los mensajes, y se han procesado {}, ahora se va "
                             "a reintentar con los {} restantes.".format(len(self.targets_processed),
                                                                         (len(self.all_targets_list)-len(self.targets_processed))))  # TODO BORRAR
                         _logger.info("The negotiation with thread [{}] has not been resolved yet. Retry number {} "
@@ -237,16 +237,47 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                         # its processing
                         await asyncio.sleep(0.1)
                         self.safe_iterations -= 1
-                    _logger.assetinfo("MENSAJE: Se han enviado y procesado todos los mensajes ({}), finalizada negociacion "
-                                      "con thread {} con resultado {}.".format(len(self.targets_processed), self.neg_thread,
-                                                                                  self.negotiation_result['winner']))  # TODO BORRAR
-                    # In this case the negotiation is resolved, so the behaviour can be killed
-                    _logger.info("The negotiation with thread [{}] is resolved, so the behavior is killed"
-                                 .format(self.neg_thread))
-                    await self.exit_negotiation(is_winner=self.negotiation_result['winner'],
-                                                resolved_timestamp=self.negotiation_result['timestamp'])
-                    return  # killing a behaviour does not cancel its current run loop
+                    else:
+                        if self.negotiation_result is not None:
+                            _logger.assetinfo("MENSAJE: Se han enviado y procesado todos los mensajes ({}), finalizada negociacion "
+                                              "con thread {} con resultado {}.".format(len(self.targets_processed), self.neg_thread,
+                                                                                          self.negotiation_result['winner']))  # TODO BORRAR
+                            # In this case the negotiation is resolved, so the behaviour can be killed
+                            _logger.info("The negotiation with thread [{}] is resolved, so the behavior is killed"
+                                         .format(self.neg_thread))
+                            await self.exit_negotiation(is_winner=self.negotiation_result['winner'],
+                                                        resolved_timestamp=self.negotiation_result['timestamp'])
+                            return  # killing a behaviour does not cancel its current run loop
+                        else:
+                            _logger.assetinfo(
+                                "MENSAJE: No se han conseguido procesar todos los mensajes ({}), finalizada negociacion"
+                                " con thread {} con resultado negativo y enviado FAILURE.".format(
+                                    len(self.targets_processed), self.neg_thread))  # TODO BORRAR
 
+                            # In this case  the negotiation is not resolved, so a failure message is sent to the requester
+                            _logger.info(
+                                "The negotiation with thread [{}] has not been resolved in {} safe iterations, so the "
+                                "behavior is sending a 'FAILURE' message to the requester if it has not been resolved."
+                                .format(self.neg_thread, self.safe_iterations))
+
+                            missing_msgs = sum(
+                                1 for jid_target in self.all_targets_list
+                                if jid_target not in self.targets_processed
+                            )
+
+                            failure_acl_msg = await inter_smia_interactions_utils.create_acl_smia_message(
+                                self.received_body_json['negRequester'], self.neg_thread,
+                                FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE,
+                                self.received_acl_msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB),
+                                msg_body={
+                                    'reason': "Negotiation not resolved ({} propose messages are not received).".format(
+                                        missing_msgs), 'exceptionType': 'CapabilityRequestExecutionError',
+                                    'affectedElement': self.received_body_json['capabilityIRI']})
+                            await self.send(failure_acl_msg)
+                            _logger.aclinfo("ACL failure message sent for the negotiation request with thread ["
+                                            + self.neg_thread + "]")
+                            await self.exit_negotiation(is_winner=False)
+                            return  # killing a behaviour does not cancel its current run loop
 
 
     async def get_neg_value_with_criteria(self):
