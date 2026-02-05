@@ -6,48 +6,30 @@ from smia.utilities.general_utils import DockerUtils
 
 from smia.logic import acl_smia_messages_utils
 
-async def save_csv_neg_metrics(folder_path, agent_jid, participants, neg_num, iteration, elapsed_time):
 
-    agent_jid = await acl_smia_messages_utils.get_agent_id_from_jid(agent_jid)
+async def save_csv_neg_metrics(folder_path, participants, parallel_negs, neg_iter, experiment_iter, experiment_id,
+                               elapsed_time):
+
     # Add ‘N/A’ if optional variables have not been specified
-    participants, neg_num, iteration, elapsed_time = [v if v is not None else "N/A" for v in
-                                                      (participants, neg_num, iteration, elapsed_time)]
+    participants, parallel_negs, neg_iter, experiment_iter, experiment_id, elapsed_time = \
+        [v if v is not None else "N/A" for v in
+         (participants, parallel_negs, neg_iter, experiment_iter, experiment_id, elapsed_time)]
 
     if not os.path.exists(folder_path):
         os.mkdir(folder_path)  # If necessary, the folder is created
 
-    file_path = f"{folder_path}/test_{participants}_{neg_num}_metrics.csv"
+    file_path = f"{folder_path}/test_{participants}_{parallel_negs}_negs.csv"
     try:
         with open(file_path, 'a', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
             if not os.path.isfile(file_path) or os.path.getsize(file_path) == 0:
-                writer.writerow(['Participants', 'ParallelNegotiations', 'Iteration', 'ExperimentID', 'ElapsedTime'])
-            writer.writerow([f"{participants}", f"{neg_num}", f"{iteration}",
-                             f"{neg_thread}", f"{description}"])
+                writer.writerow(['FactorA', 'FactorB', 'NegIteration', 'ExperimentIteration', 'ExperimentID',
+                                 'ElapsedTime'])
+            writer.writerow([f"{participants}", f"{parallel_negs}", f"{neg_iter}", f"{experiment_iter}",
+                             f"{experiment_id}", f"{elapsed_time / 1e9:.9f}"])
     except Exception as e:
         print(f"Error writing to file: {e}")
 
-async def save_csv_neg_metrics_timestamp(folder_path, agent_jid, iteration=None, neg_thread=None,
-                                         description=None, file_prefix=None):
-
-    agent_jid = await acl_smia_messages_utils.get_agent_id_from_jid(agent_jid)
-    # Add ‘N/A’ if optional variables have not been specified
-    iteration, neg_thread, description = [v if v is not None else "N/A" for v in (iteration, neg_thread, description)]
-    file_prefix = file_prefix or ''
-
-    if not os.path.exists(folder_path):
-        os.mkdir(folder_path)  # If necessary, the folder is created
-
-    file_path = f"{folder_path}/{file_prefix}{agent_jid}-metrics.csv"
-    try:
-        with open(file_path, 'a', newline='', encoding='utf-8') as file:
-            writer = csv.writer(file)
-            if not os.path.isfile(file_path) or os.path.getsize(file_path) == 0:
-                writer.writerow(['AgentID', 'Timestamp', 'NegotiationNum', 'NegotiationThread', 'Description'])
-            writer.writerow([f"{agent_jid}", f"{get_current_timer_nanosecs():.9f}", f"{iteration}",
-                             f"{neg_thread}", f"{description}"])
-    except Exception as e:
-        print(f"Error writing to file: {e}")
 
 async def save_prefix_csv_metrics_timestamp(folder_path, agent_jid, file_prefix=None):
     file_prefix = file_prefix or ''

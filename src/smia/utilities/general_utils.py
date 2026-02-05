@@ -188,6 +188,16 @@ class GeneralUtils:
         return time.time()
 
     @staticmethod
+    def get_current_timer_nanosecs():
+        """
+        This method returns the current high-resolution timer of the SMIA in nanoseconds as an integer.
+
+        Returns:
+            int: current timestamp in nanoseconds
+        """
+        return time.perf_counter_ns()
+
+    @staticmethod
     def get_current_date_time():
         """
         This method returns the current DateTime of the SMIA. The DateTime is obtained from the UNIX timestamp.

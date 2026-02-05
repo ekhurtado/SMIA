@@ -1,10 +1,12 @@
 import logging
 
+from smia import GeneralUtils
+
 from smia.utilities.general_utils import DockerUtils
 from spade.behaviour import CyclicBehaviour
 
 from smia.logic import acl_smia_messages_utils
-from neg_requester_utils import save_prefix_csv_metrics_timestamp, save_csv_neg_metrics_timestamp
+from neg_requester_utils import save_prefix_csv_metrics_timestamp, save_csv_neg_metrics, get_safe_env_var
 
 _logger = logging.getLogger(__name__)
 
@@ -73,10 +75,11 @@ class ReceiveACLNegBehaviour(CyclicBehaviour):
                     #     metrics_folder, self.myagent.jid, iteration=self.myagent.requested_negs_dict[msg.thread],
                     #     neg_thread=msg.thread, description='Negotiation error with thread [{}]: reason '
                     #                                        '[{}]'.format(msg.thread, msg_parsed_body['reason']))
-                    await save_csv_neg_metrics_timestamp(
-                        metrics_folder, self.myagent.jid, iteration=self.myagent.requested_negs_dict[msg.thread],
-                        neg_thread=msg.thread, description='Negotiation error with thread [{}]: reason '
-                                                           '[{}]'.format(msg.thread, msg_parsed_body['reason']))
+                    csv_data = await self.get_csv_data_from_thread(msg.thread,
+                                                                   GeneralUtils.get_current_timer_nanosecs())
+                    if csv_data is not None:
+                        csv_data['elapsed_time']= 'N/A'
+                        await save_csv_neg_metrics(metrics_folder, **csv_data)
                 else:
                     winner_jid = acl_smia_messages_utils.get_sender_from_acl_msg(msg)
                     _logger.assetinfo("--> Received negotiation winner for thread [{}]: {}".format(msg.thread,
@@ -87,11 +90,13 @@ class ReceiveACLNegBehaviour(CyclicBehaviour):
                     metrics_folder = DockerUtils.get_env_var('METRICS_FOLDER')
                     if metrics_folder is None:
                         metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
-                    await save_csv_neg_metrics_timestamp(
-                        metrics_folder, self.myagent.jid, iteration=self.myagent.requested_negs_dict[msg.thread],
-                        neg_thread=msg.thread, description='Negotiation completed with thread [{}]: winner '
-                                                           '[{}]'.format(msg.thread, winner_jid))
-
+                    # await save_csv_neg_metrics_timestamp(
+                    #     metrics_folder, self.myagent.jid, iteration=self.myagent.requested_negs_dict[msg.thread],
+                    #     neg_thread=msg.thread, description='Negotiation completed with thread [{}]: winner '
+                    #                                        '[{}]'.format(msg.thread, winner_jid))
+                    csv_data = await self.get_csv_data_from_thread(msg.thread, GeneralUtils.get_current_timer_nanosecs())
+                    if csv_data is not None:
+                        await save_csv_neg_metrics(metrics_folder, **csv_data)
                 self.received_negs += 1
                 self.myagent.received_negs_threads.add(msg.thread)
 
@@ -111,3 +116,23 @@ class ReceiveACLNegBehaviour(CyclicBehaviour):
             _logger.info("         - No message received within 10 seconds on SMIA NR (ReceiveACLNegBehaviour)")
 
 
+
+    async def get_csv_data_from_thread(self, thread, received_time):
+        """
+        This methods get all the required data of the negotiation to be saved in the CSV obtaining from the information
+        in the agent using the thread.
+        """
+        if thread not in self.myagent.requested_negs_dict:
+            _logger.warning("A thread has been received that does not belong to any requested negotiation.")
+            return None
+
+        neg_request_data = self.myagent.requested_negs_dict[thread]
+        participants = len(self.myagent.negs_participants)
+        parallel_negs = get_safe_env_var('PARALLEL_NEGOTIATIONS', default=1, var_type=int)
+        neg_iter = neg_request_data['negIter']
+        experiment_iter = neg_request_data['experimentIter']
+
+        return {'participants': participants, 'parallel_negs': parallel_negs,
+                'neg_iter': neg_iter, 'experiment_iter': experiment_iter,
+                'experiment_id': f"{participants}.{parallel_negs}.{neg_iter}.{experiment_iter}",
+                'elapsed_time': received_time - neg_request_data['requestedTime']}
