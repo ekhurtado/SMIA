@@ -68,6 +68,7 @@ class RequestACLNegBehaviour(CyclicBehaviour):
         else:
             self.smia_instances_ids = [item.strip() for item in self.smia_instances_ids.split(',') if item.strip()]
 
+        self.current_experiment_iter = 1
         self.requested_all_negs = False
         self.myagent.requested_negs_threads = set()
         self.myagent.requested_negs_dict = {}
@@ -85,18 +86,21 @@ class RequestACLNegBehaviour(CyclicBehaviour):
 
         # if self.requested_negs_num < self.num_iterations:
         if not self.requested_all_negs:
-            for experiment_iter in range(1, self.num_iterations + 1):
+            # for experiment_iter in range(1, self.num_iterations + 1):
+            if self.current_experiment_iter <= self.num_iterations:
 
                 for neg_iter in range(1, self.parallel_negotiations + 1):
                     cfp_thread = await acl_smia_messages_utils.create_random_thread(self.myagent)
-                    cfp_thread += f":{experiment_iter}:{neg_iter}"
+                    cfp_thread += f":{self.current_experiment_iter}:{neg_iter}"
 
                     # Since this behavior is specific to the messages with these threads, it reserves it so that the generic
                     # ACLHandlingBehavior does not process them.
                     await self.myagent.add_reserved_thread(cfp_thread)
 
+                    # await asyncio.sleep(1)
+
                     for smia_instance_id in self.smia_instances_ids:
-                        # await asyncio.sleep(1)  # Wait 1 second between negotiation requests
+                        # await asyncio.sleep(0.01)  # Wait 1 second between negotiation requests
                         cfp_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
                             smia_instance_id, cfp_thread, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_CFP,
                             ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE, protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
@@ -113,7 +117,7 @@ class RequestACLNegBehaviour(CyclicBehaviour):
                     self.myagent.requested_negs_threads.add(cfp_thread)
                     self.myagent.requested_negs_dict[cfp_thread] = {
                         'requestedTime': GeneralUtils.get_current_timer_nanosecs(),
-                        'experimentIter': experiment_iter, 'negIter': neg_iter}
+                        'experimentIter': self.current_experiment_iter, 'negIter': neg_iter}
 
                     # # TODO BORRAR -> es para obtener los datos para el analisis
                     # from smia.utilities import smia_general_info
@@ -128,6 +132,7 @@ class RequestACLNegBehaviour(CyclicBehaviour):
                 await asyncio.sleep(self.req_cycle_time)
                 #await asyncio.sleep(120)
 
+                self.current_experiment_iter += 1
             self.requested_all_negs = True
 
         else:
