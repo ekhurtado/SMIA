@@ -35,13 +35,10 @@ class ReceiveACLNegBehaviour(CyclicBehaviour):
         """
         _logger.info("ReceiveACLNegBehaviour starting...")
 
-        self.num_iterations = DockerUtils.get_env_var('NUM_ITERATIONS')
-        if self.num_iterations is None:
-            self.num_iterations = 1
-        else:
-            self.num_iterations = int(self.num_iterations)
-        self.received_negs = 0
+        self.num_iterations = get_safe_env_var('NUM_ITERATIONS', default=1, var_type=int)
+        self.parallel_negotiations = get_safe_env_var('PARALLEL_NEGOTIATIONS', default=1, var_type=int)
 
+        self.received_negs = 0
         self.myagent.received_negs_threads = set()
 
 
@@ -80,6 +77,7 @@ class ReceiveACLNegBehaviour(CyclicBehaviour):
                     if csv_data is not None:
                         csv_data['elapsed_time']= 'N/A'
                         await save_csv_neg_metrics(metrics_folder, **csv_data)
+                        _logger.assetinfo("Saved error negotiation with thread {} in CSV file.".format(msg.thread))
                 else:
                     winner_jid = acl_smia_messages_utils.get_sender_from_acl_msg(msg)
                     _logger.assetinfo("--> Received negotiation winner for thread [{}]: {}".format(msg.thread,
@@ -97,10 +95,11 @@ class ReceiveACLNegBehaviour(CyclicBehaviour):
                     csv_data = await self.get_csv_data_from_thread(msg.thread, GeneralUtils.get_current_timer_nanosecs())
                     if csv_data is not None:
                         await save_csv_neg_metrics(metrics_folder, **csv_data)
+                        _logger.assetinfo("Saved data of negotiation with thread {} in CSV file.".format(msg.thread))
                 self.received_negs += 1
                 self.myagent.received_negs_threads.add(msg.thread)
 
-            if len(self.myagent.received_negs_threads) == self.num_iterations:
+            if len(self.myagent.received_negs_threads) == (self.num_iterations * self.parallel_negotiations):
                 _logger.assetinfo("#### ALL NEGOTIATION WINNERS RECEIVED ####")
 
                 # TODO BORRAR -> es para obtener los datos para el analisis
@@ -127,7 +126,7 @@ class ReceiveACLNegBehaviour(CyclicBehaviour):
             return None
 
         neg_request_data = self.myagent.requested_negs_dict[thread]
-        participants = len(self.myagent.negs_participants)
+        participants = self.myagent.negs_participants
         parallel_negs = get_safe_env_var('PARALLEL_NEGOTIATIONS', default=1, var_type=int)
         neg_iter = neg_request_data['negIter']
         experiment_iter = neg_request_data['experimentIter']

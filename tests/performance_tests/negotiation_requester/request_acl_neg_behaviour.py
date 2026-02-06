@@ -68,7 +68,7 @@ class RequestACLNegBehaviour(CyclicBehaviour):
         else:
             self.smia_instances_ids = [item.strip() for item in self.smia_instances_ids.split(',') if item.strip()]
 
-        self.requested_negs_num = 0
+        self.requested_all_negs = False
         self.myagent.requested_negs_threads = set()
         self.myagent.requested_negs_dict = {}
         self.myagent.negs_participants = len(self.smia_instances_ids)
@@ -83,49 +83,52 @@ class RequestACLNegBehaviour(CyclicBehaviour):
         This method implements the logic of the behaviour.
         """
 
-        if self.requested_negs_num < self.num_iterations:
+        # if self.requested_negs_num < self.num_iterations:
+        if not self.requested_all_negs:
+            for experiment_iter in range(1, self.num_iterations + 1):
 
-            for neg_iter in range(1, self.parallel_negotiations + 1):
-                cfp_thread = await acl_smia_messages_utils.create_random_thread(self.myagent)
-                cfp_thread += f":{self.requested_negs_num}:{neg_iter}"
+                for neg_iter in range(1, self.parallel_negotiations + 1):
+                    cfp_thread = await acl_smia_messages_utils.create_random_thread(self.myagent)
+                    cfp_thread += f":{experiment_iter}:{neg_iter}"
 
-                # Since this behavior is specific to the messages with these threads, it reserves it so that the generic
-                # ACLHandlingBehavior does not process them.
-                await self.myagent.add_reserved_thread(cfp_thread)
+                    # Since this behavior is specific to the messages with these threads, it reserves it so that the generic
+                    # ACLHandlingBehavior does not process them.
+                    await self.myagent.add_reserved_thread(cfp_thread)
 
-                for smia_instance_id in self.smia_instances_ids:
-                    # await asyncio.sleep(1)  # Wait 1 second between negotiation requests
-                    cfp_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
-                        smia_instance_id, cfp_thread, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_CFP,
-                        ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE, protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
-                        msg_body=await acl_smia_messages_utils.generate_json_from_schema(
-                            ACLSMIAJSONSchemas.JSON_SCHEMA_CSS_SERVICE,
-                            capabilityIRI='http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation',
-                            skillIRI='http://www.w3id.org/hsu-aut/css#NegotiationBasedOnRAM',
-                            negCriterion='http://www.w3id.org/hsu-aut/css#NegotiationBasedOnRAM',
-                            negRequester=str(self.myagent.jid), negTargets=self.smia_instances_ids))
-                    await self.send(cfp_acl_message)
+                    for smia_instance_id in self.smia_instances_ids:
+                        # await asyncio.sleep(1)  # Wait 1 second between negotiation requests
+                        cfp_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
+                            smia_instance_id, cfp_thread, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_CFP,
+                            ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE, protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
+                            msg_body=await acl_smia_messages_utils.generate_json_from_schema(
+                                ACLSMIAJSONSchemas.JSON_SCHEMA_CSS_SERVICE,
+                                capabilityIRI='http://www.w3id.org/upv-ehu/gcis/css-smia#Negotiation',
+                                skillIRI='http://www.w3id.org/hsu-aut/css#NegotiationBasedOnRAM',
+                                negCriterion='http://www.w3id.org/hsu-aut/css#NegotiationBasedOnRAM',
+                                negRequester=str(self.myagent.jid), negTargets=self.smia_instances_ids))
+                        await self.send(cfp_acl_message)
 
-                _logger.aclinfo("FIPA-CNP to thread [{}] initiated with SMIA candidates {}"
-                                .format(cfp_thread, self.smia_instances_ids))
-                self.myagent.requested_negs_threads.add(cfp_thread)
-                self.myagent.requested_negs_dict[cfp_thread] = {
-                    'requestedTime': GeneralUtils.get_current_timer_nanosecs(),
-                    'experimentIter': self.requested_negs_num, 'negIter': neg_iter}
+                    _logger.aclinfo("FIPA-CNP to thread [{}] initiated with SMIA candidates {}"
+                                    .format(cfp_thread, self.smia_instances_ids))
+                    self.myagent.requested_negs_threads.add(cfp_thread)
+                    self.myagent.requested_negs_dict[cfp_thread] = {
+                        'requestedTime': GeneralUtils.get_current_timer_nanosecs(),
+                        'experimentIter': experiment_iter, 'negIter': neg_iter}
 
-                # # TODO BORRAR -> es para obtener los datos para el analisis
-                # from smia.utilities import smia_general_info
-                # metrics_folder = DockerUtils.get_env_var('METRICS_FOLDER')
-                # if metrics_folder is None:
-                #     metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
-                # await save_csv_neg_metrics_timestamp(
-                #     metrics_folder, self.myagent.jid, iteration=self.myagent.requested_negs_dict[cfp_thread],
-                #     neg_thread=cfp_thread, description='Negotiation requested with thread [{}]'.format(cfp_thread))
+                    # # TODO BORRAR -> es para obtener los datos para el analisis
+                    # from smia.utilities import smia_general_info
+                    # metrics_folder = DockerUtils.get_env_var('METRICS_FOLDER')
+                    # if metrics_folder is None:
+                    #     metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
+                    # await save_csv_neg_metrics_timestamp(
+                    #     metrics_folder, self.myagent.jid, iteration=self.myagent.requested_negs_dict[cfp_thread],
+                    #     neg_thread=cfp_thread, description='Negotiation requested with thread [{}]'.format(cfp_thread))
 
-            await asyncio.sleep(self.req_cycle_time)
-            #await asyncio.sleep(120)
+                _logger.info("Waiting {} until the next iteration...".format(self.req_cycle_time))
+                await asyncio.sleep(self.req_cycle_time)
+                #await asyncio.sleep(120)
 
-            self.requested_negs_num += 1
+            self.requested_all_negs = True
 
         else:
             _logger.info("All the negotiations have been sent.")

@@ -18,7 +18,7 @@ async def save_csv_neg_metrics(folder_path, participants, parallel_negs, neg_ite
     if not os.path.exists(folder_path):
         os.mkdir(folder_path)  # If necessary, the folder is created
 
-    file_path = f"{folder_path}/test_{participants}_{parallel_negs}_negs.csv"
+    file_path = f"{folder_path}/test_{participants}_agents_{parallel_negs}_negs.csv"
     try:
         with open(file_path, 'a', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
