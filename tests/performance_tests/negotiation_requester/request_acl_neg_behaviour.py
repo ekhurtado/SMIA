@@ -4,7 +4,7 @@ import os
 
 from spade.behaviour import CyclicBehaviour
 
-from neg_requester_utils import save_csv_neg_metrics_timestamp, get_safe_env_var
+from neg_requester_utils import get_safe_env_var
 from smia import CriticalError, GeneralUtils
 from smia.logic import acl_smia_messages_utils, inter_smia_interactions_utils
 from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo, ACLSMIAJSONSchemas
@@ -37,12 +37,12 @@ class RequestACLNegBehaviour(CyclicBehaviour):
         """
         _logger.info("RequestACLNegBehaviour starting...")
 
-        # TODO BORRAR -> es para obtener los datos para el analisis
-        from smia.utilities import smia_general_info
-        metrics_folder = DockerUtils.get_env_var('METRICS_FOLDER')
-        if metrics_folder is None:
-            metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
-        await save_csv_neg_metrics_timestamp(metrics_folder, self.myagent.jid, description='SMIA NR started')
+        # # TODO BORRAR -> es para obtener los datos para el analisis
+        # from smia.utilities import smia_general_info
+        # metrics_folder = DockerUtils.get_env_var('METRICS_FOLDER')
+        # if metrics_folder is None:
+        #     metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
+        # await save_csv_neg_metrics_timestamp(metrics_folder, self.myagent.jid, description='SMIA NR started')
 
         # try:
         #     self.num_iterations = int(DockerUtils.get_env_var('NUM_ITERATIONS'))
@@ -85,7 +85,7 @@ class RequestACLNegBehaviour(CyclicBehaviour):
 
         if self.requested_negs_num < self.num_iterations:
 
-            for neg_iter in self.parallel_negotiations:
+            for neg_iter in range(1, self.parallel_negotiations + 1):
                 cfp_thread = await acl_smia_messages_utils.create_random_thread(self.myagent)
                 cfp_thread += f":{self.requested_negs_num}:{neg_iter}"
 
