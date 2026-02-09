@@ -48,7 +48,7 @@ class ReceiveACLNegBehaviour(CyclicBehaviour):
         """
 
         # Wait for a message with the standard ACL template to arrive.
-        msg = await self.receive(timeout=10)  # Timeout set to 10 seconds so as not to continuously execute the behavior
+        msg = await self.receive(timeout=5)  # Timeout set to 10 seconds so as not to continuously execute the behavior
         if msg:
             # This method will receive all ACL messages to the SMIA NR, so it will check if some of them are responses to
             # previous SMIA NR requests
@@ -112,8 +112,8 @@ class ReceiveACLNegBehaviour(CyclicBehaviour):
 
             else:
                 _logger.info("There are yet negotiations that are not completed.")
-        else:
-            _logger.info("         - No message received within 10 seconds on SMIA NR (ReceiveACLNegBehaviour)")
+        # else:
+        #     _logger.info("         - No message received within 10 seconds on SMIA NR (ReceiveACLNegBehaviour)")
 
 
 
