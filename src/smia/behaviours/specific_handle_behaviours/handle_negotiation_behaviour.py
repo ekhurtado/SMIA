@@ -388,7 +388,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                                 " on negotiation with thread [" + self.neg_thread + "]")
                 # await asyncio.sleep(0.01)   # It waits 0.01 second for each agent involved
                 # await asyncio.sleep(random.uniform(0.005, 0.025))   # It waits random seconds for each agent. 5–25 ms, with enough jitter to break synchronization.
-                await asyncio.sleep(random.uniform(0.015, 0.035))   # It waits random seconds for each agent. 5–25 ms, with enough jitter to break synchronization.
+                # await asyncio.sleep(random.uniform(0.015, 0.035))   # It waits random seconds for each agent. 5–25 ms, with enough jitter to break synchronization.
+                await asyncio.sleep(random.uniform(0.025, 0.045))   # It waits random seconds for each agent. 5–25 ms, with enough jitter to break synchronization.
 
     async def request_remaining_neg_acl_msgs(self):
         """
@@ -414,7 +415,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                                 "requesting the neg value on thread [" + self.neg_thread + "]")
                 # await asyncio.sleep(0.01)    # It waits 0.01 second for each agent involved
                 # await asyncio.sleep(random.uniform(0.005, 0.025))   # It waits random seconds for each agent. 5–25 ms, with enough jitter to break synchronization.
-                await asyncio.sleep(random.uniform(0.015, 0.035))   # It waits random seconds for each agent. 5–25 ms, with enough jitter to break synchronization.
+                # await asyncio.sleep(random.uniform(0.015, 0.035))   # It waits random seconds for each agent. 5–25 ms, with enough jitter to break synchronization.
+                await asyncio.sleep(random.uniform(0.025, 0.045))   # It waits random seconds for each agent. 5–25 ms, with enough jitter to break synchronization.
 
     async def handle_neg_values_tie(self, received_agent_id, received_neg_value):
         """
@@ -449,6 +451,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
             # In this case the SMIA instance has loosened the negotiation, so a False is returned
             return False
         return True
+
 
     async def exit_negotiation(self, is_winner, resolved_timestamp=None):
         """
