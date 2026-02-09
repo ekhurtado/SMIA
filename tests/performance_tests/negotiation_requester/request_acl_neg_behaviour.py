@@ -100,7 +100,7 @@ class RequestACLNegBehaviour(CyclicBehaviour):
                     # await asyncio.sleep(1)
 
                     for smia_instance_id in self.smia_instances_ids:
-                        # await asyncio.sleep(0.01)  # Wait 1 second between negotiation requests
+                        await asyncio.sleep(0.001)  # Wait 1 second between negotiation requests
                         cfp_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
                             smia_instance_id, cfp_thread, FIPAACLInfo.FIPA_ACL_PERFORMATIVE_CFP,
                             ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE, protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,

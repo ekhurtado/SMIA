@@ -145,6 +145,9 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         # in the negotiation. In this case, one iteration is performed to distribute the communication load.
         await self.send_propose_acl_msgs()  # Envia los propose en la primera iteracion de espera
 
+        if len(self.targets_remaining) == 0:
+            await asyncio.sleep(random.uniform(1, 2))
+
         # Wait for a message with the standard ACL template for negotiating to arrive.
         msg = await self.receive(timeout=0)  # Timeout set to 0s to continuously execute the behavior
         if msg:
@@ -228,7 +231,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                                      .format(self.neg_thread, self.current_retries))
                         await self.request_remaining_neg_acl_msgs()
                         # 0.2 seconds are waited for each agent to receive messages
-                        await asyncio.sleep(0.2*(len(self.all_targets_list)-len(self.targets_processed)))
+                        # await asyncio.sleep(0.2*(len(self.all_targets_list)-len(self.targets_processed)))
+                        await asyncio.sleep(random.uniform(1, 2))
                         self.current_retries += 1
                 else:
                     # In this case, all agents have been processed, so this agent has resolved the negotiation
@@ -382,7 +386,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 _logger.aclinfo("ACL PROPOSE negotiation message sent to " + jid_target +
                                 "with neg value " + str(self.neg_value) +
                                 " on negotiation with thread [" + self.neg_thread + "]")
-                await asyncio.sleep(0.01)   # It waits 0.01 second for each agent involved
+                # await asyncio.sleep(0.01)   # It waits 0.01 second for each agent involved
+                await asyncio.sleep(random.uniform(0.005, 0.025))   # It waits random seconds for each agent. 5–25 ms, with enough jitter to break synchronization.
 
     async def request_remaining_neg_acl_msgs(self):
         """
@@ -406,7 +411,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 await self.send(request_acl_message)
                 _logger.aclinfo("ACL REQUEST negotiation message sent to " + jid_target +
                                 "requesting the neg value on thread [" + self.neg_thread + "]")
-                await asyncio.sleep(0.01)    # It waits 0.01 second for each agent involved
+                # await asyncio.sleep(0.01)    # It waits 0.01 second for each agent involved
+                await asyncio.sleep(random.uniform(0.005, 0.025))   # It waits random seconds for each agent. 5–25 ms, with enough jitter to break synchronization.
 
     async def handle_neg_values_tie(self, received_agent_id, received_neg_value):
         """
