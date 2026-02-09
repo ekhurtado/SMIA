@@ -80,8 +80,9 @@ class ReceiveACLNegBehaviour(CyclicBehaviour):
                         _logger.assetinfo("Saved error negotiation with thread {} in CSV file.".format(msg.thread))
                 else:
                     winner_jid = acl_smia_messages_utils.get_sender_from_acl_msg(msg)
-                    _logger.assetinfo("--> Received negotiation winner for thread [{}]: {}".format(msg.thread,
-                                                                                                   winner_jid))
+                    _logger.assetinfo("--> Received negotiation winner for thread [{}] ({}/{}): {}"
+                                      .format(msg.thread, len(self.myagent.received_negs_threads) + 1,
+                                              (self.num_iterations * self.parallel_negotiations), winner_jid))
 
                     # TODO BORRAR -> es para obtener los datos para el analisis
                     from smia.utilities import smia_archive_utils, smia_general_info

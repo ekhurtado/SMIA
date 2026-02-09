@@ -146,7 +146,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         await self.send_propose_acl_msgs()  # Envia los propose en la primera iteracion de espera
 
         if len(self.targets_remaining) == 0:
-            await asyncio.sleep(random.uniform(1, 2))
+            await asyncio.sleep(random.uniform(0.2, 2))
 
         # Wait for a message with the standard ACL template for negotiating to arrive.
         msg = await self.receive(timeout=0)  # Timeout set to 0s to continuously execute the behavior
@@ -231,8 +231,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                                      .format(self.neg_thread, self.current_retries))
                         await self.request_remaining_neg_acl_msgs()
                         # 0.2 seconds are waited for each agent to receive messages
-                        # await asyncio.sleep(0.2*(len(self.all_targets_list)-len(self.targets_processed)))
-                        await asyncio.sleep(random.uniform(1, 2))
+                        await asyncio.sleep(0.2*(len(self.all_targets_list)-len(self.targets_processed)))
+                        # await asyncio.sleep(random.uniform(1, 2))
                         self.current_retries += 1
                 else:
                     # In this case, all agents have been processed, so this agent has resolved the negotiation

@@ -97,7 +97,7 @@ class RequestACLNegBehaviour(CyclicBehaviour):
                     # ACLHandlingBehavior does not process them.
                     await self.myagent.add_reserved_thread(cfp_thread)
 
-                    # await asyncio.sleep(1)
+                    await asyncio.sleep(0.05*self.parallel_negotiations)
 
                     for smia_instance_id in self.smia_instances_ids:
                         await asyncio.sleep(0.001)  # Wait 1 second between negotiation requests
