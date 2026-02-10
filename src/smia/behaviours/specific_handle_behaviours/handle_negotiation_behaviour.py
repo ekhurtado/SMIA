@@ -56,7 +56,6 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
 
         self.neg_value = 0.0
         self.negotiation_result = None
-        self.initial_iteration = True
 
         # If not all proposals have been received, three retries are set to request them again (using request)
         self.max_retries = 3
@@ -64,7 +63,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
 
         # The safe iterations (to keep the behavior alive in case the other participants have not finished processing)
         # are set depending on the number of participants in the negotiation. The total number of iterations is at
-        # least 10 or the number of targets
+        # least 10 or based on the number of targets
         self.safe_iterations = max(10, int(len(self.received_body_json['negTargets'])*0.2))
 
         self.requested_timestamp = GeneralUtils.get_current_timestamp()
@@ -115,20 +114,20 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         else:
             # In this case, there are multiple participants, so it will execute the FIPA-SMIA-CNP protocol
             try:
-                # Dynamic timeout between messages
-                # Calculate the waiting time to give it time to process incoming messages while sending messages
-                time_base = 0.005
-                time_jitter = 0.001
+                # First, the times between message transmissions and active waiting times for reception are calculated.
+                # Dynamic wait time between messages: wait time to allow incoming messages to be processed while other
+                # messages are being sent.
+                time_base = 0.005   # is set as the minimum time to serialize an XMPP message.
+                time_jitter = 0.001 # Randomness to avoid scenarios where everyone sends at the same time
                 time_sleep_base = time_base + (len(self.received_body_json['negTargets']) * time_jitter)
                 time_sleep_range = time_sleep_base * 0.1    # 10 %
                 self.time_sleep = time_sleep_base + random.uniform(-time_sleep_range, 0)
 
-                # Dynamic recovery timeout
-                security_factor = 3.0
+                # Dynamic recovery timeout: waiting time to process messages to be received once all messages have been
+                # sent (e.g., when sending retry requests)
+                security_factor = 3.0   # A multiplier to absorb network delays
                 total_transmission_time = (len(self.received_body_json['negTargets']) - 1) * self.time_sleep
                 self.recovery_wait = total_transmission_time * security_factor
-
-                _logger.assetinfo("Time sleep [{}] and recovery [{}]".format(self.time_sleep, self.recovery_wait))  # TODO BORRAR
 
                 #  The value of the criterion must be obtained just before starting to manage the negotiation, so that at the
                 #  time of sending the PROPOSE and receiving that of the others it will be the same value.
@@ -239,14 +238,6 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 if len(self.targets_processed) < len(self.all_targets_list):
                     if self.current_retries < self.max_retries:
                         # In this case, not all agents have been processed and there are still retries remaining
-                        _logger.assetinfo("MENSAJE: INICIANDO TANDA DE RECUPERACION N: {}."
-                                          .format(self.current_retries + 1))  # TODO BORRAR
-                        _logger.assetinfo("MENSAJE: Voy a hacer un reintento (enviar REQUEST)."
-                                     .format(self.neg_thread, self.current_retries))      # TODO BORRAR
-                        _logger.assetinfo(
-                            "MENSAJE: Se han enviado todos los mensajes, y se han procesado {}, ahora se va "
-                            "a reintentar con los {} restantes.".format(len(self.targets_processed),
-                                                                        (len(self.all_targets_list)-len(self.targets_processed))))  # TODO BORRAR
                         _logger.info("The negotiation with thread [{}] has not been resolved yet. Retry number {} "
                                      "requesting the negotiation value from the remaining targets."
                                      .format(self.neg_thread, self.current_retries + 1))
@@ -265,9 +256,6 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                         self.safe_iterations -= 1
                     else:
                         if self.negotiation_result is not None:
-                            _logger.assetinfo("MENSAJE: Se han enviado y procesado todos los mensajes ({}), finalizada negociacion "
-                                              "con thread {} con resultado {}.".format(len(self.targets_processed), self.neg_thread,
-                                                                                          self.negotiation_result['winner']))  # TODO BORRAR
                             # In this case the negotiation is resolved, so the behaviour can be killed
                             _logger.info("The negotiation with thread [{}] is resolved, so the behavior is killed"
                                          .format(self.neg_thread))
@@ -275,11 +263,6 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                                                         resolved_timestamp=self.negotiation_result['timestamp'])
                             return  # killing a behaviour does not cancel its current run loop
                         else:
-                            _logger.assetinfo(
-                                "MENSAJE: No se han conseguido procesar todos los mensajes ({}), finalizada negociacion"
-                                " con thread {} con resultado negativo y enviado FAILURE.".format(
-                                    len(self.targets_processed), self.neg_thread))  # TODO BORRAR
-
                             # In this case  the negotiation is not resolved, so a failure message is sent to the requester
                             _logger.info(
                                 "The negotiation with thread [{}] has not been resolved in {} safe iterations, so the "
@@ -426,9 +409,6 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
             protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL,
             msg_body={'requestedData': 'negValue'})
 
-        _logger.assetinfo("Thread [{}] Processed agents (do not need to request) [{}]".format(
-            self.neg_thread, self.targets_processed))  # TODO BORRAR BUG TEST
-
         # This REQUEST FIPA-ACL message is sent to all participants of the negotiation (except for this SMIA)
         for jid_target in self.all_targets_list:
             if (jid_target not in self.targets_processed) and (jid_target != str(self.myagent.jid)):
@@ -466,11 +446,6 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         scores_dict_disturbed = {opt: scores_dict[opt] * (1 + perturbations[opt])
                                  for opt in perturbations}
 
-        # _logger.assetinfo("Received value [{}] from [{}] to be compared with my value [{}]".format(
-        #     received_agent_id, received_neg_value, self.neg_value))  # TODO BORRAR BUG TEST
-        # _logger.assetinfo("The SMIA has a negotiation tie with thread [{}], with values [{}]".format(
-        #     self.received_acl_msg.thread, scores_dict_disturbed))  # TODO BORRAR BUG TEST
-
         if max(scores_dict_disturbed, key=lambda k: scores_dict_disturbed[k]) != str(self.myagent.jid):
             # In this case the SMIA instance has loosened the negotiation, so a False is returned
             return False
@@ -488,10 +463,6 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
             is_winner (bool): it determines whether the SMIA has been the winner of the negotiation.
             resolved_timestamp (int): timestamp when the negotiation is resolved.
         """
-        _logger.assetinfo("The SMIA has finished the negotiation with thread [{}], with the value [{}]"
-                          ", so the result is {}".format(
-            self.received_acl_msg.thread, self.neg_value, is_winner)) # TODO BORRAR BUG TEST
-
         if is_winner:
             _logger.info("The SMIA has finished the negotiation with thread [" + self.neg_thread +
                          "] as the winner")
