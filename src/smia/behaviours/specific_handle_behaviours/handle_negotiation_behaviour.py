@@ -120,11 +120,11 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 time_base = 0.005
                 time_jitter = 0.001
                 time_sleep_base = time_base + (len(self.received_body_json['negTargets']) * time_jitter)
-                time_sleep_range = time_sleep_base * 0.2    # 20 %
+                time_sleep_range = time_sleep_base * 0.1    # 10 %
                 self.time_sleep = time_sleep_base + random.uniform(-time_sleep_range, 0)
 
                 # Dynamic recovery timeout
-                security_factor = 1.5
+                security_factor = 3.0
                 total_transmission_time = (len(self.received_body_json['negTargets']) - 1) * self.time_sleep
                 self.recovery_wait = total_transmission_time * security_factor
 
@@ -161,11 +161,14 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         await self.send_propose_acl_msgs()  # Envia los propose en la primera iteracion de espera
 
         if len(self.targets_remaining) == 0:
-            await asyncio.sleep(self.recovery_wait)
+            timeout = self.recovery_wait
+            # await asyncio.sleep(self.recovery_wait)
+        else:
+            timeout = 0
             # await asyncio.sleep(random.uniform(0.2, 2))
 
         # Wait for a message with the standard ACL template for negotiating to arrive.
-        msg = await self.receive(timeout=0)  # Timeout set to 0s to continuously execute the behavior
+        msg = await self.receive(timeout=timeout)  # Timeout set to 0s to continuously execute the behavior
         if msg:
             if msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB) == FIPAACLInfo.FIPA_ACL_PERFORMATIVE_PROPOSE:
                 # A PROPOSE ACL message has been received by the agent
@@ -237,7 +240,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                     if self.current_retries < self.max_retries:
                         # In this case, not all agents have been processed and there are still retries remaining
                         _logger.assetinfo("MENSAJE: INICIANDO TANDA DE RECUPERACION N: {}."
-                                          .format(self.current_retries))  # TODO BORRAR
+                                          .format(self.current_retries + 1))  # TODO BORRAR
                         _logger.assetinfo("MENSAJE: Voy a hacer un reintento (enviar REQUEST)."
                                      .format(self.neg_thread, self.current_retries))      # TODO BORRAR
                         _logger.assetinfo(
@@ -251,7 +254,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                         # 0.2 seconds are waited for each agent to receive messages
                         # await asyncio.sleep(0.2*(len(self.all_targets_list)-len(self.targets_processed)))
                         # await asyncio.sleep(random.uniform(0.2, 2))
-                        await asyncio.sleep(self.recovery_wait)
+                        # await asyncio.sleep(self.recovery_wait)
                         self.current_retries += 1
                 else:
                     # In this case, all agents have been processed, so this agent has resolved the negotiation
