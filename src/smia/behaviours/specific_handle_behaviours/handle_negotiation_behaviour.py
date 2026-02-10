@@ -65,7 +65,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         # The safe iterations (to keep the behavior alive in case the other participants have not finished processing)
         # are set depending on the number of participants in the negotiation. The total number of iterations is at
         # least 10 or the number of targets
-        self.safe_iterations = max(10, int(len(self.received_body_json['negTargets']*0.2)))
+        self.safe_iterations = max(10, int(len(self.received_body_json['negTargets'])*0.2))
 
         self.requested_timestamp = GeneralUtils.get_current_timestamp()
 
