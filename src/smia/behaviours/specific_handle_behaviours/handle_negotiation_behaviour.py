@@ -249,7 +249,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                                                                         (len(self.all_targets_list)-len(self.targets_processed))))  # TODO BORRAR
                         _logger.info("The negotiation with thread [{}] has not been resolved yet. Retry number {} "
                                      "requesting the negotiation value from the remaining targets."
-                                     .format(self.neg_thread, self.current_retries))
+                                     .format(self.neg_thread, self.current_retries + 1))
                         await self.request_remaining_neg_acl_msgs()
                         # 0.2 seconds are waited for each agent to receive messages
                         # await asyncio.sleep(0.2*(len(self.all_targets_list)-len(self.targets_processed)))
@@ -261,7 +261,9 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                     if self.safe_iterations > 0:
                         # In safe iterations, it waits 0.1 second in case there is any agent that has not completed
                         # its processing
-                        await asyncio.sleep(0.1)
+                        _logger.assetinfo("MENSAJE: ESTOY EN SAFE ITERATIONS: {}".format(self.safe_iterations))  # TODO borrar
+                        await asyncio.sleep(5.0)
+                        # await asyncio.sleep(0.1)
                         self.safe_iterations -= 1
                     else:
                         if self.negotiation_result is not None:

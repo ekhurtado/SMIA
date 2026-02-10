@@ -122,7 +122,8 @@ class RequestACLNegBehaviour(CyclicBehaviour):
                 'experimentIter': current_msg_info['experimentIter'], 'negIter': current_msg_info['negIter']}
 
             if current_msg_info['is_last']:
-                await asyncio.sleep(0.2)
+                await asyncio.sleep(1.0)
+                # await asyncio.sleep(0.2)
 
 
 
