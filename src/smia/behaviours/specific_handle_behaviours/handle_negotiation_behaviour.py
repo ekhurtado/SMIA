@@ -118,7 +118,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 # Dynamic timeout between messages
                 # Calculate the waiting time to give it time to process incoming messages while sending messages
                 time_base = 0.005
-                time_jitter = 0.005
+                time_jitter = 0.001
                 time_sleep_base = time_base + (len(self.received_body_json['negTargets']) * time_jitter)
                 time_sleep_range = time_sleep_base * 0.2    # 20 %
                 self.time_sleep = time_sleep_base + random.uniform(-time_sleep_range, 0)
@@ -127,6 +127,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 security_factor = 1.5
                 total_transmission_time = (len(self.received_body_json['negTargets']) - 1) * self.time_sleep
                 self.recovery_wait = total_transmission_time * security_factor
+
+                _logger.assetinfo("Time sleep [{}] and recovery [{}]".format(self.time_sleep, self.recovery_wait))  # TODO BORRAR
 
                 #  The value of the criterion must be obtained just before starting to manage the negotiation, so that at the
                 #  time of sending the PROPOSE and receiving that of the others it will be the same value.
@@ -234,6 +236,8 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                 if len(self.targets_processed) < len(self.all_targets_list):
                     if self.current_retries < self.max_retries:
                         # In this case, not all agents have been processed and there are still retries remaining
+                        _logger.assetinfo("MENSAJE: INICIANDO TANDA DE RECUPERACION N: {}."
+                                          .format(self.current_retries))  # TODO BORRAR
                         _logger.assetinfo("MENSAJE: Voy a hacer un reintento (enviar REQUEST)."
                                      .format(self.neg_thread, self.current_retries))      # TODO BORRAR
                         _logger.assetinfo(
