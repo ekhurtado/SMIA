@@ -65,7 +65,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
         # The safe iterations (to keep the behavior alive in case the other participants have not finished processing)
         # are set depending on the number of participants in the negotiation. The total number of iterations is at
         # least 10 or the number of targets
-        self.safe_iterations = max(10, len(self.received_body_json['negTargets']))
+        self.safe_iterations = max(10, int(len(self.received_body_json['negTargets']*0.2)))
 
         self.requested_timestamp = GeneralUtils.get_current_timestamp()
 
@@ -261,9 +261,7 @@ class HandleNegotiationBehaviour(CyclicBehaviour):
                     if self.safe_iterations > 0:
                         # In safe iterations, it waits 0.1 second in case there is any agent that has not completed
                         # its processing
-                        _logger.assetinfo("MENSAJE: ESTOY EN SAFE ITERATIONS: {}".format(self.safe_iterations))  # TODO borrar
-                        await asyncio.sleep(5.0)
-                        # await asyncio.sleep(0.1)
+                        await asyncio.sleep(0.5)
                         self.safe_iterations -= 1
                     else:
                         if self.negotiation_result is not None:
