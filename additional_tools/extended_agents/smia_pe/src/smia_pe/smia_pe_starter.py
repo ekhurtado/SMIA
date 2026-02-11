@@ -41,13 +41,13 @@ def main():
     receive_acl_behaviour = ReceiveACLBehaviour(smia_pe_agent)
     smia_pe_agent.add_new_agent_capability(receive_acl_behaviour)
 
-    # The behaviour for executing the CSS-driven BPMN production plan is added
-    bpmn_performer_behaviour = BPMNPerformerBehaviour(smia_pe_agent)
-    smia_pe_agent.add_new_agent_capability(bpmn_performer_behaviour)
-
     # The graphical web user interface is also added in order to manage the BPMN workflow
     smia_pe_gui_behaviour = SMIAPEGUIBehaviour()
     smia_pe_agent.add_new_agent_capability(smia_pe_gui_behaviour)
+
+    # The behaviour for executing the CSS-driven BPMN production plan is added
+    bpmn_performer_behaviour = BPMNPerformerBehaviour(smia_pe_agent)
+    smia_pe_agent.add_new_agent_capability(bpmn_performer_behaviour)
 
     smia.run(smia_pe_agent)
 
