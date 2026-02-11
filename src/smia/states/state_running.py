@@ -31,7 +31,7 @@ class StateRunning(State):
             metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
         else:
             await smia_archive_utils.save_csv_calculated_metrics(metrics_folder, self.agent.jid, 0,
-                                                                 'SMIA ready', 'ready-')
+                                                                 'SMIA ready', 'registered-')
 
         # SMIA is in the Running status
         smia_archive_utils.update_status('Running')
