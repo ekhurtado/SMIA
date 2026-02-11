@@ -156,7 +156,7 @@ class StateBooting(State):
                      "KB.".format(smia_ism_jid))
         await self.send(register_acl_msg)
         _logger.info("Waiting for the confirmation of the registry in the SMIA KB...")
-        msg = await self.receive(timeout=15)  # TODO DELETE: CHANGED FOR REGISTRATION PERFORMANCE TEST
+        msg = await self.receive(timeout=30)  # TODO DELETE: CHANGED FOR REGISTRATION PERFORMANCE TEST
         # msg = await self.receive(timeout=5)  # Timeout set to 5 seconds
         if msg:
             valid_msg_template = GeneralUtils.create_acl_template(
