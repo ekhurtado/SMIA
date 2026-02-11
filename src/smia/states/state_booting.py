@@ -115,7 +115,7 @@ class StateBooting(State):
                      "instance in the SMIA KB.".format(smia_ism_jid))
         await self.send(register_acl_msg)
         _logger.info("Waiting for the confirmation of the registry in the SMIA KB...")
-        msg = await self.receive(timeout=10)  # Timeout set to 10 seconds
+        msg = await self.receive(timeout=30)  # Timeout set to 10 seconds
         if msg:
             valid_msg_template = GeneralUtils.create_acl_template(
                 FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM, ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE)
@@ -180,6 +180,8 @@ class StateBooting(State):
                     await smia_archive_utils.save_csv_calculated_metrics(metrics_folder, self.agent.jid,
                                                                          registered_time-self.agent.setup_time,
                                                                          'Time elapsed for SMIA registration')
+                    _logger.assetinfo("ALMACENADO TIEMPO {} en {}".format(metrics_folder,
+                                                                          registered_time-self.agent.setup_time))  # TODO BORRAR
 
             else:
                 ("A message arrived but it is not about the registration. Sender [{}], Performative [{}], "
