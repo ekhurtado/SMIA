@@ -73,7 +73,7 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
             'Obtaining BPMN file ...', 'message': 'The BPMN file has been obtained from the AAS model.'})
 
         _logger.info("SMIA PE will wait 15 seconds for other instances to complete their initializations..")
-        await asyncio.sleep(15)
+        # await asyncio.sleep(15)   # TODO DELETED FOR PERFORMANCE TESTS
 
     async def run(self):
         """
@@ -189,7 +189,7 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
         metrics_folder = os.environ.get('METRICS_FOLDER')
         if metrics_folder is None:
             metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
-        await smia_bpmn_utils.save_csv_bpmn_calculated_metrics(metrics_folder, 0 , 'ready-')
+        await smia_bpmn_utils.save_csv_bpmn_calculated_metrics(metrics_folder, 0.0 , 'ready-bpmn-')
 
 
         # Before executing the BPMN element it is necessary to check if some additional tasks need to be done

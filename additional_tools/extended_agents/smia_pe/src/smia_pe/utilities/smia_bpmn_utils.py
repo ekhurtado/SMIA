@@ -328,7 +328,7 @@ async def save_csv_bpmn_calculated_metrics(folder_path, elapsed_time, file_prefi
     from smia.utilities.general_utils import DockerUtils
 
     # Add ‘N/A’ if optional variables have not been specified
-    elapsed_time = elapsed_time or 'N/A'
+    elapsed_time = elapsed_time or 0.0
     file_prefix = file_prefix or ''
 
     bpmn_elements = DockerUtils.get_safe_env_var('BPMN_ELEMENTS', 0, int)
@@ -338,7 +338,7 @@ async def save_csv_bpmn_calculated_metrics(folder_path, elapsed_time, file_prefi
     if not os.path.exists(folder_path):
         os.mkdir(folder_path)  # If necessary, the folder is created
 
-    file_path = f"{folder_path}/test_{bpmn_elements}_bpmn.csv"
+    file_path = f"{folder_path}/{file_prefix}test_{bpmn_elements}_bpmn.csv"
     try:
         with open(file_path, 'a', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
