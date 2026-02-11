@@ -162,6 +162,22 @@ class StateBooting(State):
                 FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM, ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE)
             if valid_msg_template.match(msg) and msg.thread == register_acl_msg.thread:
                 _logger.aclinfo("SMIA instance successfully registered in the SMIA KB")
+
+                # TODO DELETE: REGISTRATION PERFORMANCE TEST
+                from smia.utilities import smia_archive_utils, smia_general_info
+                import os
+                registered_time = GeneralUtils.get_current_timer_nanosecs()
+                metrics_folder = os.environ.get('METRICS_FOLDER')
+                if metrics_folder is None:
+                    metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
+                if self.agent.setup_time is None:
+                    _logger.error("The registration time could not be obtained because the agent does not have the "
+                                  "specified start time.")
+                else:
+                    await smia_archive_utils.save_csv_calculated_metrics(metrics_folder, self.agent.jid,
+                                                                         registered_time-self.agent.setup_time,
+                                                                         'Time elapsed for SMIA registration')
+
             else:
                 ("A message arrived but it is not about the AAS model. Sender [{}], Performative [{}], "
                  "Ontology [{}]".format(acl_smia_messages_utils.get_sender_from_acl_msg(msg),

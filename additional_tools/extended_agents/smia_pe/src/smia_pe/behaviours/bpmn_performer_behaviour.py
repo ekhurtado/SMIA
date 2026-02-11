@@ -3,6 +3,7 @@ import logging
 
 from SpiffWorkflow.bpmn.parser import BpmnParser
 from SpiffWorkflow.bpmn.specs.defaults import ServiceTask
+
 from smia import CriticalError, GeneralUtils
 from smia.logic import inter_smia_interactions_utils, acl_smia_messages_utils
 from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
@@ -52,6 +53,8 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
         This method implements the initialization process of this behaviour.
         """
         _logger.info("BPMNPerformerBehaviour starting...")
+
+        self.bpmn_start_time = GeneralUtils.get_current_timer_nanosecs()
 
         # The variable for execution information about the SMIA PE is initialized
         self.myagent.smia_pe_info = {'Status': 'Starting', 'StartTime': GeneralUtils.get_current_date_time(),
@@ -128,6 +131,18 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
         """
         This method executes the BPMN workflow.
         """
+
+        # TODO DELETE: REGISTRATION PERFORMANCE TEST
+        from smia.utilities import smia_general_info
+        from utilities import smia_bpmn_utils
+        import os
+        bpmn_finished_time = GeneralUtils.get_current_timer_nanosecs()
+        metrics_folder = os.environ.get('METRICS_FOLDER')
+        if metrics_folder is None:
+            metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
+        await smia_bpmn_utils.save_csv_bpmn_calculated_metrics(metrics_folder,
+                                                               bpmn_finished_time - self.bpmn_start_time)
+
         # Let's start from the beginning
         current_elem = self.process_parser.get_spec().start
 
@@ -166,6 +181,17 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
         Args:
             current_bpmn_elem: BPMN element object.
         """
+
+        # TODO DELETE: REGISTRATION PERFORMANCE TEST
+        from smia.utilities import smia_general_info
+        from utilities import smia_bpmn_utils
+        import os
+        metrics_folder = os.environ.get('METRICS_FOLDER')
+        if metrics_folder is None:
+            metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
+        await smia_bpmn_utils.save_csv_bpmn_calculated_metrics(metrics_folder, 0 , 'ready-')
+
+
         # Before executing the BPMN element it is necessary to check if some additional tasks need to be done
         if isinstance(current_bpmn_elem, ServiceTask):
             # Only ServiceTasks can be executed by SMIA PE

@@ -450,3 +450,26 @@ async def save_csv_metrics_timestamp(folder_path, agent_jid, description=None, f
             writer.writerow([f"{agent_jid}", f"{GeneralUtils.get_current_timestamp_microsecs():.4f}", f"{description}"])
     except Exception as e:
         print(f"Error writing to file: {e}")
+
+
+async def save_csv_calculated_metrics(folder_path, agent_jid, elapsed_time, description=None, file_prefix=None):
+    import csv
+    from smia.logic import acl_smia_messages_utils
+
+    agent_jid = await acl_smia_messages_utils.get_agent_id_from_jid(agent_jid)
+    if description is None:
+        description = ''
+    if not os.path.exists(folder_path):
+        os.mkdir(folder_path)  # If necessary, the folder is created
+    if file_prefix is None:
+        file_prefix = ''
+
+    file_path = f"{folder_path}/{file_prefix}{agent_jid}-metrics.csv"
+    try:
+        with open(file_path, 'a', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
+            if not os.path.isfile(file_path) or os.path.getsize(file_path) == 0:
+                writer.writerow(['AgentID', 'ElapsedTime', 'Description'])
+            writer.writerow([f"{agent_jid}", f"{elapsed_time / 1e9:.9f}", f"{description}"])
+    except Exception as e:
+        print(f"Error writing to file: {e}")

@@ -23,6 +23,16 @@ class StateRunning(State):
         """
         _logger.info("## STATE 2: RUNNING ##  (Initial state)")
 
+        # TODO DELETE: REGISTRATION PERFORMANCE TEST
+        from smia.utilities import smia_archive_utils, smia_general_info
+        import os
+        metrics_folder = os.environ.get('METRICS_FOLDER')
+        if metrics_folder is None:
+            metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
+        else:
+            await smia_archive_utils.save_csv_calculated_metrics(metrics_folder, self.agent.jid, 0,
+                                                                 'SMIA ready', 'ready-')
+
         # SMIA is in the Running status
         smia_archive_utils.update_status('Running')
 

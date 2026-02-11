@@ -359,3 +359,18 @@ class DockerUtils:
                             "necessary.".format(env_var_name))
             return None
         return env_var_value
+
+    @staticmethod
+    def get_safe_env_var(key, default, var_type):
+        """
+        Gets an environment variable, converts it to the desired type, and returns the default if it fails or does not
+        exist.
+
+        Returns:
+            var_type: value of the environmental variable.
+        """
+        try:
+            value = DockerUtils.get_env_var(key)
+            return var_type(value)
+        except (TypeError, ValueError, AttributeError):
+            return default

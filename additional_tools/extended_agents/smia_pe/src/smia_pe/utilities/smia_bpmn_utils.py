@@ -317,3 +317,33 @@ class SMIABPMNUtils:
                         # The behaviour is also unlocked
                         behaviour.acl_request_event.set()
                         _logger.info("BPMNPerformerBehaviour unlocked by the timeout management method.")
+
+
+
+
+async def save_csv_bpmn_calculated_metrics(folder_path, elapsed_time, file_prefix=None):
+    import csv
+    import os
+    from smia.logic import acl_smia_messages_utils
+    from smia.utilities.general_utils import DockerUtils
+
+    # Add ‘N/A’ if optional variables have not been specified
+    elapsed_time = elapsed_time or 'N/A'
+    file_prefix = file_prefix or ''
+
+    bpmn_elements = DockerUtils.get_safe_env_var('BPMN_ELEMENTS', 0, int)
+    iteration = DockerUtils.get_safe_env_var('ITERATION', 0, int)
+    experiment_id = f"{bpmn_elements}.{iteration}"
+
+    if not os.path.exists(folder_path):
+        os.mkdir(folder_path)  # If necessary, the folder is created
+
+    file_path = f"{folder_path}/test_{bpmn_elements}_bpmn.csv"
+    try:
+        with open(file_path, 'a', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
+            if not os.path.isfile(file_path) or os.path.getsize(file_path) == 0:
+                writer.writerow(['Factor', 'Iteration', 'ExperimentID', 'ElapsedTime'])
+            writer.writerow([f"{bpmn_elements}", f"{iteration}", f"{experiment_id}", f"{elapsed_time / 1e9:.9f}"])
+    except Exception as e:
+        print(f"Error writing to file: {e}")

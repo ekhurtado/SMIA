@@ -95,6 +95,10 @@ class SMIAAgent(Agent):
         """
         _logger.info(f"Setting up {self.jid} SMIA...")
 
+        # TODO DELETE: REGISTRATION PERFORMANCE TEST
+
+        self.setup_time = GeneralUtils.get_current_timer_nanosecs()
+
         # First, the FSMBehaviour is instantiated
         fsm_behaviour = AASFSMBehaviour()
 
