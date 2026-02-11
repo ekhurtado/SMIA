@@ -115,7 +115,7 @@ class StateBooting(State):
                      "instance in the SMIA KB.".format(smia_ism_jid))
         await self.send(register_acl_msg)
         _logger.info("Waiting for the confirmation of the registry in the SMIA KB...")
-        msg = await self.receive(timeout=5)  # Timeout set to 5 seconds
+        msg = await self.receive(timeout=10)  # Timeout set to 10 seconds
         if msg:
             valid_msg_template = GeneralUtils.create_acl_template(
                 FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM, ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE)
@@ -158,7 +158,9 @@ class StateBooting(State):
         _logger.info("Waiting for the confirmation of the registry in the SMIA KB...")
         msg = await self.receive(timeout=30)  # TODO DELETE: CHANGED FOR REGISTRATION PERFORMANCE TEST
         # msg = await self.receive(timeout=5)  # Timeout set to 5 seconds
+        _logger.assetinfo("HA PASADO DEL RECEIVE")  # TODO BORRAR
         if msg:
+            _logger.assetinfo("MENSAJE RECEIVE: {}".format(msg))  # TODO BORRAR
             valid_msg_template = GeneralUtils.create_acl_template(
                 FIPAACLInfo.FIPA_ACL_PERFORMATIVE_INFORM, ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE)
             if valid_msg_template.match(msg) and msg.thread == register_acl_msg.thread:
@@ -180,7 +182,7 @@ class StateBooting(State):
                                                                          'Time elapsed for SMIA registration')
 
             else:
-                ("A message arrived but it is not about the AAS model. Sender [{}], Performative [{}], "
+                ("A message arrived but it is not about the registration. Sender [{}], Performative [{}], "
                  "Ontology [{}]".format(acl_smia_messages_utils.get_sender_from_acl_msg(msg),
                                         msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB),
                                         msg.get_metadata(FIPAACLInfo.FIPA_ACL_ONTOLOGY_ATTRIB)))
