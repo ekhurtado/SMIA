@@ -79,6 +79,16 @@ class StateBooting(State):
         """
         css_elements_json = {'capabilities': [], 'skills': []}
         # First, the JSON of each capability will be obtained
+        _logger.assetinfo("Voy a mirar capabilities en {} || {} || {}".format(await self.agent.css_ontology.get_ontology_instances_by_class_iri(
+                    CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI),
+                                                                              await self.agent.css_ontology.get_ontology_instances_by_class_iri(
+                                                                                  CapabilitySkillOntologyInfo.CSS_ONTOLOGY_AGENT_CAPABILITY_IRI)
+,
+                                                                              await self.agent.css_ontology.get_ontology_instances_by_class_iri(
+                                                                                  CapabilitySkillOntologyInfo.CSS_ONTOLOGY_ASSET_CAPABILITY_IRI)
+                                                                              ))
+        # TODO BORRAR ARRIBA
+
         for capability in (filter(None,
                 (await self.agent.css_ontology.get_ontology_instances_by_class_iri(
                     CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI) or []) +
@@ -95,8 +105,12 @@ class StateBooting(State):
             css_elements_json['capabilities'].append(capability_json)
 
         # Then, the JSON of each skill will be obtained
-        for skill in await self.agent.css_ontology.get_ontology_instances_by_class_iri(
-                CapabilitySkillOntologyInfo.CSS_ONTOLOGY_SKILL_IRI):
+        _logger.assetinfo("Voy a mirar SKILLS en {} ".format(
+            await self.agent.css_ontology.get_ontology_instances_by_class_iri(
+                CapabilitySkillOntologyInfo.CSS_ONTOLOGY_SKILL_IRI)))
+        # TODO BORRAR ARRIBA
+        for skill in (filter(None, (await self.agent.css_ontology.get_ontology_instances_by_class_iri(
+                CapabilitySkillOntologyInfo.CSS_ONTOLOGY_SKILL_IRI) or []))):
             # The JSON is created from OWL instance
             css_elements_json['skills'].append(skill.from_ontology_instance_to_json())
 
