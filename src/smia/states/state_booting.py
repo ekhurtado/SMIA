@@ -79,16 +79,6 @@ class StateBooting(State):
         """
         css_elements_json = {'capabilities': [], 'skills': []}
         # First, the JSON of each capability will be obtained
-        _logger.assetinfo("Voy a mirar capabilities en {} || {} || {}".format(await self.agent.css_ontology.get_ontology_instances_by_class_iri(
-                    CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI),
-                                                                              await self.agent.css_ontology.get_ontology_instances_by_class_iri(
-                                                                                  CapabilitySkillOntologyInfo.CSS_ONTOLOGY_AGENT_CAPABILITY_IRI)
-,
-                                                                              await self.agent.css_ontology.get_ontology_instances_by_class_iri(
-                                                                                  CapabilitySkillOntologyInfo.CSS_ONTOLOGY_ASSET_CAPABILITY_IRI)
-                                                                              ))
-        # TODO BORRAR ARRIBA
-
         for capability in (filter(None,
                 (await self.agent.css_ontology.get_ontology_instances_by_class_iri(
                     CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI) or []) +
@@ -105,10 +95,6 @@ class StateBooting(State):
             css_elements_json['capabilities'].append(capability_json)
 
         # Then, the JSON of each skill will be obtained
-        _logger.assetinfo("Voy a mirar SKILLS en {} ".format(
-            await self.agent.css_ontology.get_ontology_instances_by_class_iri(
-                CapabilitySkillOntologyInfo.CSS_ONTOLOGY_SKILL_IRI)))
-        # TODO BORRAR ARRIBA
         for skill in (filter(None, (await self.agent.css_ontology.get_ontology_instances_by_class_iri(
                 CapabilitySkillOntologyInfo.CSS_ONTOLOGY_SKILL_IRI) or []))):
             # The JSON is created from OWL instance
@@ -129,7 +115,7 @@ class StateBooting(State):
                      "instance in the SMIA KB.".format(smia_ism_jid))
         await self.send(register_acl_msg)
         _logger.info("Waiting for the confirmation of the registry in the SMIA KB...")
-        msg = await self.receive(timeout=300)  # TODO DELETE: CHANGED FOR REGISTRATION PERFORMANCE TEST
+        msg = await self.receive(timeout=3000)  # TODO DELETE: CHANGED FOR REGISTRATION PERFORMANCE TEST
         # msg = await self.receive(timeout=10)  # Timeout set to 10 seconds
         if msg:
             valid_msg_template = GeneralUtils.create_acl_template(
@@ -171,7 +157,7 @@ class StateBooting(State):
                      "KB.".format(smia_ism_jid))
         await self.send(register_acl_msg)
         _logger.info("Waiting for the confirmation of the registry in the SMIA KB...")
-        msg = await self.receive(timeout=300)  # TODO DELETE: CHANGED FOR REGISTRATION PERFORMANCE TEST
+        msg = await self.receive(timeout=3000)  # TODO DELETE: CHANGED FOR REGISTRATION PERFORMANCE TEST
         # msg = await self.receive(timeout=10)  # Timeout set to 10 seconds
         _logger.assetinfo("HA PASADO DEL RECEIVE")  # TODO BORRAR
         if msg:
