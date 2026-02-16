@@ -2,6 +2,43 @@
 
 (Release Notes)=
 
+## v0.3.1
+
+This release of Self-configurable Manufacturing Industrial Agents (SMIA) comes with an upgrade of the solution in terms of the organization of related developments within the GitHub project and fixes for some bugs in the software startup. 
+
+> SMIA: All Python files structured in Python modules.
+> - It includes the launcher files to run the software in the ``launchers`` module: _smia_cli_starter.py_, _smia_starter.py_ and _smia_docker_starter.py_.
+
+### Features
+
+- Added published article reference proposing the SMIA approach in GitHub README and ReadTheDocs documentation.
+  - [Self-configurable Manufacturing Industrial Agents (SMIA): a standardized approach for digitizing manufacturing assets](https://doi.org/10.1016/j.jii.2025.100915)
+- Added last version of SMIA Operator code as ``additional tool``.
+- Added all files of SMIA use case for CeDRI demonstrator in ``use_cases`` folder.
+- Added option in properties file to specify whether or not to register with the SMIA-I KB.
+  - Added also Docker option via environmental variable to specify it.
+- Developed scripts for SMIA performance tests (scaling, AAS and CSS complexity, negotiation and benchmarking tests)
+
+### Major Changes
+
+- Restructured additional developments related to the SMIA approach within the GitHub repository:
+  - Restructured ``additional_tools``, distinguishing between extended agents and infrastructure components.
+    - The extended agents include SMIA PE, SMIA HI, and SMIA Operator.
+    - The infrastructure components include SMIA-I KB and SMIA ISM.
+    - The Camunda Modeler plugin is also added as an additional tool.
+  - The ``additional_resources`` folder maintains the remaining SMIA-related developments: visual resources, CSS-SMIA ontology with the OWL file, AASX Package Explorer resources...
+- Cleaned code from the analysis of Codacy.
+- Improved self-configuration processing time x4, by reducing waiting time to show the progress bar increase.
+  
+
+### Fixed errors
+
+- Updated SMIA dependencies versions in README and RTD documentation.
+- Fixed and completed description of project structure in README file.
+- Fixed SMIA startup via the CLI launcher (the AAS ID argument was not being obtained). 
+- Fixed the obtaining of the OWL ontology from the AASX during SMIA startup, if so defined in the properties file.
+
+
 ## v0.3.0
 
 This release of Self-configurable Manufacturing Industrial Agents (SMIA) comes with a significant upgrade of the solution in terms of flexible manufacturing automation using the SMIA approach. Version 0.2.x of SMIA focused on asset integration, and version 0.3.x will focus on autonomy and flexible manufacturing (where the interaction of multiple SMIA instances and the need for new infrastructure arise).
