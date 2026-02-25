@@ -54,34 +54,40 @@
   }
 },
 {
-  "semanticId": {
-    "type": "ExternalReference",
-    "keys": [
-      {
-        "type": "GlobalReference",
-        "value": "http://www.w3id.org/upv-ehu/gcis/css-smia#hasImplementationType"
-      }
-    ]
+  "name": "GCIS | SkillImplementationType | OPERATION",
+  "qualifier": {
+    "kind": "ConceptQualifier",
+    "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "http://www.w3id.org/upv-ehu/gcis/css-smia#hasImplementationType"
+          }
+        ]
+      },
+    "type": "hasImplementationType",
+    "valueType": "xs:string",
+    "value": "OPERATION",
+    "valueId": null
   },
-  "kind": "ConceptQualifier",
-  "type": "hasImplementationType",
-  "valueType": "xs:string",
-  "value": "OPERATION"
-},
 {
-  "semanticId": {
-    "type": "ExternalReference",
-    "keys": [
-      {
-        "type": "GlobalReference",
-        "value": "http://www.w3id.org/upv-ehu/gcis/css-smia#hasType"
-      }
-    ]
-  },
-  "kind": "ConceptQualifier",
-  "type": "hasType",
-  "valueType": "xs:string",
-  "value": "INPUT"
+  "name": "GCIS | SkillParameterType | INPUT",
+  "qualifier": {
+    "kind": "ConceptQualifier",
+    "semanticId": {
+      "type": "ExternalReference",
+      "keys": [
+        {
+          "type": "GlobalReference",
+          "value": "http://www.w3id.org/upv-ehu/gcis/css-smia#hasType"
+        }
+      ]
+    },
+    "type": "hasType",
+    "valueType": "xs:string",
+    "value": "INPUT",
+    "valueId": null
 },
 {
   "name": "GCIS | CapabilityContraintsQualifiers | PRECONDITION",
