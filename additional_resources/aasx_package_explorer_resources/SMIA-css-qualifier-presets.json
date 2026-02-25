@@ -54,42 +54,6 @@
   }
 },
 {
-  "name": "GCIS | SkillImplementationType | OPERATION",
-  "qualifier": {
-    "kind": "ConceptQualifier",
-    "semanticId": {
-        "type": "ExternalReference",
-        "keys": [
-          {
-            "type": "GlobalReference",
-            "value": "http://www.w3id.org/upv-ehu/gcis/css-smia#hasImplementationType"
-          }
-        ]
-      },
-    "type": "hasImplementationType",
-    "valueType": "xs:string",
-    "value": "OPERATION",
-    "valueId": null
-  },
-{
-  "name": "GCIS | SkillParameterType | INPUT",
-  "qualifier": {
-    "kind": "ConceptQualifier",
-    "semanticId": {
-      "type": "ExternalReference",
-      "keys": [
-        {
-          "type": "GlobalReference",
-          "value": "http://www.w3id.org/upv-ehu/gcis/css-smia#hasType"
-        }
-      ]
-    },
-    "type": "hasType",
-    "valueType": "xs:string",
-    "value": "INPUT",
-    "valueId": null
-},
-{
   "name": "GCIS | CapabilityContraintsQualifiers | PRECONDITION",
   "qualifier": {
     "kind": "ConceptQualifier",
@@ -143,6 +107,96 @@
     "valueId": null
   }
 },
+  {
+    "name": "GCIS | CSS | SkillImplementationType | OPERATION",
+    "qualifier": {
+      "kind": "ConceptQualifier",
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "http://www.w3id.org/upv-ehu/gcis/css-smia#hasImplementationType"
+          }
+        ]
+      },
+      "type": "hasImplementationType",
+      "value": "OPERATION",
+      "valueId": null
+    }
+  },
+  {
+    "name": "GCIS | CSS | SkillImplementationType | SPADE_BEHAVIOUR",
+    "qualifier": {
+      "kind": "ConceptQualifier",
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "http://www.w3id.org/upv-ehu/gcis/css-smia#hasImplementationType"
+          }
+        ]
+      },
+      "type": "hasImplementationType",
+      "value": "SPADE_BEHAVIOUR",
+      "valueId": null
+    }
+  },
+  {
+    "name": "GCIS | CSS | SkillParameterType | INPUT",
+    "qualifier": {
+      "kind": "ConceptQualifier",
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "http://www.w3id.org/upv-ehu/gcis/css-smia#hasType"
+          }
+        ]
+      },
+      "type": "hasType",
+      "value": "INPUT",
+      "valueId": null
+    }
+  },
+  {
+    "name": "GCIS | CSS | SkillParameterType | OUTPUT",
+    "qualifier": {
+      "kind": "ConceptQualifier",
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "http://www.w3id.org/upv-ehu/gcis/css-smia#hasType"
+          }
+        ]
+      },
+      "type": "hasType",
+      "value": "OUTPUT",
+      "valueId": null
+    }
+  },
+  {
+    "name": "GCIS | CSS | SkillParameterType | INOUTPUT",
+    "qualifier": {
+      "kind": "ConceptQualifier",
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "http://www.w3id.org/upv-ehu/gcis/css-smia#hasType"
+          }
+        ]
+      },
+      "type": "hasType",
+      "value": "INOUTPUT",
+      "valueId": null
+    }
+  },
 {
   "name": "GCIS | AssetInterfaces | DataQueryQualifiers | JSONPATH",
   "qualifier": {
