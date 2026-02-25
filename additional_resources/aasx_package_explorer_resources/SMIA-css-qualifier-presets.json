@@ -54,14 +54,34 @@
   }
 },
 {
-  "name": "GCIS | SkillQualifiers | OPERATION",
-  "qualifier": {
-    "kind": "ConceptQualifier",
-    "semanticId": null,
-    "type": "SkillImplementationType",
-    "value": "OPERATION",
-    "valueId": null
-  }
+  "semanticId": {
+    "type": "ExternalReference",
+    "keys": [
+      {
+        "type": "GlobalReference",
+        "value": "http://www.w3id.org/upv-ehu/gcis/css-smia#hasImplementationType"
+      }
+    ]
+  },
+  "kind": "ConceptQualifier",
+  "type": "hasImplementationType",
+  "valueType": "xs:string",
+  "value": "OPERATION"
+},
+{
+  "semanticId": {
+    "type": "ExternalReference",
+    "keys": [
+      {
+        "type": "GlobalReference",
+        "value": "http://www.w3id.org/upv-ehu/gcis/css-smia#hasType"
+      }
+    ]
+  },
+  "kind": "ConceptQualifier",
+  "type": "hasType",
+  "valueType": "xs:string",
+  "value": "INPUT"
 },
 {
   "name": "GCIS | CapabilityContraintsQualifiers | PRECONDITION",
