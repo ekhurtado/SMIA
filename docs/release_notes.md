@@ -2,6 +2,51 @@
 
 (Release Notes)=
 
+## v0.3.2
+
+This release of Self-configurable Manufacturing Industrial Agents (SMIA) includes an update to the solution in terms of distributed negotiation logic as an inherent agent capability (``AgentCapability``) and an increase in support resources for using the approach (guided tutorials).
+
+> SMIA: All Python files structured in Python modules.
+> - It includes the launcher files to run the software in the ``launchers`` module: _smia_cli_starter.py_, _smia_starter.py_ and _smia_docker_starter.py_.
+
+### Features
+
+- Added a reference to the published article presenting SMIA software contribution: added citation block on RTD and GitHub and links as buttons in README.
+  - [An open-source reference framework for the implementation of type 3 Asset Administration Shells](https://doi.org/10.1016/j.simpa.2025.100807)
+- Added new agent service for all SMIA instances ``get_random_float_value``: generation of float numbers between 0 and 100.
+- Added negotiation value as data to be stored in the SMIA log, to have more information about each negotiation.
+- Added new method to obtain time in nanoseconds in SMIA general utils: ``get_current_timer_nanosecs``.
+- New step-by-step tutorial for SMIA extension and validation on ReadTheDocs platform
+  - Files added from the first step-by-step tutorial: both useful files and README.md files have been added to detail all the steps to follow.
+- Added latest version of SMIA NR (Negotiation Requester) source code: the agent that initializes the negotiations for performance evaluation.
+  - Cleaned and improved source code: removed debugging console prints, added SMIA utilities, improved the efficiency of the code...
+  - Modified source code with new design of experiments and new CSV structure.
+
+### Major Changes
+
+- Improved SMIA negotiation algorithm:
+  - Now the algorithm is capable of managing desynchronization cases in which not all proposal messages have been received.
+  - Now the algorithm requests negotiation values in case they are not received, to fix the cases where some messages are missing.
+  - Now the algorithm distributes the processing load. All messages are exchanged within the run method (sent and received).
+  - Dynamic calculation of waiting time between sent messages and waiting time for recoveries (retries).
+  - Code efficiency has been improved by using global variables for reusable data.
+- Added new global variable for the SMIA agent so that specific behaviors can reserve messages from a specific thread (so that the generic ACLHandling behavior does not process them)
+  - The new version of negotiation algorithm behaviour reserves the messages for its thread so that the generic behavior ``ACLHandlingBehavior`` never processes those messages (until the negotiation is complete).
+- Now the SMIA PyPI package also enables the ``aas_model`` module.
+
+  
+
+### Fixed errors
+
+- Fixed the handling of negotiation behaviours when a negotiation request is received (the ACL template was not specified, now the thread is used to only obtain messages for the specific negotiation).
+- Fixed a bug obtaining the SMIA-I KB registration configuration in SMIA agents (capital letters were not taken into account, corrected in booting state).
+- Fixed a bug in CSS-SMIA ontology submodel plugin for AASX Package Explorer (semantic identifiers for ``accessibleThrough`` relationships were incorrectly defined).
+- Fixed EHU acronym in ReadTheDocs and GitHub.
+- Fixed bug in SMIA PE starter (added first the SMIAPEGUIBehaviour before the BPMNPerformerBehaviour, since the latter uses variables established by the former).
+- Fixed missing concepts in SMIA CSS qualifiers presets for AASX Package Explorer resources (``additional_resources/aasx_package_explorer_resources/SMIA-css-qualifier-presets.json``).
+
+
+
 ## v0.3.1
 
 This release of Self-configurable Manufacturing Industrial Agents (SMIA) comes with an upgrade of the solution in terms of the organization of related developments within the GitHub project and fixes for some bugs in the software startup. 
