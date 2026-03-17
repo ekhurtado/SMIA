@@ -14,14 +14,15 @@ _logger = logging.getLogger(__name__)
 
 class HTTPAssetConnection(AssetConnection):
     """
-    This class implements the asset connection for HTTP protocol.
+    This class implements the asset connection for HTTP protocol. It inherits from the valid official class defined by
+    SMIA.
     """
 
     def __init__(self):
         super().__init__()
         self.architecture_style = AssetConnection.ArchitectureStyle.CLIENTSERVER
 
-        # Other data
+        # Common data
         self.interface_title = None
         self.base = None
         self.endpoint_metadata_elem = None
@@ -39,10 +40,10 @@ class HTTPAssetConnection(AssetConnection):
         # The Interface element need to be checked
         await self.check_interface_element(interface_aas_elem)
 
-        # Vamos a conseguir los datos necesarios del modelo AAS para configurar la conexion HTTP
+        # Let's retrieve the necessary data from the AAS model to configure the HTTP connection
         self.interface_title = interface_aas_elem.get_sm_element_by_semantic_id(
             AssetInterfacesInfo.SEMANTICID_INTERFACE_TITLE)
-        # La informacion general de la conexion con el activo se define en el SMC 'EndpointMetadata'
+        # General information about the connection to the asset is defined in the SMC 'EndpointMetadata'
         self.endpoint_metadata_elem = interface_aas_elem.get_sm_element_by_semantic_id(
             AssetInterfacesInfo.SEMANTICID_ENDPOINT_METADATA)
 
@@ -283,7 +284,7 @@ class HTTPAssetConnection(AssetConnection):
             case 'application/xml':
                 pass  # Add the method to convert a JSON into XML
             case _:
-                pass
+                return service_data
 
 class HTTPAssetInterfaceSemantics:
     """
