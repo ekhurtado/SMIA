@@ -83,6 +83,8 @@ class AssetInterfacesInfo:
 
     # SemanticIDs of W3 2011
     SUPPL_SEMANTICID_HTTP = 'http://www.w3.org/2011/http'
+    SUPPL_SEMANTICID_MQTT = 'http://www.w3.org/2011/mqtt'
+    SUPPL_SEMANTICID_MODBUS = 'http://www.w3.org/2011/modbus'
     SEMANTICID_INTERFACE_INTERACTION_TYPE = 'https://www.w3.org/1999/02/22-rdf-syntax-ns#type'
 
     # SemanticIDs of Web of Things (WoT) ontology

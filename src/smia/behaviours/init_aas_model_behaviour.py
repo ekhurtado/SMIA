@@ -14,6 +14,7 @@ from smia.aas_model.aas_model_utils import AASModelUtils
 from smia.aas_model.extended_submodel import ExtendedSkill, ExtendedSkillInterface, ExtendedComplexSkillInterface, \
     ExtendedComplexSkill, ExtendedSimpleSkill, ExtendedSimpleSkillInterface
 from smia.assetconnection.http_asset_connection import HTTPAssetConnection
+from smia.assetconnection.mqtt_asset_connection import MQTTAssetConnection
 from smia.css_ontology.css_ontology_utils import CapabilitySkillOntologyUtils, CapabilitySkillOntologyInfo, \
     CSSModelAASModelInfo
 from smia.utilities.smia_info import AssetInterfacesInfo
@@ -345,16 +346,26 @@ class InitAASModelBehaviour(OneShotBehaviour):
             if interface_elem.check_semantic_id_exist(AssetInterfacesInfo.SEMANTICID_INTERFACE) is False:
                 _logger.warning("There is a submodel element inside the interfaces submodel with invalid semanticID.")
                 continue
-            # Dependiendo del tipo de interfaz se generara una clase u otra (de momento solo HTTP)
+            # Depending on the type of interface, one class or another will be generated (currently only HTTP and MQTT)
+            smia_native_connection_class = None
             if interface_elem.check_suppl_semantic_id_exist(AssetInterfacesInfo.SUPPL_SEMANTICID_HTTP):
-                # Hay una interfaz de tipo HTTP
-                http_connection_class = HTTPAssetConnection()
-                await http_connection_class.configure_connection_by_aas_model(interface_elem)
-                interface_model_ref = ModelReference.from_referable(interface_elem)
-                await self.myagent.save_asset_connection_class(interface_model_ref, http_connection_class)
+                # HTTP interface is specified within the AAS model
+                smia_native_connection_class = HTTPAssetConnection()
+                # TODO CODIGO ANTIGUO: eliminar cuando se compruebe que funciona HTTP junto a MQTT
+                # http_connection_class = HTTPAssetConnection()
+                # await http_connection_class.configure_connection_by_aas_model(interface_elem)
+                # interface_model_ref = ModelReference.from_referable(interface_elem)
+                # await self.myagent.save_asset_connection_class(interface_model_ref, http_connection_class)
+            elif interface_elem.check_suppl_semantic_id_exist(AssetInterfacesInfo.SUPPL_SEMANTICID_MQTT):
+                # MQTT interface is specified within the AAS model
+                smia_native_connection_class = MQTTAssetConnection()
             if interface_elem.check_suppl_semantic_id_exist('id de opc ua'):
                 # TODO Hay una interfaz de tipo OPC CUA
                 pass
+            if smia_native_connection_class is not None:
+                await smia_native_connection_class.configure_connection_by_aas_model(interface_elem)
+                interface_model_ref = ModelReference.from_referable(interface_elem)
+                await self.myagent.save_asset_connection_class(interface_model_ref, smia_native_connection_class)
 
             self.analyzed_asset_connections.append(interface_elem.id_short)
 
