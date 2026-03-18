@@ -59,7 +59,7 @@ class MQTTAssetConnection(AssetConnection):
         content_type_elem = self.endpoint_metadata_elem.get_sm_element_by_semantic_id(
             AssetInterfacesInfo.SEMANTICID_INTERFACE_CONTENT_TYPE)
         if content_type_elem is not None:
-            self.request_headers['Content-Type'] = content_type_elem.value
+            self.request_content_type = content_type_elem.value     # TODO check (it is not used)
 
         security_definitions_elem = self.endpoint_metadata_elem.get_sm_element_by_semantic_id(
             AssetInterfacesInfo.SEMANTICID_INTERFACE_SECURITY_DEFINITIONS)
