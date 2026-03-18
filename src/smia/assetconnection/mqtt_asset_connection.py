@@ -228,14 +228,13 @@ class MQTTAssetConnection(AssetConnection):
 
         match content_type.value:
             case 'application/json':
-                # return json.dumps(service_data)   # TODO ANALIZAR SI ES NECESARIO ENVIARLO EN STRING CON aiomqtt
-                return service_data
+                return json.dumps(service_data)   # Data should be sent in string format
             case 'text/plain':
                 return json.dumps(service_data)
             case 'application/xml':
                 pass  # Add the method to convert a JSON into XML
             case _:
-                return service_data
+                return str(service_data)
 
     async def send_mqtt_request(self):
         """
