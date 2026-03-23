@@ -320,9 +320,13 @@ class OperatorRequestBehaviour(OneShotBehaviour):
                 # The information about the CSS-related response is added in the agent dictionary for HTML result page
                 if (OperatorRequestBehaviour.version_str_to_tuple(self.get_smia_version_by_id(smia_id)) >=
                         OperatorRequestBehaviour.version_str_to_tuple('0.2.4')):
+                    try:
+                        response_msg_body = json.loads(self.receive_msg.body)
+                    except (TypeError, json.JSONDecodeError):
+                        response_msg_body = self.receive_msg.body
                     response_info = {'type': 'acl_recv',
                                      'title': 'Obtaining CSS-related capability execution result ...',
-                                     'response_msg': str(json.loads(self.receive_msg.body))}
+                                     'response_msg': str(response_msg_body)}
                 else:
                     response_info = {'type': 'acl_recv', 'title': 'Obtaining CSS-related capability execution result ...',
                                      'response_msg': str(json.loads(self.receive_msg.body)['serviceData']['serviceParams'])}
