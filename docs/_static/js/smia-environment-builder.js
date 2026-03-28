@@ -1438,7 +1438,7 @@ const SMIA_Builder = {
         // ── Manufacturing Plan — smia-pe (Step 3) ──
         if (s.plan.hasPlan) {
             const planFileName = s.plan.file ? s.plan.file.name : (s.plan.path || 'plan.aasx');
-            k8sFolder.file('deploy-smia-pe.yaml', this._yamlK8sSmiaPe(planFileName, xmppDomain));
+            k8sFolder.file('deploy-smia-pe.yaml', this._yamlK8sSmiaPe(planFileName, xmppDomain, s.plan.jid, s.plan.password));
             // Add the plan AAS file into aas/
             if (s.plan.file) aasFolder.file(s.plan.file.name, s.plan.file);
         }
@@ -1664,9 +1664,11 @@ spec:
      *
      * @param {string} planFileName - Name of the plan AAS model file
      * @param {string} xmppDomain   - XMPP domain from Step 1
+     * @param {string} jid          - The JID for the PE agent
+     * @param {string} password     - The password for the PE agent
      * @returns {string} Deployment YAML
      */
-    _yamlK8sSmiaPe: function (planFileName, xmppDomain) {
+    _yamlK8sSmiaPe: function (planFileName, xmppDomain, jid, password) {
         // Manufacturing Plan Deployment: uses the plan file as AAS model
         return `apiVersion: apps/v1
 kind: Deployment
@@ -1693,10 +1695,10 @@ spec:
               value: "${planFileName}"
             # AGENT_ID: PE agent identifier with user-configured XMPP domain
             - name: AGENT_ID
-              value: "${s.plan.jid}@${xmppDomain}"
+              value: "${jid}@${xmppDomain}"
             # AGENT_PSSWD: default agent password
             - name: AGENT_PSSWD
-              value: "${s.plan.password}"
+              value: "${password}"
           volumeMounts:
             # Mount the plan file via subPath (NFS-backed PVC)
             - name: nfs-aas-volume
