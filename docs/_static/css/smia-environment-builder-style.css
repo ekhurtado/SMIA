@@ -1,103 +1,203 @@
-/* Container styling matching Furo */
+/* ============================================================
+   SMIA Environment Builder — Styles
+   Compatible with Furo / Read the Docs theme (light + dark)
+   ============================================================ */
+
+/* Container */
 .smia-wizard-container {
     background-color: var(--color-background-secondary);
     border: 1px solid var(--color-border);
-    border-radius: 8px;
-    padding: 2rem;
+    border-radius: 12px;
+    padding: 2.5rem;
     margin: 2rem 0;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Progress Bar */
+[data-theme="dark"] .smia-wizard-container {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
 .smia-progress-bar {
     background-color: var(--color-background-primary);
-    border-radius: 4px;
-    height: 8px;
-    margin-bottom: 2rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    height: 10px;
+    margin-bottom: 2.5rem;
     overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .progress-fill {
     background-color: var(--color-brand-primary);
     height: 100%;
-    transition: width 0.3s ease;
+    transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* Step Visibility */
+/* ============================================================
+   STEP VISIBILITY & ANIMATIONS
+   ============================================================ */
+.smia-welcome-screen,
 .smia-step {
     display: none;
-    animation: fadeIn 0.4s ease;
+    opacity: 0;
 }
 
+.smia-welcome-screen.active,
 .smia-step.active {
     display: block;
+    animation: fadeInSlideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+@keyframes fadeInSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* Form Elements */
+/* ============================================================
+   FORM ELEMENTS
+   ============================================================ */
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.8rem;
 }
 
 .smia-input {
     width: 100%;
-    padding: 0.6rem;
-    border: 1px solid var(--color-gray);
-    border-radius: 4px;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
     background-color: var(--color-background-primary);
     color: var(--color-foreground-primary);
     margin-top: 0.5rem;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.checkbox-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
+.smia-input:focus {
+    outline: none;
+    border-color: var(--color-brand-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand-primary) 20%, transparent);
 }
 
-/* Asset Cards */
+.section-label {
+    display: block;
+    margin-bottom: 1.2rem;
+    font-weight: 600;
+    color: var(--color-foreground-primary);
+    font-size: 1.15rem;
+}
+
+/* ============================================================
+   ASSET CARDS (Step 3 dynamic list)
+   ============================================================ */
 .asset-card {
     border: 1px solid var(--color-border);
-    background-color: var(--color-background-primary);
-    padding: 1rem;
-    border-radius: 6px;
-    margin-bottom: 1rem;
+    background-color: var(--color-background-secondary);
+    padding: 1.25rem;
+    border-radius: 8px;
+    margin-bottom: 1.25rem;
     position: relative;
     border-left: 4px solid var(--color-brand-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Specific theme for Manufacturing Plan (Step 3) */
+#plan-card-container {
+    border-left-color: #2e6d30;
+}
+
+#plan-card-container .modern-checkbox:hover .checkmark {
+    border-color: #2e6d30;
+}
+
+#plan-card-container .modern-checkbox input:checked~.checkmark {
+    background-color: #2e6d30;
+    border-color: #2e6d30;
+}
+
+[data-theme="dark"] #plan-card-container {
+    border-left-color: #2e6d30;
+}
+
+[data-theme="dark"] #plan-card-container .modern-checkbox:hover .checkmark {
+    border-color: #2e6d30;
+}
+
+[data-theme="dark"] #plan-card-container .modern-checkbox input:checked~.checkmark {
+    background-color: #2e6d30;
+    border-color: #2e6d30;
+}
+
+.asset-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .asset-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .asset-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 1rem;
+    align-items: center;
+    margin-bottom: 1.2rem;
 }
 
-/* Buttons */
+/* ============================================================
+   BUTTONS
+   ============================================================ */
 .smia-controls {
     display: flex;
     justify-content: space-between;
-    margin-top: 2rem;
+    align-items: center;
+    margin-top: 2.5rem;
     border-top: 1px solid var(--color-border);
-    padding-top: 1rem;
+    padding-top: 1.5rem;
 }
 
 .smia-btn {
-    padding: 0.6rem 1.2rem;
-    border-radius: 4px;
+    padding: 0.7rem 1.4rem;
+    border-radius: 6px;
     border: none;
     cursor: pointer;
     font-weight: 600;
-    transition: all 0.2s;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
 }
 
 .smia-btn.primary {
-    background-color: var(--color-brand-primary);
-    color: var(--color-background-primary);
+    background-color: var(--color-brand-content);
+    color: #ffffff;
+    box-shadow: 0 2px 6px color-mix(in srgb, var(--color-brand-content) 30%, transparent);
+}
+
+.smia-btn.primary:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px color-mix(in srgb, var(--color-brand-content) 40%, transparent);
+}
+
+.smia-btn.primary:active {
+    transform: translateY(1px);
 }
 
 .smia-btn.secondary {
@@ -106,144 +206,272 @@
     color: var(--color-brand-primary);
 }
 
+.smia-btn.secondary:hover {
+    background-color: color-mix(in srgb, var(--color-brand-primary) 10%, transparent);
+}
+
 .btn-text-danger {
     background: none;
     border: none;
-    color: var(--color-problematic); /* Furo's red */
+    color: var(--color-problematic);
     cursor: pointer;
     font-size: 0.9rem;
+    font-weight: 600;
+    transition: opacity 0.2s ease;
 }
 
-/* Info Box */
+.btn-text-danger:hover {
+    opacity: 0.7;
+}
+
+.btn-icon-danger {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #dc3545;
+    /* Rojo explícito */
+    transition: all 0.2s ease;
+}
+
+.btn-icon-danger:hover {
+    background-color: rgba(220, 53, 69, 0.15);
+    border-color: #dc3545;
+}
+
+[data-theme="dark"] .btn-icon-danger {
+    color: #ef5350;
+}
+
+[data-theme="dark"] .btn-icon-danger:hover {
+    background-color: rgba(239, 83, 80, 0.15);
+    border-color: #ef5350;
+}
+
+.btn-icon-danger svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+/* ============================================================
+   INFO BOX
+   ============================================================ */
 .info-box {
     background-color: var(--color-admonition-background);
-    border-left: 4px solid var(--color-brand-content);
-    padding: 0.8rem;
-    font-size: 0.9rem;
+    border-left: 4px solid var(--color-brand-primary);
+    padding: 1rem;
+    font-size: 0.95rem;
     margin-top: 1rem;
-}
-
-/* --- NUEVO: Paso 0 (Pantalla de Bienvenida) --- */
-.smia-welcome-screen {
-    text-align: center;
-    padding: 3rem 1rem;
-    animation: fadeIn 0.5s ease;
-}
-
-.welcome-icon {
-    font-size: 4rem;
-    margin-bottom: 1.5rem;
-    display: block;
-}
-
-.welcome-title {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
+    border-radius: 6px;
+    line-height: 1.5;
     color: var(--color-foreground-primary);
 }
 
+/* ============================================================
+   WELCOME SCREEN
+   ============================================================ */
+.smia-welcome-screen {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.welcome-icon {
+    width: 150px;
+    height: 130px;
+    margin-bottom: 2rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+.welcome-title {
+    font-size: 2rem;
+    margin-bottom: 1.25rem;
+    color: var(--color-foreground-primary);
+    font-weight: 700;
+}
+
 .welcome-text {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     color: var(--color-foreground-secondary);
-    max-width: 600px;
-    margin: 0 auto 2rem auto;
+    max-width: 650px;
+    margin: 0 auto 2.5rem auto;
+    line-height: 1.6;
 }
 
 .btn-large {
-    font-size: 1.2rem;
-    padding: 0.8rem 2rem;
-    border-radius: 50px; /* Estilo píldora */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    font-size: 1.15rem;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
 }
 
-/* --- NUEVO: Estilo Grid Cards para Paso 1 --- */
+/* ============================================================
+   GRID LAYOUTS
+   ============================================================ */
 .env-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 1.5rem;
     margin-bottom: 1.5rem;
 }
 
-.env-card {
-    background: var(--color-background-secondary);
+/* ============================================================
+   CARD BASES: env-card, toggle-card, option-card
+   ============================================================ */
+.env-card,
+.toggle-card,
+.option-card {
+    background: var(--color-background-primary);
     border: 2px solid var(--color-border);
-    border-radius: 8px;
-    padding: 1.5rem;
+    border-radius: 10px;
+    padding: 1.75rem;
     cursor: pointer;
     text-align: center;
-    transition: all 0.2s ease;
+    transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
     position: relative;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-.env-card:hover {
+.env-card:hover,
+.toggle-card:hover,
+.option-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    border-color: var(--color-brand-primary);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--color-brand-primary) 15%, transparent);
+    border-color: color-mix(in srgb, var(--color-brand-primary) 60%, var(--color-border));
 }
 
-.env-card.selected {
+.env-card.selected,
+.toggle-card.selected,
+.option-card.selected {
     border-color: var(--color-brand-primary);
-    background-color: var(--color-background-primary);
-    box-shadow: 0 0 0 2px var(--color-brand-primary); /* Doble borde visual */
+    background-color: color-mix(in srgb, var(--color-brand-primary) 5%, var(--color-background-primary));
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-brand-primary) 30%, transparent);
 }
 
-.env-card.selected::after {
-    content: "✓";
+/* ============================================================
+   SELECTED INDICATOR
+   ============================================================ */
+.env-card.selected::after,
+.option-card.selected::after {
+    content: "";
     position: absolute;
-    top: 10px;
-    right: 10px;
-    color: var(--color-brand-primary);
-    font-weight: bold;
+    top: 12px;
+    right: 12px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--color-brand-primary) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='%23fff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E") center / 12px no-repeat;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
+/* ============================================================
+   CARD ICON & TEXT HELPERS
+   ============================================================ */
 .card-icon {
     font-size: 2.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
     display: block;
 }
 
 .card-title {
-    font-weight: bold;
+    font-weight: 700;
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
 }
 
 .card-desc {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: var(--color-foreground-secondary);
+    line-height: 1.4;
 }
 
-
-/* --- GESTIÓN DE PANTALLAS (FIX BUG STEP 0) --- */
-/* Por defecto, todas las pantallas (steps y welcome) están ocultas */
-.smia-welcome-screen, .smia-step {
-    display: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-/* --- GESTIÓN DE PANTALLAS (FIX BUG STEP 0) --- */
-/* Por defecto, todas las pantallas (steps y welcome) están ocultas */
-.smia-welcome-screen, .smia-step {
-    display: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-/* Solo la clase active las muestra */
-.smia-welcome-screen.active, .smia-step.active {
+.card-icon-svg {
     display: block;
-    opacity: 1;
-    animation: slideUp 0.4s ease forwards;
+    margin: 0 auto 0.75rem auto;
 }
 
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+.card-service-img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    margin-bottom: 1rem;
+    display: block;
 }
 
-/* --- MODERNIZACIÓN DE UI --- */
+.card-local-img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    margin-bottom: 0.75rem;
+    display: block;
+}
 
-/* 1. Custom File Upload (Botón ancho con icono) */
+/* ============================================================
+   TOGGLE CARD
+   ============================================================ */
+.toggle-card {
+    padding-top: 2.5rem;
+}
+
+.toggle-card input[type="checkbox"] {
+    display: none;
+}
+
+/* Pill badge */
+.toggle-card-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 42px;
+    height: 24px;
+    border-radius: 12px;
+    background-color: var(--color-background-secondary);
+    border: 2px solid var(--color-border);
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    padding: 2px;
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
+/* Dot */
+.toggle-card-badge::after {
+    content: "";
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--color-foreground-secondary);
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: translateX(0);
+}
+
+/* Active state */
+.toggle-card.selected .toggle-card-badge {
+    background-color: var(--color-brand-primary);
+    border-color: var(--color-brand-primary);
+}
+
+.toggle-card.selected .toggle-card-badge::after {
+    background-color: #ffffff;
+    transform: translateX(18px);
+}
+
+/* ============================================================
+   FILE UPLOAD
+   ============================================================ */
 .file-upload-wrapper {
     position: relative;
     width: 100%;
@@ -263,248 +491,393 @@
 
 .file-upload-label {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    background-color: var(--color-background-secondary);
-    border: 2px dashed var(--color-border); /* Borde punteado moderno */
-    border-radius: 6px;
-    padding: 0.8rem 1.2rem;
+    gap: 1rem;
+    background-color: var(--color-background-primary);
+    border: 2px dashed var(--color-border);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
     color: var(--color-foreground-secondary);
     font-weight: 500;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
     width: 100%;
     box-sizing: border-box;
 }
 
-.file-upload-input:hover + .file-upload-label {
+.file-upload-label .file-text {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.file-upload-label .upload-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    color: var(--color-foreground-secondary);
+    transition: color 0.2s;
+}
+
+.file-upload-input:hover+.file-upload-label {
     border-color: var(--color-brand-primary);
-    background-color: var(--color-background-hover);
+    color: var(--color-brand-primary);
+    background-color: color-mix(in srgb, var(--color-brand-primary) 5%, transparent);
+}
+
+.file-upload-input:hover+.file-upload-label .upload-icon {
     color: var(--color-brand-primary);
 }
 
-.file-upload-label .icon {
-    font-size: 1.2rem;
-    margin-left: 10px;
-}
-
-/* Estado cuando hay fichero seleccionado (controlado por JS) */
 .file-upload-label.has-file {
     border-style: solid;
-    background-color: rgba(0, 200, 83, 0.1); /* Verde muy suave */
+    background-color: rgba(0, 200, 83, 0.08);
+    /* Suave green for success */
     border-color: #00c853;
-    color: #00c853;
+    color: #009624;
 }
 
-/* 2. Modern Checkboxes */
+[data-theme="dark"] .file-upload-label.has-file {
+    color: #00e676;
+}
+
+.file-upload-label.has-file .upload-icon {
+    color: inherit;
+}
+
+/* ============================================================
+   INLINE CHECKBOXES
+   ============================================================ */
 .modern-checkbox {
     display: flex;
     align-items: center;
     cursor: pointer;
     user-select: none;
     padding: 0.5rem 0;
+    font-weight: 500;
 }
 
 .modern-checkbox input {
-    display: none; /* Ocultar el checkbox nativo */
+    display: none;
 }
 
 .checkmark {
-    height: 20px;
-    width: 20px;
-    background-color: var(--color-background-secondary);
-    border: 2px solid var(--color-gray);
-    border-radius: 4px;
+    height: 22px;
+    width: 22px;
+    background-color: var(--color-background-primary);
+    border: 2px solid var(--color-border);
+    border-radius: 6px;
     margin-right: 12px;
     position: relative;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
 }
 
 .modern-checkbox:hover .checkmark {
     border-color: var(--color-brand-primary);
 }
 
-.modern-checkbox input:checked ~ .checkmark {
+.modern-checkbox input:checked~.checkmark {
     background-color: var(--color-brand-primary);
     border-color: var(--color-brand-primary);
 }
 
-/* El "tick" del checkbox */
 .modern-checkbox .checkmark:after {
     content: "";
     position: absolute;
     display: none;
     left: 6px;
     top: 2px;
-    width: 5px;
-    height: 10px;
+    width: 6px;
+    height: 11px;
     border: solid white;
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
 }
 
-.modern-checkbox input:checked ~ .checkmark:after {
+.modern-checkbox input:checked~.checkmark:after {
     display: block;
 }
 
-/* 3. Botón Eliminar Minimalista (Trash Icon) */
-.btn-icon-danger {
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    cursor: pointer;
-    padding: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-problematic); /* Rojo de Furo */
-    transition: all 0.2s;
-}
-
-.btn-icon-danger:hover {
-    background-color: rgba(220, 53, 69, 0.1);
-    border-color: var(--color-problematic);
-}
-
-.btn-icon-danger svg {
-    width: 20px;
-    height: 20px;
-    fill: currentColor;
-}
-
-
-.section-label {
-    display: block;
-    margin-bottom: 1.2rem; /* Más espaciado entre título y cards */
-    font-weight: 600;
-    color: var(--color-foreground-primary);
-    font-size: 1.1rem;
-}
-
-.env-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2.5rem; /* Separación extra al final de la grid */
-}
-
-/* Efecto Hover Coloreado (Solicitado) */
-.env-card {
-    /* ... propiedades existentes ... */
-    transition: all 0.25s ease; /* Suavizar transición */
-}
-
-.env-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    border-color: var(--color-brand-primary); /* Borde coloreado al pasar ratón */
-}
-
-/* Reutilizamos estilo para tarjetas de selección secundarias (XMPP/Instance Type) */
-.sub-option-card {
-    background: var(--color-background-primary);
-    border: 1px solid var(--color-border);
-    border-radius: 6px;
-    padding: 1rem;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s;
-    position: relative;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.sub-option-card:hover {
-    border-color: var(--color-brand-primary);
-}
-
-.sub-option-card.selected {
-    border-color: var(--color-brand-primary);
-    background-color: rgba(var(--color-brand-primary-rgb), 0.05); /* Sutil fondo si es posible, sino default */
-    box-shadow: 0 0 0 2px var(--color-brand-primary);
-}
-
-.sub-option-card.selected::after {
-    content: "✓";
-    position: absolute;
-    top: 5px;
-    right: 8px;
-    color: var(--color-brand-primary);
-    font-weight: bold;
-    font-size: 0.9rem;
-}
-
-.sub-card-icon {
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
-    display: block;
-}
-
-.sub-card-title {
-    font-weight: 600;
+/* ============================================================
+   INTERACTIVE SUMMARY — Step 4 (BUGS CLIPPED)
+   ============================================================ */
+.summary-intro {
+    color: var(--color-foreground-secondary);
     font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
 }
 
+.summary-grid-top {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1rem;
+}
 
-/* --- MODIFICAR: Estilos de Tarjetas (Paso 1 y Generales) --- */
-.env-card, .toggle-card, .option-card {
-    background: var(--color-background-secondary);
-    border: 2px solid var(--color-border); /* Borde base más visible */
-    border-radius: 8px;
-    padding: 1.5rem;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s ease;
-    position: relative;
-    height: 100%;
-    box-sizing: border-box;
+.summary-card-full-row {
+    margin-top: 1.25rem;
+}
+
+/* FIX OVERFLOW: ensure parent container enables flex wrapping or constraints */
+.summary-card {
+    background-color: var(--color-background-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    /* Critical for grid children box-model containment */
+}
+
+.summary-card:hover {
+    border-color: color-mix(in srgb, var(--color-brand-primary) 50%, var(--color-border));
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--color-brand-primary) 10%, transparent);
+}
+
+.summary-card-header {
+    display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    padding: 0.85rem 1.25rem;
+    background-color: color-mix(in srgb, var(--color-brand-primary) 8%, transparent);
+    border-bottom: 1px solid var(--color-border);
 }
 
-/* Regla solicitada: Color en Hover */
-.env-card:hover, .toggle-card:hover, .option-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    /* Usamos la variable de Sphinx-Design si existe, fallback al primario */
-    border-color: var(--sd-color-card-border-hover, var(--color-brand-primary));
+.summary-card-title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--color-foreground-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
 }
 
-.env-card.selected, .toggle-card.selected, .option-card.selected {
-    border-color: var(--color-brand-primary);
-    background-color: var(--color-background-primary);
-    box-shadow: 0 0 0 2px var(--color-brand-primary);
-}
-
-/* --- NUEVO: Estilos específicos para Paso 2 (Toggle Cards) --- */
-.toggle-icon {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-    color: var(--color-foreground-secondary);
-}
-
-.toggle-card.selected .toggle-icon {
+.summary-edit-btn {
+    background: transparent;
+    border: 1px solid var(--color-brand-primary);
     color: var(--color-brand-primary);
-}
-
-.toggle-status {
+    border-radius: 20px;
+    padding: 0.3rem 0.85rem;
     font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.summary-edit-btn:hover {
+    background-color: var(--color-brand-primary);
+    color: #ffffff;
+}
+
+.summary-card-body {
+    padding: 1.1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-width: 0;
+    /* Ensure internal containment */
+}
+
+/* Key / value row - FIX OVERFLOW */
+.summary-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.9rem;
+    min-height: 1.4em;
+    min-width: 0;
+    /* Ensures flex container allows shrinking */
+}
+
+.summary-key {
+    color: var(--color-foreground-secondary);
+    flex-shrink: 0;
+    padding-top: 0.1em;
+    font-weight: 500;
+}
+
+.summary-val {
+    color: var(--color-foreground-primary);
+    font-weight: 600;
+    text-align: right;
+
+    /* VITAL: Force lengthy text to break cleanly instead of overflowing */
+    word-break: break-all;
+    overflow-wrap: break-word;
+    min-width: 0;
+    /* Essential inside a flex container to contain text node */
+}
+
+/* Coloured status badges */
+.summary-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    font-weight: bold;
-    margin-top: 0.5rem;
+}
+
+.badge-blue {
+    background-color: color-mix(in srgb, var(--color-brand-primary) 15%, transparent);
+    color: var(--color-brand-primary);
+}
+
+.badge-green {
+    background-color: rgba(0, 168, 70, 0.15);
+    color: #009624;
+}
+
+[data-theme="dark"] .badge-green {
+    color: #00e676;
+}
+
+.badge-gray {
+    background-color: rgba(128, 128, 128, 0.15);
     color: var(--color-foreground-secondary);
 }
 
-.toggle-card.selected .toggle-status {
-    color: var(--color-brand-primary);
-    content: "ENABLED";
+.badge-orange {
+    background-color: rgba(255, 152, 0, 0.15);
+    color: #e65100;
 }
 
-/* Grid para opciones AAS */
+[data-theme="dark"] .badge-orange {
+    color: #ffb74d;
+}
+
+.badge-red {
+    background-color: rgba(220, 53, 69, 0.15);
+    color: var(--color-problematic);
+}
+
+/* ── Sub-sections inside the full-width assets card ── */
+.summary-subsection+.summary-subsection {
+    border-top: 1px dashed var(--color-border);
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+}
+
+.summary-subsection-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-foreground-secondary);
+    padding: 0 0 0.8rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.summary-subsection-title::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 14px;
+    border-radius: 2px;
+    background-color: var(--color-brand-primary);
+    flex-shrink: 0;
+}
+
+/* Two-column layout */
+.summary-assets-body {
+    padding: 0 1.25rem 1.25rem 1.25rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 2.5rem;
+    min-width: 0;
+    /* FIX OVERFLOW */
+}
+
+@media (max-width: 768px) {
+    .summary-assets-body {
+        grid-template-columns: 1fr;
+    }
+}
+
+.summary-asset-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.summary-asset-list li {
+    font-size: 0.8rem;
+    color: var(--color-foreground-secondary);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-border);
+    line-height: 1.5;
+    word-break: break-all;
+    /* FIX OVERFLOW */
+    overflow-wrap: break-word;
+    /* FIX OVERFLOW */
+}
+
+.summary-asset-list li:last-child {
+    border-bottom: none;
+}
+
+.summary-asset-list li::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--color-brand-primary);
+    flex-shrink: 0;
+    margin-top: 0.45em;
+}
+
+.summary-empty {
+    font-size: 0.9rem;
+    color: var(--color-foreground-secondary);
+    font-style: italic;
+    padding: 0.5rem 0;
+}
+
+.summary-cta {
+    margin-top: 1.5rem;
+    padding: 1.2rem;
+    background: color-mix(in srgb, var(--color-brand-primary) 8%, transparent);
+    border: 2px dashed color-mix(in srgb, var(--color-brand-primary) 40%, transparent);
+    border-radius: 10px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--color-foreground-secondary);
+}
+
+.summary-cta strong {
+    color: var(--color-foreground-primary);
+}
+
+/* ============================================================
+   MISC
+   ============================================================ */
+#docker-gradient {
+    fill: var(--color-brand-primary);
+    stroke-width: 0px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
 .options-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));

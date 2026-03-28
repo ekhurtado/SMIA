@@ -123,6 +123,7 @@ html_js_files = [
     'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',
     'https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js',
     'js/smia-environment-builder.js',
+    'js/infra-docker-compose-data.js',
 ]
 
 pygments_dark_style = "monokai"
