@@ -183,33 +183,33 @@ const SMIA_Builder = {
                     <img src="_static/images/environment_builder_images/SMIA_environment_builder_icon.svg" class="welcome-icon" alt="SMIA Icon">
                     <h2 class="welcome-title">SMIA Environment Builder</h2>
                     <p class="welcome-text">
-                        Welcome to the configuration wizard. This tool will assist you in generating
-                        the necessary deployment files (Docker Compose / Kubernetes) or the local
-                        scaffolding for your SMIA environment.
+                        Set up your SMIA workspace automatically with this tool. Simply select your target ecosystem (Local, 
+                        Docker Compose, or Kubernetes) and configure your infrastructure services and SMIA instances 
+                        to get a ready-to-use environment.
                     </p>
                     <button id="btn-start" class="smia-btn primary btn-large">Start Configuration</button>
                 </div>
 
                 <!-- ── STEP 1: Base Infrastructure ── -->
                 <div class="smia-step" id="step-1">
-                    <h3>Step 1: Base Infrastructure</h3>
+                    <h3>Step 1: Base Environment</h3>
 
-                    <label class="section-label">Select Deployment Environment:</label>
+                    <label class="section-label">Select your working environment:</label>
                     <div class="env-grid">
                         <div class="env-card" data-env="local">
                             <span class="card-icon">${ICONS.local}</span>
                             <span class="card-title">Local (Python)</span>
-                            <span class="card-desc">Container-less development. Direct Python execution scripts.</span>
+                            <span class="card-desc">Container-less environment for development and local Python execution.</span>
                         </div>
                         <div class="env-card" data-env="docker">
                             <span class="card-icon">${ICONS.docker}</span>
                             <span class="card-title">Docker Compose</span>
-                            <span class="card-desc">Standard containerized deployment for testing or light production.</span>
+                            <span class="card-desc">Standard containerized environment, ideal for testing and single-node deployments.</span>
                         </div>
                         <div class="env-card" data-env="k8s">
                             <span class="card-icon">${ICONS.k8s}</span>
                             <span class="card-title">Kubernetes</span>
-                            <span class="card-desc">Distributed, scalable deployment (generates YAMLs for Kompose).</span>
+                            <span class="card-desc">Scalable distributed environment, ideal for workload distribution and multi-node deployments.</span>
                         </div>
                     </div>
                     <div id="env-error" style="color: var(--color-problematic); display:none; margin-bottom:1rem;">
@@ -279,9 +279,9 @@ const SMIA_Builder = {
 
                 <!-- ── STEP 2: Core SMIA Services ── -->
                 <div class="smia-step" id="step-2">
-                    <h3>Step 2: Core SMIA Services</h3>
+                    <h3>Step 2: Infrastructure Services</h3>
 
-                    <label class="section-label">Optional Components</label>
+                    <label class="section-label">SMIA infrastructure</label>
                     <div class="env-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 1rem;">
 
                         <div class="toggle-card" id="card-kb">
@@ -310,7 +310,7 @@ const SMIA_Builder = {
                         ⚠️ <strong>Warning:</strong> SMIA ISM cannot be disabled while SMIA-I KB is enabled. Please disable SMIA-I KB first.
                     </div>
 
-                    <label class="section-label">AAS Server Strategy</label>
+                    <label class="section-label">AAS Server</label>
                     <div class="env-grid" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem;">
                         <div class="option-card selected" data-aas="basyx">
                             <img src="_static/images/environment_builder_images/basyxlogo.png" alt="BaSyx" class="card-local-img"
@@ -336,7 +336,7 @@ const SMIA_Builder = {
 
                 <!-- ── STEP 3: Assets & Manufacturing ── -->
                 <div class="smia-step" id="step-3">
-                    <h3 id="step-3-title">Step 3: Assets &amp; Manufacturing</h3>
+                    <h3 id="step-3-title">Step 3: Manufacturing assets</h3>
 
                     <div id="step-3-intro-local" style="display:none; margin-bottom:1.5rem; color:var(--color-foreground-secondary)">
                         Add a single Asset file to be included in your local environment ZIP.
@@ -344,7 +344,7 @@ const SMIA_Builder = {
 
                     <!-- Manufacturing Plan (hidden in local mode) -->
                     <div class="asset-card" id="plan-card-container">
-                        <h4>Manufacturing Plan (Optional)</h4>
+                        <h4>Manufacturing Plan asset (optional)</h4>
                         <label class="modern-checkbox">
                             <input type="checkbox" id="chk-has-plan">
                             <span class="checkmark"></span>
@@ -377,7 +377,7 @@ const SMIA_Builder = {
 
                     <label class="section-label" style="margin-top: 2rem;">Production Assets</label>
                     <div id="assets-list"></div>
-                    <button class="smia-btn secondary" id="btn-add-asset" style="width:100%">+ Add Asset Instance</button>
+                    <button class="smia-btn secondary" id="btn-add-asset" style="width:100%">+ Add asset instance</button>
 
                     <!-- Operator section — always visible (local AND docker/k8s) -->
                     <div id="operator-section" style="margin-top: 2rem; border-top: 1px solid var(--color-border); padding-top: 2rem;">
@@ -399,7 +399,7 @@ const SMIA_Builder = {
                     <h3>Review &amp; Generate</h3>
                     <p class="summary-intro">
                         Review your configuration below. Click <strong>Edit</strong> on any section to go back
-                        and make changes, then return here to download your deployment package.
+                        and make changes, or proceed to download your environment package.
                     </p>
                     <div id="summary-content"></div>
                 </div>
@@ -672,7 +672,7 @@ const SMIA_Builder = {
             const isLocal = (this.state.envType === 'local');
             document.getElementById('step-3-title').textContent = isLocal
                 ? 'Add Asset File'
-                : 'Step 3: Assets & Manufacturing';
+                : 'Step 3: Manufacturing assets';
             document.getElementById('step-3-intro-local').style.display = isLocal ? 'block' : 'none';
             document.getElementById('plan-card-container').style.display = isLocal ? 'none' : 'block';
             //document.getElementById('plan-card-container').style.display = 'block';
@@ -773,7 +773,7 @@ const SMIA_Builder = {
             : this._buildSummaryContainer(s);
 
         html += `<div class="summary-cta">
-            <strong>Ready?</strong> Click <strong>Download ZIP</strong> below to generate your deployment package.
+            <strong>Ready?</strong> Click <strong>Download ZIP</strong> below to generate your environment package.
         </div>`;
 
         document.getElementById('summary-content').innerHTML = html;
@@ -815,7 +815,7 @@ const SMIA_Builder = {
             this._row('XMPP Domain', `<code class="summary-val">${s.xmpp.domain || '—'}</code>`);
 
         const infraCard = this._summaryCard(
-            ICONS.summaryInfra, 'Infrastructure', 1,
+            ICONS.summaryInfra, 'Base Environment', 1,
             `<div class="summary-card-body">${infraRows}</div>`
         );
 
@@ -841,7 +841,7 @@ const SMIA_Builder = {
                 ? this._row('Server IP', `<code class="summary-val">${s.xmpp.ip || '—'}</code>`) : '');
 
         const infraCard = this._summaryCard(
-            ICONS.summaryInfra, 'Infrastructure', 1,
+            ICONS.summaryInfra, 'Base Environment', 1,
             `<div class="summary-card-body">${infraRows}</div>`
         );
 
@@ -859,7 +859,7 @@ const SMIA_Builder = {
                 ? this._row('AAS IP', `<code class="summary-val">${s.core.aasServer.ip || '—'}</code>`) : '');
 
         const coreCard = this._summaryCard(
-            ICONS.summaryServices, 'Core Services', 2,
+            ICONS.summaryServices, 'Infrastructure Services', 2,
             `<div class="summary-card-body">${coreRows}</div>`
         );
 
@@ -937,7 +937,7 @@ const SMIA_Builder = {
         </div>`;
 
         return this._summaryCard(
-            ICONS.summaryAssets, 'Assets &amp; Manufacturing', step, bodyHtml
+            ICONS.summaryAssets, 'Manufacturing assets', step, bodyHtml
         );
     },
 
