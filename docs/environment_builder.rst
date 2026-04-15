@@ -76,3 +76,7 @@ After downloading your configuration:
 2. **Review the README.md** for specific deployment instructions
 3. **Place your AAS models** in the designated directory (if applicable)
 4. **Deploy the environment** using the provided commands in ``README.md``.
+
+
+.. note::
+   **Icon Credits:** the *Environment Builder* tool utilizes third-party iconography: `Docker <https://www.docker.com/>`_, `Kubernetes <https://kubernetes.io/>`_, `Basyx <https://basyx.org/>`_, and `Ejabberd <https://www.ejabberd.im/>`_.
