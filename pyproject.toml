@@ -16,7 +16,7 @@ license= {text="GNU Affero General Public License v3"}
 keywords=['smia', 'dt', 'aas', 'i4.0', 'css']
 requires-python = ">= 3.10"
 classifiers = [
-    'Development Status :: 2 - Pre-Alpha',
+    'Development Status :: 3 - Alpha',
     'Intended Audience :: Developers',
     'License :: OSI Approved :: GNU Affero General Public License v3',
     'Natural Language :: English',
