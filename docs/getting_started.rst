@@ -3,7 +3,7 @@ Getting Started
 
 |github| |pypi| |dockerhub| |youtube|
 
-|doiScientific| |doiSW|
+|doiScientific| |doiSW| |doiDataset|
 
 ----
 
@@ -34,6 +34,10 @@ Getting Started
 .. |doiSW| image:: https://img.shields.io/badge/Paper-Software-%23fab608.svg?style=for-the-badge&logo=doi&logoColor=white
    :target: https://doi.org/10.1016/j.simpa.2025.100807
    :alt: DOIsoftware
+
+.. |doiDataset| image:: https://img.shields.io/badge/Dataset-Software-%23fab608.svg?style=for-the-badge&logo=doi&logoColor=white
+   :target: https://doi.org/10.82518/R1IXE6
+   :alt: DOIdataset
 
 SMIA is a software that implements an AAS-compliant Digital Twin (DT) that is based on a flexible manufacturing-centered ontology.
 

@@ -4,7 +4,7 @@
 
 [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ekhurtado/SMIA) [![Read the Docs](https://img.shields.io/badge/readthedocs-%238CA1AF.svg?style=for-the-badge&logo=readthedocs&logoColor=white)](https://smia.readthedocs.io/en/latest/) [![DockerHub](https://img.shields.io/badge/dockerhub-%233775A9.svg?style=for-the-badge&logo=docker&logoColor=white)](https://hub.docker.com/r/ekhurtado/smia) [![YouTube](https://img.shields.io/badge/YouTube-%23FF0000.svg?style=for-the-badge&logo=YouTube&logoColor=white)](https://youtube.com/playlist?list=PLs6bFF_iqW3HEwYAFOMHvW0xEngXnVF9K&si=UqWwelA3RO8C2A1u)
 
-[![DOIscientific](https://img.shields.io/badge/Paper-Scientific-%23fab608.svg?style=for-the-badge&logo=doi&logoColor=white)](https://doi.org/10.1016/j.jii.2025.100915) [![DOIsw](https://img.shields.io/badge/Paper-Software-%23fab608.svg?style=for-the-badge&logo=doi&logoColor=white)](https://doi.org/10.1016/j.simpa.2025.100807)
+[![DOIscientific](https://img.shields.io/badge/Paper-Scientific-%23fab608.svg?style=for-the-badge&logo=doi&logoColor=white)](https://doi.org/10.1016/j.jii.2025.100915) [![DOIsw](https://img.shields.io/badge/Paper-Software-%23fab608.svg?style=for-the-badge&logo=doi&logoColor=white)](https://doi.org/10.1016/j.simpa.2025.100807) [![DOIdataset](https://img.shields.io/badge/Dataset-Software-%23fab608.svg?style=for-the-badge&logo=doi&logoColor=white)](https://doi.org/10.82518/R1IXE6)
 
 [//]: # ([![PyPI]&#40;https://img.shields.io/badge/pypi-%23008bdd.svg?style=for-the-badge&logo=pypi&logoColor=white&#41;]&#40;https://pypi.org/project/smia/&#41;)
 
