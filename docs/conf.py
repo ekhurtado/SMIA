@@ -113,10 +113,38 @@ html_theme_options = {
         "color-api-background": "#383838",
         "color-api-background-hover": "#5e5e5e",
     },
+    "footer_icons": [
+        {
+            "name": "Youtube",
+            "url": "https://youtube.com/playlist?list=PLs6bFF_iqW3HEwYAFOMHvW0xEngXnVF9K&si=UqWwelA3RO8C2A1u",
+            "html": "",
+            "class": "fa-brands fa-solid fa-youtube fa-lg",
+        },
+        {
+            "name": "Docker",
+            "url": "https://hub.docker.com/r/ekhurtado/smia",
+            "html": "",
+            "class": "fa-brands fa-solid fa-docker fa-lg",
+        },
+        {
+            "name": "Python",
+            "url": "https://pypi.org/project/smia/",
+            "html": "",
+            "class": "fa-brands fa-solid fa-python fa-lg",
+        },
+        {
+            "name": "GitHub",
+            "url": "https://github.com/ekhurtado/SMIA",
+            "html": "",
+            "class": "fa-brands fa-solid fa-github fa-lg",
+        },
+
+    ],
 }
 
 html_css_files = [
     'css/smia-environment-builder-style.css',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css',
 ]
 
 html_js_files = [
