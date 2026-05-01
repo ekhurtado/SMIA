@@ -2,6 +2,44 @@
 
 (Release Notes)=
 
+## v0.3.3
+
+This release of Self-configurable Manufacturing Industrial Agents (SMIA) includes new features and improvements to the software's inherent functionality, information updates, and bug fixes.
+
+> SMIA: All Python files structured in Python modules.
+> - It includes the launcher files to run the software in the ``launchers`` module: _smia_cli_starter.py_, _smia_starter.py_ and _smia_docker_starter.py_.
+
+### Features
+
+- Added new communication protocol to SMIA: ``MQTT``
+  - Created the file for the source code of the new communication protocol (MQTT): ``MQTTAssetConnection``. 
+  - The file has been added alongside the source code (not yet tested). 
+- Added latest source code of ``SMIA environment builder`` tool within ReadTheDocs documentation platform.
+- Added SMIA software performance-related dataset link to README files (GitHub and PyPI) and ReadTheDocs documentation platform (getting started).
+
+### Major Changes
+
+- Added generation of ``MQTTAssetConnection`` class for each MQTT interface defined in AAS model dynamically within ``InitAASModelBehaviour``.
+- Added ``aiomqtt`` as dependencies for SMIA in ``pyproject.toml`` file.
+- Improved ``SMIA environment builder`` tool within ReadTheDocs documentation platform.
+  - Modified displayed text, added third-party icons trademarks and acknowledgments, and added footer icons with links to SMIA official support resources (GitHub, DockerHub, etc.).
+- Update of PyPI development status classifier and version from ``2-Pre-Alpha`` to ``3-Alpha`` status.
+- Improved source code from the results of the Codacy analysis.
+  
+
+### Fixed errors
+
+- Fixed AASX file for SMIA Operator additional tool
+  - Added valid AASX file from SMIA approach scientific paper to SMIA Operator additional tool. 
+  - It is also modified its launcher to improve the configurability between local and Docker execution enviroments.
+- Fixed an issue in the SMIA Operator tool when receiving an ACL response with a body that was not in JSON format. The body is now parsed correctly.
+- Minor corrections have also been made to the comments in the HTTP protocol file.
+- Fixed an error in version specification in pyproject aiomqtt dependency and minor error in MQTT asset connection class regarding configuration from AAS model.
+- Fixed problems when generating Kubernetes environment with SMIA environment builder tool within ReadTheDocs documentation platform.
+- Fixed errors in CapabilityRequestExecutionError instantiations in ``HandleCapabilityBehaviour`` (thread argument was not added).
+- Fixed an error assigning arguments in ``logic.services_utils``.
+
+
 ## v0.3.2
 
 This release of Self-configurable Manufacturing Industrial Agents (SMIA) includes an update to the solution in terms of distributed negotiation logic as an inherent agent capability (``AgentCapability``) and an increase in support resources for using the approach (guided tutorials).
