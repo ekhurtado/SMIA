@@ -362,7 +362,7 @@ class ExtendedRange(Range):
             # TODO Think about more types
             return True if self.min <= formatted_value <= self.max else False
         except ValueError as e:
-            _logger.error("Value error with data {} of type {} in Range {}".format(value, self,value, self))
+            _logger.error("Value error with data {} of type {} in Range {}".format(value, self.value, self))
             return False
 
 class ExtendedBlob(Blob):

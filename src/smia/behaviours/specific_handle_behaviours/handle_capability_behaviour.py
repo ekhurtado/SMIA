@@ -441,7 +441,8 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
                     aas_skill_interface_elem.id_short, **received_skill_input_data)
 
             except (KeyError, ValueError) as e:
-                raise CapabilityRequestExecutionError(cap_instance.name, "The requested capability {} cannot be "
+                raise CapabilityRequestExecutionError(self.received_acl_msg.thread,
+                                                      cap_instance.name, "The requested capability {} cannot be "
                                                       "executed because the agent service {} cannot be successfully "
                                                       "executed.".format(cap_instance.name,
                                                       aas_skill_interface_elem.id_short), self)

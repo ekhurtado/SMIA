@@ -63,8 +63,8 @@ class AgentServiceUtils:
 
         # The received parameters with the values are available in kwargs
         if len(required_params_info) != 0 and ((kwargs is None) or (len(kwargs) == 0)):
-            raise ValueError(f"The service method cannot be executed because the required parameters have not been "
-                             f"provided.")
+            raise ValueError("The service method cannot be executed because the required parameters have not been "
+                             "provided.")
 
         for param_name, value in kwargs.items():
             if param_name in required_params_info:

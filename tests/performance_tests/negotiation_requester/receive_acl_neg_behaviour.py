@@ -104,7 +104,7 @@ class ReceiveACLNegBehaviour(CyclicBehaviour):
                 _logger.assetinfo("#### ALL NEGOTIATION WINNERS RECEIVED ####")
 
                 # TODO BORRAR -> es para obtener los datos para el analisis
-                from smia.utilities import smia_archive_utils, smia_general_info
+                from smia.utilities import smia_general_info
                 metrics_folder = DockerUtils.get_env_var('METRICS_FOLDER')
                 if metrics_folder is None:
                     metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
