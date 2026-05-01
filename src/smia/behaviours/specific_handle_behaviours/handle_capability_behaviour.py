@@ -345,7 +345,8 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
         if CapabilitySkillACLInfo.ATTRIB_SKILL_IRI not in self.received_body_json:
             cap_associated_skills = cap_ontology_instance.get_associated_skill_instances()
             if cap_associated_skills is None:
-                raise CapabilityRequestExecutionError(cap_iri, "The capability {} does not have any associated skill, "
+                raise CapabilityRequestExecutionError(self.received_acl_msg.thread,
+                                                      cap_iri, "The capability {} does not have any associated skill, "
                                                                 "so it cannot be executed".format(cap_iri), self)
             else:
                 # In this case, a specific skill has not been determined, so we will check if any skill has no
@@ -371,7 +372,8 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
                 skill_interface_ontology_instance = list(skill_ontology_instance.
                                                          get_associated_skill_interface_instances())[0]
                 if skill_interface_ontology_instance is None:
-                    raise CapabilityRequestExecutionError(cap_iri, "The capability requested by the given"
+                    raise CapabilityRequestExecutionError(self.received_acl_msg.thread,
+                                                          cap_iri, "The capability requested by the given"
                                                                     " skill cannot be executed because there is no skill "
                                                                     "interface defined.", self)
             else:
@@ -405,7 +407,8 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
                 skill_param_ontology_instance = await self.myagent.css_ontology.get_ontology_instance_by_iri(iri)
                 received_skill_input_data[skill_param_ontology_instance.name] = value
         if None in (aas_cap_elem, aas_skill_elem, aas_skill_interface_elem):
-            raise CapabilityRequestExecutionError(cap_instance.name, "The requested capability {} cannot be executed"
+            raise CapabilityRequestExecutionError(self.received_acl_msg.thread,
+                                                  cap_instance.name, "The requested capability {} cannot be executed"
                                                                      " because there is no AAS element linked to the ontology "
                                                                      "instances.".format(cap_instance.name), self)
 
