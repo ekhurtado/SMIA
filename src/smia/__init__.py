@@ -4,7 +4,7 @@ This is the main package of SMIA, that includes all source code and all subpacka
 
 __author__ = """Ekaitz Hurtado"""
 __email__ = "ekaitz.hurtado@ehu.eus"
-__version__ = '0.3.2'
+__version__ = '0.3.3'
 
 __all__ = ['launchers', 'agents', 'utilities', 'assetconnection', 'aas_model']
 
