@@ -14,6 +14,7 @@ These guides are a comprehensive resource for using the :term:`SMIA` software. F
     start_up_guide
     extension_guide
     guided_tutorials/guided_tutorials
+    ecosystem/ecosystem
 
 Installation of required resources
 ----------------------------------
