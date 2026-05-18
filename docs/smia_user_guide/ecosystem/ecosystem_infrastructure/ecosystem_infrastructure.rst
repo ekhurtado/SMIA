@@ -24,7 +24,7 @@ AASX Package Explorer enables the generation of CSS-enriched AAS models that are
 Camunda Modeler
 ---------------
 
-Camunda Modeler habilita la definicion de flujos de trabajo BPMN dirigidos por CSS válidos para su ejecución mediante :term:`SMIA PE`.
+Camunda Modeler enables the definition of CSS-driven BPMN workflows that are valid for their automated execution by :term:`SMIA PE`.
 
     The guide for Camunda Modeler is available at :octicon:`repo;1em` :ref:`SMIA ecosystem Camunda Modeler`.
 

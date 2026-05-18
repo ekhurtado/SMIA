@@ -27,6 +27,9 @@ Glossary
     **FIPA-ACL**
         The goal of the Foundation for Intelligent Physical Agents (FIPA) is to produce software standards for heterogeneous and interacting agents and agent-based systems. Among FIPA specifications, FIPA ACL (Agent Communication Language) is a language in which communicative acts can be expressed and hence messages constructed that represents an standardized :term:`I4.0 language` [`FIPA <http://www.fipa.org/about/index.html>`_].
 
+    **FIPA-SMIACL**
+        An :term:`I4.0 language` based on the fully standardized :term:`FIPA-ACL` for the SMIA multi-agent environment (specifying communicative acts, interaction patterns, etc.).
+
     **I4.0 language**
         System of rules that enables interoperable communication between :term:`I4.0 Components <I4.0 Component>` in an :term:`I4.0 System`, for both vertical and horizontal interactions. The goal is to create a standardized language that enables machines to exchange information, negotiate tasks and activate themselves autonomously within a value chain.
 
@@ -47,6 +50,12 @@ Glossary
 
     **SMIA**
         The Self-configurable Manufacturing Industrial Agents approach seeks to provide a solution for the integration of standardized manufacturing assets and their inclusion in flexible production systems in a way that achieves the demanding requirements imposed during the digital transformation by the Industry 4.0 paradigm. In order to achieve this goal, it considers several axes as key aspects of development: interoperability, autonomy, accessibility and scalability. To achieve this, a solution is presented based on the self-configuration of :term:`Digital Twins <Digital Twin>` implemented through :term:`industrial agents <Industrial Agent>` as asset representatives, based on their standardized descriptions such as the :term:`AAS` and enriched with architectural styles such as the :term:`CSS model`.
+
+    **SMIA PE**
+        The :term:`SMIA` PE (Production Execution) agent guarantees the realization of the required interactions between distributed components that may arise during production execution, facilitated through the fully implemented :term:`FIPA-SMIACL` specification acting as an I4.0 Language. It features extended capabilities for interpreting CSS-driven :term:`BPMN` workflows to orchestrate dynamic and constraint-based discovery, negotiation, and task allocation.
+
+    **BPMN**
+        The Business Process Model and Notation (BPMN) is a Process Modeling Language standard that provides a comprehensive model that successfully captures the informational, functional, and behavioral aspects of complex workflows. In the context of flexible manufacturing, its value lies in its abstraction capacity through a machine-readable graphical notation, ensuring that the production plan remains entirely flexible until it is dynamically interpreted and orchestrated by the distributed runtime system.
 
     **Digital Twin**
         :term:`Digital representation`, sufficient to meet the requirements of a set of use cases. That is, it is the software needed to access the administrative part of the asset and allow that information to be exposed to other software applications. In addition, it must also provide the ability to communicate with the asset [adapted from `Specification of the AAS Part 1: Metamodel <https://industrialdigitaltwin.org/en/content-hub/aasspecifications/specification-of-the-asset-administration-shell-part-1-metamodel-idta-number-01001-3-0-1>`_].
