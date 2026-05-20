@@ -13,6 +13,11 @@ builtins.__sphinx_build__ = True
 
 # sys.path.insert(0, os.path.abspath(os.path.join('..', 'src')))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+
+# The SMIA PE source code is added for API documentation section from its internal 'src' folder because the imports
+# were defined locally rather than in the main module
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
+                                                'additional_tools/extended_agents/smia_pe/src')))
 # print("sys.path:", sys.path)
 
 # If any part of the code gives error when generating the documentation, try importing and printing that part.

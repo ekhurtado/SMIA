@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 from spade.behaviour import OneShotBehaviour
 
-from utilities.gui_utils import GUIFeatures, GUIControllers
+from smia_pe.utilities.gui_utils import GUIFeatures, GUIControllers
 
 _logger = logging.getLogger(__name__)
 

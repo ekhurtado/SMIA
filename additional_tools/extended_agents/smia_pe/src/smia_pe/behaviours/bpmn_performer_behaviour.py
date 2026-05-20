@@ -10,9 +10,9 @@ from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
 from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo, ACLSMIAJSONSchemas
 from spade.behaviour import CyclicBehaviour
 
-from utilities.smia_bpmn_info import SMIABPMNInfo
-from utilities.smia_bpmn_utils import SMIABPMNUtils
-from utilities.smia_pe_aas_model_utils import SMIAPEModelUtils
+from smia_pe.utilities.smia_bpmn_info import SMIABPMNInfo
+from smia_pe.utilities.smia_bpmn_utils import SMIABPMNUtils
+from smia_pe.utilities.smia_pe_aas_model_utils import SMIAPEModelUtils
 
 _logger = logging.getLogger(__name__)
 

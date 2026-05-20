@@ -5,9 +5,9 @@ import smia
 from smia.agents.extensible_smia_agent import ExtensibleSMIAAgent
 from smia.utilities.general_utils import DockerUtils
 
-from behaviours.smia_pe_gui_behaviour import SMIAPEGUIBehaviour
-from behaviours.bpmn_performer_behaviour import BPMNPerformerBehaviour
-from behaviours.receive_acl_behaviour import ReceiveACLBehaviour
+from smia_pe.behaviours.smia_pe_gui_behaviour import SMIAPEGUIBehaviour
+from smia_pe.behaviours.bpmn_performer_behaviour import BPMNPerformerBehaviour
+from smia_pe.behaviours.receive_acl_behaviour import ReceiveACLBehaviour
 
 _logger = logging.getLogger(__name__)
 

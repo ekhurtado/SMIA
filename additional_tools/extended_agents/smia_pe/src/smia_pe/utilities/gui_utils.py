@@ -7,7 +7,7 @@ from SpiffWorkflow.bpmn.specs.defaults import ServiceTask
 from SpiffWorkflow.specs import StartTask
 from aiohttp import web
 
-from utilities.smia_bpmn_utils import SMIABPMNUtils
+from smia_pe.utilities.smia_bpmn_utils import SMIABPMNUtils
 
 _logger = logging.getLogger(__name__)
 

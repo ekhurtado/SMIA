@@ -5,7 +5,7 @@ import re
 from SpiffWorkflow.bpmn.specs.defaults import EndEvent, ExclusiveGateway, StartEvent
 from SpiffWorkflow.bpmn.specs.defaults import ServiceTask
 
-from utilities.smia_bpmn_info import SMIABPMNInfo
+from smia_pe.utilities.smia_bpmn_info import SMIABPMNInfo
 
 _logger = logging.getLogger(__name__)
 

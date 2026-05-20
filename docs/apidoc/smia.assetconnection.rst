@@ -9,6 +9,7 @@ Submodules
 
    smia.assetconnection.asset_connection
    smia.assetconnection.http_asset_connection
+   smia.assetconnection.mqtt_asset_connection
 
 Module contents
 ---------------
