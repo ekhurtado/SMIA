@@ -21,6 +21,11 @@ The source code can be downloaded directly from the official GitHub repository f
 
             :octicon:`mark-github;1em` SMIA Operator agent source code
 
+.. seealso::
+
+    The API documentation for the SMIA Operator source code is also available at :octicon:`repo;1em` :ref:`API documentation SMIA ecosystem <API documentation SMIA ecosystem>`.
+
+
 Deployment Environment
 ----------------------
 

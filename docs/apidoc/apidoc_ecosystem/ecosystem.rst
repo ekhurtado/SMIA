@@ -1,7 +1,8 @@
+.. _API documentation SMIA ecosystem:
+
 API documentation: SMIA ecosystem
 =================================
 
-.. _API documentation SMIA ecosystem:
 
 .. toctree::
    :maxdepth: 1
