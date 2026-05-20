@@ -1,5 +1,5 @@
 sphinx_rtd_theme==2.0.0
-spade==3.3.3
+spade ~= 4.0.3
 Flask==2.2.5
 requests==2.31.0
 furo==2024.8.6
@@ -11,9 +11,13 @@ sphinxembeddedvideos==1.1.0.dev20190210
 sphinx-new-tab-link==0.6.1
 myst-parser==4.0.0
 aiokafka==0.10.0
-basyx-python-sdk==1.0.0
+basyx-python-sdk ~= 1.2.1
 tdqm==0.0.1
 jsonpath-ng==1.7.0
 psutil==6.1.0
-owlready2==0.47
+owlready2 ~= 0.48
 jsonschema==4.22.0
+aiohttp >= 3.10.4
+aiomqtt ~= 2.5.1
+tqdm ~= 4.67.1
+slixmpp == 1.8.5
