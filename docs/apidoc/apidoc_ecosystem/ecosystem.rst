@@ -7,3 +7,4 @@ API documentation: SMIA ecosystem
    :maxdepth: 1
 
    smia_pe/smia_pe
+   smia_operator/smia_operator

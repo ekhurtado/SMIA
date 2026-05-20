@@ -18,6 +18,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 # were defined locally rather than in the main module
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
                                                 'additional_tools/extended_agents/smia_pe/src')))
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
+                                                'additional_tools/extended_agents/smia_operator_agent')))
 # print("sys.path:", sys.path)
 
 # If any part of the code gives error when generating the documentation, try importing and printing that part.

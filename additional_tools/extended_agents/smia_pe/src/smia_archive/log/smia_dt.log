@@ -27817,3 +27817,12 @@ ConnectionError: stream shut down
 2025-07-11 15:48:12,871 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/BPMNPerformerBehaviour line:43
 2025-07-11 15:48:12,871 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/SMIAPEGUIBehaviour line:43
 2025-07-11 15:48:14,804 [SPADE] [WARNING] Keyboard interrupt received. Stopping SPADE... line:142
+2026-05-20 17:53:44,632 [__main__] [INFO] Initializing SMIA PE ... line:19
+2026-05-20 17:53:44,633 [smia.utilities.general_utils] [WARNING] The environment variable 'AAS_MODEL_NAME' for the AAS model is not set, so check that it is not necessary. Please add the information (or the AAS id) and restart the container. line:315
+2026-05-20 17:53:44,729 [smia.utilities.smia_archive_utils] [INFO] SMIA Archive initialized. line:34
+2026-05-20 17:53:44,729 [smia] [ERROR] The file path to the AAS model is None, so it cannot be loaded. line:77
+2026-05-20 17:53:44,821 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/ReceiveACLBehaviour line:43
+2026-05-20 17:53:44,821 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: OneShotBehaviour/SMIAPEGUIBehaviour line:43
+2026-05-20 17:53:44,822 [smia.agents.extensible_smia_agent] [INFO] Added a new agent capability to SMIA: CyclicBehaviour/BPMNPerformerBehaviour line:43
+2026-05-20 17:53:44,929 [aioxmpp.node] [WARNING] connection failed: [Errno 11001] getaddrinfo failed line:251
+2026-05-20 17:53:44,930 [SPADE] [ERROR] Exception in the event loop: failed to connect to XMPP domain '#': multiple errors: [Errno 11001] getaddrinfo failed line:118

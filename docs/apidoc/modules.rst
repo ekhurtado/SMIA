@@ -9,10 +9,10 @@ API documentation
    smia
 
 
-Additional tools
-----------------
+API documentation: ecosystem
+----------------------------
 
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 2
 
-    apidoc_ecosystem/ecosystem.rst
+    apidoc_ecosystem/ecosystem
