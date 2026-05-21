@@ -27,14 +27,14 @@ The tutorial consists of three phases. It starts by generating the necessary pre
 .. figure:: ../../_static/images/guides_images/SMIA_guided_tutorial_steps.jpg
    :alt: SMIA extension guided tutorial steps
 
-   SMIA extension guided tutorial steps
+   **Figure**: SMIA extension guided tutorial steps
 
 The objective is to increase the agent's autonomy using the three extension mechanisms it offers: adding an agent service, adding an agent capability, and adding an asset interface (asset connection). The explanation of each extension, as well as the CSS-enriched AAS elements of the asset to be defined, is presented in the following figure:
 
 .. figure:: ../../_static/images/guides_images/SMIA_guided_tutorial_asset_info.jpg
    :alt: SMIA extension guided tutorial asset info
 
-   SMIA extension guided tutorial asset info
+   **Figure**: SMIA extension guided tutorial asset info
 
 Tutorial Objective
 ~~~~~~~~~~~~~~~~~~
