@@ -23,15 +23,15 @@ SMIA PE provides CSS-driven BPMN workflow automation.
 SMIA HI
 ---------
 
-SMIA PE provides CSS-driven BPMN workflow automation.
+SMIA HI provides human-machine interaction capabilities within the SMIA ecosystem.
 
-    The guide for SMIA PE is available at :octicon:`repo;1em` :ref:`SMIA ecosystem SMIA HI`.
+    The guide for SMIA HI is available at :octicon:`repo;1em` :ref:`SMIA ecosystem SMIA HI`.
 
 
 SMIA Operator
 --------------
 
-SMIA PE provides CSS-driven BPMN workflow automation.
+SMIA Operator provides a graphical interface for human users to interact with the SMIA normalized multi-agent system.
 
-    The guide for SMIA PE is available at :octicon:`repo;1em` :ref:`SMIA ecosystem SMIA Operator`.
+    The guide for SMIA Operator is available at :octicon:`repo;1em` :ref:`SMIA ecosystem SMIA Operator`.
 
