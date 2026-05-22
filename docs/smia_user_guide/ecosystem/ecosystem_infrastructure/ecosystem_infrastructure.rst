@@ -28,3 +28,12 @@ Camunda Modeler enables the definition of CSS-driven BPMN workflows that are val
 
     The guide for Camunda Modeler is available at :octicon:`repo;1em` :ref:`SMIA ecosystem Camunda Modeler`.
 
+
+SMIA-I KB
+----------
+
+SMIA-I KB (Knowledge Base) provides system information to identify SMIA agents and their CSS functional information.
+
+    The guide for SMIA-I KB is available at :octicon:`repo;1em` :ref:`SMIA ecosystem SMIA-I KB`.
+
+
