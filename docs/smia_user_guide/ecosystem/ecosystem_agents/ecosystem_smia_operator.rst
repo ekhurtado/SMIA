@@ -3,7 +3,7 @@
 SMIA ecosystem: SMIA Operator
 =============================
 
-The SMIA Operator is a specialized tool that features a graphical interface allowing human users to easily interact with deployed agents. This tool provides a structured view of the functional information (:term:`CSS model`) of the assets and enables users to request tasks from associated SMIA agents without having to deal with the complexity of the required I4.0 Language (FIPA-SMIACL).
+The SMIA Operator is a specialized tool that features a graphical interface allowing human users to easily interact with deployed agents. This tool provides a structured view of the functional information (:term:`CSS model`) of the assets and enables users to request tasks from associated SMIA agents without having to deal with the complexity of the required I4.0 Language (:term:`FIPA-SMIACL`).
 
 .. note::
 
