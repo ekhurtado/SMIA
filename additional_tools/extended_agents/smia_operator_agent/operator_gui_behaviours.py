@@ -5,12 +5,13 @@ import logging
 from collections import OrderedDict
 from datetime import datetime
 
+from smia.logic import acl_smia_messages_utils
 from spade.behaviour import OneShotBehaviour, CyclicBehaviour
 from spade.message import Message
 
 from smia import GeneralUtils
 from smia.css_ontology.css_ontology_utils import CapabilitySkillACLInfo
-from smia.utilities.fipa_acl_info import ServiceTypes, FIPAACLInfo
+from smia.utilities.fipa_acl_info import ServiceTypes, FIPAACLInfo, ACLSMIAOntologyInfo, ACLSMIAJSONSchemas
 from smia.utilities.smia_info import SMIAInteractionInfo
 from operator_gui_logic import GUIFeatures, GUIControllers
 
@@ -207,6 +208,23 @@ class OperatorRequestBehaviour(OneShotBehaviour):
                     neg_body_json['serviceData']['serviceParams'].update({'capabilityName': 'Negotiation',
                                                                           'skillName': 'NegotiationBasedOnRAM'})
 
+                if (OperatorRequestBehaviour.version_str_to_tuple(self.get_smia_version_by_id(smia_id)) >=
+                        OperatorRequestBehaviour.version_str_to_tuple('0.2.4')):
+                    _logger.info("It is a version higher than 0.2.4, so it requires a specific FIPA-SMIA-ACL "
+                                 "message format.")
+                    neg_msg_metadata = {'performative': FIPAACLInfo.FIPA_ACL_PERFORMATIVE_CFP,
+                                        'ontology': ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE,
+                                        'protocol': FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL}
+                    neg_body_json = await self.adapt_msg_to_fipa_smiacl(neg_body_json)
+                    neg_body_json = await acl_smia_messages_utils.generate_json_from_schema(
+                        ACLSMIAJSONSchemas.JSON_SCHEMA_CSS_SERVICE, capabilityIRI=self.capability,
+                        skillIRI=self.skill, constraints=self.constraints,
+                        skillParams=self.skill_params,
+                        negCriterion='http://www.w3id.org/hsu-aut/css#NegotiationBasedOnRAM',
+                        negRequester=str(self.myagent.jid), negTargets=self.selected_smia_ids)
+                else:
+                    neg_msg_metadata = SMIAInteractionInfo.NEG_STANDARD_ACL_TEMPLATE_CFP.metadata
+
                 # The updated JSON for the message body is added to message object
                 msg.body = json.dumps(neg_body_json)
 
@@ -215,7 +233,7 @@ class OperatorRequestBehaviour(OneShotBehaviour):
                     msg.to = smia_id
                     _logger.aclinfo("Sending Negotiation request to {}...".format(smia_id))
                     neg_msg = OperatorRequestBehaviour.create_acl_msg(
-                        smia_id, self.thread, SMIAInteractionInfo.NEG_STANDARD_ACL_TEMPLATE_CFP.metadata, neg_body_json)
+                        smia_id, self.thread, neg_msg_metadata, neg_body_json)
                     await self.send(neg_msg)
                     # await self.send(msg)
                     _logger.aclinfo("Message sent to {}!".format(msg.to))
@@ -262,31 +280,7 @@ class OperatorRequestBehaviour(OneShotBehaviour):
                     _logger.info("It is a version higher than 0.2.4, so it requires a specific FIPA-SMIA-ACL "
                                  "message format.")
                     msg_metadata = {'performative': 'request', 'ontology': 'css-service', 'protocol': 'fipa-request'}
-                    if '#' not in self.capability:
-                        self.capability = 'http://www.w3id.org/upv-ehu/gcis/css-smia#' + self.capability
-                    if '#' not in self.skill:
-                        self.skill = 'http://www.w3id.org/hsu-aut/css#' + self.skill
-
-                    msg_body_json = {'capabilityIRI': self.capability, 'skillIRI': self.skill}
-                    if self.skill_params is not None:
-                        skill_params_dict = {}
-                        for param in set(eval(self.skill_params)):
-                            param_value = self.form_data.get(param, None)
-                            if param_value is None:
-                                _logger.warning(
-                                    "The value of the {} parameter is missing, it is possible that the capability "
-                                    "cannot be executed.".format(param))
-                            if '#' not in param:
-                                param = 'http://www.w3id.org/hsu-aut/css#' + param
-                            skill_params_dict[param] = param_value
-                        msg_body_json['skillParams'] = skill_params_dict
-                    if self.constraints is not None:
-                        constraints = {}
-                        for const_name, const_value in eval(self.constraints).items():
-                            if '#' not in const_name:
-                                const_name = 'http://www.w3id.org/hsu-aut/css#' + const_name
-                            constraints[const_name] = const_value
-                        msg_body_json['constraints'] = constraints
+                    msg_body_json = await self.adapt_msg_to_fipa_smiacl(msg_body_json)
                 else:
                     if self.capability == 'Negotiation':
                         # In this particular case, the negotiation request is made via the performative CallForProposal
@@ -352,6 +346,44 @@ class OperatorRequestBehaviour(OneShotBehaviour):
             self.myagent.request_exec_info['InteractionsDict'].append(
                 {'type': 'exception', 'title': 'An error ocurred during the CSS-related request.', 'message': str(e)})
 
+    async def adapt_msg_to_fipa_smiacl(self, msg_body_json: dict) -> dict:
+        """
+        This method adapts a FIPA-ACL message into one that is compatible with the FIPA-SMIACL normalized language
+         (used in SMIA versions later than 0.2.4).
+
+        Args:
+            msg_body_json: dict with body of the message.
+
+        Returns:
+            msg_body_json: dict with adapted body of the message.
+        """
+
+        if '#' not in self.capability:
+            self.capability = 'http://www.w3id.org/upv-ehu/gcis/css-smia#' + self.capability
+        if '#' not in self.skill:
+            self.skill = 'http://www.w3id.org/hsu-aut/css#' + self.skill
+
+        msg_body_json = {'capabilityIRI': self.capability, 'skillIRI': self.skill}
+        if self.skill_params is not None:
+            skill_params_dict = {}
+            for param in set(eval(self.skill_params)):
+                param_value = self.form_data.get(param, None)
+                if param_value is None:
+                    _logger.warning(
+                        "The value of the {} parameter is missing, it is possible that the capability "
+                        "cannot be executed.".format(param))
+                if '#' not in param:
+                    param = 'http://www.w3id.org/hsu-aut/css#' + param
+                skill_params_dict[param] = param_value
+            msg_body_json['skillParams'] = skill_params_dict
+        if self.constraints is not None:
+            constraints = {}
+            for const_name, const_value in eval(self.constraints).items():
+                if '#' not in const_name:
+                    const_name = 'http://www.w3id.org/hsu-aut/css#' + const_name
+                constraints[const_name] = const_value
+            msg_body_json['constraints'] = constraints
+        return msg_body_json
 
     @staticmethod
     def create_acl_msg(receiver_jid, thread, metadata, body_json):
