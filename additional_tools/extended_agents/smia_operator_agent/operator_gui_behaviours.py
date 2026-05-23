@@ -255,7 +255,13 @@ class OperatorRequestBehaviour(OneShotBehaviour):
                 self.thread = msg.thread
 
                 # The SMIA id to request the capability is updated to create correctly the next ACL message
-                smia_id = eval(json.loads(self.receive_msg.body)['serviceData']['serviceParams'])['winner']
+                response_body = acl_smia_messages_utils.get_parsed_body_from_acl_msg(self.receive_msg)
+                if 'serviceData' in response_body:
+                    smia_id = eval(json.loads(self.receive_msg.body)['serviceData']['serviceParams'])['winner']
+                elif 'winner' in response_body and response_body['winner']:
+                    smia_id = acl_smia_messages_utils.get_sender_from_acl_msg(self.receive_msg)
+                else:
+                    smia_id = str(response_body)
 
                 # The information about the negotiation response is added in the dictionary for the HTML result page
                 response_info = {'type': 'acl_recv', 'title': 'Obtaining negotiation winner ...'}
