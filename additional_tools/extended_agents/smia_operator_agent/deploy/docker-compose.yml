@@ -4,7 +4,7 @@ services:
 
 
   smia-operator:
-    image: ekhurtado/smia-use-cases:latest-operator
+    image: ekhurtado/smia-tools:latest-smia-operator
     container_name: smia-operator
     environment:
       - AAS_MODEL_NAME=<path to model>.aasx
