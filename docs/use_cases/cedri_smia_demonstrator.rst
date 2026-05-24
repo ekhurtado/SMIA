@@ -35,7 +35,7 @@ Human operator           Transportation, VisualInspection   Weight (max 3 kg)   
 Production plans
 ~~~~~~~~~~~~~~~~
 
-To efficiently validate the SMIA approach to flexible manufacturing, two production plans have been designed:
+To efficiently validate the SMIA approach to flexible manufacturing, two production plans have been designed using Camunda Modeler:
 
 * Production A: focused on automatic production through distributed asset selection
 
@@ -54,6 +54,10 @@ To efficiently validate the SMIA approach to flexible manufacturing, two product
     :alt: CeDRI demonstrator validation: production plan B
 
     **Figure**: Use case validation: production plan B
+
+.. seealso::
+
+    These plans were designed using the dedicated SMIA plugin for Camunda Modeler, which provides CSS-driven BPMN workflows that are valid for SMIA PE. More information is available at :octicon:`repo;1em` :ref:`SMIA ecosystem Camunda Modeler`
 
 Development of the use case
 ---------------------------
