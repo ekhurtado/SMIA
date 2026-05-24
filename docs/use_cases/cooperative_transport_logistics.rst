@@ -7,7 +7,7 @@ This use case represents a robotic logistics production scenario, in which a pla
 
 .. note::
 
-    All the resources developed in the case study are available in the `SMIA repository on GitHub <https://github.com/ekhurtado/SMIA/tree/cooperative_transport_logistics/use_cases/cooperative_transport_logistics>`_. The use case was validated with SMIA version 0.2.2.
+    All the resources developed in the case study are available in the `SMIA repository on GitHub <https://github.com/ekhurtado/SMIA/tree/cooperative_transport_logistics/use_cases/cooperative_transport_logistics>`_. The use case was validated with SMIA version :bdg-primary:`0.2.2`.
 
 Description of the use case
 ---------------------------
