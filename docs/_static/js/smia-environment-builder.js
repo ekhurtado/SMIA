@@ -1743,7 +1743,7 @@ spec:
     spec:
       containers:
         - name: smia-operator
-          image: ekhurtado/smia-tools:latest-smia-ism
+          image: ekhurtado/smia-tools:latest-smia-operator
           env:
             # AAS_MODEL_NAME: Operator AAS model file (fetched from GitHub)
             - name: AAS_MODEL_NAME
