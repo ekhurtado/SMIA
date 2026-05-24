@@ -9,6 +9,7 @@ from smia.logic import acl_smia_messages_utils
 from spade.behaviour import OneShotBehaviour, CyclicBehaviour
 from spade.message import Message
 
+import smia
 from smia import GeneralUtils
 from smia.css_ontology.css_ontology_utils import CapabilitySkillACLInfo
 from smia.utilities.fipa_acl_info import ServiceTypes, FIPAACLInfo, ACLSMIAOntologyInfo, ACLSMIAJSONSchemas
@@ -26,6 +27,7 @@ class OperatorGUIBehaviour(OneShotBehaviour):
         # First, the dictionary is initialized to add the menu entries that are required in runtime. The name of the
         # SMIA SPADE agent is also initialized to be used in the added HTMLs templates
         self.agent.web_menu_entries = OrderedDict()
+        self.agent.smia_version = smia.__version__
         # self.agent.agent_name = str(self.agent.jid).split('@')[0]  # tambien se puede lograr mediante agent.jid.localpart
         self.agent.build_avatar_url = GUIFeatures.build_avatar_url
 
@@ -218,8 +220,8 @@ class OperatorRequestBehaviour(OneShotBehaviour):
                     neg_body_json = await self.adapt_msg_to_fipa_smiacl(neg_body_json)
                     neg_body_json = await acl_smia_messages_utils.generate_json_from_schema(
                         ACLSMIAJSONSchemas.JSON_SCHEMA_CSS_SERVICE, capabilityIRI=self.capability,
-                        skillIRI=self.skill, constraints=self.constraints,
-                        skillParams=self.skill_params,
+                        skillIRI=self.skill, constraints=neg_body_json.get('constraints'),  # Adapted constraints
+                        skillParams=neg_body_json.get('skillParams'),  # Adapted skill params
                         negCriterion='http://www.w3id.org/hsu-aut/css#NegotiationBasedOnRAM',
                         negRequester=str(self.myagent.jid), negTargets=self.selected_smia_ids)
                 else:
