@@ -10,6 +10,8 @@ This collection of user guides provides information about supporting infrastruct
     :hidden:
 
     ecosystem_camunda_modeler
+    ecosystem_smia_i_kb
+    ecosystem_smia_ism
 
 AASX Package Explorer
 ---------------------
@@ -35,5 +37,14 @@ SMIA-I KB
 SMIA-I KB (Knowledge Base) provides system information to identify SMIA agents and their CSS functional information.
 
     The guide for SMIA-I KB is available at :octicon:`repo;1em` :ref:`SMIA ecosystem SMIA-I KB`.
+
+
+
+SMIA-ISM
+----------
+
+SMIA-ISM (Infrastructure Services Manager) bridges the gap between the normalized MAS and the non-agent infrastructure, efficiently decoupling and linking both environments.
+
+    The guide for SMIA ISM is available at :octicon:`repo;1em` :ref:`SMIA ecosystem SMIA ISM`.
 
 
