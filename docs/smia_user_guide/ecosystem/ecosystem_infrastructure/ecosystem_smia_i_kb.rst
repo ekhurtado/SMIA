@@ -364,175 +364,255 @@ API schemas
 
 .. _SMIA ecosystem SMIA-I KB API schemas:
 
-The following schemas define the data structures that are used in request bodies and responses across the API.
+The following **schemas** define the data structures that are used in request bodies and responses across the API. Although the format is defined in an abstract manner and supports both JSON and XML serialization, it is recommended to use **JSON**.
+
+.. dropdown:: :octicon:`file-badge;1em;sd-text-primary` Capability schema
+
+    .. list-table:: Capability
+       :header-rows: 1
+       :widths: 20 15 10 55
+
+       * - Field
+         - Type
+         - Req.
+         - Description
+       * - ``iri``
+         - ``ReferenceIRI``
+         - Yes
+         - Unique ontology IRI identifier (e.g., ``http://name.org/css-smia#Capability01``)
+       * - ``name``
+         - ``string``
+         - Yes
+         - Name of the capability (e.g., ``capability01``)
+       * - ``category``
+         - ``enum``
+         - Yes
+         - ``AgentCapability`` or ``AssetCapability``
+       * - ``hasLifecycle``
+         - ``enum``
+         - Yes
+         - ``ASSURANCE``, ``OFFER``, or ``REQUIREMENT``
+       * - ``isRealizedBy``
+         - ``[ReferenceIRI]``
+         - Yes
+         - Skill IRIs that realize this capability
+       * - ``assets``
+         - ``[Asset]``
+         - Yes
+         - Assets that can perform this capability
+       * - ``isRestrictedBy``
+         - ``[CapabilityConstraint]``
+         - No
+         - Constraints that restrict this capability
+
+.. dropdown:: :octicon:`file-badge;1em;sd-text-primary` Skill schema
+
+    .. list-table:: Skill
+       :header-rows: 1
+       :widths: 20 15 10 55
+
+       * - Field
+         - Type
+         - Req.
+         - Description
+       * - ``iri``
+         - ``ReferenceIRI``
+         - Yes
+         - Unique ontology IRI identifier
+       * - ``name``
+         - ``string``
+         - Yes
+         - Name of the skill (e.g., ``skill01``)
+       * - ``accessibleThrough``
+         - ``[ReferenceIRI]``
+         - No
+         - Skill interface IRIs through which the skill is accessible
+       * - ``hasParameter``
+         - ``[SkillParameter]``
+         - No
+         - Associated skill parameters
+       * - ``hasImplementationType``
+         - ``string``
+         - No
+         - Implementation type (e.g., ``OPERATION``, ``SPADE_BEHAVIOUR``)
+
+.. dropdown:: :octicon:`file-badge;1em;sd-text-primary` SMIAinstance schema
+
+    .. list-table:: SMIAinstance
+       :header-rows: 1
+       :widths: 20 15 10 55
+
+       * - Field
+         - Type
+         - Req.
+         - Description
+       * - ``id``
+         - ``ReferenceSMIA``
+         - Yes
+         - SMIA instance identifier (e.g., ``agentInstance001``)
+       * - ``asset``
+         - ``Asset``
+         - Yes
+         - Associated asset information
+       * - ``aasID``
+         - ``ReferenceAAS``
+         - Yes
+         - AAS identifier of the instance
+       * - ``status``
+         - ``string``
+         - No
+         - Current status (e.g., ``Running``)
+       * - ``startedTimeStamp``
+         - ``integer``
+         - No
+         - Unix timestamp of when the instance started
+       * - ``smiaVersion``
+         - ``string``
+         - No
+         - SMIA software version (e.g., ``0.2.3``)
+
+.. dropdown:: :octicon:`file-badge;1em;sd-text-primary` Asset schema
+
+    .. list-table:: Asset
+       :header-rows: 1
+       :widths: 20 15 10 55
+
+       * - Field
+         - Type
+         - Req.
+         - Description
+       * - ``id``
+         - ``string``
+         - Yes
+         - Asset identifier (e.g., ``http://example.com/ids/asset001``)
+       * - ``kind``
+         - ``enum``
+         - Yes
+         - ``Type``, ``Instance``, or ``NotApplicable``
+       * - ``type``
+         - ``ReferenceAAS``
+         - No
+         - AAS reference for the asset
+
+.. dropdown:: :octicon:`file-badge;1em;sd-text-primary` CapabilityConstraint schema
+
+    .. list-table:: CapabilityConstraint
+       :header-rows: 1
+       :widths: 20 15 10 55
+
+       * - Field
+         - Type
+         - Req.
+         - Description
+       * - ``iri``
+         - ``ReferenceIRI``
+         - Yes
+         - Unique ontology IRI identifier
+       * - ``name``
+         - ``string``
+         - Yes
+         - Name of the constraint (e.g., ``capabilityConstraint01``)
+       * - ``hasCondition``
+         - ``enum``
+         - Yes
+         - ``INVARIANT``, ``PRECONDITION``, or ``POSTCONDITION``
+
+.. dropdown:: :octicon:`file-badge;1em;sd-text-primary` SkillParameter schema
+
+    .. list-table:: SkillParameter
+       :header-rows: 1
+       :widths: 20 15 10 55
+
+       * - Field
+         - Type
+         - Req.
+         - Description
+       * - ``iri``
+         - ``ReferenceIRI``
+         - Yes
+         - Unique ontology IRI identifier
+       * - ``name``
+         - ``string``
+         - Yes
+         - Name of the parameter (e.g., ``skillParameter01``)
+       * - ``hasType``
+         - ``enum``
+         - Yes
+         - ``INPUT``, ``OUTPUT``, or ``INOUTPUT``
 
 
-.. list-table:: Capability
-   :header-rows: 1
-   :widths: 20 15 10 55
 
-   * - Field
-     - Type
-     - Req.
-     - Description
-   * - ``iri``
-     - ``ReferenceIRI``
-     - Yes
-     - Unique ontology IRI identifier (e.g., ``http://name.org/css-smia#Capability01``)
-   * - ``name``
-     - ``string``
-     - Yes
-     - Name of the capability (e.g., ``capability01``)
-   * - ``category``
-     - ``enum``
-     - Yes
-     - ``AgentCapability`` or ``AssetCapability``
-   * - ``hasLifecycle``
-     - ``enum``
-     - Yes
-     - ``ASSURANCE``, ``OFFER``, or ``REQUIREMENT``
-   * - ``isRealizedBy``
-     - ``[ReferenceIRI]``
-     - Yes
-     - Skill IRIs that realize this capability
-   * - ``assets``
-     - ``[Asset]``
-     - Yes
-     - Assets that can perform this capability
-   * - ``isRestrictedBy``
-     - ``[CapabilityConstraint]``
-     - No
-     - Constraints that restrict this capability
+Usage Examples
+--------------
 
-.. list-table:: Skill
-   :header-rows: 1
-   :widths: 20 15 10 55
+HTTP requests examples
+~~~~~~~~~~~~~~~~~~~~~~
 
-   * - Field
-     - Type
-     - Req.
-     - Description
-   * - ``iri``
-     - ``ReferenceIRI``
-     - Yes
-     - Unique ontology IRI identifier
-   * - ``name``
-     - ``string``
-     - Yes
-     - Name of the skill (e.g., ``skill01``)
-   * - ``accessibleThrough``
-     - ``[ReferenceIRI]``
-     - No
-     - Skill interface IRIs through which the skill is accessible
-   * - ``hasParameter``
-     - ``[SkillParameter]``
-     - No
-     - Associated skill parameters
-   * - ``hasImplementationType``
-     - ``string``
-     - No
-     - Implementation type (e.g., ``OPERATION``, ``SPADE_BEHAVIOUR``)
+**Retrieve all capabilities**
 
-.. list-table:: SMIAinstance
-   :header-rows: 1
-   :widths: 20 15 10 55
+.. code-block:: bash
 
-   * - Field
-     - Type
-     - Req.
-     - Description
-   * - ``id``
-     - ``ReferenceSMIA``
-     - Yes
-     - SMIA instance identifier (e.g., ``agentInstance001``)
-   * - ``asset``
-     - ``Asset``
-     - Yes
-     - Associated asset information
-   * - ``aasID``
-     - ``ReferenceAAS``
-     - Yes
-     - AAS identifier of the instance
-   * - ``status``
-     - ``string``
-     - No
-     - Current status (e.g., ``Running``)
-   * - ``startedTimeStamp``
-     - ``integer``
-     - No
-     - Unix timestamp of when the instance started
-   * - ``smiaVersion``
-     - ``string``
-     - No
-     - SMIA software version (e.g., ``0.2.3``)
+    curl -X GET "https://<IP>:<PORT>/api/v3/capabilities" \
+         -H "Accept: application/json"
 
-.. list-table:: Asset
-   :header-rows: 1
-   :widths: 20 15 10 55
+**Register a new SMIA instance**
 
-   * - Field
-     - Type
-     - Req.
-     - Description
-   * - ``id``
-     - ``string``
-     - Yes
-     - Asset identifier (e.g., ``http://example.com/ids/asset001``)
-   * - ``kind``
-     - ``enum``
-     - Yes
-     - ``Type``, ``Instance``, or ``NotApplicable``
-   * - ``type``
-     - ``ReferenceAAS``
-     - No
-     - AAS reference for the asset
+.. code-block:: bash
 
-.. list-table:: CapabilityConstraint
-   :header-rows: 1
-   :widths: 20 15 10 55
+    curl -X POST "https://<IP>:<PORT>/api/v3/smiaInstances" \
+         -H "Content-Type: application/json" \
+         -d '{
+           "id": "agentInstance001",
+           "asset": {
+             "id": "http://example.com/ids/asset001",
+             "kind": "Instance"
+           },
+           "aasID": "http://example.com/ids/aasElement001",
+           "status": "Running",
+           "smiaVersion": "0.3.3"
+         }'
 
-   * - Field
-     - Type
-     - Req.
-     - Description
-   * - ``iri``
-     - ``ReferenceIRI``
-     - Yes
-     - Unique ontology IRI identifier
-   * - ``name``
-     - ``string``
-     - Yes
-     - Name of the constraint (e.g., ``capabilityConstraint01``)
-   * - ``hasCondition``
-     - ``enum``
-     - Yes
-     - ``INVARIANT``, ``PRECONDITION``, or ``POSTCONDITION``
+**Encode an IRI for use as a path parameter**
 
-.. list-table:: SkillParameter
-   :header-rows: 1
-   :widths: 20 15 10 55
+.. code-block:: bash
 
-   * - Field
-     - Type
-     - Req.
-     - Description
-   * - ``iri``
-     - ``ReferenceIRI``
-     - Yes
-     - Unique ontology IRI identifier
-   * - ``name``
-     - ``string``
-     - Yes
-     - Name of the parameter (e.g., ``skillParameter01``)
-   * - ``hasType``
-     - ``enum``
-     - Yes
-     - ``INPUT``, ``OUTPUT``, or ``INOUTPUT``
+    curl -X PUT "https://<IP>:<PORT>/api/v3/serialization" \
+         -H "Content-Type: application/json" \
+         -d '"http://name.org/css-smia#Capability01"'
+
+**Check AAS Repository availability**
+
+.. code-block:: bash
+
+    curl -X GET "https://<IP>:<PORT>/api/v3/checkAASRepository?AASRepositoryURL=http://<AAS server IP>:<AAS server PORT>"
+
+FIPA-SMIACL examples
+~~~~~~~~~~~~~~~~~~~~
+
+El acceso a SMIA-I KB desde un agente SMIA se realiza mediante el componente de infraestructura SMIA ISM, para asegurar el desacople con los servicios externos y mantener el entorno agéntico totalmente normalizado. The code provided is part of a SPADE behavior, which is responsible for sending messages.
+
+.. seealso::
+
+    El componente SMIA ISM se detalla en su página de documentación dedicada: :octicon:`repo;1em` :ref:`SMIA ecosystem SMIA ISM`.
+
+.. code:: python
+
+    from smia.logic import inter_smia_interactions_utils, , acl_smia_messages_utils
+    from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
+    from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo, ACLSMIAJSONSchemas
+
+    # Obtain all the asset identifiers associated to the given capability
+    smia_i_kb_api_body = await acl_smia_messages_utils.
+            generate_json_from_schema(ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE,
+            serviceID=AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_ALL_ASSET_BY_CAPABILITY,
+            serviceType=AASRelatedServicesInfo.AAS_SERVICE_TYPE_DISCOVERY, serviceParams=capability_iri)
+    request_assets_acl_msg = await inter_smia_interactions_utils.create_acl_smia_message(
+            f"{AASRelatedServicesInfo.SMIA_ISM_ID}@"
+            f"{await acl_smia_messages_utils.get_xmpp_server_from_jid(self.myagent.jid)}",
+            await acl_smia_messages_utils.create_random_thread(self.myagent), FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST,
+            ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE, protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL,
+            msg_body=smia_i_kb_api_body)
+    await self.send(request_assets_acl_msg)
 
 
------
 
-
-**This page isn't fully developed yet, but it will be soon!**
-
-.. TODO DESARROLLAR ESTA PAGINA Y QUITAR LA ANTERIOR FRASE
