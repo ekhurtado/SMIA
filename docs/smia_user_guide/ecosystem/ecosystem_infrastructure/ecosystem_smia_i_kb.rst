@@ -81,7 +81,7 @@ The API is organized into several functional areas corresponding to the CSS (Cap
 
     .. list-table::
        :header-rows: 1
-       :widths: 20 8 22 40
+       :widths: 28 8 22 42
 
        * - Path
          - Method
@@ -116,11 +116,11 @@ The API is organized into several functional areas corresponding to the CSS (Cap
        * -
          - :bdg-warning:`PUT`
          - Updates an existing capability
-         - *Path:* ``capabilityIdentifier``; *Body:* ``Capability``
+         - *Path:* ``capabilityIdentifier`` (Base64); *Body:* ``Capability`` (:ref:`REF <SMIA ecosystem SMIA-I KB API schemas>`)
        * -
          - :bdg-danger:`DELETE`
          - Deletes a specific capability
-         - *Path:* ``capabilityIdentifier``
+         - *Path:* ``capabilityIdentifier`` (Base64)
 
        * -
          -
@@ -129,11 +129,11 @@ The API is organized into several functional areas corresponding to the CSS (Cap
        * - ``/capabilities/{capabilityIdentifier}/skill-refs``
          - :bdg-success:`GET`
          - Returns skill references of a capability
-         - *Path:* ``capabilityIdentifier``
+         - *Path:* ``capabilityIdentifier`` (Base64)
        * -
          - :bdg-warning:`POST`
          - Add a skill reference to a capability
-         - *Path:* ``capabilityIdentifier``; *Body:* ``ReferenceIRI``
+         - *Path:* ``capabilityIdentifier`` (Base64); *Body:* ``ReferenceIRI`` (:ref:`REF <SMIA ecosystem SMIA-I KB API schemas>`)
 
        * -
          -
@@ -142,11 +142,11 @@ The API is organized into several functional areas corresponding to the CSS (Cap
        * - ``/capabilities/{capabilityIdentifier}/capabilitiesConstraints``
          - :bdg-success:`GET`
          - Returns constraints of a capability
-         - *Path:* ``capabilityIdentifier``
+         - *Path:* ``capabilityIdentifier`` (Base64)
        * -
          - :bdg-warning:`POST`
          - Add a constraint to a capability
-         - *Path:* ``capabilityIdentifier``; *Body:* ``CapabilityConstraint``
+         - *Path:* ``capabilityIdentifier`` (Base64); *Body:* ``CapabilityConstraint`` (:ref:`REF <SMIA ecosystem SMIA-I KB API schemas>`)
 
        * -
          -
@@ -155,11 +155,11 @@ The API is organized into several functional areas corresponding to the CSS (Cap
        * - ``/capabilities/{capabilityIdentifier}/capabilitiesConstraints/{capabilityConstraintIdentifier}``
          - :bdg-success:`GET`
          - Returns a specific constraint
-         - *Path:* both identifiers (Base64-URL encoded)
+         - *Path:* both identifiers (Base64)
        * -
          - :bdg-warning:`PUT`
          - Updates a constraint
-         - *Path:* both identifiers; *Body:* ``CapabilityConstraint``
+         - *Path:* both identifiers; *Body:* ``CapabilityConstraint`` (:ref:`REF <SMIA ecosystem SMIA-I KB API schemas>`)
        * -
          - :bdg-danger:`DELETE`
          - Deletes a constraint
@@ -172,11 +172,11 @@ The API is organized into several functional areas corresponding to the CSS (Cap
        * - ``/capabilities/{capabilityIdentifier}/assets``
          - :bdg-success:`GET`
          - Returns assets of a capability
-         - *Path:* ``capabilityIdentifier``
+         - *Path:* ``capabilityIdentifier`` (Base64)
        * -
          - :bdg-warning:`POST`
          - Add an asset to a capability
-         - *Path:* ``capabilityIdentifier``; *Body:* plain string (asset ID)
+         - *Path:* ``capabilityIdentifier`` (Base64); *Body:* plain string (asset ID)
 
 
 .. dropdown:: :octicon:`cache;1em;sd-text-primary` Skill API
@@ -198,7 +198,7 @@ The API is organized into several functional areas corresponding to the CSS (Cap
        * -
          - :bdg-warning:`POST`
          - Add a new skill
-         - *Body:* ``Skill``
+         - *Body:* ``Skill`` (:ref:`REF <SMIA ecosystem SMIA-I KB API schemas>`)
 
        * -
          -
@@ -216,15 +216,15 @@ The API is organized into several functional areas corresponding to the CSS (Cap
        * - ``/skills/{skillIdentifier}``
          - :bdg-success:`GET`
          - Returns a specific skill by IRI
-         - *Path:* ``skillIdentifier`` (Base64-URL encoded)
+         - *Path:* ``skillIdentifier`` (Base64)
        * -
          - :bdg-warning:`PUT`
          - Updates an existing skill
-         - *Path:* ``skillIdentifier``; *Body:* ``Skill``
+         - *Path:* ``skillIdentifier`` (Base64); *Body:* ``Skill`` (:ref:`REF <SMIA ecosystem SMIA-I KB API schemas>`)
        * -
          - :bdg-danger:`DELETE`
          - Deletes a skill
-         - *Path:* ``skillIdentifier``
+         - *Path:* ``skillIdentifier`` (Base64)
 
        * -
          -
@@ -233,11 +233,11 @@ The API is organized into several functional areas corresponding to the CSS (Cap
        * - ``/skills/{skillIdentifier}/parameters``
          - :bdg-success:`GET`
          - Returns parameters of a skill
-         - *Path:* ``skillIdentifier``
+         - *Path:* ``skillIdentifier`` (Base64)
        * -
          - :bdg-warning:`POST`
          - Add a parameter to a skill
-         - *Path:* ``skillIdentifier``; *Body:* ``SkillParameter``
+         - *Path:* ``skillIdentifier`` (Base64); *Body:* ``SkillParameter`` (:ref:`REF <SMIA ecosystem SMIA-I KB API schemas>`)
 
        * -
          -
@@ -246,11 +246,11 @@ The API is organized into several functional areas corresponding to the CSS (Cap
        * - ``/skills/{skillIdentifier}/parameters/{skillParameterIdentifier}``
          - :bdg-success:`GET`
          - Returns a specific parameter
-         - *Path:* both identifiers (Base64-URL encoded)
+         - *Path:* both identifiers (Base64)
        * -
          - :bdg-warning:`PUT`
          - Updates a skill parameter
-         - *Path:* both identifiers; *Body:* ``Skill``
+         - *Path:* both identifiers; *Body:* ``Skill`` (:ref:`REF <SMIA ecosystem SMIA-I KB API schemas>`)
        * -
          - :bdg-danger:`DELETE`
          - Deletes a skill parameter
@@ -263,7 +263,7 @@ The API is organized into several functional areas corresponding to the CSS (Cap
 
     .. list-table::
        :header-rows: 1
-       :widths: 20 10 20 30
+       :widths: 28 10 20 42
 
        * - Path
          - Method
@@ -276,7 +276,7 @@ The API is organized into several functional areas corresponding to the CSS (Cap
        * -
          - :bdg-warning:`POST`
          - Register a new SMIA instance
-         - *Body:* ``SMIAinstance``
+         - *Body:* ``SMIAinstance`` (:ref:`REF <SMIA ecosystem SMIA-I KB API schemas>`)
 
        * -
          -
@@ -298,7 +298,7 @@ The API is organized into several functional areas corresponding to the CSS (Cap
        * -
          - :bdg-warning:`PUT`
          - Updates an existing SMIA instance
-         - *Path:* ``smiaInstanceIdentifier``; *Body:* ``SMIAinstance``
+         - *Path:* ``smiaInstanceIdentifier``; *Body:* ``SMIAinstance`` (:ref:`REF <SMIA ecosystem SMIA-I KB API schemas>`)
        * -
          - :bdg-danger:`DELETE`
          - Deletes a SMIA instance
@@ -347,7 +347,7 @@ The API is organized into several functional areas corresponding to the CSS (Cap
        * - ``/serialization``
          - :bdg-warning:`PUT`
          - Encodes a plain string into Base64-URL format
-         - *Body:* ``ReferenceIRI`` (plain string)
+         - *Body:* ``ReferenceIRI`` (:ref:`REF <SMIA ecosystem SMIA-I KB API schemas>`) (plain string)
 
        * -
          -
@@ -356,7 +356,7 @@ The API is organized into several functional areas corresponding to the CSS (Cap
        * - ``/deserialization``
          - :bdg-warning:`PUT`
          - Decodes a Base64-URL string back to plain text
-         - *Body:* ``ReferenceIRIencoded``
+         - *Body:* ``ReferenceIRIencoded`` (:ref:`REF <SMIA ecosystem SMIA-I KB API schemas>`)
 
 
 API schemas
