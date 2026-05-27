@@ -602,11 +602,11 @@ HTTP requests examples
 FIPA-SMIACL examples
 ~~~~~~~~~~~~~~~~~~~~
 
-El acceso a SMIA-I KB desde un agente SMIA se realiza mediante el componente de infraestructura SMIA ISM, para asegurar el desacople con los servicios externos y mantener el entorno agéntico totalmente normalizado. The code provided is part of a SPADE behavior, which is responsible for sending messages.
+Access to SMIA-I KB from an SMIA agent is provided through the SMIA ISM infrastructure component, to ensure decoupling from external services and keep the agent environment fully standardized. The code provided is part of a SPADE behavior, which is responsible for sending messages.
 
 .. seealso::
 
-    El componente SMIA ISM se detalla en su página de documentación dedicada: :octicon:`repo;1em` :ref:`SMIA ecosystem SMIA ISM`.
+    The SMIA ISM component is detailed on its dedicated documentation page: :octicon:`repo;1em` :ref:`SMIA ecosystem SMIA ISM`.
 
 .. code:: python
 
