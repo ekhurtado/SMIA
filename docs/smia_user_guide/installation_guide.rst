@@ -25,7 +25,7 @@ For installing the AASX Package Explorer the binaries are provided in the projec
 
 .. tip::
 
-    Up to now, the latest version of the software is the `v2024-06-10.alpha <https://github.com/eclipse-aaspe/package-explorer/releases/tag/v2024-06-10.alpha>`_. The ZIP file with all necessary files can be downloaded from the `aasx-package-explorer.2024-06-10.alpha.zip <https://github.com/eclipse-aaspe/package-explorer/releases/download/v2024-06-10.alpha/aasx-package-explorer.2024-06-10.alpha.zip>`_.
+    Up to now, the latest version of the software is the `v2025-03-25.alpha <https://github.com/eclipse-aaspe/package-explorer/releases/tag/v2025-03-25.alpha>`_. The ZIP file with all necessary files can be downloaded from the `aasx-package-explorer.2025-03-25.alpha.zip <https://github.com/eclipse-aaspe/package-explorer/releases/download/v2025-03-25.alpha/aasx-package-explorer.2025-03-25.alpha.zip>`_.
 
 Software configuration
 ~~~~~~~~~~~~~~~~~~~~~~

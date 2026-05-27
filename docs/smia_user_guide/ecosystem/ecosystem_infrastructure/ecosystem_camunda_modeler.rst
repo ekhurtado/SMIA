@@ -49,8 +49,8 @@ Once downloaded, you must add the SMIA plugin to your installation. To do so, fo
         Either compiled earlier and copied to the Camunda installation folder or copied to the folder and then compiled, once the plugin is inside the Camunda installation folder it can be used. If there are problems, Camunda should be restarted. There are two options: close and open the program, or execute Ctrl+R.
 
 
-Flexible manufacturing plans as logical assets
-----------------------------------------------
+SMIA plugin for Camunda Modeler
+-------------------------------
 
 A key aspect of the proposed SMIA approach is digitizing manufacturing plans represented as production assets, ensuring flexibility throughout the design and execution phases. The plan definition must contain the sequence of actions for both manufacturing and contingency situations.
 
@@ -99,16 +99,16 @@ To minimally modify standard elements and maintain compatibility within the BPMN
 .. dropdown:: :octicon:`file-badge;1em;sd-text-primary` BPMN extension within SMIA approach for ``Exclusive Gateway`` element.
 
     .. list-table::
-        :widths: 25 15 40
-        :header-rows: 1
-        :align: center
+       :widths: 25 15 40
+       :header-rows: 1
+       :align: center
 
-        * - Attribute
-          - Type
-          - Description
-        * - ``smia:timeoutValue``
-          - ``Integer``
-          - Timeout for the previous task execution.
+       * - Attribute
+         - Type
+         - Description
+       * - ``smia:timeoutValue``
+         - ``Integer``
+         - Timeout for the previous task execution.
 
 
 The defined structures for the values of each attribute allow for data validation, facilitating its subsequent extraction at runtime.
@@ -116,6 +116,8 @@ The defined structures for the values of each attribute allow for data validatio
 .. tip::
 
     As the plan design is modular, it is not mandatory to establish all assets beforehand. Regarding the realization of the task, it is possible to either select a specific asset or leave it undefined so that the most suitable asset is dynamically chosen at runtime.
+
+.. TODO SE HA ANALIZADO HASTA AQUI, QUEDA ACABAR LA PAGINA
 
 Using the Camunda Modeler Plugin
 --------------------------------
