@@ -26,7 +26,7 @@ The SMIA-I KB leverages an OWL ontological database, enabling efficient manageme
 
 .. .. seealso::
 
-    .. The API documentation for the SMIA ecosystem source code is also available at :octicon:`repo;1em` :ref:`API documentation SMIA ecosystem <API documentation SMIA ecosystem>`.
+    .. The API documentation for the SMIA-I KB source code is also available at :octicon:`repo;1em` :ref:`API documentation SMIA ecosystem <API documentation SMIA ecosystem>`.
 
 
 Deployment Environment
