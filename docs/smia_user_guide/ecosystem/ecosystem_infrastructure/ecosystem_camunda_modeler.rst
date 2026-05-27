@@ -99,7 +99,7 @@ To minimally modify standard elements and maintain compatibility within the BPMN
 .. dropdown:: :octicon:`file-badge;1em;sd-text-primary` BPMN extension within SMIA approach for ``Exclusive Gateway`` element.
 
     .. list-table::
-       :widths: 25 15 40
+       :widths: 25 15 100
        :header-rows: 1
        :align: center
 
