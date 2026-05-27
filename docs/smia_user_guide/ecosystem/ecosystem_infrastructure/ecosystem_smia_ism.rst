@@ -169,10 +169,16 @@ The SMIA internal code provides utilities that facilitate the requesting of infr
         from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo, ACLSMIAJSONSchemas
 
         # Obtain all the asset identifiers associated to the given capability
-        request_assets_acl_msg = await self.create_acl_message_to_smia_ism(await acl_smia_messages_utils.
+        smia_i_kb_api_body = await acl_smia_messages_utils.
             generate_json_from_schema(ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE,
             serviceID=AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_ALL_ASSET_BY_CAPABILITY,
-            serviceType=AASRelatedServicesInfo.AAS_SERVICE_TYPE_DISCOVERY, serviceParams=capability_iri))
+            serviceType=AASRelatedServicesInfo.AAS_SERVICE_TYPE_DISCOVERY, serviceParams=capability_iri)
+        request_assets_acl_msg = await inter_smia_interactions_utils.create_acl_smia_message(
+            f"{AASRelatedServicesInfo.SMIA_ISM_ID}@"
+            f"{await acl_smia_messages_utils.get_xmpp_server_from_jid(self.myagent.jid)}",
+            await acl_smia_messages_utils.create_random_thread(self.myagent), FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST,
+            ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE, protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL,
+            msg_body=smia_i_kb_api_body)
         await self.send(request_assets_acl_msg)
 
 
