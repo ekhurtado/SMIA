@@ -33,7 +33,7 @@ The source code can be downloaded directly from the official GitHub repository f
 Deployment Environment
 ----------------------
 
-The first step is the establishment of an appropriate deployment environment. A valid environment containing SMIA Operator can be easily generated using the tool provided in this documentation platform: :ref:`SMIA Environment Builder`: in step 3, *SMIA Operator* must be selected. There are two primary types of environments for the SMIA Operator.
+The first step is the establishment of an appropriate deployment environment. A valid environment containing SMIA Operator can be easily generated using the tool provided in this documentation platform: :octicon:`repo;1em` :ref:`SMIA Environment Builder`. To achieve the desired result, in step 3 *SMIA Operator* must be selected. There are two primary types of environments for the SMIA Operator.
 
 Local deployment
 ~~~~~~~~~~~~~~~~

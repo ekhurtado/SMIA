@@ -29,6 +29,19 @@ The SMIA-I KB leverages an OWL ontological database, enabling efficient manageme
     .. The API documentation for the SMIA ecosystem source code is also available at :octicon:`repo;1em` :ref:`API documentation SMIA ecosystem <API documentation SMIA ecosystem>`.
 
 
+Deployment Environment
+----------------------
+
+SMIA-I KB can be deployed locally by downloading the source code and simply running the module in the ``src`` directory with ``python -m swagger_server``. However, it is recommended to deploy it in a virtualized environment for a self-contained deployment environment. The Docker image of the SMIA-I KB is available in the `SMIA Docker Hub <https://hub.docker.com/r/ekhurtado/smia-tools/tags>`_.
+
+A valid virtualized environment containing SMIA-I KB can be easily generated using the tool provided in this documentation platform: :octicon:`repo;1em` :ref:`SMIA Environment Builder`. To achieve the desired result, in step 2 *SMIA-I KB* must be selected within the infrastructure components.
+
+The deployment command depends on the selected virtualization environment: Docker Compose (``docker compose up``) or Kubernetes (``kubectl apply -f deploy/``). Once deployed, the SMIA-I KB initializes the server and exposes its REST API at the configured port.
+
+.. note::
+
+    As mentioned in the :octicon:`repo;1em` :ref:`SMIA Environment Builder`, if SMIA-I KB is deployed for the SMIA agentic environment, the deployment of the :octicon:`repo;1em` :ref:`SMIA ecosystem SMIA ISM` infrastructure component is required to mediate agent interactions with the Knowledge Base.
+
 Interface and Interaction
 -------------------------
 
