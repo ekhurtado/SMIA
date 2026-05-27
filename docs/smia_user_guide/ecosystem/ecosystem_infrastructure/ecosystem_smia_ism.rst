@@ -115,15 +115,65 @@ The infrastructure services currently exposed and managed by SMIA ISM are as fol
     * For the **Registry services**, the object required by the external infrastructure must be specified. The structure of this object is defined by the external infrastructure. For example, the data schemas for SMIA-I KB are provided in :octicon:`repo;1em` :ref:`SMIA ecosystem SMIA-I KB <SMIA ecosystem SMIA-I KB API schemas>`. Thus, in ``RegisterSMIAInstance``, the *SMIAinstance schema* must be added, and in `RegisterCSSElements`, a list of *Capability schemas* and *Skill schemas* must be added.
 
 
-Execution Workflow Example
---------------------------
+Execution example
+-----------------
 
-When a manufacturing plan task requires a specific capability rather than a predefined asset, the SMIA Process Engine (PE) must dynamically discover available options. The interaction follows a distributed FIPA-ACL-compliant sequence:
+When an SMIA instance requires global information or needs to expose its capabilities beyond its own ACL interface, it requests an infrastructure service from the SMIA ISM. Possible scenarios include, but are not limited to, the following:
 
-#. **Capability Discovery Request:** The system requests a discovery service from the SMIA ISM to find all assets offering the required capability using the ``GetAllAssetIDByCapability`` identifier.
-#. **External Infrastructure Query:** The SMIA ISM queries the SMIA-I KB for the associated CSS elements, as each instance has previously registered all its CSS information.
-#. **Identifier Retrieval:** The SMIA ISM returns the identifiers of the appropriate compatible assets.
-#. **Distributed Negotiation:** Finally, the resulting associated SMIA instances are requested to engage in a social, distributed negotiation to determine the most appropriate candidate.
+* **Expose its own information**: each SMIA instance retrieves all information about its asset during its self-configuration phase. If the instance wants to be available when another instance requests global information, it must request :bdg-primary:`RegisterSMIAInstance`. Additionally, if it wants to expose its CSS information extracted during that phase, it will request :bdg-primary:`RegisterCSSElements`. This ensures the availability of both the instance and its functional information.
+* **Discovery of SMIAs representing assets with a given capability**: when an SMIA instance needs to send a CSS execution request for a production task but does not know who can perform it, it must gather some global information to initialize a distributed negotiation and identify the most suitable asset. This situation can occur during the execution of the :octicon:`repo;1em` :ref:`SMIA ecosystem SMIA PE <SMIA ecosystem SMIA PE>`.
+    #. **Discovery of assets with a given capability**: first, it needs to obtain the assets associated with that capability. If the associated SMIA instances have previously registered their CSS information in the SMIA-I KB, this can be obtained using the capability's IRI via :bdg-primary:`GetAllAssetIDByCapability`.
+    #. **Discovery of assets with a given capability**: then, once the list of assets has been obtained, it is necessary to retrieve the identifiers of their associated SMIA instances in order to enable communication via FIPA-SMIACL. The identifier of the SMIA agent associated with a given asset can be obtained via :bdg-primary:`GetSMIAInstanceIDByAssetID`.
+
+The SMIA internal code provides utilities that facilitate the requesting of infrastructure services from SMIA ISM by any SMIA agent. Below are two code examples for the different types of services. Both code snippets are part of a SPADE behavior, which is responsible for sending messages.
+
+.. dropdown:: :octicon:`code;1em;sd-text-primary` Sample code for registering CSS capabilities and skills
+
+    .. code:: python
+
+        from smia.logic import inter_smia_interactions_utils, , acl_smia_messages_utils
+        from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
+        from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo, ACLSMIAJSONSchemas
+
+        capability_json = {"iri": "http://www.w3id.org/upv-ehu/gcis/css-smia#Capability01",
+          "assets": [{"kind": "Instance","id": "http://example.com/ids/asset001"}],
+          "name": "capability01", "isRealizedBy": ["http://www.w3id.org/hsu-aut/css#Skill01"],
+          "category": "AssetCapability", "hasLifecycle": "ASSURANCE"
+        }
+        skill_json = {"iri": "http://www.w3id.org/hsu-aut/css#Skill01", "hasImplementationType": "OPERATION",
+          "accessibleThrough": ["http://www.w3id.org/hsu-aut/css#SkillInterface01"],
+          "name": "skill01"
+        }
+        css_elements_json = {'capabilities': [capability_json], 'skills': [skill_json]}
+
+        # Obtain all the asset identifiers associated to the given capability
+        smia_ism_jid = (f"{AASRelatedServicesInfo.SMIA_ISM_ID}@"
+                        f"{await acl_smia_messages_utils.get_xmpp_server_from_jid(self.agent.jid)}")
+        register_acl_msg = await inter_smia_interactions_utils.create_acl_smia_message(
+            # 'gcis1@xmpp.jp', await acl_smia_messages_utils.create_random_thread(self.agent),
+            smia_ism_jid, await acl_smia_messages_utils.create_random_thread(self.agent),
+            FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST, ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE,
+            protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL, msg_body=await acl_smia_messages_utils.
+            generate_json_from_schema(ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE, serviceID=
+            AASRelatedServicesInfo.AAS_INFRASTRUCTURE_REGISTRY_CSS_ELEMENTS, serviceType=
+            AASRelatedServicesInfo.AAS_INFRASTRUCTURE_SERVICE_TYPE_REGISTRY, serviceParams=css_elements_json))
+        await self.send(register_acl_msg)
+
+
+.. dropdown:: :octicon:`code;1em;sd-text-primary` Sample code for discovering assetd with a given capability
+
+    .. code:: python
+
+        from smia.logic import inter_smia_interactions_utils, , acl_smia_messages_utils
+        from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
+        from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo, ACLSMIAJSONSchemas
+
+        # Obtain all the asset identifiers associated to the given capability
+        request_assets_acl_msg = await self.create_acl_message_to_smia_ism(await acl_smia_messages_utils.
+            generate_json_from_schema(ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE,
+            serviceID=AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_ALL_ASSET_BY_CAPABILITY,
+            serviceType=AASRelatedServicesInfo.AAS_SERVICE_TYPE_DISCOVERY, serviceParams=capability_iri))
+        await self.send(request_assets_acl_msg)
 
 
 
