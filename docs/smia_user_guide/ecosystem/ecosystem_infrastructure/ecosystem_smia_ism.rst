@@ -17,7 +17,7 @@ Regarding internal development, the SMIA ISM leverages SMIA extension mechanisms
 .. dropdown:: Link to SMIA ISM logic source code
        :octicon:`link;1em;sd-text-primary`
 
-       .. button-link:: https://github.com/ekhurtado/SMIA/tree/main/additional_tools/extended_agents/smia_ism
+       .. button-link:: https://github.com/ekhurtado/SMIA/tree/main/additional_tools/infrastructure_components/smia_ism
             :color: primary
             :outline:
 
@@ -42,21 +42,78 @@ Infrastructure Services request
 
 Internally, requests for infrastructure services received by the SMIA ISM from the agent environment are validated against the corresponding schema: ``SMIAACLMessageInfo.SMIA_ISM_ACL_INFRASTRUCTURE_SERVICE_TEMPLATE``. This schema is detailed in the following table:
 
-[ADD TABLE]
+.. dropdown:: :octicon:`cache;1em;sd-text-primary` FIPA-SMIACL message schema for SMIA ISM infrastructure services
 
-The content of the FIPA-SMIACL message is also validated against the JSON schema corresponding to the specified ontology (``ACLSMIAJSONSchemas.JSON_SCHEMA_ACL_SMIA_ONTOLOGIES_MAP``). If the infrastructure service request is valid, a single-execution behavior is launched for its dedicated management. Thus, it is leveraged the same decoupled pattern from the SMIA core for incoming communications: the dynamic generation of asynchronous threads to enable an efficient and scalable management of interactions, while minimizing potential failures (if a problem arises, the global execution is not affected).
+    .. list-table::
+       :header-rows: 1
+       :widths: 10 25 40
+
+       * - Attribute
+         - Established Value(s)
+         - Description
+       * - ``performative``
+         - ``request``, ``query-if``, ``query-ref``
+         - The communicative act: ``request`` to execute an infrastructure service; ``query-if`` and ``query-ref`` to query about them.
+       * - ``ontology``
+         - ``aas-infrastructure-service``
+         - The SMIA ontology classification for infrastructure services.
+       * - ``protocol``
+         -
+         - The interaction protocol (e.g., ``fipa-request`` or ``fipa-query``)
+       * - ``language``
+         -
+         - The language of the message (``smia-language`` is the default value in SMIA).
+       * - ``encoding``
+         -
+         - The encoding format of the message body (``application/json`` is the default value in SMIA).
+
+The content of the FIPA-SMIACL message is also validated against the JSON schema corresponding to the specified ontology for these kind of services (``ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE``):
+
+.. dropdown:: :octicon:`cache;1em;sd-text-primary` JSON schema for infrastructure service messages
+
+    .. list-table::
+       :header-rows: 1
+       :widths: 15 10 12 53
+
+       * - Field
+         - Type
+         - Mandatory
+         - Description
+       * - ``serviceID``
+         - ``string``
+         - Yes
+         - The unique identifier of the infrastructure service to be executed. The SMIA core includes a list of these in ``smia.utilities.aas_related_services_info.py``.
+       * - ``serviceType``
+         - ``enum``
+         - Yes
+         - Category of the infrastructure service: ``RegistryService`` for registration operations or ``DiscoveryService`` for lookup operations.
+       * - ``serviceParams``
+         - Object
+         - No
+         - Parameters required by the specific service. The expected structure depends on the ``serviceID`` value.
+
+
+If the infrastructure service request is valid, a single-execution behavior is launched for its dedicated management. Thus, it is leveraged the same decoupled pattern from the SMIA core for incoming communications: the dynamic generation of asynchronous threads to enable an efficient and scalable management of interactions, while minimizing potential failures (if a problem arises, the global execution is not affected).
 
 Infrastructure Services available
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-al aprovechar el módulo ``smia.logic.agent_services.AgentServices`` para la gestión de los servicios que expone al entorno agentico se logra
+The SMIA ISM dynamically links infrastructure service identifiers to related executable methods by leveraging the ``smia.logic.agent_services.AgentServices`` module, thereby enabling their decoupled execution. This strategic decision simplifies the addition of new services and the maintenance of existing ones, requiring only a change in the associated executable method. In addition, it takes advantage of this module’s built-in features, such as the registration and maintenance of identifiers and associated methods, automatic validation of received parameters (e.g., whether the data type is valid) and efficient execution of methods regardless of their implementation (whether they are defined as static, generic, or class methods, and configured for either synchronous or asynchronous execution).
 
-The SMIA ISM dynamically links infrastructure service identifiers to related executable methods, enabling their decoupled execution. This strategic decision simplifies the addition of new services and the maintenance of existing ones, requiring only a change in the associated executable method.
+The infrastructure services currently exposed and managed by SMIA ISM are as follows (which are requested by adding their identifiers to the ``serviceID`` field in the JSON body):
 
-It exposes and manages the following primary services to the Multi-Agent System:
+* **Registry services:** These expose registry-related functionalities, including operations with identifiers such as :bdg-primary:`RegisterSMIAInstance` and :bdg-primary:`RegisterCSSElements`.
+    * Available at ``AASRelatedServicesInfo.AAS_INFRASTRUCTURE_REGISTRY_x`` within ``smia.utilities.aas_related_services_info.py``.
+* **Discovery services:** These enable advanced asset lookup, exposing functionalities with identifiers such as :bdg-primary:`GetSMIAInstanceIDByAssetID`, :bdg-primary:`GetAssetIDBySMIAInstanceID`, :bdg-primary:`GetAllAssetIDByCapability`, and :bdg-primary:`GetAssetAdministrationShellById`.
+    * Available at ``AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_x`` within ``smia.utilities.aas_related_services_info.py``.
 
-* **Registry services:** These expose registry-related functionalities, including operations such as ``RegisterSMIAInstance`` and ``RegisterCSSElement``.
-* **Discovery services:** These enable advanced asset lookup, exposing functionalities such as ``GetSMIAInstanceIDByAssetID``, ``GetAllAssetIDByCapability``, and ``GetAssetAdministrationShellById``.
+.. note::
+
+    The ``serviceParams`` field of the JSON body is conditionally based on the ``serviceID`` value.
+
+    * For the **Discovery services**, the identifier required by the external infrastructure must be specified as a plain ``string`` depending on the service. In accordance with the service naming convention, these identifiers appear in the service name itself after *By* (e.g., ``assetID`` for ``GetSMIAInstanceIDByAssetID``), with the exception of CSS elements, which must also be IRIs (e.g., the capability IRI for ``GetAllAssetIDByCapability``).
+    * For the **Registry services**, the object required by the external infrastructure must be specified. The structure of this object is defined by the external infrastructure. For example, the data schemas for SMIA-I KB are provided in :octicon:`repo;1em` :ref:`SMIA ecosystem SMIA-I KB <SMIA ecosystem SMIA-I KB API schemas>`. Thus, in ``RegisterSMIAInstance``, the *SMIAinstance schema* must be added, and in `RegisterCSSElements`, a list of *Capability schemas* and *Skill schemas* must be added.
+
 
 Execution Workflow Example
 --------------------------
