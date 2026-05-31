@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="es" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Asset Fleet</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
+          rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- CONFIGURACIÓN CSS FRAMEWORK -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        asset: {
+                            light: '#D7EDF7',
+                            lightBorder: '#B0D5E8',
+                            dark: '#1E3A5F',
+                            darkBorder: '#2D4A6D'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- MÓDULO LÓGICO CSS: Animaciones Cinemáticas y Estados -->
+    <style>
+        /* Base compartida */
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .tool-weld, .tool-drill, .tool-pick, .weld-spark {
+            display: none;
+        }
+
+        /* 1. Animaciones Robot */
+        @keyframes rob-weld {
+            0%, 100% {
+                transform: rotate(-5deg);
+            }
+            50% {
+                transform: rotate(15deg);
+            }
+        }
+
+        @keyframes rob-drill {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(4px);
+            }
+        }
+
+        @keyframes rob-pick {
+            0% {
+                transform: rotate(-40deg);
+            }
+            50% {
+                transform: rotate(40deg);
+            }
+            100% {
+                transform: rotate(-40deg);
+            }
+        }
+
+        @keyframes spark-flash {
+            0%, 100% {
+                opacity: 0;
+                transform: scale(0.5);
+                fill: #eab308;
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.5);
+                fill: #3b82f6;
+            }
+        }
+
+        .arm-base {
+            transform-origin: 50px 80px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .weld-spark {
+            transform-origin: 50px -5px;
+        }
+
+        .robot.task-weld .arm-base {
+            animation: rob-weld 0.15s infinite;
+        }
+
+        .robot.task-weld .weld-spark {
+            animation: spark-flash 0.1s infinite;
+            display: block;
+        }
+
+        .robot.task-weld .tool-default {
+            display: none;
+        }
+
+        .robot.task-weld .tool-weld {
+            display: block;
+        }
+
+        .robot.task-drill .arm-base {
+            animation: rob-drill 0.05s infinite;
+        }
+
+        .robot.task-drill .tool-default {
+            display: none;
+        }
+
+        .robot.task-drill .tool-drill {
+            display: block;
+        }
+
+        .robot.task-pick_place .arm-base {
+            animation: rob-pick 2.5s infinite ease-in-out;
+        }
+
+        .robot.task-pick_place .tool-default {
+            display: none;
+        }
+
+        .robot.task-pick_place .tool-pick {
+            display: block;
+        }
+
+        /* 2. Animaciones AGV */
+        @keyframes agv-transport {
+            0%, 100% {
+                transform: translateX(-15px);
+            }
+            50% {
+                transform: translateX(15px);
+            }
+        }
+
+        @keyframes agv-patrol {
+            0%, 100% {
+                transform: translateX(-40px);
+            }
+            50% {
+                transform: translateX(40px);
+            }
+        }
+
+        @keyframes radar-spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes signal-pulse {
+            0%, 100% {
+                opacity: 0.2;
+                transform: scale(0.8);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.5);
+            }
+        }
+
+        .agv-group {
+            transition: transform 0.5s ease;
+        }
+
+        .agv-radar {
+            transform-origin: 30px 40px;
+        }
+
+        .agv-signal {
+            transform-origin: 30px 30px;
+            opacity: 0;
+        }
+
+        .mobile.task-transport .agv-group {
+            animation: agv-transport 4s infinite ease-in-out;
+        }
+
+        .mobile.task-patrol .agv-group {
+            animation: agv-patrol 1.5s infinite ease-in-out;
+        }
+
+        .mobile.task-scan .agv-radar {
+            animation: radar-spin 0.8s infinite linear;
+        }
+
+        .mobile.task-scan .agv-signal {
+            animation: signal-pulse 1s infinite;
+        }
+
+        /* 3. Animaciones Humanas */
+        @keyframes hum-assemble-r {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(-40deg);
+            }
+        }
+
+        @keyframes hum-assemble-l {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(40deg);
+            }
+        }
+
+        @keyframes hum-inspect {
+            0%, 100% {
+                transform: scale(1) translateY(0);
+            }
+            50% {
+                transform: scale(1.15) translateY(-5px);
+            }
+        }
+
+        @keyframes hum-maintain-r {
+            0%, 100% {
+                transform: rotate(-80deg);
+            }
+            50% {
+                transform: rotate(60deg);
+            }
+        }
+
+        .human-torso {
+            transform-origin: 50px 50px;
+            transition: transform 0.5s;
+        }
+
+        .human-arm-r {
+            transform-origin: 65px 45px;
+            transition: transform 0.3s;
+        }
+
+        .human-arm-l {
+            transform-origin: 35px 45px;
+            transition: transform 0.3s;
+        }
+
+        .human.task-assemble .human-arm-r {
+            animation: hum-assemble-r 0.4s infinite ease-in-out;
+        }
+
+        .human.task-assemble .human-arm-l {
+            animation: hum-assemble-l 0.4s infinite ease-in-out;
+        }
+
+        .human.task-inspect .human-torso {
+            animation: hum-inspect 2s infinite ease-in-out;
+        }
+
+        .human.task-inspect .human-arm-r {
+            transform: rotate(-90deg);
+        }
+
+        .human.task-maintain .human-arm-r {
+            animation: hum-maintain-r 1.2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 h-screen overflow-hidden flex flex-col md:flex-row transition-colors duration-300">
+
+<!-- CABECERA MÓVIL (Off-Canvas Trigger) -->
+<header class="md:hidden flex items-center justify-between px-4 h-16 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 z-20 shrink-0">
+    <div class="flex items-center">
+        <div class="w-3 h-3 bg-blue-600 dark:bg-blue-500 rounded-sm mr-3"></div>
+        <h1 class="text-sm font-extrabold tracking-widest uppercase">Industrial Asset Simulator</h1>
+    </div>
+    <button id="mobile-menu-btn"
+            class="p-2 text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors">
+        <i data-lucide="menu" class="w-5 h-5"></i>
+    </button>
+</header>
+
+<!-- Overlay Oscuro para Menú Móvil -->
+<div id="sidebar-overlay"
+     class="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 hidden transition-opacity duration-300 md:hidden"></div>
+
+<!-- NAVEGACIÓN LATERAL -->
+<aside id="sidebar"
+       class="fixed inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out w-64 bg-white dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 flex flex-col z-40 h-full">
+    <div class="h-16 md:h-20 flex items-center justify-between px-6 border-b border-zinc-200 dark:border-zinc-800 shrink-0">
+        <div class="flex items-center hidden md:flex">
+            <div class="w-3 h-3 bg-blue-600 dark:bg-blue-500 rounded-sm mr-3"></div>
+            <h1 class="text-sm font-extrabold tracking-widest uppercase">Industrial Asset Simulator</h1>
+        </div>
+        <div class="flex items-center md:hidden">
+            <span class="text-xs font-bold tracking-widest text-zinc-500 uppercase">Menú</span>
+        </div>
+        <div class="flex gap-2">
+            <button id="theme-toggle"
+                    class="p-2 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-zinc-500 dark:text-zinc-400">
+                <i data-lucide="moon" class="w-4 h-4 hidden dark:block"></i>
+                <i data-lucide="sun" class="w-4 h-4 block dark:hidden"></i>
+            </button>
+            <button id="close-sidebar-btn"
+                    class="md:hidden p-2 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-zinc-500 dark:text-zinc-400">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
+
+    <nav class="flex-1 px-4 py-6 md:py-8 space-y-1 overflow-y-auto">
+        <button onclick="switchTab('dashboard')" id="nav-dashboard"
+                class="nav-btn w-full flex items-center px-4 py-3 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white rounded-lg transition-all font-semibold text-sm">
+            <i data-lucide="grid" class="w-4 h-4 mr-3 opacity-70"></i> Panel Principal
+        </button>
+        <button onclick="switchTab('history')" id="nav-history"
+                class="nav-btn w-full flex items-center px-4 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 text-zinc-500 dark:text-zinc-400 rounded-lg transition-all font-semibold text-sm">
+            <i data-lucide="history" class="w-4 h-4 mr-3 opacity-70"></i> Histórico API
+        </button>
+        <button onclick="switchTab('api')" id="nav-api"
+                class="nav-btn w-full flex items-center px-4 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 text-zinc-500 dark:text-zinc-400 rounded-lg transition-all font-semibold text-sm">
+            <i data-lucide="code-2" class="w-4 h-4 mr-3 opacity-70"></i> Docs
+        </button>
+    </nav>
+    <div class="p-6 border-t border-zinc-200 dark:border-zinc-800 md:border-t-0 shrink-0">
+        <div class="flex items-center text-[10px] font-mono text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
+            <div id="connection-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-2"></div>
+            <span id="connection-text">SSE Live</span>
+        </div>
+    </div>
+</aside>
+
+<!-- ÁREA PRINCIPAL -->
+<main class="flex-1 overflow-y-auto relative selection:bg-blue-200 dark:selection:bg-blue-900 h-full">
+
+    <!-- PESTAÑA: DASHBOARD -->
+    <section id="tab-dashboard" class="tab-content active p-4 md:p-10 max-w-7xl mx-auto">
+        <header class="mb-8 md:mb-10 flex flex-col md:flex-row md:justify-between md:items-end gap-2">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Estado de la Flota</h2>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm mt-1 md:mt-2 font-medium">Clasificación explícita de
+                    activos en secciones divididas.</p>
+            </div>
+        </header>
+        <div id="dashboard-container">
+            <!-- Secciones inyectadas al inicializar la App -->
+        </div>
+    </section>
+
+    <!-- PESTAÑA: HISTÓRICO -->
+    <section id="tab-history" class="tab-content p-4 md:p-10 max-w-7xl mx-auto">
+        <header class="mb-8 md:mb-10">
+            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Registro de Peticiones</h2>
+            <p class="text-zinc-500 dark:text-zinc-400 text-sm mt-1 md:mt-2 font-medium">Histórico clasificado y acotado
+                a los últimos 100 eventos del servidor.</p>
+        </header>
+
+        <div id="history-sections-container">
+            <!-- Tablas inyectadas al inicializar la App -->
+        </div>
+    </section>
+
+    <!-- PESTAÑA: API -->
+    <section id="tab-api" class="tab-content p-4 md:p-10 max-w-4xl mx-auto pb-20">
+        <header class="mb-8 md:mb-10">
+            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Referencia de la API</h2>
+            <p class="text-zinc-500 dark:text-zinc-400 text-sm mt-1 md:mt-2 font-medium">Documentación técnica para el
+                control e integración externa de la flota de activos.</p>
+        </header>
+
+        <div class="space-y-8">
+
+            <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-5 md:p-7 overflow-hidden transition-all hover:shadow-md">
+                <div class="flex flex-col md:flex-row md:items-center mb-4 gap-3">
+                    <span class="bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 font-mono text-xs font-extrabold px-2.5 py-1 rounded w-max tracking-widest uppercase">GET</span>
+                    <code class="text-sm font-mono font-bold text-zinc-800 dark:text-zinc-200 break-all">/api/v1/asset/{asset_id}/status</code>
+                </div>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm mb-6 leading-relaxed">Recupera la telemetría actual
+                    de un activo específico. Devuelve el estado en tiempo real, el nivel de batería restante y la tarea
+                    que está ejecutando en caso de estar ocupado.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-xs font-extrabold tracking-widest text-zinc-900 dark:text-zinc-100 uppercase mb-3 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+                            Parámetros de Ruta</h4>
+                        <ul class="text-sm text-zinc-600 dark:text-zinc-400 space-y-2">
+                            <li><code
+                                    class="text-xs font-mono text-zinc-900 dark:text-zinc-300 font-bold bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded">asset_id</code>
+                                <span class="italic text-xs">(string)</span> - ID único del activo (ej. <span
+                                        class="font-mono text-xs">ROBOT_A</span>)
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-extrabold tracking-widest text-zinc-900 dark:text-zinc-100 uppercase mb-3 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+                            Respuesta (200 OK)</h4>
+                        <pre class="bg-zinc-50 dark:bg-[#0d1117] border border-zinc-200 dark:border-zinc-800 rounded-lg p-3 text-[11px] font-mono text-zinc-700 dark:text-zinc-300 overflow-x-auto">
+    {
+      "type": "robot",
+      "status": "idle",
+      "battery": 100.0,
+      "current_task": null
+    }</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-5 md:p-7 overflow-hidden transition-all hover:shadow-md">
+                <div class="flex flex-col md:flex-row md:items-center mb-4 gap-3">
+                    <span class="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 font-mono text-xs font-extrabold px-2.5 py-1 rounded w-max tracking-widest uppercase">POST</span>
+                    <code class="text-sm font-mono font-bold text-zinc-800 dark:text-zinc-200 break-all">/api/v1/asset/{asset_id}/action</code>
+                </div>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm mb-6 leading-relaxed">Asigna una tarea a un activo.
+                    El servidor validará si la tarea es compatible con el tipo de activo, si está disponible (estado
+                    'idle') y si tiene batería suficiente para completar la operación solicitada.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-xs font-extrabold tracking-widest text-zinc-900 dark:text-zinc-100 uppercase mb-3 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+                            Body Request (JSON)</h4>
+                        <ul class="text-sm text-zinc-600 dark:text-zinc-400 space-y-2">
+                            <li><code
+                                    class="text-xs font-mono text-zinc-900 dark:text-zinc-300 font-bold bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded">action</code>
+                                <span class="italic text-xs">(string)</span> - Tarea válida.
+                            </li>
+                            <li><code
+                                    class="text-xs font-mono text-zinc-900 dark:text-zinc-300 font-bold bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded">duration</code>
+                                <span class="italic text-xs">(int)</span> - Segundos (1 a 30).
+                            </li>
+                        </ul>
+                        <div class="mt-4">
+                            <h4 class="text-[10px] font-extrabold tracking-widest text-zinc-500 uppercase mb-2">Ejemplo
+                                cURL</h4>
+                            <pre class="bg-zinc-50 dark:bg-[#0d1117] border border-zinc-200 dark:border-zinc-800 rounded-lg p-3 text-[10px] font-mono text-zinc-700 dark:text-zinc-300 overflow-x-auto whitespace-pre-wrap word-break">curl -X POST http://localhost:5000/api/v1/asset/ROBOT_A/action -H "Content-Type: application/json" -d '{"action": "weld", "duration": 15}'</pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-extrabold tracking-widest text-zinc-900 dark:text-zinc-100 uppercase mb-3 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+                            Respuesta (200 OK)</h4>
+                        <pre class="bg-zinc-50 dark:bg-[#0d1117] border border-zinc-200 dark:border-zinc-800 rounded-lg p-3 text-[11px] font-mono text-zinc-700 dark:text-zinc-300 overflow-x-auto">
+    {
+      "status": "success",
+      "asset": "ROBOT_A",
+      "action_completed": "weld"
+    }</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-5 md:p-7 overflow-hidden transition-all hover:shadow-md">
+                <div class="flex flex-col md:flex-row md:items-center mb-4 gap-3">
+                    <span class="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 font-mono text-xs font-extrabold px-2.5 py-1 rounded w-max tracking-widest uppercase">POST</span>
+                    <code class="text-sm font-mono font-bold text-zinc-800 dark:text-zinc-200 break-all">/api/v1/asset/{asset_id}/charge</code>
+                </div>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm mb-6 leading-relaxed">Alterna el estado de recarga de
+                    un activo. Para iniciar la recarga, el activo no puede estar realizando ninguna tarea. Si alcanza el
+                    100%, el sistema lo devolverá automáticamente a estado 'idle'.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-xs font-extrabold tracking-widest text-zinc-900 dark:text-zinc-100 uppercase mb-3 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+                            Body Request (JSON)</h4>
+                        <ul class="text-sm text-zinc-600 dark:text-zinc-400 space-y-2">
+                            <li><code
+                                    class="text-xs font-mono text-zinc-900 dark:text-zinc-300 font-bold bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded">enable</code>
+                                <span class="italic text-xs">(boolean)</span> - True para cargar, False para detener.
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-extrabold tracking-widest text-zinc-900 dark:text-zinc-100 uppercase mb-3 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+                            Respuesta (200 OK)</h4>
+                        <pre class="bg-zinc-50 dark:bg-[#0d1117] border border-zinc-200 dark:border-zinc-800 rounded-lg p-3 text-[11px] font-mono text-zinc-700 dark:text-zinc-300 overflow-x-auto">
+    {
+      "status": "success",
+      "charging": true
+    }</pre>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+<script>
+    // --- LÓGICA DEL SIDEBAR (MÓVIL) ---
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+
+    function toggleSidebar() {
+        const isClosed = sidebar.classList.contains('-translate-x-full');
+        if (isClosed) {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        } else {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        }
+    }
+
+    mobileMenuBtn.addEventListener('click', toggleSidebar);
+    closeSidebarBtn.addEventListener('click', toggleSidebar);
+    overlay.addEventListener('click', toggleSidebar);
+
+    // --- MÓDULO DE CONFIGURACIÓN ---
+
+    // 1. Recibimos la fuente de verdad inyectada por Jinja2 desde Python de forma segura
+    const INJECTED_TASKS = {{ asset_tasks | tojson | safe }};
+
+    // 2. Función auxiliar para construir los <option> dinámicamente
+    function buildOptions(assetType) {
+        let html = '';
+        const tasks = INJECTED_TASKS[assetType] || {};
+        for (const [taskId, taskLabel] of Object.entries(tasks)) {
+            html += `<option value="${taskId}">${taskLabel}</option>`;
+        }
+        return html;
+    }
+
+    const ASSET_CONFIG = {
+        robot: {
+            title: 'Production Assets',
+            energyLabel: 'BATERÍA',
+            chargeIcon: 'zap',
+            chargeText: 'Recargar',
+            workingText: 'Desconectar',
+            optionsHTML: buildOptions('robot'),
+            svgTemplate: `
+                <svg viewBox="0 0 100 100" class="w-28 h-28 md:w-32 md:h-32 overflow-visible">
+                    <path class="fill-[#7B9CB5] dark:fill-[#2D4A6D] transition-colors" d="M 20 100 L 80 100 L 70 80 L 30 80 Z" />
+                    <circle cx="50" cy="80" r="14" class="fill-[#5B82A1] dark:fill-[#4A6F96] transition-colors" />
+                    <g class="arm-base">
+                        <rect x="42" y="40" width="16" height="45" rx="4" class="fill-[#41627D] dark:fill-[#5B82A1]" />
+                        <circle cx="50" cy="40" r="10" class="fill-[#2F4A63] dark:fill-[#41627D]" />
+                        <g class="arm-forearm">
+                            <rect x="44" y="5" width="12" height="40" rx="3" class="fill-[#7B9CB5] dark:fill-[#7B9CB5]" />
+                            <circle class="tool-default fill-white dark:fill-zinc-300" cx="50" cy="5" r="6" />
+                            <g class="tool-weld">
+                                <polygon points="46,5 54,5 50,-5" class="fill-red-500" />
+                                <path d="M 50 -12 L 53 -5 L 60 -5 L 55 0 L 57 7 L 50 3 L 43 7 L 45 0 L 40 -5 L 47 -5 Z" class="weld-spark fill-transparent" />
+                            </g>
+                            <g class="tool-drill"><polygon points="48,5 52,5 50,-15" class="fill-[#2F4A63] dark:fill-[#B0D5E8]" /></g>
+                            <g class="tool-pick"><path d="M 42 5 L 42 -5 M 58 5 L 58 -5" stroke="currentColor" stroke-width="4" fill="none" class="stroke-[#2F4A63] dark:stroke-white"/></g>
+                        </g>
+                    </g>
+                </svg>
+            `
+        },
+        mobile: {
+            title: 'Mobile Assets',
+            energyLabel: 'BATERÍA',
+            chargeIcon: 'zap',
+            chargeText: 'Recargar',
+            workingText: 'Desconectar',
+            optionsHTML: buildOptions('mobile'),
+            svgTemplate: `
+                <svg viewBox="0 0 100 100" class="w-28 h-28 md:w-32 md:h-32 overflow-visible">
+                    <g class="agv-group">
+                        <rect x="15" y="55" width="70" height="25" rx="6" class="fill-[#5B82A1] dark:fill-[#2D4A6D] transition-colors"/>
+                        <circle cx="25" cy="80" r="10" class="fill-[#1A2E44] dark:fill-[#0F1C2E]"/>
+                        <circle cx="25" cy="80" r="4" class="fill-[#B0D5E8]"/>
+                        <circle cx="75" cy="80" r="10" class="fill-[#1A2E44] dark:fill-[#0F1C2E]"/>
+                        <circle cx="75" cy="80" r="4" class="fill-[#B0D5E8]"/>
+                        <rect x="25" y="45" width="10" height="10" class="fill-[#7B9CB5] dark:fill-[#4A6F96]" />
+                        <path d="M 25 45 L 35 45 L 30 35 Z" class="agv-radar fill-blue-500" />
+                        <circle cx="30" cy="30" r="15" fill="none" stroke="#3b82f6" stroke-width="2" class="agv-signal" />
+                    </g>
+                </svg>
+            `
+        },
+        human: {
+            title: 'Human Assets',
+            energyLabel: 'ESTAMINA',
+            chargeIcon: 'coffee',
+            chargeText: 'Descansar',
+            workingText: 'Trabajar',
+            optionsHTML: buildOptions('human'),
+            svgTemplate: `
+                <svg viewBox="0 0 100 100" class="w-28 h-28 md:w-32 md:h-32 overflow-visible">
+                    <g class="human-torso">
+                        <circle cx="50" cy="25" r="12" class="fill-[#1A2E44] dark:fill-[#B0D5E8] transition-colors" />
+                        <rect x="35" y="40" width="30" height="35" rx="10" class="fill-[#4A6F96] dark:fill-[#5B82A1] transition-colors" />
+                        <path d="M 35 45 Q 20 60 25 75" fill="none" stroke-width="8" stroke-linecap="round" class="human-arm-l stroke-[#1A2E44] dark:stroke-[#B0D5E8]" />
+                        <path d="M 65 45 Q 80 60 75 75" fill="none" stroke-width="8" stroke-linecap="round" class="human-arm-r stroke-[#1A2E44] dark:stroke-[#B0D5E8]" />
+                        <line x1="42" y1="70" x2="42" y2="100" stroke-width="8" stroke-linecap="round" class="stroke-[#1A2E44] dark:stroke-[#B0D5E8]" />
+                        <line x1="58" y1="70" x2="58" y2="100" stroke-width="8" stroke-linecap="round" class="stroke-[#1A2E44] dark:stroke-[#B0D5E8]" />
+                    </g>
+                </svg>
+            `
+        }
+    };
+
+    // --- MÓDULO DE TEMA ---
+    const themeToggleBtn = document.getElementById('theme-toggle');
+
+    function updateThemeIcons() {
+        const isDark = document.documentElement.classList.contains('dark');
+        themeToggleBtn.innerHTML = isDark ? '<i data-lucide="moon" class="w-4 h-4"></i>' : '<i data-lucide="sun" class="w-4 h-4"></i>';
+        lucide.createIcons();
+    }
+
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+    updateThemeIcons();
+    themeToggleBtn.addEventListener('click', function () {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('color-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        updateThemeIcons();
+    });
+
+    // --- ESTADO Y CORE UI ---
+    let currentGlobalState = {};
+    let requestHistory = [];
+    let isLocalMode = false;
+
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.classList.remove('bg-zinc-100', 'dark:bg-zinc-800', 'text-zinc-900', 'dark:text-white');
+            btn.classList.add('text-zinc-500', 'dark:text-zinc-400', 'hover:bg-zinc-50', 'dark:hover:bg-zinc-800/50');
+        });
+        document.getElementById('tab-' + tabId).classList.add('active');
+        const activeBtn = document.getElementById('nav-' + tabId);
+        activeBtn.classList.remove('text-zinc-500', 'dark:text-zinc-400', 'hover:bg-zinc-50', 'dark:hover:bg-zinc-800/50');
+        activeBtn.classList.add('bg-zinc-100', 'dark:bg-zinc-800', 'text-zinc-900', 'dark:text-white');
+
+        // Auto-cerrar sidebar en móviles tras la navegación
+        if (window.innerWidth < 768) {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        }
+    }
+
+    // Funciones Inyectoras HTML para layout modular
+    function getDashboardSectionHTML(type, title) {
+        return `
+        <div id="section-${type}" class="mb-12 hidden">
+            <div class="flex items-center gap-4 mb-6">
+                <h3 class="text-sm font-extrabold tracking-widest uppercase text-zinc-500 dark:text-zinc-400 whitespace-nowrap">${title}</h3>
+                <div class="h-px w-full bg-zinc-200 dark:bg-zinc-800"></div>
+            </div>
+            <div id="grid-${type}" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6"></div>
+        </div>`;
+    }
+
+    function getHistoryTableHTML(type, title) {
+        return `
+        <div id="history-${type}-section" class="mb-12 hidden">
+            <div class="flex items-center gap-4 mb-6">
+                <h3 class="text-sm font-extrabold tracking-widest uppercase text-zinc-500 dark:text-zinc-400 whitespace-nowrap">${title}</h3>
+                <div class="h-px w-full bg-zinc-200 dark:bg-zinc-800"></div>
+            </div>
+            <div class="overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800">
+                        <thead class="bg-zinc-50 dark:bg-zinc-800/50">
+                            <tr>
+                                <th class="px-4 md:px-6 py-4 text-left text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest whitespace-nowrap">Timestamp (UTC)</th>
+                                <th class="px-4 md:px-6 py-4 text-left text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest whitespace-nowrap">Activo</th>
+                                <th class="px-4 md:px-6 py-4 text-left text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest whitespace-nowrap">Tipo Petición</th>
+                                <th class="px-4 md:px-6 py-4 text-left text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest min-w-[250px]">Detalle de Ejecución</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-body-${type}" class="divide-y divide-zinc-100 dark:divide-zinc-800/50 text-sm">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>`;
+    }
+
+    function getBaseCardHTML(assetId, type) {
+        const config = ASSET_CONFIG[type] || ASSET_CONFIG.robot;
+
+        return `
+            <div id="card-${assetId}" class="bg-asset-light dark:bg-asset-dark border border-asset-lightBorder dark:border-asset-darkBorder text-zinc-900 dark:text-blue-50 rounded-2xl p-4 md:p-6 relative overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1">
+                <div class="flex justify-between items-start mb-6 md:mb-8">
+                    <div>
+                        <h5 class="text-base md:text-lg font-extrabold font-mono tracking-tight uppercase">${assetId}</h5>
+                        <p class="text-[10px] md:text-[11px] opacity-70 font-bold tracking-widest uppercase mt-1">${type} ASSET</p>
+                    </div>
+                    <span id="status-badge-${assetId}" class="text-[9px] md:text-[10px] font-bold px-2 py-1 rounded flex items-center uppercase tracking-widest bg-white/50 dark:bg-black/30">
+                        <span id="status-dot-${assetId}" class="w-1.5 h-1.5 rounded-full mr-1.5 bg-zinc-400"></span>
+                        <span id="status-text-${assetId}">IDLE</span>
+                    </span>
+                </div>
+
+                <div id="svg-container-${assetId}" class="flex justify-center mb-6 md:mb-8 h-28 md:h-32 items-end ${type} is-idle">
+                    ${config.svgTemplate}
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-[9px] md:text-[10px] font-bold opacity-80 mb-1.5 tracking-widest">
+                            <span>${config.energyLabel}</span>
+                            <span id="battery-text-${assetId}" class="font-mono">100%</span>
+                        </div>
+                        <div class="w-full bg-white/40 dark:bg-black/40 rounded-full h-1.5 overflow-hidden">
+                            <div id="battery-bar-${assetId}" class="h-full rounded-full transition-all duration-1000 bg-blue-600 dark:bg-blue-400" style="width: 100%"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center h-6">
+                         <div id="spinner-${assetId}" class="hidden items-center">
+                            <div role="status">
+                                <svg aria-hidden="true" class="w-3 h-3 md:w-4 md:h-4 mr-2 text-white/50 animate-spin fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 28.0063 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 28.0063 9.08144 50.5908Z" fill="currentColor"/>
+                                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                                </svg>
+                            </div>
+                         </div>
+                         <span id="task-label-${assetId}" class="text-[9px] md:text-[10px] font-mono px-2 py-1 bg-white/60 dark:bg-black/30 rounded">STANDBY</span>
+                    </div>
+
+                    <div class="pt-3 md:pt-4 border-t border-black/10 dark:border-white/10">
+                        <div class="grid grid-cols-3 gap-2 mb-2">
+                            <select id="task-${assetId}" class="col-span-2 bg-white/60 dark:bg-black/30 border-none text-[11px] md:text-xs rounded focus:ring-2 focus:ring-blue-500 p-2 font-medium">
+                                ${config.optionsHTML}
+                            </select>
+                            <input type="number" id="duration-${assetId}" placeholder="Secs" class="bg-white/60 dark:bg-black/30 border-none text-[11px] md:text-xs rounded focus:ring-2 focus:ring-blue-500 p-2 font-mono text-center" value="10" min="1" max="30">
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <button id="btn-start-${assetId}" onclick="triggerAction('${assetId}')" class="flex-1 bg-black/90 dark:bg-white text-white dark:text-black hover:bg-black dark:hover:bg-zinc-200 font-bold rounded text-[11px] md:text-xs px-3 py-2.5 transition-colors flex items-center justify-center">
+                                <i data-lucide="play" class="w-3.5 h-3.5 mr-1.5"></i> Iniciar
+                            </button>
+                            <button id="btn-charge-${assetId}" onclick="toggleCharge('${assetId}')" class="flex-1 bg-white/80 dark:bg-black/40 hover:bg-white dark:hover:bg-black/60 font-bold rounded text-[11px] md:text-xs px-3 py-2.5 transition-colors flex items-center justify-center">
+                                <i data-lucide="${config.chargeIcon}" class="w-3.5 h-3.5 mr-1.5"></i> <span id="charge-txt-${assetId}">${config.chargeText}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+    }
+
+    function getBadgeClassByRequestType(type) {
+        switch (type) {
+            case 'ACTION':
+                return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
+            case 'CHARGE':
+                return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400';
+            case 'STATUS':
+                return 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400';
+            case 'INIT':
+                return 'bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-400';
+            default:
+                return 'bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-400';
+        }
+    }
+
+    function renderHistory() {
+        const tbodies = {
+            robot: document.getElementById('history-body-robot'),
+            mobile: document.getElementById('history-body-mobile'),
+            human: document.getElementById('history-body-human'),
+            system: document.getElementById('history-body-system')
+        };
+
+        // Purgar para repintado reactivo
+        Object.values(tbodies).forEach(tb => {
+            if (tb) tb.innerHTML = '';
+        });
+
+        let hasHist = {robot: false, mobile: false, human: false, system: false};
+
+        requestHistory.forEach(log => {
+            const timeStr = new Date(log.timestamp).toLocaleTimeString();
+            const badgeClass = getBadgeClassByRequestType(log.type);
+            const targetType = log.asset_type || 'system';
+
+            if (tbodies[targetType]) {
+                hasHist[targetType] = true;
+                tbodies[targetType].insertAdjacentHTML('beforeend', `
+                    <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors">
+                        <td class="px-4 md:px-6 py-3 md:py-4 whitespace-nowrap text-xs md:text-sm font-mono text-zinc-500 dark:text-zinc-400">${timeStr}</td>
+                        <td class="px-4 md:px-6 py-3 md:py-4 whitespace-nowrap text-xs md:text-sm font-bold text-zinc-900 dark:text-zinc-100">${log.asset_id}</td>
+                        <td class="px-4 md:px-6 py-3 md:py-4 whitespace-nowrap"><span class="px-2.5 py-1 rounded text-[10px] md:text-xs font-bold ${badgeClass}">${log.type}</span></td>
+                        <td class="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm text-zinc-600 dark:text-zinc-300 min-w-[200px]">${log.details}</td>
+                    </tr>
+                `);
+            }
+        });
+
+        // Toggle visibility de secciones del histórico si tienen datos
+        document.getElementById('history-robot-section').classList.toggle('hidden', !hasHist.robot);
+        document.getElementById('history-mobile-section').classList.toggle('hidden', !hasHist.mobile);
+        document.getElementById('history-human-section').classList.toggle('hidden', !hasHist.human);
+        document.getElementById('history-system-section').classList.toggle('hidden', !hasHist.system);
+    }
+
+    function renderUI() {
+        let hasType = {robot: false, mobile: false, human: false};
+
+        for (const [assetId, data] of Object.entries(currentGlobalState)) {
+            hasType[data.type] = true;
+
+            let card = document.getElementById(`card-${assetId}`);
+            if (!card) {
+                const targetGrid = document.getElementById(`grid-${data.type}`);
+                if (targetGrid) {
+                    targetGrid.insertAdjacentHTML('beforeend', getBaseCardHTML(assetId, data.type));
+                    lucide.createIcons();
+                }
+            }
+
+            const config = ASSET_CONFIG[data.type] || ASSET_CONFIG.robot;
+            const isCharging = data.status === 'charging';
+            const isBusy = data.status === 'busy';
+            const isIdle = data.status === 'idle';
+
+            const badge = document.getElementById(`status-badge-${assetId}`);
+            const dot = document.getElementById(`status-dot-${assetId}`);
+            const statusText = document.getElementById(`status-text-${assetId}`);
+            const svgContainer = document.getElementById(`svg-container-${assetId}`);
+            const batText = document.getElementById(`battery-text-${assetId}`);
+            const batBar = document.getElementById(`battery-bar-${assetId}`);
+            const taskLabel = document.getElementById(`task-label-${assetId}`);
+            const inputDuration = document.getElementById(`duration-${assetId}`);
+            const inputTask = document.getElementById(`task-${assetId}`);
+            const btnStart = document.getElementById(`btn-start-${assetId}`);
+            const btnCharge = document.getElementById(`btn-charge-${assetId}`);
+            const chargeTxt = document.getElementById(`charge-txt-${assetId}`);
+            const spinner = document.getElementById(`spinner-${assetId}`);
+
+            if (isCharging) {
+                badge.className = "text-[9px] md:text-[10px] font-bold px-2 py-1 rounded flex items-center uppercase tracking-widest bg-emerald-500/20 text-emerald-700 dark:text-emerald-400";
+                dot.className = "w-1.5 h-1.5 rounded-full mr-1.5 bg-emerald-500 animate-pulse";
+                svgContainer.className = `flex justify-center mb-6 md:mb-8 h-28 md:h-32 items-end ${data.type} is-charging`;
+                taskLabel.innerText = data.type === 'human' ? "RECUPERANDO..." : "RECARGANDO...";
+                chargeTxt.innerText = config.workingText;
+                spinner.classList.add('hidden');
+                spinner.classList.remove('flex');
+            } else if (isBusy) {
+                badge.className = "text-[9px] md:text-[10px] font-bold px-2 py-1 rounded flex items-center uppercase tracking-widest bg-blue-500/20 text-blue-800 dark:text-blue-300";
+                dot.className = "w-1.5 h-1.5 rounded-full mr-1.5 bg-blue-600 dark:bg-blue-400 animate-pulse";
+                svgContainer.className = `flex justify-center mb-6 md:mb-8 h-28 md:h-32 items-end ${data.type} is-busy task-${data.current_task}`;
+                taskLabel.innerText = `${data.current_task.toUpperCase()}`;
+                chargeTxt.innerText = config.chargeText;
+                spinner.classList.remove('hidden');
+                spinner.classList.add('flex');
+            } else {
+                badge.className = "text-[9px] md:text-[10px] font-bold px-2 py-1 rounded flex items-center uppercase tracking-widest bg-white/50 dark:bg-black/30 text-current";
+                dot.className = "w-1.5 h-1.5 rounded-full mr-1.5 bg-current opacity-50";
+                svgContainer.className = `flex justify-center mb-6 md:mb-8 h-28 md:h-32 items-end ${data.type} is-idle`;
+                taskLabel.innerText = "STANDBY";
+                chargeTxt.innerText = config.chargeText;
+                spinner.classList.add('hidden');
+                spinner.classList.remove('flex');
+            }
+
+            statusText.innerText = data.status.toUpperCase();
+
+            batText.innerText = `${data.battery.toFixed(0)}%`;
+            batText.className = data.battery < 20 ? 'font-mono text-red-600 dark:text-red-400 font-extrabold' : 'font-mono opacity-80';
+            batBar.style.width = `${data.battery}%`;
+            batBar.className = `h-full rounded-full transition-all duration-1000 ${data.battery < 20 ? 'bg-red-500' : 'bg-blue-600 dark:bg-blue-400'}`;
+
+            inputDuration.disabled = !isIdle;
+            inputTask.disabled = !isIdle;
+            btnStart.disabled = !isIdle;
+            btnCharge.disabled = isBusy;
+
+            if (!isIdle) {
+                inputDuration.classList.add("opacity-40", "cursor-not-allowed");
+                inputTask.classList.add("opacity-40", "cursor-not-allowed");
+                btnStart.classList.add("opacity-40", "cursor-not-allowed");
+            } else {
+                inputDuration.classList.remove("opacity-40", "cursor-not-allowed");
+                inputTask.classList.remove("opacity-40", "cursor-not-allowed");
+                btnStart.classList.remove("opacity-40", "cursor-not-allowed");
+            }
+        }
+
+        // Mostrar solo secciones con activos
+        document.getElementById('section-robot').classList.toggle('hidden', !hasType.robot);
+        document.getElementById('section-mobile').classList.toggle('hidden', !hasType.mobile);
+        document.getElementById('section-human').classList.toggle('hidden', !hasType.human);
+    }
+
+    async function triggerAction(assetId) {
+        const durationInput = document.getElementById(`duration-${assetId}`);
+        const taskSelect = document.getElementById(`task-${assetId}`);
+        let duration = parseInt(durationInput.value, 10);
+        const task = taskSelect.value;
+        if (isNaN(duration) || duration <= 0) duration = 5;
+
+        if (isLocalMode) {
+            if (currentGlobalState[assetId].status !== 'idle') return;
+            currentGlobalState[assetId].status = 'busy';
+            currentGlobalState[assetId].current_task = task;
+
+            requestHistory.unshift({
+                timestamp: new Date().toISOString(),
+                asset_id: assetId,
+                asset_type: currentGlobalState[assetId].type,
+                type: 'ACTION',
+                details: `Ejecución mock solicitada: ${task} (${duration}s)`
+            });
+
+            renderUI();
+            renderHistory();
+            setTimeout(() => {
+                if (currentGlobalState[assetId].status === 'busy') {
+                    currentGlobalState[assetId].status = 'idle';
+                    currentGlobalState[assetId].current_task = null;
+                    renderUI();
+                }
+            }, duration * 1000);
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/v1/asset/${assetId}/action`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({action: task, duration: duration})
+            });
+            if (!response.ok) alert(`Error: ${(await response.json()).detail}`);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    async function toggleCharge(assetId) {
+        const enable = currentGlobalState[assetId].status !== 'charging';
+
+        if (isLocalMode) {
+            if (enable && currentGlobalState[assetId].status === 'idle') currentGlobalState[assetId].status = 'charging';
+            else if (!enable && currentGlobalState[assetId].status === 'charging') currentGlobalState[assetId].status = 'idle';
+
+            requestHistory.unshift({
+                timestamp: new Date().toISOString(),
+                asset_id: assetId,
+                asset_type: currentGlobalState[assetId].type,
+                type: 'CHARGE',
+                details: `Recuperación ${enable ? 'iniciada' : 'detenida'} (mock)`
+            });
+
+            renderUI();
+            renderHistory();
+            return;
+        }
+
+        try {
+            await fetch(`/api/v1/asset/${assetId}/charge`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({enable: enable})
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    function initNetwork() {
+        try {
+            const isIsolatedEnv = window.location.protocol.startsWith("blob") || window.location.origin === "null";
+            if (isIsolatedEnv) throw new Error("Aislado");
+
+            const eventSource = new EventSource('/ui/stream');
+            eventSource.onmessage = function (event) {
+                const parsed = JSON.parse(event.data);
+                currentGlobalState = parsed.state;
+                requestHistory = parsed.history;
+                renderUI();
+                renderHistory();
+            };
+            eventSource.onerror = function () {
+                document.getElementById('connection-dot').className = "w-1.5 h-1.5 rounded-full bg-red-500 mr-2";
+                document.getElementById('connection-text').innerText = "SSE Offline";
+            };
+        } catch (e) {
+            console.warn("Modo Local Activo.");
+            isLocalMode = true;
+            currentGlobalState = {
+                "ROBOT_A": {type: "robot", status: "idle", battery: 100.0, current_task: null},
+                "AGV_01": {type: "mobile", status: "idle", battery: 85.0, current_task: null},
+                "OPERARIO_X": {type: "human", status: "charging", battery: 42.0, current_task: null}
+            };
+            requestHistory = [{
+                timestamp: new Date().toISOString(),
+                asset_id: "SYSTEM",
+                asset_type: "system",
+                type: "INIT",
+                details: "Mock Mode Initialized"
+            }];
+            renderUI();
+            renderHistory();
+            setInterval(() => {
+                let changed = false;
+                for (const [id, data] of Object.entries(currentGlobalState)) {
+                    if (data.status === 'charging') {
+                        data.battery = Math.min(100, data.battery + 2.5);
+                        if (data.battery >= 100) data.status = 'idle';
+                        changed = true;
+                    } else if (data.status === 'busy') {
+                        data.battery = Math.max(0, data.battery - 2);
+                        if (data.battery <= 0) {
+                            data.status = 'idle';
+                            data.current_task = null;
+                        }
+                        changed = true;
+                    }
+                }
+                if (changed) renderUI();
+            }, 1000);
+        }
+    }
+
+    // Inicializador Estructural (Dom Builder)
+    document.addEventListener("DOMContentLoaded", () => {
+        const dashboardContainer = document.getElementById('dashboard-container');
+        dashboardContainer.insertAdjacentHTML('beforeend', getDashboardSectionHTML('robot', ASSET_CONFIG.robot.title));
+        dashboardContainer.insertAdjacentHTML('beforeend', getDashboardSectionHTML('mobile', ASSET_CONFIG.mobile.title));
+        dashboardContainer.insertAdjacentHTML('beforeend', getDashboardSectionHTML('human', ASSET_CONFIG.human.title));
+
+        const historyContainer = document.getElementById('history-sections-container');
+        historyContainer.insertAdjacentHTML('beforeend', getHistoryTableHTML('robot', `Histórico - ${ASSET_CONFIG.robot.title}`));
+        historyContainer.insertAdjacentHTML('beforeend', getHistoryTableHTML('mobile', `Histórico - ${ASSET_CONFIG.mobile.title}`));
+        historyContainer.insertAdjacentHTML('beforeend', getHistoryTableHTML('human', `Histórico - ${ASSET_CONFIG.human.title}`));
+        historyContainer.insertAdjacentHTML('beforeend', getHistoryTableHTML('system', `Eventos de Sistema`));
+
+        lucide.createIcons();
+        initNetwork();
+    });
+</script>
+</body>
+</html>
