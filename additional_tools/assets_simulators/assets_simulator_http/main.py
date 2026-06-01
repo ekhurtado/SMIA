@@ -129,7 +129,6 @@ templates = Jinja2Templates(directory="templates")
 # Modelos Pydantic
 # ---------------------------------------------------------
 class ActionRequest(BaseModel):
-    action: str = Field(..., description="Task to simulate")
     duration: int = Field(..., gt=0, le=30, description="Duration in seconds")
 
 
@@ -210,8 +209,8 @@ async def toggle_charge(asset_id: str, payload: ChargeRequest):
     return {"status": "success", "charging": payload.enable}
 
 
-@app.post("/api/v1/asset/{asset_id}/action")
-async def trigger_action(asset_id: str, payload: ActionRequest):
+@app.post("/api/v1/asset/{asset_id}/action/{action_name}")
+async def trigger_action(asset_id: str, action_name: str, payload: ActionRequest):
     if asset_id not in assets_state:
         raise HTTPException(status_code=404, detail="Asset not found")
 
@@ -219,10 +218,10 @@ async def trigger_action(asset_id: str, payload: ActionRequest):
         state = assets_state[asset_id]
 
         asset_type = state["type"]
-        if payload.action not in ASSET_TASKS.get(asset_type, {}):
+        if action_name not in ASSET_TASKS.get(asset_type, {}):
             raise HTTPException(
                 status_code=400,
-                detail=f"Task '{payload.action}' is not supported by {asset_type} assets. Allowed: {list(ASSET_TASKS[asset_type].keys())}"
+                detail=f"Task '{action_name}' is not supported by {asset_type} assets. Allowed: {list(ASSET_TASKS[asset_type].keys())}"
             )
 
         if state["status"] != "idle":
@@ -233,9 +232,9 @@ async def trigger_action(asset_id: str, payload: ActionRequest):
             raise HTTPException(status_code=400, detail="Insufficient energy for task")
 
         state["status"] = "busy"
-        state["current_task"] = payload.action
+        state["current_task"] = action_name
 
-        append_to_history(asset_id, "ACTION", f"Ejecución solicitada: {payload.action.upper()} ({payload.duration}s)")
+        append_to_history(asset_id, "ACTION", f"Ejecución solicitada: {action_name.upper()} ({payload.duration}s)")
 
     await notify_clients()
 
@@ -259,7 +258,7 @@ async def trigger_action(asset_id: str, payload: ActionRequest):
     except asyncio.CancelledError:
         raise
 
-    return {"status": "success", "asset": asset_id, "action_completed": payload.action}
+    return {"status": "success", "asset": asset_id, "action_completed": action_name}
 
 
 @app.get("/favicon.ico", include_in_schema=False)

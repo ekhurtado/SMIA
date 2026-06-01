@@ -19,9 +19,9 @@ Respuesta esperada:
 
 ### 2. Lanzar tarea
 ```bash
-curl -X POST http://localhost:5000/api/v1/asset/robot_A/action \
+curl -X POST http://localhost:5000/api/v1/asset/robot_A/action/weld \
   -H "Content-Type: application/json" \
-  -d '{"action": "weld", "duration": 10}'
+  -d '{"duration": 10}'
 ```
 
 ### 3. Verificar busy
@@ -30,9 +30,9 @@ curl -X POST http://localhost:5000/api/v1/asset/robot_A/action \
 curl http://localhost:5000/api/v1/asset/robot_A/status
 
 # Intentar segunda tarea (debe devolver 409)
-curl -X POST http://localhost:5000/api/v1/asset/robot_A/action \
+curl -X POST http://localhost:5000/api/v1/asset/robot_A/action/paint \
   -H "Content-Type: application/json" \
-  -d '{"action": "paint", "duration": 5}'
+  -d '{"duration": 5}'
 ```
 
 ### 4. Stream SSE

@@ -433,21 +433,31 @@
             <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-5 md:p-7 overflow-hidden transition-all hover:shadow-md">
                 <div class="flex flex-col md:flex-row md:items-center mb-4 gap-3">
                     <span class="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 font-mono text-xs font-extrabold px-2.5 py-1 rounded w-max tracking-widest uppercase">POST</span>
-                    <code class="text-sm font-mono font-bold text-zinc-800 dark:text-zinc-200 break-all">/api/v1/asset/{asset_id}/action</code>
+                    <code class="text-sm font-mono font-bold text-zinc-800 dark:text-zinc-200 break-all">/api/v1/asset/{asset_id}/action/{action_name}</code>
                 </div>
                 <p class="text-zinc-500 dark:text-zinc-400 text-sm mb-6 leading-relaxed">Asigna una tarea a un activo.
-                    El servidor validará si la tarea es compatible con el tipo de activo, si está disponible (estado
-                    'idle') y si tiene batería suficiente para completar la operación solicitada.</p>
+                    La acción a ejecutar se indica como segmento de la ruta. El servidor validará si la tarea es
+                    compatible con el tipo de activo, si está disponible (estado 'idle') y si tiene batería suficiente
+                    para completar la operación solicitada.</p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <h4 class="text-xs font-extrabold tracking-widest text-zinc-900 dark:text-zinc-100 uppercase mb-3 border-b border-zinc-200 dark:border-zinc-800 pb-2">
-                            Body Request (JSON)</h4>
+                            Parámetros de Ruta</h4>
                         <ul class="text-sm text-zinc-600 dark:text-zinc-400 space-y-2">
                             <li><code
-                                    class="text-xs font-mono text-zinc-900 dark:text-zinc-300 font-bold bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded">action</code>
-                                <span class="italic text-xs">(string)</span> - Tarea válida.
+                                    class="text-xs font-mono text-zinc-900 dark:text-zinc-300 font-bold bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded">asset_id</code>
+                                <span class="italic text-xs">(string)</span> - ID único del activo.
                             </li>
+                            <li><code
+                                    class="text-xs font-mono text-zinc-900 dark:text-zinc-300 font-bold bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded">action_name</code>
+                                <span class="italic text-xs">(string)</span> - Tarea válida soportada por el tipo de
+                                activo.
+                            </li>
+                        </ul>
+                        <h4 class="text-xs font-extrabold tracking-widest text-zinc-900 dark:text-zinc-100 uppercase mb-3 mt-4 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+                            Body Request (JSON)</h4>
+                        <ul class="text-sm text-zinc-600 dark:text-zinc-400 space-y-2">
                             <li><code
                                     class="text-xs font-mono text-zinc-900 dark:text-zinc-300 font-bold bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded">duration</code>
                                 <span class="italic text-xs">(int)</span> - Segundos (1 a 30).
@@ -456,7 +466,7 @@
                         <div class="mt-4">
                             <h4 class="text-[10px] font-extrabold tracking-widest text-zinc-500 uppercase mb-2">Ejemplo
                                 cURL</h4>
-                            <pre class="bg-zinc-50 dark:bg-[#0d1117] border border-zinc-200 dark:border-zinc-800 rounded-lg p-3 text-[10px] font-mono text-zinc-700 dark:text-zinc-300 overflow-x-auto whitespace-pre-wrap word-break">curl -X POST http://localhost:5000/api/v1/asset/ROBOT_A/action -H "Content-Type: application/json" -d '{"action": "weld", "duration": 15}'</pre>
+                            <pre class="bg-zinc-50 dark:bg-[#0d1117] border border-zinc-200 dark:border-zinc-800 rounded-lg p-3 text-[10px] font-mono text-zinc-700 dark:text-zinc-300 overflow-x-auto whitespace-pre-wrap word-break">curl -X POST http://localhost:5000/api/v1/asset/ROBOT_A/action/weld -H "Content-Type: application/json" -d '{"duration": 15}'</pre>
                         </div>
                     </div>
                     <div>
@@ -941,10 +951,10 @@
         }
 
         try {
-            const response = await fetch(`/api/v1/asset/${assetId}/action`, {
+            const response = await fetch(`/api/v1/asset/${assetId}/action/${task}`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({action: task, duration: duration})
+                body: JSON.stringify({duration: duration})
             });
             if (!response.ok) alert(`Error: ${(await response.json()).detail}`);
         } catch (err) {

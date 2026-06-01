@@ -86,7 +86,7 @@ async def event_generator():
 | Metodo | Ruta | Descripcion |
 |--------|------|-------------|
 | GET | `/api/v1/asset/{asset_id}/status` | Estado de un activo |
-| POST | `/api/v1/asset/{asset_id}/action` | Ejecutar accion |
+| POST | `/api/v1/asset/{asset_id}/action/{action_name}` | Ejecutar accion (action_name) |
 | GET | `/ui/stream` | Stream SSE |
 | GET | `/` | Frontend SPA |
 
