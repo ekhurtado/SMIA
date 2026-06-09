@@ -237,22 +237,80 @@
             }
         }
 
-        @keyframes hum-inspect {
+        @keyframes hum-inspect-torso {
             0%, 100% {
                 transform: scale(1) translateY(0);
             }
             50% {
-                transform: scale(1.15) translateY(-5px);
+                transform: scale(1.05) translateY(-2px);
             }
         }
 
-        @keyframes hum-maintain-r {
+        @keyframes hum-inspect-arm-r {
             0%, 100% {
-                transform: rotate(-80deg);
+                transform: rotate(-70deg);
             }
             50% {
-                transform: rotate(60deg);
+                transform: rotate(-90deg);
             }
+        }
+
+        @keyframes hum-inspect-arm-l {
+            0%, 100% {
+                transform: rotate(15deg);
+            }
+            50% {
+                transform: rotate(35deg);
+            }
+        }
+
+        @keyframes hum-walk-torso {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            25%, 75% {
+                transform: translateY(-3px);
+            }
+        }
+
+        @keyframes hum-walk-leg-l {
+            0%, 100% {
+                transform: rotate(-25deg);
+            }
+            50% {
+                transform: rotate(25deg);
+            }
+        }
+
+        @keyframes hum-walk-leg-r {
+            0%, 100% {
+                transform: rotate(25deg);
+            }
+            50% {
+                transform: rotate(-25deg);
+            }
+        }
+
+        @keyframes hum-walk-arm-l {
+            0%, 100% {
+                transform: rotate(30deg);
+            }
+            50% {
+                transform: rotate(-30deg);
+            }
+        }
+
+        @keyframes hum-walk-arm-r {
+            0%, 100% {
+                transform: rotate(-30deg);
+            }
+            50% {
+                transform: rotate(30deg);
+            }
+        }
+
+        .tool-glasses, .tool-wrench {
+            display: none;
         }
 
         .human-torso {
@@ -270,6 +328,16 @@
             transition: transform 0.3s;
         }
 
+        .human-leg-l {
+            transform-origin: 42px 70px;
+            transition: transform 0.3s;
+        }
+
+        .human-leg-r {
+            transform-origin: 58px 70px;
+            transition: transform 0.3s;
+        }
+
         .human.task-assemble .human-arm-r {
             animation: hum-assemble-r 0.4s infinite ease-in-out;
         }
@@ -279,15 +347,43 @@
         }
 
         .human.task-inspect .human-torso {
-            animation: hum-inspect 2s infinite ease-in-out;
+            animation: hum-inspect-torso 3s infinite ease-in-out;
         }
 
         .human.task-inspect .human-arm-r {
-            transform: rotate(-90deg);
+            animation: hum-inspect-arm-r 1.5s infinite ease-in-out;
+        }
+
+        .human.task-inspect .human-arm-l {
+            animation: hum-inspect-arm-l 1.5s infinite ease-in-out;
+        }
+
+        .human.task-inspect .tool-glasses {
+            display: block;
+        }
+
+        .human.task-maintain .human-torso {
+            animation: hum-walk-torso 1s infinite linear;
+        }
+
+        .human.task-maintain .human-leg-l {
+            animation: hum-walk-leg-l 1s infinite linear;
+        }
+
+        .human.task-maintain .human-leg-r {
+            animation: hum-walk-leg-r 1s infinite linear;
+        }
+
+        .human.task-maintain .human-arm-l {
+            animation: hum-walk-arm-l 1s infinite linear;
         }
 
         .human.task-maintain .human-arm-r {
-            animation: hum-maintain-r 1.2s infinite ease-in-out;
+            animation: hum-walk-arm-r 1s infinite linear;
+        }
+
+        .human.task-maintain .tool-wrench {
+            display: block;
         }
     </style>
 </head>
@@ -617,11 +713,22 @@
                 <svg viewBox="0 0 100 100" class="w-28 h-28 md:w-32 md:h-32 overflow-visible">
                     <g class="human-torso">
                         <circle cx="50" cy="25" r="12" class="fill-[#1A2E44] dark:fill-[#B0D5E8] transition-colors" />
+                        <g class="tool-glasses">
+                            <rect x="42" y="22" width="6" height="4" rx="1" fill="none" stroke="#3b82f6" stroke-width="1.5" />
+                            <rect x="52" y="22" width="6" height="4" rx="1" fill="none" stroke="#3b82f6" stroke-width="1.5" />
+                            <line x1="48" y1="24" x2="52" y2="24" stroke="#3b82f6" stroke-width="1.5" />
+                        </g>
                         <rect x="35" y="40" width="30" height="35" rx="10" class="fill-[#4A6F96] dark:fill-[#5B82A1] transition-colors" />
                         <path d="M 35 45 Q 20 60 25 75" fill="none" stroke-width="8" stroke-linecap="round" class="human-arm-l stroke-[#1A2E44] dark:stroke-[#B0D5E8]" />
-                        <path d="M 65 45 Q 80 60 75 75" fill="none" stroke-width="8" stroke-linecap="round" class="human-arm-r stroke-[#1A2E44] dark:stroke-[#B0D5E8]" />
-                        <line x1="42" y1="70" x2="42" y2="100" stroke-width="8" stroke-linecap="round" class="stroke-[#1A2E44] dark:stroke-[#B0D5E8]" />
-                        <line x1="58" y1="70" x2="58" y2="100" stroke-width="8" stroke-linecap="round" class="stroke-[#1A2E44] dark:stroke-[#B0D5E8]" />
+                        <g class="human-arm-r">
+                            <path d="M 65 45 Q 80 60 75 75" fill="none" stroke-width="8" stroke-linecap="round" class="stroke-[#1A2E44] dark:stroke-[#B0D5E8]" />
+                            <g class="tool-wrench">
+                                <rect x="73" y="72" width="4" height="18" rx="2" class="fill-[#7B9CB5] dark:fill-[#B0D5E8]" />
+                                <path d="M 69 72 C 69 66, 81 66, 81 72 L 77 74 L 77 70 C 77 68, 73 68, 73 70 L 73 74 Z" class="fill-[#5B82A1] dark:fill-[#D7EDF7]" />
+                            </g>
+                        </g>
+                        <line x1="42" y1="70" x2="42" y2="100" stroke-width="8" stroke-linecap="round" class="human-leg-l stroke-[#1A2E44] dark:stroke-[#B0D5E8]" />
+                        <line x1="58" y1="70" x2="58" y2="100" stroke-width="8" stroke-linecap="round" class="human-leg-r stroke-[#1A2E44] dark:stroke-[#B0D5E8]" />
                     </g>
                 </svg>
             `
