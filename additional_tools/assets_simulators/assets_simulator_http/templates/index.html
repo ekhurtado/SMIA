@@ -162,6 +162,52 @@
                 linear-gradient(90deg, rgba(59, 130, 246, 0.06) 1px, transparent 1px);
         }
 
+        /* === PANEL ASSET SELECTOR === */
+        .asset-pill {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        .asset-pill:active {
+            transform: scale(0.97);
+        }
+
+        .asset-pill .pill-indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 2px;
+            border: 1.5px solid currentColor;
+            opacity: 0.35;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .asset-pill.selected .pill-indicator {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            border: none;
+            opacity: 1;
+            background: currentColor;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .asset-pill .pill-indicator svg {
+            display: none;
+        }
+
+        .asset-pill.selected .pill-indicator svg {
+            display: block;
+        }
+
+        .panel-card-enter {
+            animation: home-scale-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
         /* 1. Animaciones Robot */
         @keyframes rob-weld {
             0%, 100% {
@@ -540,9 +586,13 @@
                 class="nav-btn w-full flex items-center px-4 py-3 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white rounded-lg transition-all font-semibold text-sm">
             <i data-lucide="home" class="w-4 h-4 mr-3 opacity-70"></i> Inicio
         </button>
+        <button onclick="switchTab('panel')" id="nav-panel"
+                class="nav-btn w-full flex items-center px-4 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 text-zinc-500 dark:text-zinc-400 rounded-lg transition-all font-semibold text-sm">
+            <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3 opacity-70"></i> Panel Principal
+        </button>
         <button onclick="switchTab('dashboard')" id="nav-dashboard"
                 class="nav-btn w-full flex items-center px-4 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 text-zinc-500 dark:text-zinc-400 rounded-lg transition-all font-semibold text-sm">
-            <i data-lucide="grid" class="w-4 h-4 mr-3 opacity-70"></i> Panel Principal
+            <i data-lucide="library" class="w-4 h-4 mr-3 opacity-70"></i> Librería de Activos
         </button>
         <button onclick="switchTab('history')" id="nav-history"
                 class="nav-btn w-full flex items-center px-4 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 text-zinc-500 dark:text-zinc-400 rounded-lg transition-all font-semibold text-sm">
@@ -694,13 +744,52 @@
         </div>
     </section>
 
-    <!-- PESTAÑA: DASHBOARD -->
+    <!-- PESTAÑA: PANEL PRINCIPAL -->
+    <section id="tab-panel" class="tab-content p-4 md:p-10 max-w-7xl mx-auto">
+        <header class="mb-8 md:mb-10 flex flex-col md:flex-row md:justify-between md:items-end gap-4">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Panel Principal</h2>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm mt-1 md:mt-2 font-medium">Selecciona los activos que deseas visualizar y gestionar.</p>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="panelSelectAll()" class="text-[11px] font-bold px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/50 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors">
+                    Seleccionar todos
+                </button>
+                <button onclick="panelDeselectAll()" class="text-[11px] font-bold px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors">
+                    Limpiar
+                </button>
+            </div>
+        </header>
+
+        <!-- Selector de activos -->
+        <div class="mb-8">
+            <div class="flex items-center gap-4 mb-4">
+                <h3 class="text-sm font-extrabold tracking-widest uppercase text-zinc-500 dark:text-zinc-400 whitespace-nowrap">Activos Disponibles</h3>
+                <div class="h-px w-full bg-zinc-200 dark:bg-zinc-800"></div>
+            </div>
+            <div id="panel-selector" class="flex flex-wrap gap-2.5">
+                <!-- Pills inyectadas dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Grid de activos seleccionados -->
+        <div id="panel-empty-state" class="hidden py-16 text-center">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-zinc-100 dark:bg-zinc-800 mb-4">
+                <i data-lucide="mouse-pointer-click" class="w-7 h-7 text-zinc-400 dark:text-zinc-500"></i>
+            </div>
+            <p class="text-sm font-semibold text-zinc-500 dark:text-zinc-400">Selecciona activos de la lista superior para comenzar a monitorizarlos.</p>
+        </div>
+        <div id="panel-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
+            <!-- Cards inyectadas dinámicamente -->
+        </div>
+    </section>
+
+    <!-- PESTAÑA: LIBRERÍA DE ACTIVOS -->
     <section id="tab-dashboard" class="tab-content p-4 md:p-10 max-w-7xl mx-auto">
         <header class="mb-8 md:mb-10 flex flex-col md:flex-row md:justify-between md:items-end gap-2">
             <div>
-                <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Estado de la Flota</h2>
-                <p class="text-zinc-500 dark:text-zinc-400 text-sm mt-1 md:mt-2 font-medium">Clasificación explícita de
-                    activos en secciones divididas.</p>
+                <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Librería de Activos</h2>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm mt-1 md:mt-2 font-medium">Catálogo completo de activos clasificados por tipo.</p>
             </div>
         </header>
         <div id="dashboard-container">
@@ -1000,6 +1089,7 @@
     let currentGlobalState = {};
     let requestHistory = [];
     let isLocalMode = false;
+    let panelSelectedAssets = new Set();
 
     function switchTab(tabId) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -1057,23 +1147,24 @@
         </div>`;
     }
 
-    function getBaseCardHTML(assetId, type) {
+    function getBaseCardHTML(assetId, type, prefix = '') {
         const config = ASSET_CONFIG[type] || ASSET_CONFIG.robot;
+        const p = prefix;
 
         return `
-            <div id="card-${assetId}" class="bg-asset-light dark:bg-asset-dark border border-asset-lightBorder dark:border-asset-darkBorder text-zinc-900 dark:text-blue-50 rounded-2xl p-4 md:p-6 relative overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1">
+            <div id="${p}card-${assetId}" class="bg-asset-light dark:bg-asset-dark border border-asset-lightBorder dark:border-asset-darkBorder text-zinc-900 dark:text-blue-50 rounded-2xl p-4 md:p-6 relative overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1${prefix === 'p-' ? ' panel-card-enter' : ''}">
                 <div class="flex justify-between items-start mb-6 md:mb-8">
                     <div>
                         <h5 class="text-base md:text-lg font-extrabold font-mono tracking-tight uppercase">${assetId}</h5>
                         <p class="text-[10px] md:text-[11px] opacity-70 font-bold tracking-widest uppercase mt-1">${type} ASSET</p>
                     </div>
-                    <span id="status-badge-${assetId}" class="text-[9px] md:text-[10px] font-bold px-2 py-1 rounded flex items-center uppercase tracking-widest bg-white/50 dark:bg-black/30">
-                        <span id="status-dot-${assetId}" class="w-1.5 h-1.5 rounded-full mr-1.5 bg-zinc-400"></span>
-                        <span id="status-text-${assetId}">IDLE</span>
+                    <span id="${p}status-badge-${assetId}" class="text-[9px] md:text-[10px] font-bold px-2 py-1 rounded flex items-center uppercase tracking-widest bg-white/50 dark:bg-black/30">
+                        <span id="${p}status-dot-${assetId}" class="w-1.5 h-1.5 rounded-full mr-1.5 bg-zinc-400"></span>
+                        <span id="${p}status-text-${assetId}">IDLE</span>
                     </span>
                 </div>
 
-                <div id="svg-container-${assetId}" class="flex justify-center mb-6 md:mb-8 h-28 md:h-32 items-end ${type} is-idle">
+                <div id="${p}svg-container-${assetId}" class="flex justify-center mb-6 md:mb-8 h-28 md:h-32 items-end ${type} is-idle">
                     ${config.svgTemplate}
                 </div>
 
@@ -1081,15 +1172,15 @@
                     <div>
                         <div class="flex justify-between text-[9px] md:text-[10px] font-bold opacity-80 mb-1.5 tracking-widest">
                             <span>${config.energyLabel}</span>
-                            <span id="battery-text-${assetId}" class="font-mono">100%</span>
+                            <span id="${p}battery-text-${assetId}" class="font-mono">100%</span>
                         </div>
                         <div class="w-full bg-white/40 dark:bg-black/40 rounded-full h-1.5 overflow-hidden">
-                            <div id="battery-bar-${assetId}" class="h-full rounded-full transition-all duration-1000 bg-blue-600 dark:bg-blue-400" style="width: 100%"></div>
+                            <div id="${p}battery-bar-${assetId}" class="h-full rounded-full transition-all duration-1000 bg-blue-600 dark:bg-blue-400" style="width: 100%"></div>
                         </div>
                     </div>
 
                     <div class="flex justify-between items-center h-6">
-                         <div id="spinner-${assetId}" class="hidden items-center">
+                         <div id="${p}spinner-${assetId}" class="hidden items-center">
                             <div role="status">
                                 <svg aria-hidden="true" class="w-3 h-3 md:w-4 md:h-4 mr-2 text-white/50 animate-spin fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 28.0063 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 28.0063 9.08144 50.5908Z" fill="currentColor"/>
@@ -1097,28 +1188,101 @@
                                 </svg>
                             </div>
                          </div>
-                         <span id="task-label-${assetId}" class="text-[9px] md:text-[10px] font-mono px-2 py-1 bg-white/60 dark:bg-black/30 rounded">STANDBY</span>
+                         <span id="${p}task-label-${assetId}" class="text-[9px] md:text-[10px] font-mono px-2 py-1 bg-white/60 dark:bg-black/30 rounded">STANDBY</span>
                     </div>
 
                     <div class="pt-3 md:pt-4 border-t border-black/10 dark:border-white/10">
                         <div class="grid grid-cols-3 gap-2 mb-2">
-                            <select id="task-${assetId}" class="col-span-2 bg-white/60 dark:bg-black/30 border-none text-[11px] md:text-xs rounded focus:ring-2 focus:ring-blue-500 p-2 font-medium">
+                            <select id="${p}task-${assetId}" class="col-span-2 bg-white/60 dark:bg-black/30 border-none text-[11px] md:text-xs rounded focus:ring-2 focus:ring-blue-500 p-2 font-medium">
                                 ${config.optionsHTML}
                             </select>
-                            <input type="number" id="duration-${assetId}" placeholder="Secs" class="bg-white/60 dark:bg-black/30 border-none text-[11px] md:text-xs rounded focus:ring-2 focus:ring-blue-500 p-2 font-mono text-center" value="10" min="1" max="30">
+                            <input type="number" id="${p}duration-${assetId}" placeholder="Secs" class="bg-white/60 dark:bg-black/30 border-none text-[11px] md:text-xs rounded focus:ring-2 focus:ring-blue-500 p-2 font-mono text-center" value="10" min="1" max="30">
                         </div>
 
                         <div class="flex flex-col sm:flex-row gap-2">
-                            <button id="btn-start-${assetId}" onclick="triggerAction('${assetId}')" class="flex-1 bg-black/90 dark:bg-white text-white dark:text-black hover:bg-black dark:hover:bg-zinc-200 font-bold rounded text-[11px] md:text-xs px-3 py-2.5 transition-colors flex items-center justify-center">
+                            <button id="${p}btn-start-${assetId}" onclick="triggerAction('${assetId}', '${p}')" class="flex-1 bg-black/90 dark:bg-white text-white dark:text-black hover:bg-black dark:hover:bg-zinc-200 font-bold rounded text-[11px] md:text-xs px-3 py-2.5 transition-colors flex items-center justify-center">
                                 <i data-lucide="play" class="w-3.5 h-3.5 mr-1.5"></i> Iniciar
                             </button>
-                            <button id="btn-charge-${assetId}" onclick="toggleCharge('${assetId}')" class="flex-1 bg-white/80 dark:bg-black/40 hover:bg-white dark:hover:bg-black/60 font-bold rounded text-[11px] md:text-xs px-3 py-2.5 transition-colors flex items-center justify-center">
-                                <i data-lucide="${config.chargeIcon}" class="w-3.5 h-3.5 mr-1.5"></i> <span id="charge-txt-${assetId}">${config.chargeText}</span>
+                            <button id="${p}btn-charge-${assetId}" onclick="toggleCharge('${assetId}', '${p}')" class="flex-1 bg-white/80 dark:bg-black/40 hover:bg-white dark:hover:bg-black/60 font-bold rounded text-[11px] md:text-xs px-3 py-2.5 transition-colors flex items-center justify-center">
+                                <i data-lucide="${config.chargeIcon}" class="w-3.5 h-3.5 mr-1.5"></i> <span id="${p}charge-txt-${assetId}">${config.chargeText}</span>
                             </button>
                         </div>
                     </div>
                 </div>
             </div>`;
+    }
+
+    // --- Actualización de estado visual de una card (reutilizable entre vistas) ---
+    function updateCardState(assetId, data, prefix) {
+        const p = prefix;
+        const config = ASSET_CONFIG[data.type] || ASSET_CONFIG.robot;
+        const isCharging = data.status === 'charging';
+        const isBusy = data.status === 'busy';
+        const isIdle = data.status === 'idle';
+
+        const badge = document.getElementById(`${p}status-badge-${assetId}`);
+        if (!badge) return; // Card no existe en esta vista
+
+        const dot = document.getElementById(`${p}status-dot-${assetId}`);
+        const statusText = document.getElementById(`${p}status-text-${assetId}`);
+        const svgContainer = document.getElementById(`${p}svg-container-${assetId}`);
+        const batText = document.getElementById(`${p}battery-text-${assetId}`);
+        const batBar = document.getElementById(`${p}battery-bar-${assetId}`);
+        const taskLabel = document.getElementById(`${p}task-label-${assetId}`);
+        const inputDuration = document.getElementById(`${p}duration-${assetId}`);
+        const inputTask = document.getElementById(`${p}task-${assetId}`);
+        const btnStart = document.getElementById(`${p}btn-start-${assetId}`);
+        const btnCharge = document.getElementById(`${p}btn-charge-${assetId}`);
+        const chargeTxt = document.getElementById(`${p}charge-txt-${assetId}`);
+        const spinner = document.getElementById(`${p}spinner-${assetId}`);
+
+        if (isCharging) {
+            badge.className = "text-[9px] md:text-[10px] font-bold px-2 py-1 rounded flex items-center uppercase tracking-widest bg-emerald-500/20 text-emerald-700 dark:text-emerald-400";
+            dot.className = "w-1.5 h-1.5 rounded-full mr-1.5 bg-emerald-500 animate-pulse";
+            svgContainer.className = `flex justify-center mb-6 md:mb-8 h-28 md:h-32 items-end ${data.type} is-charging`;
+            taskLabel.innerText = data.type === 'human' ? "RECUPERANDO..." : "RECARGANDO...";
+            chargeTxt.innerText = config.workingText;
+            spinner.classList.add('hidden');
+            spinner.classList.remove('flex');
+        } else if (isBusy) {
+            badge.className = "text-[9px] md:text-[10px] font-bold px-2 py-1 rounded flex items-center uppercase tracking-widest bg-blue-500/20 text-blue-800 dark:text-blue-300";
+            dot.className = "w-1.5 h-1.5 rounded-full mr-1.5 bg-blue-600 dark:bg-blue-400 animate-pulse";
+            svgContainer.className = `flex justify-center mb-6 md:mb-8 h-28 md:h-32 items-end ${data.type} is-busy task-${data.current_task}`;
+            taskLabel.innerText = `${data.current_task.toUpperCase()}`;
+            chargeTxt.innerText = config.chargeText;
+            spinner.classList.remove('hidden');
+            spinner.classList.add('flex');
+        } else {
+            badge.className = "text-[9px] md:text-[10px] font-bold px-2 py-1 rounded flex items-center uppercase tracking-widest bg-white/50 dark:bg-black/30 text-current";
+            dot.className = "w-1.5 h-1.5 rounded-full mr-1.5 bg-current opacity-50";
+            svgContainer.className = `flex justify-center mb-6 md:mb-8 h-28 md:h-32 items-end ${data.type} is-idle`;
+            taskLabel.innerText = "STANDBY";
+            chargeTxt.innerText = config.chargeText;
+            spinner.classList.add('hidden');
+            spinner.classList.remove('flex');
+        }
+
+        statusText.innerText = data.status.toUpperCase();
+
+        batText.innerText = `${data.battery.toFixed(0)}%`;
+        batText.className = data.battery < 20 ? 'font-mono text-red-600 dark:text-red-400 font-extrabold' : 'font-mono opacity-80';
+        batBar.style.width = `${data.battery}%`;
+        batBar.className = `h-full rounded-full transition-all duration-1000 ${data.battery < 20 ? 'bg-red-500' : 'bg-blue-600 dark:bg-blue-400'}`;
+
+        inputDuration.disabled = !isIdle;
+        inputTask.disabled = !isIdle;
+        btnStart.disabled = !isIdle;
+        btnCharge.disabled = isBusy;
+
+        if (!isIdle) {
+            inputDuration.classList.add("opacity-40", "cursor-not-allowed");
+            inputTask.classList.add("opacity-40", "cursor-not-allowed");
+            btnStart.classList.add("opacity-40", "cursor-not-allowed");
+        } else {
+            inputDuration.classList.remove("opacity-40", "cursor-not-allowed");
+            inputTask.classList.remove("opacity-40", "cursor-not-allowed");
+            btnStart.classList.remove("opacity-40", "cursor-not-allowed");
+        }
     }
 
     function getBadgeClassByRequestType(type) {
@@ -1176,98 +1340,158 @@
         document.getElementById('history-system-section').classList.toggle('hidden', !hasHist.system);
     }
 
+    // --- PANEL PRINCIPAL: Selector de activos ---
+    const PILL_TYPE_LABELS = { robot: 'PROD', mobile: 'MOB', human: 'OPS' };
+
+    function renderPanelSelector() {
+        const selectorContainer = document.getElementById('panel-selector');
+        if (!selectorContainer) return;
+        selectorContainer.innerHTML = '';
+
+        const assetIds = Object.keys(currentGlobalState);
+        if (assetIds.length === 0) return;
+
+        assetIds.forEach(assetId => {
+            const data = currentGlobalState[assetId];
+            const isSelected = panelSelectedAssets.has(assetId);
+            const typeTag = PILL_TYPE_LABELS[data.type] || data.type.toUpperCase();
+
+            const baseCls = isSelected
+                ? 'bg-asset-light dark:bg-asset-dark border-asset-lightBorder dark:border-asset-darkBorder text-zinc-900 dark:text-blue-50'
+                : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-700 hover:text-zinc-700 dark:hover:text-zinc-300';
+
+            selectorContainer.insertAdjacentHTML('beforeend', `
+                <button onclick="togglePanelAsset('${assetId}')"
+                        id="pill-${assetId}"
+                        class="asset-pill ${isSelected ? 'selected' : ''} inline-flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg border ${baseCls} text-xs font-bold">
+                    <span class="pill-indicator">
+                        <svg class="w-2.5 h-2.5 text-white dark:text-zinc-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    </span>
+                    <span class="font-mono tracking-tight text-[12px]">${assetId}</span>
+                    <span class="text-[9px] font-extrabold tracking-widest opacity-50">${typeTag}</span>
+                </button>
+            `);
+        });
+    }
+
+    function togglePanelAsset(assetId) {
+        if (panelSelectedAssets.has(assetId)) {
+            panelSelectedAssets.delete(assetId);
+            // Eliminar card del panel
+            const card = document.getElementById(`p-card-${assetId}`);
+            if (card) card.remove();
+        } else {
+            panelSelectedAssets.add(assetId);
+            // Insertar card en panel
+            const panelGrid = document.getElementById('panel-grid');
+            const data = currentGlobalState[assetId];
+            if (panelGrid && data) {
+                panelGrid.insertAdjacentHTML('beforeend', getBaseCardHTML(assetId, data.type, 'p-'));
+                updateCardState(assetId, data, 'p-');
+                lucide.createIcons();
+            }
+        }
+        renderPanelSelector();
+        updatePanelEmptyState();
+        savePanelSelection();
+    }
+
+    function panelSelectAll() {
+        const panelGrid = document.getElementById('panel-grid');
+        for (const assetId of Object.keys(currentGlobalState)) {
+            if (!panelSelectedAssets.has(assetId)) {
+                panelSelectedAssets.add(assetId);
+                const data = currentGlobalState[assetId];
+                if (panelGrid && data) {
+                    panelGrid.insertAdjacentHTML('beforeend', getBaseCardHTML(assetId, data.type, 'p-'));
+                    updateCardState(assetId, data, 'p-');
+                }
+            }
+        }
+        lucide.createIcons();
+        renderPanelSelector();
+        updatePanelEmptyState();
+        savePanelSelection();
+    }
+
+    function panelDeselectAll() {
+        panelSelectedAssets.clear();
+        const panelGrid = document.getElementById('panel-grid');
+        if (panelGrid) panelGrid.innerHTML = '';
+        renderPanelSelector();
+        updatePanelEmptyState();
+        savePanelSelection();
+    }
+
+    function updatePanelEmptyState() {
+        const emptyState = document.getElementById('panel-empty-state');
+        const panelGrid = document.getElementById('panel-grid');
+        if (emptyState) {
+            emptyState.classList.toggle('hidden', panelSelectedAssets.size > 0);
+        }
+        if (panelGrid) {
+            panelGrid.classList.toggle('hidden', panelSelectedAssets.size === 0);
+        }
+    }
+
+    function savePanelSelection() {
+        localStorage.setItem('panel-selected-assets', JSON.stringify([...panelSelectedAssets]));
+    }
+
+    function loadPanelSelection() {
+        try {
+            const saved = JSON.parse(localStorage.getItem('panel-selected-assets') || '[]');
+            panelSelectedAssets = new Set(saved);
+        } catch (e) {
+            panelSelectedAssets = new Set();
+        }
+    }
+
     function renderUI() {
         let hasType = {robot: false, mobile: false, human: false};
 
         for (const [assetId, data] of Object.entries(currentGlobalState)) {
             hasType[data.type] = true;
 
-            let card = document.getElementById(`card-${assetId}`);
-            if (!card) {
+            // --- Librería de activos (prefijo vacío) ---
+            let libCard = document.getElementById(`card-${assetId}`);
+            if (!libCard) {
                 const targetGrid = document.getElementById(`grid-${data.type}`);
                 if (targetGrid) {
-                    targetGrid.insertAdjacentHTML('beforeend', getBaseCardHTML(assetId, data.type));
+                    targetGrid.insertAdjacentHTML('beforeend', getBaseCardHTML(assetId, data.type, ''));
                     lucide.createIcons();
                 }
             }
+            updateCardState(assetId, data, '');
 
-            const config = ASSET_CONFIG[data.type] || ASSET_CONFIG.robot;
-            const isCharging = data.status === 'charging';
-            const isBusy = data.status === 'busy';
-            const isIdle = data.status === 'idle';
-
-            const badge = document.getElementById(`status-badge-${assetId}`);
-            const dot = document.getElementById(`status-dot-${assetId}`);
-            const statusText = document.getElementById(`status-text-${assetId}`);
-            const svgContainer = document.getElementById(`svg-container-${assetId}`);
-            const batText = document.getElementById(`battery-text-${assetId}`);
-            const batBar = document.getElementById(`battery-bar-${assetId}`);
-            const taskLabel = document.getElementById(`task-label-${assetId}`);
-            const inputDuration = document.getElementById(`duration-${assetId}`);
-            const inputTask = document.getElementById(`task-${assetId}`);
-            const btnStart = document.getElementById(`btn-start-${assetId}`);
-            const btnCharge = document.getElementById(`btn-charge-${assetId}`);
-            const chargeTxt = document.getElementById(`charge-txt-${assetId}`);
-            const spinner = document.getElementById(`spinner-${assetId}`);
-
-            if (isCharging) {
-                badge.className = "text-[9px] md:text-[10px] font-bold px-2 py-1 rounded flex items-center uppercase tracking-widest bg-emerald-500/20 text-emerald-700 dark:text-emerald-400";
-                dot.className = "w-1.5 h-1.5 rounded-full mr-1.5 bg-emerald-500 animate-pulse";
-                svgContainer.className = `flex justify-center mb-6 md:mb-8 h-28 md:h-32 items-end ${data.type} is-charging`;
-                taskLabel.innerText = data.type === 'human' ? "RECUPERANDO..." : "RECARGANDO...";
-                chargeTxt.innerText = config.workingText;
-                spinner.classList.add('hidden');
-                spinner.classList.remove('flex');
-            } else if (isBusy) {
-                badge.className = "text-[9px] md:text-[10px] font-bold px-2 py-1 rounded flex items-center uppercase tracking-widest bg-blue-500/20 text-blue-800 dark:text-blue-300";
-                dot.className = "w-1.5 h-1.5 rounded-full mr-1.5 bg-blue-600 dark:bg-blue-400 animate-pulse";
-                svgContainer.className = `flex justify-center mb-6 md:mb-8 h-28 md:h-32 items-end ${data.type} is-busy task-${data.current_task}`;
-                taskLabel.innerText = `${data.current_task.toUpperCase()}`;
-                chargeTxt.innerText = config.chargeText;
-                spinner.classList.remove('hidden');
-                spinner.classList.add('flex');
-            } else {
-                badge.className = "text-[9px] md:text-[10px] font-bold px-2 py-1 rounded flex items-center uppercase tracking-widest bg-white/50 dark:bg-black/30 text-current";
-                dot.className = "w-1.5 h-1.5 rounded-full mr-1.5 bg-current opacity-50";
-                svgContainer.className = `flex justify-center mb-6 md:mb-8 h-28 md:h-32 items-end ${data.type} is-idle`;
-                taskLabel.innerText = "STANDBY";
-                chargeTxt.innerText = config.chargeText;
-                spinner.classList.add('hidden');
-                spinner.classList.remove('flex');
-            }
-
-            statusText.innerText = data.status.toUpperCase();
-
-            batText.innerText = `${data.battery.toFixed(0)}%`;
-            batText.className = data.battery < 20 ? 'font-mono text-red-600 dark:text-red-400 font-extrabold' : 'font-mono opacity-80';
-            batBar.style.width = `${data.battery}%`;
-            batBar.className = `h-full rounded-full transition-all duration-1000 ${data.battery < 20 ? 'bg-red-500' : 'bg-blue-600 dark:bg-blue-400'}`;
-
-            inputDuration.disabled = !isIdle;
-            inputTask.disabled = !isIdle;
-            btnStart.disabled = !isIdle;
-            btnCharge.disabled = isBusy;
-
-            if (!isIdle) {
-                inputDuration.classList.add("opacity-40", "cursor-not-allowed");
-                inputTask.classList.add("opacity-40", "cursor-not-allowed");
-                btnStart.classList.add("opacity-40", "cursor-not-allowed");
-            } else {
-                inputDuration.classList.remove("opacity-40", "cursor-not-allowed");
-                inputTask.classList.remove("opacity-40", "cursor-not-allowed");
-                btnStart.classList.remove("opacity-40", "cursor-not-allowed");
+            // --- Panel principal (prefijo 'p-') ---
+            if (panelSelectedAssets.has(assetId)) {
+                let panelCard = document.getElementById(`p-card-${assetId}`);
+                if (!panelCard) {
+                    const panelGrid = document.getElementById('panel-grid');
+                    if (panelGrid) {
+                        panelGrid.insertAdjacentHTML('beforeend', getBaseCardHTML(assetId, data.type, 'p-'));
+                        lucide.createIcons();
+                    }
+                }
+                updateCardState(assetId, data, 'p-');
             }
         }
 
-        // Mostrar solo secciones con activos
+        // Mostrar solo secciones con activos en la librería
         document.getElementById('section-robot').classList.toggle('hidden', !hasType.robot);
         document.getElementById('section-mobile').classList.toggle('hidden', !hasType.mobile);
         document.getElementById('section-human').classList.toggle('hidden', !hasType.human);
+
+        // Actualizar selector y empty state del panel
+        renderPanelSelector();
+        updatePanelEmptyState();
     }
 
-    async function triggerAction(assetId) {
-        const durationInput = document.getElementById(`duration-${assetId}`);
-        const taskSelect = document.getElementById(`task-${assetId}`);
+    async function triggerAction(assetId, prefix = '') {
+        const p = prefix;
+        const durationInput = document.getElementById(`${p}duration-${assetId}`);
+        const taskSelect = document.getElementById(`${p}task-${assetId}`);
         let duration = parseInt(durationInput.value, 10);
         const task = taskSelect.value;
         if (isNaN(duration) || duration <= 0) duration = 5;
@@ -1309,7 +1533,7 @@
         }
     }
 
-    async function toggleCharge(assetId) {
+    async function toggleCharge(assetId, prefix = '') {
         const enable = currentGlobalState[assetId].status !== 'charging';
 
         if (isLocalMode) {
@@ -1397,16 +1621,21 @@
 
     // Inicializador Estructural (Dom Builder)
     document.addEventListener("DOMContentLoaded", () => {
+        // Librería de activos (secciones por tipo)
         const dashboardContainer = document.getElementById('dashboard-container');
         dashboardContainer.insertAdjacentHTML('beforeend', getDashboardSectionHTML('robot', ASSET_CONFIG.robot.title));
         dashboardContainer.insertAdjacentHTML('beforeend', getDashboardSectionHTML('mobile', ASSET_CONFIG.mobile.title));
         dashboardContainer.insertAdjacentHTML('beforeend', getDashboardSectionHTML('human', ASSET_CONFIG.human.title));
 
+        // Histórico
         const historyContainer = document.getElementById('history-sections-container');
         historyContainer.insertAdjacentHTML('beforeend', getHistoryTableHTML('robot', `Histórico - ${ASSET_CONFIG.robot.title}`));
         historyContainer.insertAdjacentHTML('beforeend', getHistoryTableHTML('mobile', `Histórico - ${ASSET_CONFIG.mobile.title}`));
         historyContainer.insertAdjacentHTML('beforeend', getHistoryTableHTML('human', `Histórico - ${ASSET_CONFIG.human.title}`));
         historyContainer.insertAdjacentHTML('beforeend', getHistoryTableHTML('system', `Eventos de Sistema`));
+
+        // Restaurar selección del panel desde localStorage
+        loadPanelSelection();
 
         lucide.createIcons();
         initNetwork();
