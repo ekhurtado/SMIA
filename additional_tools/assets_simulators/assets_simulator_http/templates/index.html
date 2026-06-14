@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enterprise Asset Fleet</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,6 +55,111 @@
 
         .tool-weld, .tool-drill, .tool-pick, .weld-spark {
             display: none;
+        }
+
+        /* === HOME PAGE STYLES === */
+        @keyframes home-fade-up {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes home-scale-in {
+            from { opacity: 0; transform: scale(0.92); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes home-shimmer {
+            0%   { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes home-glow-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+            50%      { box-shadow: 0 0 32px 4px rgba(59, 130, 246, 0.12); }
+        }
+
+        .home-hero {
+            animation: home-fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .home-desc {
+            animation: home-fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+        }
+
+        .home-cards-title {
+            animation: home-fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+        }
+
+        .home-card {
+            animation: home-scale-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+            transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                        box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                        border-color 0.28s ease;
+        }
+
+        .home-card:nth-child(1) { animation-delay: 0.30s; }
+        .home-card:nth-child(2) { animation-delay: 0.38s; }
+        .home-card:nth-child(3) { animation-delay: 0.46s; }
+        .home-card:nth-child(4) { animation-delay: 0.54s; }
+
+        .home-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 20px 44px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .dark .home-card:hover {
+            box-shadow: 0 20px 44px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .home-card-icon {
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                        background 0.28s ease;
+        }
+
+        .home-card:hover .home-card-icon {
+            transform: scale(1.12) rotate(-4deg);
+        }
+
+        .home-card-arrow {
+            transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                        opacity 0.28s ease;
+            opacity: 0;
+            transform: translateX(-6px);
+        }
+
+        .home-card:hover .home-card-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .home-shimmer-line {
+            height: 2px;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(59, 130, 246, 0.5) 50%,
+                transparent 100%
+            );
+            background-size: 200% 100%;
+            animation: home-shimmer 3s ease-in-out infinite;
+        }
+
+        .home-logo-glow {
+            animation: home-glow-pulse 4s ease-in-out infinite;
+            border-radius: 24px;
+        }
+
+        .home-grid-bg {
+            background-image:
+                linear-gradient(rgba(59, 130, 246, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
+            background-size: 48px 48px;
+        }
+
+        .dark .home-grid-bg {
+            background-image:
+                linear-gradient(rgba(59, 130, 246, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.06) 1px, transparent 1px);
         }
 
         /* 1. Animaciones Robot */
@@ -430,8 +536,12 @@
     </div>
 
     <nav class="flex-1 px-4 py-6 md:py-8 space-y-1 overflow-y-auto">
-        <button onclick="switchTab('dashboard')" id="nav-dashboard"
+        <button onclick="switchTab('home')" id="nav-home"
                 class="nav-btn w-full flex items-center px-4 py-3 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white rounded-lg transition-all font-semibold text-sm">
+            <i data-lucide="home" class="w-4 h-4 mr-3 opacity-70"></i> Inicio
+        </button>
+        <button onclick="switchTab('dashboard')" id="nav-dashboard"
+                class="nav-btn w-full flex items-center px-4 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 text-zinc-500 dark:text-zinc-400 rounded-lg transition-all font-semibold text-sm">
             <i data-lucide="grid" class="w-4 h-4 mr-3 opacity-70"></i> Panel Principal
         </button>
         <button onclick="switchTab('history')" id="nav-history"
@@ -452,10 +562,140 @@
 </aside>
 
 <!-- ÁREA PRINCIPAL -->
-<main class="flex-1 overflow-y-auto relative selection:bg-blue-200 dark:selection:bg-blue-900 h-full">
+<main class="flex-1 overflow-y-auto relative selection:bg-blue-200 dark:selection:bg-blue-900 h-full home-grid-bg">
+
+    <!-- PESTAÑA: HOME -->
+    <section id="tab-home" class="tab-content active">
+        <div class="p-4 md:p-10 max-w-5xl mx-auto pb-20">
+
+            <!-- Hero: Logo + Título -->
+            <div class="home-hero flex flex-col items-center text-center pt-6 md:pt-12 mb-10 md:mb-14">
+                <div class="home-logo-glow p-4 md:p-6 mb-6 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm">
+                    <img src="/images/SMIA_logo.png" alt="SMIA Logo" class="h-16 md:h-24 w-auto" />
+                </div>
+                <h2 class="text-2xl md:text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white leading-tight">
+                    Asset Simulator
+                    <span class="block text-sm md:text-base font-semibold tracking-widest uppercase text-blue-600 dark:text-blue-400 mt-2">
+                        HTTP Server
+                    </span>
+                </h2>
+            </div>
+
+            <!-- Shimmer divider -->
+            <div class="home-shimmer-line w-full max-w-md mx-auto mb-10 md:mb-14 rounded-full"></div>
+
+            <!-- Descripción -->
+            <div class="home-desc max-w-2xl mx-auto mb-12 md:mb-16">
+                <div class="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 md:p-8">
+                    <div class="flex items-start gap-4">
+                        <div class="shrink-0 mt-1">
+                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+                                <i data-lucide="server" class="w-5 h-5 text-white"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-extrabold tracking-widest uppercase text-zinc-500 dark:text-zinc-400 mb-3">¿Qué es este servidor?</h3>
+                            <p class="text-sm md:text-base text-zinc-600 dark:text-zinc-300 leading-relaxed">
+                                Es un servidor HTTP para simular la realización de tareas por parte de diferentes activos.
+                                Sirve para validar el enfoque <strong class="text-zinc-900 dark:text-white">SMIA</strong> y para tareas de
+                                mantenimiento o simulación de activos industriales.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Título sección recursos -->
+            <div class="home-cards-title flex items-center gap-4 mb-8">
+                <h3 class="text-sm font-extrabold tracking-widest uppercase text-zinc-500 dark:text-zinc-400 whitespace-nowrap">Ecosistema SMIA</h3>
+                <div class="h-px w-full bg-zinc-200 dark:bg-zinc-800"></div>
+            </div>
+
+            <!-- Resource Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
+
+                <!-- GitHub -->
+                <a href="https://github.com/ekhurtado/SMIA" target="_blank" rel="noopener noreferrer"
+                   class="home-card group block bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 md:p-6 hover:border-zinc-400 dark:hover:border-zinc-600 cursor-pointer no-underline">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="home-card-icon w-12 h-12 rounded-xl bg-zinc-900 dark:bg-white flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white dark:text-zinc-900" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </div>
+                        <span class="home-card-arrow text-zinc-400 dark:text-zinc-500">
+                            <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
+                        </span>
+                    </div>
+                    <h4 class="text-base font-extrabold text-zinc-900 dark:text-white mb-1.5 tracking-tight">GitHub</h4>
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">Repositorio oficial con el código fuente, issues y contribuciones del proyecto SMIA.</p>
+                    <div class="mt-3 text-[10px] font-mono font-bold text-zinc-400 dark:text-zinc-500 tracking-wider uppercase">ekhurtado/SMIA</div>
+                </a>
+
+                <!-- ReadTheDocs -->
+                <a href="https://smia.readthedocs.io/en/" target="_blank" rel="noopener noreferrer"
+                   class="home-card group block bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 md:p-6 hover:border-blue-400 dark:hover:border-blue-600 cursor-pointer no-underline">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="home-card-icon w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
+                            <i data-lucide="book-open" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <span class="home-card-arrow text-zinc-400 dark:text-zinc-500">
+                            <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
+                        </span>
+                    </div>
+                    <h4 class="text-base font-extrabold text-zinc-900 dark:text-white mb-1.5 tracking-tight">ReadTheDocs</h4>
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">Documentación técnica completa: guías de instalación, configuración, arquitectura y API reference.</p>
+                    <div class="mt-3 text-[10px] font-mono font-bold text-zinc-400 dark:text-zinc-500 tracking-wider uppercase">smia.readthedocs.io</div>
+                </a>
+
+                <!-- PyPI -->
+                <a href="https://pypi.org/project/smia/" target="_blank" rel="noopener noreferrer"
+                   class="home-card group block bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 md:p-6 hover:border-amber-400 dark:hover:border-amber-600 cursor-pointer no-underline">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="home-card-icon w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-yellow-600 flex items-center justify-center">
+                            <i data-lucide="package" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <span class="home-card-arrow text-zinc-400 dark:text-zinc-500">
+                            <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
+                        </span>
+                    </div>
+                    <h4 class="text-base font-extrabold text-zinc-900 dark:text-white mb-1.5 tracking-tight">PyPI</h4>
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">Paquete Python instalable vía pip. Versiones publicadas, dependencias y changelog del proyecto.</p>
+                    <div class="mt-3 text-[10px] font-mono font-bold text-zinc-400 dark:text-zinc-500 tracking-wider uppercase">pip install smia</div>
+                </a>
+
+                <!-- DockerHub -->
+                <a href="https://hub.docker.com/r/ekhurtado/smia" target="_blank" rel="noopener noreferrer"
+                   class="home-card group block bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 md:p-6 hover:border-cyan-400 dark:hover:border-cyan-600 cursor-pointer no-underline">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="home-card-icon w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 00.186-.186V3.574a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.186m0 2.716h2.118a.187.187 0 00.186-.186V6.29a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.887c0 .102.082.186.185.186m-2.93 0h2.12a.186.186 0 00.184-.186V6.29a.185.185 0 00-.185-.185H8.1a.185.185 0 00-.185.185v1.887c0 .102.083.186.185.186m-2.964 0h2.119a.186.186 0 00.185-.186V6.29a.186.186 0 00-.185-.185H5.136a.186.186 0 00-.186.185v1.887c0 .102.084.186.186.186m5.893 2.715h2.118a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 00.185-.185V9.006a.186.186 0 00-.185-.186H5.136a.186.186 0 00-.186.185v1.888c0 .102.084.185.186.185m-2.92 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 00-.75.748 11.687 11.687 0 00.692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 003.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288Z"/>
+                            </svg>
+                        </div>
+                        <span class="home-card-arrow text-zinc-400 dark:text-zinc-500">
+                            <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
+                        </span>
+                    </div>
+                    <h4 class="text-base font-extrabold text-zinc-900 dark:text-white mb-1.5 tracking-tight">Docker Hub</h4>
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">Imágenes Docker listas para desplegar. Contenedores optimizados para entornos de producción e I4.0.</p>
+                    <div class="mt-3 text-[10px] font-mono font-bold text-zinc-400 dark:text-zinc-500 tracking-wider uppercase">ekhurtado/smia</div>
+                </a>
+
+            </div>
+
+            <!-- Footer tagline -->
+            <div class="mt-12 md:mt-16 text-center">
+                <p class="text-[11px] font-mono font-bold text-zinc-400 dark:text-zinc-500 tracking-widest uppercase">
+                    Self-configurable Manufacturing Industrial Agents
+                </p>
+            </div>
+
+        </div>
+    </section>
 
     <!-- PESTAÑA: DASHBOARD -->
-    <section id="tab-dashboard" class="tab-content active p-4 md:p-10 max-w-7xl mx-auto">
+    <section id="tab-dashboard" class="tab-content p-4 md:p-10 max-w-7xl mx-auto">
         <header class="mb-8 md:mb-10 flex flex-col md:flex-row md:justify-between md:items-end gap-2">
             <div>
                 <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Estado de la Flota</h2>

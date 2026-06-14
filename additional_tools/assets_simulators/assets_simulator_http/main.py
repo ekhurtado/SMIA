@@ -7,6 +7,7 @@ from contextlib import asynccontextmanager
 from typing import Dict, Any, Set
 from fastapi import FastAPI, Request, HTTPException, status
 from fastapi.responses import StreamingResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
 
@@ -123,6 +124,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Unified Asset Simulator", lifespan=lifespan)
 templates = Jinja2Templates(directory="templates")
+app.mount("/images", StaticFiles(directory="images"), name="images")
 
 
 # ---------------------------------------------------------
@@ -263,7 +265,7 @@ async def trigger_action(asset_id: str, action_name: str, payload: ActionRequest
 
 @app.get("/favicon.ico", include_in_schema=False)
 async def favicon():
-    return {"status": "ok"}
+    return FileResponse("images/SMIA_favicon.ico")
 
 
 if __name__ == "__main__":
