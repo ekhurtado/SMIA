@@ -72,17 +72,6 @@ class HandleAASRelatedSvcBehaviour(OneShotBehaviour):
 
         _logger.info("Management of the AAS-related service with thread {} finished.".format(self.received_acl_msg.thread))
 
-        # TODO BORRAR ENFOQUE ANTIGUO
-        # # First, the performative of the request is obtained
-        # match self.svc_req_data['performative']:
-        #     case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST:  # TODO actualizar dentro de todo el codigo los usos de performativas y ontologias de FIPA-ACL
-        #         await self.handle_request()
-        #     case FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_IF:
-        #         await self.handle_query_if()
-        #     # TODO PensarOtros
-        #     case _:
-        #         _logger.error("Performative not available for service management.")
-
     # -------------------------------------
     # Asset-/agent-related services methods
     # -------------------------------------
@@ -310,63 +299,6 @@ class HandleAASRelatedSvcBehaviour(OneShotBehaviour):
         # The AAS Infrastructure Services are offered by the platform (in SMIA approach by SMIA ISM), not by SMIA
         # instances, so it will not realize any task
         pass
-
-    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    # TODO BORRAR ENFOQUE ANTIGUO
-    # ------------------------------------------
-    # Methods to handle of all types of services
-    # ------------------------------------------
-    async def handle_request(self):
-        """
-        This method handle capability requests to the DT.
-        """
-        # The type is analyzed to perform the appropriate service
-        match self.svc_req_data['serviceType']:
-            case ServiceTypes.ASSET_RELATED_SERVICE:
-                # await self.handle_asset_related_svc()   # TODO
-                await self.handle_asset_agent_related_svc_request()
-            case ServiceTypes.AAS_INFRASTRUCTURE_SERVICE:
-                await self.handle_aas_infrastructure_svc_request()  # TODO
-            case ServiceTypes.AAS_SERVICE:
-                await self.handle_aas_services_request()  # TODO
-            case ServiceTypes.SUBMODEL_SERVICE:
-                await self.handle_submodel_service_request()
-            case _:
-                _logger.error("Service type not available.")
-
-    async def handle_query_if(self):
-        """This method handle Query-If service requests. This request is received when the DT is asked about information
-         related to a service."""
-        pass
-        # TODO FALTA POR HACER
-
-    # -----------------------------------
-    # Methods to handle specific services
-    # -----------------------------------
-    async def handle_aas_services_request(self):
-        """
-        This method handles AAS Services. These services serve for the management of asset-related information through
-        a set of infrastructure services provided by the AAS itself. These include Submodel Registry Services (to list
-        and register submodels), Meta-information Management Services (including Classification Services, to check if the
-        interface complies with the specifications; Contextualization Services, to check if they belong together in a
-        context to build a common function; and Restriction of Use Services, divided between access control and usage
-        control) and Exposure and Discovery Services (to search for submodels or asset related services).
-
-        """
-        _logger.info('AAS Service request: ' + str(self.svc_req_data))
-
-    async def handle_aas_infrastructure_svc_request(self):
-        """
-        This method handles AAS Infrastructure Services. These services are part of I4.0 Infrastructure Services
-        (Systemic relevant). They are necessary to create AASs and make them localizable and are not offered by an AAS, but
-        by the platform (computational infrastructure). These include the AAS Create Service (for creating AASs with unique
-        identifiers), AAS Registry Services (for registering AASs) and AAS Exposure and Discovery Services (for searching
-        for AASs).
-
-        """
-        _logger.info('AAS Infrastructure Service request: ' + str(self.svc_req_data))
-
-
 
 
     async def send_response_msg_to_sender(self, performative, service_params):

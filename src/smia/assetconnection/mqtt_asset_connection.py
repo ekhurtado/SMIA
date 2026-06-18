@@ -37,8 +37,6 @@ class MQTTAssetConnection(AssetConnection):
         self.control_packet = None
         self.request_body = None
 
-        # TODO analizar si son necesarias mas variables globales
-
 
     async def configure_connection_by_aas_model(self, interface_aas_elem):
         # The Interface element is first checked

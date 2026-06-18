@@ -39,12 +39,6 @@ class SMIAInteractionInfo:
         GeneralUtils.create_acl_template(performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_NOT_UNDERSTOOD)
     )
 
-    # TODO ANTIGUO TEMPLATE
-    SVC_STANDARD_ACL_TEMPLATE = (SVC_STANDARD_ACL_TEMPLATE_CFP | SVC_STANDARD_ACL_TEMPLATE_INFORM
-                                 | SVC_STANDARD_ACL_TEMPLATE_REQUEST | SVC_STANDARD_ACL_TEMPLATE_QUERY_IF
-                                 | CAP_STANDARD_ACL_TEMPLATE_REQUEST | CAP_STANDARD_ACL_TEMPLATE_QUERY_IF  # TODO OJO, estos son los dos las capacidades
-                                 )
-
 
     # Object of the standard template for service requests through ACL messages
     # -------------------------------------------------------------------------
@@ -63,10 +57,6 @@ class SMIAInteractionInfo:
     # The template for the negotiations is the combination of the different possibilities
     ACL_CNP_INTERACTIONS_ACL_TEMPLATE = GeneralUtils.create_acl_template(
         performative=FIPAACLInfo.FIPA_ACL_PERFORMATIVE_CFP, protocol=FIPAACLInfo.FIPA_ACL_CONTRACT_NET_PROTOCOL)
-
-    # TODO ANTIGUO TEMPLATE
-    NEG_STANDARD_ACL_TEMPLATE = (NEG_STANDARD_ACL_TEMPLATE_CFP | NEG_STANDARD_ACL_TEMPLATE_FAILURE |
-                                 NEG_STANDARD_ACL_TEMPLATE_INFORM)
 
 
 

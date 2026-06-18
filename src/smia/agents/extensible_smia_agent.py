@@ -23,11 +23,6 @@ class ExtensibleSMIAAgent(SMIAAgent):
 
         self.extended_agent_capabilities = []
 
-    # TODO The features that shall be offered are:
-    #  1. define and add new connections to the asset (i.e., new communication protocols)
-    #  2. define and add new agent capabilities to increase its intelligence and autonomy.
-    #  3. define and add new agent services
-
     def add_new_agent_capability(self, behaviour_class):
         """
         This method adds a new :term:`agent capability <Capability>` to SMIA to increase its intelligence and autonomy.

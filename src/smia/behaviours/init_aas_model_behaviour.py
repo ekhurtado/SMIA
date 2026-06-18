@@ -351,11 +351,6 @@ class InitAASModelBehaviour(OneShotBehaviour):
             if interface_elem.check_suppl_semantic_id_exist(AssetInterfacesInfo.SUPPL_SEMANTICID_HTTP):
                 # HTTP interface is specified within the AAS model
                 smia_native_connection_class = HTTPAssetConnection()
-                # TODO CODIGO ANTIGUO: eliminar cuando se compruebe que funciona HTTP junto a MQTT
-                # http_connection_class = HTTPAssetConnection()
-                # await http_connection_class.configure_connection_by_aas_model(interface_elem)
-                # interface_model_ref = ModelReference.from_referable(interface_elem)
-                # await self.myagent.save_asset_connection_class(interface_model_ref, http_connection_class)
             elif interface_elem.check_suppl_semantic_id_exist(AssetInterfacesInfo.SUPPL_SEMANTICID_MQTT):
                 # MQTT interface is specified within the AAS model
                 smia_native_connection_class = MQTTAssetConnection()

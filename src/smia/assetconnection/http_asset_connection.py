@@ -237,7 +237,6 @@ class HTTPAssetConnection(AssetConnection):
                     # TODO a probar
                     response = await session.patch(url=self.request_uri, params=self.request_params)
                 elif self.request_method == 'POST':
-                    # TODO a probar
                     if isinstance(self.request_body, dict):
                         response = await session.post(url=self.request_uri, json=self.request_body)
                     else:
@@ -296,7 +295,7 @@ class HTTPAssetInterfaceSemantics:
     SEMANTICID_HTTP_INTERFACE_FIELD_NAME = 'https://www.w3.org/2011/http#fieldName'
     SEMANTICID_HTTP_INTERFACE_FIELD_VALUE = 'https://www.w3.org/2011/http#fieldValue'
 
-    # TODO nuevo
+    # Extensions for the submodel "Asset Description Interfaces"
     SEMANTICID_HTTP_INTERFACE_PARAMS = 'https://www.w3.org/2011/http#params'
     SEMANTICID_HTTP_INTERFACE_PARAM_NAME = 'https://www.w3.org/2011/http#paramName'
     SEMANTICID_HTTP_INTERFACE_PARAM_VALUE = 'https://www.w3.org/2011/http#paramValue'
