@@ -28,8 +28,7 @@ The SMIA HI represents a human worker and acts as its Digital Twin (DT). Its Gra
 
     The API documentation for the SMIA ecosystem source code is also available at :octicon:`repo;1em` :ref:`API documentation SMIA ecosystem <API documentation SMIA ecosystem>`.
 
-    .. TODO GENERAR DOCUMENTACION DE SMIA HI Y AÑADIRLA EN API documentation (no está)
 
-**This page isn't fully developed yet, but it will be soon!**
+.. This page isn't fully developed yet, but it will be soon!
 
 .. TODO DESARROLLAR ESTA PAGINA Y QUITAR LA ANTERIOR FRASE

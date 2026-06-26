@@ -23,9 +23,9 @@ Regarding internal development, the SMIA ISM leverages SMIA extension mechanisms
 
             :octicon:`mark-github;1em` SMIA ISM agent source code
 
-.. .. seealso::
+.. seealso::
 
-    .. The API documentation for the SMIA ISM source code is also available at :octicon:`repo;1em` :ref:`API documentation SMIA ecosystem <API documentation SMIA ecosystem>`.
+    The API documentation for the SMIA ISM source code is also available at :octicon:`repo;1em` :ref:`API documentation SMIA ecosystem <API documentation SMIA ecosystem>`.
 
 Architecture and implementation
 -------------------------------
