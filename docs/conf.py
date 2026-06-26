@@ -21,6 +21,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
                                                 'additional_tools/extended_agents/smia_operator_agent')))
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
+                                                'additional_tools/extended_agents/smia_hi/src')))
 # print("sys.path:", sys.path)
 
 # If any part of the code gives error when generating the documentation, try importing and printing that part.
