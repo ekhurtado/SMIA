@@ -9,10 +9,10 @@ from spade.behaviour import CyclicBehaviour
 
 from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAJSONSchemas
 
-from behaviours.handle_acl_openapi_behaviour import HandleACLOpenAPIBehaviour
-from external_infrastructures.smia_kb_infrastructure import SMIAKBInfrastructure
-from logic.acl_open_api_services import ACLOpenAPIServices
-from utilities.smia_acl_message_info import SMIAACLMessageInfo
+from smia_ism.behaviours.handle_acl_openapi_behaviour import HandleACLOpenAPIBehaviour
+from smia_ism.external_infrastructures.smia_kb_infrastructure import SMIAKBInfrastructure
+from smia_ism.logic.acl_open_api_services import ACLOpenAPIServices
+from smia_ism.utilities.smia_acl_message_info import SMIAACLMessageInfo
 
 _logger = logging.getLogger(__name__)
 

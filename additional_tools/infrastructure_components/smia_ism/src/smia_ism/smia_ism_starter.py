@@ -5,8 +5,8 @@ import smia
 from smia.agents.extensible_smia_agent import ExtensibleSMIAAgent
 from smia.utilities.general_utils import DockerUtils
 
-from behaviours.acl_openapi_handling_behaviour import ACLOpenAPIHandlingBehaviour
-from utilities import general_utils
+from smia_ism.behaviours.acl_openapi_handling_behaviour import ACLOpenAPIHandlingBehaviour
+from smia_ism.utilities import general_utils
 
 _logger = logging.getLogger(__name__)
 

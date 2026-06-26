@@ -1,6 +1,6 @@
 from urllib.parse import urlparse
 
-from utilities.acl_open_api_utils import encode_string_in_base64_url
+from smia_ism.utilities.acl_open_api_utils import encode_string_in_base64_url
 
 class AASRepositoryInfrastructure:
     """

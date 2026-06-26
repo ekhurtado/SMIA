@@ -10,3 +10,4 @@ API documentation: SMIA ecosystem
    smia_pe/smia_pe
    smia_operator/smia_operator
    smia_hi/smia_hi
+   smia_ism/smia_ism

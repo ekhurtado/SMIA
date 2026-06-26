@@ -2,9 +2,9 @@ import logging
 
 from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
 
-from external_infrastructures.aas_repository_infrastructure import AASRepositoryInfrastructure
-from external_infrastructures.smia_kb_infrastructure import SMIAKBInfrastructure
-from utilities.acl_open_api_utils import send_openapi_http_get_request, send_openapi_http_post_request, \
+from smia_ism.external_infrastructures.aas_repository_infrastructure import AASRepositoryInfrastructure
+from smia_ism.external_infrastructures.smia_kb_infrastructure import SMIAKBInfrastructure
+from smia_ism.utilities.acl_open_api_utils import send_openapi_http_get_request, send_openapi_http_post_request, \
     check_and_get_response_error
 
 _logger = logging.getLogger(__name__)
