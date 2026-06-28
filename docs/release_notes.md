@@ -2,6 +2,52 @@
 
 (Release Notes)=
 
+## v0.3.4
+
+This release of Self-configurable Manufacturing Industrial Agents (SMIA) comes with an significant upgrade of ... en la plataforma de documentación alojada en la plataforma ReadTheDocs, especificamente en relacion con los componentes del ecosistema SMIA. It also includes improvements to the source code's efficiency by removing obsolete code and comments.
+
+> SMIA: All Python files structured in Python modules.
+> - It includes the launcher files to run the software in the ``launchers`` module: _smia_cli_starter.py_, _smia_starter.py_ and _smia_docker_starter.py_.
+
+### Features
+
+- Added GNU GPL V3 license file to the source code of SMIA Environment Builder tool of SMIA documentation platform in ReadTheDocs.
+- Progress with SMIA ReadTheDocs documentation platform
+  - Added ecosystem infrastructure pages and improved page for SMIA Operator tool as extended agent.
+  - A new page has been added to the ``API Documentation`` section to allow for the inclusion of source code for additional tools within the ecosystem.
+    - API of SMIA PE source code extended agent.
+    - API of SMIA Operator source code extended agent.
+    - API of SMIA HI source code extended agent.
+    - API of SMIA ISM source code extended agent as infrastructure component.
+  - Significantly improved SMIA Operator page, e.g., detailing the usage of its graphical interface and added link to the video showing its usage.
+  - Significantly improved SMIA PE page, e.g., detailing the implementation, and how to deploy and use this extended agent. It is also added link to the video showing its usage.
+  - Created and added page for SMIA-I KB:  its complete API has been detailed using tables (specifying the HTTP methods available and required schemas and parameters), an usage section (for HTTPrequests and FIPA-SMIACL requests through SMIA ISM), how to deploy it
+  - Created and added page for SMIA HI: 
+  - Created and added page for SMIA ISM: explanation of the internal logic, "Architecture and implementation" section (schemas for valid FIPA-SMIACL messages, and list of available infrastructure services exposed), "Execution example" section (some usage scenarios which involve SMIA ISM and added also some example codes)
+  - Created and added page for Camunda Modeler plugin
+  - Added 'Quick start' in 'Getting started' page within ReadTheDocs SMIA documentation platform to guide new users'
+  - Added page of the use case of flexible small-scale manufacturing developed in CeDRI.
+    - Improved page of the use case of flexible small-scale manufacturing developed in CeDRI: added link to Camunda Modeler plugin, used to design the BPMN production plans for the case study.
+- First version of the new SMIA additional tool: assets simulator for HTTP-based assets.
+
+### Major Changes
+
+- Updated ``docs/requirements.txt`` file with dependencies for SMIA (updated some versions and added missing dependencies such as aiomqtt).
+- Source code cleanup. Completed ``TODO`` tasks have been removed, and obsolete code has been removed from ``ACLHandlingBehaviour``, ``HandleAASRelatedSvcBehaviour``, ``InitAASModelBehaviour``, and ``NegotiatingBehaviour``.
+  
+
+### Fixed errors
+
+- Grammatical corrections added to the step-by-step tutorial for the SMIA documentation platform on ReadTheDocs.
+- Added SMIA Environment builder link in 'getting_started' page within the ReadTheDocs documentation platform.
+- Fixed SMIA Operator source code (OperatorRequestBehaviour):
+  - Requesting FIPA-CNP distributed negotiation protocol with new version of the algorithm within SMIA.
+  - Obtaining the winner of a FIPA-CNP distributed negotiation protocol with the new version of the algorithm within SMIA.
+- Fixed bug requesting distributed negotiations when multiple SMIA instances selected in SMIA Operator and fixed SMIA version in its HTML pages (now the latest version is shown).
+- Fixed docker-compose.yml file of SMIA Operator with its new Docker image within "smia-tools" repository.
+- Fixed SMIA Environment Builder source code when generating YAML deployment file for SMIA Operator (Docker image was not properly defined).
+- Fixed name of the GCIS research group (which is the group in which the PhD thesis that develops the SMIA approach is being conducted) in all the required files.
+
 ## v0.3.3
 
 This release of Self-configurable Manufacturing Industrial Agents (SMIA) includes new features and improvements to the software's inherent functionality, information updates, and bug fixes.
