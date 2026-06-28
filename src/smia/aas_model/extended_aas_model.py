@@ -6,8 +6,8 @@ from basyx.aas.util import traversal
 from smia.aas_model.aas_model_utils import AASModelInfo, AASModelUtils
 from smia.logic import acl_smia_messages_utils
 
-from smia.logic.exceptions import CapabilityCheckingError, AASModelReadingError, OntologyReadingError
-from smia.css_ontology.css_ontology_utils import CapabilitySkillOntologyUtils, CapabilitySkillACLInfo, \
+from smia.logic.exceptions import AASModelReadingError, OntologyReadingError
+from smia.css_ontology.css_ontology_utils import CapabilitySkillOntologyUtils, \
     CapabilitySkillOntologyInfo
 from smia.utilities.smia_info import AssetInterfacesInfo
 

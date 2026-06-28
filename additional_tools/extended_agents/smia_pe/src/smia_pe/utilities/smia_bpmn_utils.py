@@ -324,7 +324,6 @@ class SMIABPMNUtils:
 async def save_csv_bpmn_calculated_metrics(folder_path, elapsed_time, file_prefix=None):
     import csv
     import os
-    from smia.logic import acl_smia_messages_utils
     from smia.utilities.general_utils import DockerUtils
 
     # Add ‘N/A’ if optional variables have not been specified

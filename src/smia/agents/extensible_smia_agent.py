@@ -84,7 +84,7 @@ class ExtensibleSMIAAgent(SMIAAgent):
                 AssetInterfacesInfo.SEMANTICID_INTERFACES_SUBMODEL)
             if (aid_submodel is None) or (not isinstance(aid_submodel, basyx.aas.model.Submodel)):
                 _logger.warning("The standardized submodel 'AssetInterfacesDescription' does not exist in the AAS "
-                                "model.".format(asset_connection_class))
+                                "model. {}".format(asset_connection_class))
                 return
             try:
                 aas_interface_elem = aid_submodel.get_referable(aas_interface_id_short)

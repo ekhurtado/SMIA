@@ -12,7 +12,7 @@ from smia.logic.exceptions import RequestDataError, ServiceRequestExecutionError
 from smia.logic.services_utils import AgentServiceUtils
 from smia.utilities import smia_archive_utils
 from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
-from smia.utilities.fipa_acl_info import FIPAACLInfo, ServiceTypes, ACLSMIAOntologyInfo
+from smia.utilities.fipa_acl_info import FIPAACLInfo, ACLSMIAOntologyInfo
 from smia.utilities.smia_info import AssetInterfacesInfo
 
 _logger = logging.getLogger(__name__)
