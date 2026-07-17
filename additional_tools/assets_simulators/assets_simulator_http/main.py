@@ -1,6 +1,7 @@
 import os
 import json
 import asyncio
+import uvicorn
 from datetime import datetime
 from collections import deque
 from contextlib import asynccontextmanager
@@ -269,6 +270,5 @@ async def favicon():
 
 
 if __name__ == "__main__":
-    import uvicorn
 
     uvicorn.run(app, host="0.0.0.0", port=5000)

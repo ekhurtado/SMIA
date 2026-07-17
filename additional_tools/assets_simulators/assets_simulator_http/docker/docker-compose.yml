@@ -1,0 +1,16 @@
+#version: "2"
+
+services:
+
+  smia-assets-simulator-http:
+    image: ekhurtado/smia-tools:latest-assets-simulator-http
+    build:
+      context: .
+      dockerfile: Dockerfile_AssetsSimulator_HTTP
+    ports:
+      - '5000:5000'
+    environment:
+      - PRODUCTION_ASSETS=industrial_robot_001,industrial_robot_002
+      - MOBILE_ASSETS=mobile_robot_001,agv_002
+      - HUMAN_ASSETS=human_worker_001
+    container_name: smia-assets-simulator-http
