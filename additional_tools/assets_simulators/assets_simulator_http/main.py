@@ -179,7 +179,7 @@ async def sse_stream(request: Request):
 # ---------------------------------------------------------
 # APIs de Control de Activos
 # ---------------------------------------------------------
-@app.get("/api/v1/asset/{asset_id}/status")
+@app.get("/api/v1/asset/{asset_id:path}/status")
 async def get_status(asset_id: str):
     if asset_id not in assets_state:
         raise HTTPException(status_code=404, detail="Asset not found")
@@ -191,7 +191,7 @@ async def get_status(asset_id: str):
     return assets_state[asset_id]
 
 
-@app.post("/api/v1/asset/{asset_id}/charge")
+@app.post("/api/v1/asset/{asset_id:path}/charge")
 async def toggle_charge(asset_id: str, payload: ChargeRequest):
     if asset_id not in assets_state:
         raise HTTPException(status_code=404, detail="Asset not found")
@@ -212,7 +212,7 @@ async def toggle_charge(asset_id: str, payload: ChargeRequest):
     return {"status": "success", "charging": payload.enable}
 
 
-@app.post("/api/v1/asset/{asset_id}/action/{action_name}")
+@app.post("/api/v1/asset/{asset_id:path}/action/{action_name}")
 async def trigger_action(asset_id: str, action_name: str, payload: ActionRequest):
     if asset_id not in assets_state:
         raise HTTPException(status_code=404, detail="Asset not found")
