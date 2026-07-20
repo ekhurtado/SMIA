@@ -273,7 +273,7 @@ class AssetConnection(metaclass=abc.ABCMeta):
         # First, if 'dataQuery' attribute is set has to be analyzed
         data_query_elem = interaction_metadata.get_sm_element_by_semantic_id(
             AssetInterfacesInfo.SEMANTICID_INTERFACE_INTERACTION_DATA_QUERY)
-        if data_query_elem is not None:
+        if data_query_elem is not None and data_query_elem.value.strip():
             # The type of the content must be obtained
             forms_elem = interaction_metadata.get_sm_element_by_semantic_id(
                 AssetInterfacesInfo.SEMANTICID_INTERFACE_FORMS)
