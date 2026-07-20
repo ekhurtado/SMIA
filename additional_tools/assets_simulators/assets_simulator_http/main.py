@@ -192,7 +192,9 @@ async def get_status(asset_id: str):
 
 
 @app.post("/api/v1/asset/{asset_id:path}/charge")
-async def toggle_charge(asset_id: str, payload: ChargeRequest):
+async def toggle_charge(asset_id: str, payload: ChargeRequest = None):
+    if payload is None:
+        payload = ChargeRequest(enable=True)  # If payload is not specified, it is enabled by default
     if asset_id not in assets_state:
         raise HTTPException(status_code=404, detail="Asset not found")
 

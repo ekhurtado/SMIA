@@ -27,9 +27,8 @@ def main():
     # Then, the AASX model is added
     # smia.load_aas_model('../examples/SMIA_Operator_article.aasx')
     # smia.load_aas_model('../examples/CeDRI_PunchingMachine_instanceA.aasx')
-    smia.load_aas_model('../examples/SimulatedAssetsHTTP_IR.aasx')
+    smia.load_aas_model('../examples/SMIA_test_64_sm.aasx')
     # smia.load_aas_model('../examples/SMIA_TransportRobot_article_1.aasx')
-    # smia.load_aas_model('../examples/SMIA_TransportRobot_without_OWL.aasx')
     # smia.load_aas_model('../examples/SMIA_tutorial_1.aasx')
 
     # Create the agent object
