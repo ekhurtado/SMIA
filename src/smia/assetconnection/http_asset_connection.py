@@ -138,10 +138,11 @@ class HTTPAssetConnection(AssetConnection):
             forms_elem (basyx.aas.model.submodelElementCollection): SubmodelElement of forms within InteractionMetadata.
         """
         href_elem = forms_elem.get_sm_element_by_semantic_id(AssetInterfacesInfo.SEMANTICID_INTERFACE_HREF)
-        if ('http://' in href_elem.value) or ('https://' in href_elem.value):
-            self.request_uri = href_elem.value
+        href_value = href_elem.value.strip()  # Extract and clean the value (remove leading and trailing spaces)
+        if ('http://' in href_value) or ('https://' in href_value):
+            self.request_uri = href_value
         else:
-            self.request_uri = self.base.value + href_elem.value
+            self.request_uri = self.base.value.strip() + href_value
 
     async def get_headers(self, forms_elem):
         """
