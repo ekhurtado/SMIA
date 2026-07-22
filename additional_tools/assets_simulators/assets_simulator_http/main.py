@@ -22,7 +22,7 @@ HUM_ASSETS_STR = os.getenv("HUMAN_ASSETS", "")
 ASSET_TASKS = {
     "robot": {"weld": "Soldadura", "drill": "Perforación", "pick_place": "Mover Pieza"},
     "mobile": {"transport": "Transporte", "patrol": "Patrulla", "scan": "Escaneo RADAR"},
-    "human": {"assemble": "Ensamblaje", "inspect": "Inspección QA", "maintain": "Mantenimiento"}
+    "human": {"transport": "Transporte", "assemble": "Ensamblaje", "inspect": "Inspección QA", "maintain": "Mantenimiento"}
 }
 
 ASSET_CATALOG = {}

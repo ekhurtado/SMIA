@@ -343,6 +343,32 @@
             }
         }
 
+        @keyframes agv-cargo-bob {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-1.5px) rotate(-1.5deg);
+            }
+            50% {
+                transform: translateY(-2.5px) rotate(0deg);
+            }
+            75% {
+                transform: translateY(-1.5px) rotate(1.5deg);
+            }
+        }
+
+        @keyframes agv-cargo-shadow {
+            0%, 100% {
+                transform: scaleX(1);
+                opacity: 0.28;
+            }
+            50% {
+                transform: scaleX(0.85);
+                opacity: 0.18;
+            }
+        }
+
         @keyframes agv-patrol {
             0%, 100% {
                 transform: translateX(-40px);
@@ -387,6 +413,26 @@
 
         .mobile.task-transport .agv-group {
             animation: agv-transport 4s infinite ease-in-out;
+        }
+
+        .agv-cargo {
+            display: none;
+            transform-origin: 50px 35px;
+        }
+
+        .mobile.task-transport .agv-cargo {
+            display: block;
+            animation: agv-cargo-bob 0.6s infinite ease-in-out;
+        }
+
+        .agv-cargo-shadow {
+            display: none;
+            transform-origin: 50px 56px;
+        }
+
+        .mobile.task-transport .agv-cargo-shadow {
+            display: block;
+            animation: agv-cargo-shadow 0.6s infinite ease-in-out;
         }
 
         .mobile.task-patrol .agv-group {
@@ -492,6 +538,72 @@
             }
         }
 
+        @keyframes hum-transport-walk {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            25%, 75% {
+                transform: translateY(-3px);
+            }
+        }
+
+        @keyframes hum-transport-walk-leg-l {
+            0%, 100% {
+                transform: rotate(-25deg);
+            }
+            50% {
+                transform: rotate(25deg);
+            }
+        }
+
+        @keyframes hum-transport-walk-leg-r {
+            0%, 100% {
+                transform: rotate(25deg);
+            }
+            50% {
+                transform: rotate(-25deg);
+            }
+        }
+
+        @keyframes hum-transport-arm-carry {
+            0%, 100% {
+                transform: rotate(-15deg);
+            }
+            25% {
+                transform: rotate(-12deg);
+            }
+            50% {
+                transform: rotate(-18deg);
+            }
+            75% {
+                transform: rotate(-12deg);
+            }
+        }
+
+        @keyframes hum-transport-arm-swing {
+            0%, 100% {
+                transform: rotate(30deg);
+            }
+            50% {
+                transform: rotate(-30deg);
+            }
+        }
+
+        @keyframes hum-transport-cargo-bob {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-1.5px) rotate(-2deg);
+            }
+            50% {
+                transform: translateY(0) rotate(0deg);
+            }
+            75% {
+                transform: translateY(-1.5px) rotate(2deg);
+            }
+        }
+
         .tool-glasses, .tool-wrench {
             display: none;
         }
@@ -567,6 +679,45 @@
 
         .human.task-maintain .tool-wrench {
             display: block;
+        }
+
+        .tool-cargo {
+            display: none;
+            transform-origin: 75px 75px;
+        }
+
+        .human-cargo {
+            display: none;
+            transform-origin: 50px 65px;
+        }
+
+        .human.task-transport .human-torso {
+            animation: hum-transport-walk 1s infinite linear;
+        }
+
+        .human.task-transport .human-arm-r {
+            animation: hum-transport-arm-carry 1s infinite linear;
+        }
+
+        .human.task-transport .human-arm-l {
+            animation: hum-transport-arm-swing 1s infinite linear;
+        }
+
+        .human.task-transport .human-leg-l {
+            animation: hum-transport-walk-leg-l 1s infinite linear;
+        }
+
+        .human.task-transport .human-leg-r {
+            animation: hum-transport-walk-leg-r 1s infinite linear;
+        }
+
+        .human.task-transport .tool-cargo {
+            display: block;
+            animation: hum-transport-cargo-bob 1s infinite linear;
+        }
+
+        .human.task-transport .tool-wrench {
+            display: none;
         }
     </style>
 </head>
@@ -1007,7 +1158,7 @@
     if (desktopSidebarToggleBtn) {
         desktopSidebarToggleBtn.addEventListener('click', () => {
             sidebar.classList.toggle('sidebar-collapsed');
-            
+
             // Toggle icon
             if (sidebar.classList.contains('sidebar-collapsed')) {
                 sidebarToggleIcon.setAttribute('data-lucide', 'panel-left-open');
@@ -1072,6 +1223,13 @@
             svgTemplate: `
                 <svg viewBox="0 0 100 100" class="w-28 h-28 md:w-32 md:h-32 overflow-visible">
                     <g class="agv-group">
+                        <ellipse class="agv-cargo-shadow fill-black" cx="55" cy="56" rx="22" ry="2.5" />
+                        <g class="agv-cargo">
+                            <rect x="37" y="22" width="36" height="28" rx="2" class="fill-[#B07A3B] dark:fill-[#8A5A2B]" />
+                            <rect x="37" y="22" width="36" height="4" class="fill-[#8A5A2B] dark:fill-[#6B4520]" />
+                            <line x1="55" y1="22" x2="55" y2="50" stroke="#6B4520" stroke-width="1.5" class="dark:stroke-[#4A3015]" />
+                            <line x1="37" y1="36" x2="73" y2="36" stroke="#6B4520" stroke-width="1" class="dark:stroke-[#4A3015]" />
+                        </g>
                         <rect x="15" y="55" width="70" height="25" rx="6" class="fill-[#5B82A1] dark:fill-[#2D4A6D] transition-colors"/>
                         <circle cx="25" cy="80" r="10" class="fill-[#1A2E44] dark:fill-[#0F1C2E]"/>
                         <circle cx="25" cy="80" r="4" class="fill-[#B0D5E8]"/>
@@ -1107,6 +1265,11 @@
                             <g class="tool-wrench">
                                 <rect x="73" y="72" width="4" height="18" rx="2" class="fill-[#7B9CB5] dark:fill-[#B0D5E8]" />
                                 <path d="M 69 72 C 69 66, 81 66, 81 72 L 77 74 L 77 70 C 77 68, 73 68, 73 70 L 73 74 Z" class="fill-[#5B82A1] dark:fill-[#D7EDF7]" />
+                            </g>
+                            <g class="tool-cargo">
+                                <rect x="67" y="78" width="16" height="12" rx="1.5" class="fill-[#B07A3B] dark:fill-[#8A5A2B]" />
+                                <rect x="67" y="78" width="16" height="2.5" class="fill-[#8A5A2B] dark:fill-[#6B4520]" />
+                                <line x1="75" y1="78" x2="75" y2="90" stroke="#6B4520" stroke-width="0.8" class="dark:stroke-[#4A3015]" />
                             </g>
                         </g>
                         <line x1="42" y1="70" x2="42" y2="100" stroke-width="8" stroke-linecap="round" class="human-leg-l stroke-[#1A2E44] dark:stroke-[#B0D5E8]" />
@@ -1236,7 +1399,7 @@
                          <div id="${p}spinner-${assetId}" class="hidden items-center">
                             <div role="status">
                                 <svg aria-hidden="true" class="w-3 h-3 md:w-4 md:h-4 mr-2 text-white/50 animate-spin fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 28.0063 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 28.0063 9.08144 50.5908Z" fill="currentColor"/>
+                                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 100.591 100 78.2051 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 28.0063 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 28.0063 9.08144 50.5908Z" fill="currentColor"/>
                                     <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
                                 </svg>
                             </div>
