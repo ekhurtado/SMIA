@@ -188,10 +188,14 @@ async def get_status(asset_id: str):
     append_to_history(asset_id, "STATUS", "Telemetría solicitada por cliente externo")
     await notify_clients()  # Notificamos para que UI actualice histórico
 
-    return assets_state[asset_id]
+    response_state = assets_state[asset_id].copy()
+    if response_state.get("type") == "human":
+        response_state["stamina"] = response_state.pop("battery", 100.0)
+    return response_state
 
 
 @app.post("/api/v1/asset/{asset_id:path}/charge")
+@app.post("/api/v1/asset/{asset_id:path}/recover")
 async def toggle_charge(asset_id: str, payload: ChargeRequest = None):
     if payload is None:
         payload = ChargeRequest(enable=True)  # If payload is not specified, it is enabled by default
@@ -200,17 +204,26 @@ async def toggle_charge(asset_id: str, payload: ChargeRequest = None):
 
     async with asset_locks[asset_id]:
         state = assets_state[asset_id]
+        is_human = state.get("type") == "human"
+
         if payload.enable:
             if state["status"] not in ["idle", "charging"]:
-                raise HTTPException(status_code=409, detail="Asset must be idle to begin charging")
+                detail_msg = "Asset must be idle to begin recovery" if is_human else "Asset must be idle to begin charging"
+                raise HTTPException(status_code=409, detail=detail_msg)
             state["status"] = "charging"
-            append_to_history(asset_id, "CHARGE", "Inicio de ciclo de recuperación")
+            req_type = "RECOVER" if is_human else "CHARGE"
+            req_desc = "Inicio de ciclo de recuperación"
+            append_to_history(asset_id, req_type, req_desc)
         else:
             if state["status"] == "charging":
                 state["status"] = "idle"
-            append_to_history(asset_id, "CHARGE", "Interrupción de ciclo de recuperación")
+            req_type = "RECOVER" if is_human else "CHARGE"
+            req_desc = "Interrupción de ciclo de recuperación"
+            append_to_history(asset_id, req_type, req_desc)
 
     await notify_clients()
+    if is_human:
+        return {"status": "success", "recovering": payload.enable}
     return {"status": "success", "charging": payload.enable}
 
 
@@ -234,7 +247,8 @@ async def trigger_action(asset_id: str, action_name: str, payload: ActionRequest
 
         required_battery = payload.duration * 2.0
         if state["battery"] < required_battery:
-            raise HTTPException(status_code=400, detail="Insufficient energy for task")
+            err_msg = "Insufficient stamina for task" if asset_type == "human" else "Insufficient energy for task"
+            raise HTTPException(status_code=400, detail=err_msg)
 
         state["status"] = "busy"
         state["current_task"] = action_name

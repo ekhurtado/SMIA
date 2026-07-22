@@ -1047,8 +1047,8 @@
                     <code class="text-sm font-mono font-bold text-zinc-800 dark:text-zinc-200 break-all">/api/v1/asset/{asset_id}/status</code>
                 </div>
                 <p class="text-zinc-500 dark:text-zinc-400 text-sm mb-6 leading-relaxed">Recupera la telemetría actual
-                    de un activo específico. Devuelve el estado en tiempo real, el nivel de batería restante y la tarea
-                    que está ejecutando en caso de estar ocupado.</p>
+                    de un activo específico. Devuelve el estado en tiempo real, el nivel de batería/estamina restante y la tarea
+                    que está ejecutando en caso de estar ocupado (en activos humanos se ofrece <code class="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">stamina</code> en lugar de <code class="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">battery</code>).</p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -1058,7 +1058,7 @@
                             <li><code
                                     class="text-xs font-mono text-zinc-900 dark:text-zinc-300 font-bold bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded">asset_id</code>
                                 <span class="italic text-xs">(string)</span> - ID único del activo (ej. <span
-                                        class="font-mono text-xs">ROBOT_A</span>)
+                                        class="font-mono text-xs">ROBOT_A</span> o <span class="font-mono text-xs">OPERARIO_X</span>)
                             </li>
                         </ul>
                     </div>
@@ -1066,12 +1066,11 @@
                         <h4 class="text-xs font-extrabold tracking-widest text-zinc-900 dark:text-zinc-100 uppercase mb-3 border-b border-zinc-200 dark:border-zinc-800 pb-2">
                             Respuesta (200 OK)</h4>
                         <pre class="bg-zinc-50 dark:bg-[#0d1117] border border-zinc-200 dark:border-zinc-800 rounded-lg p-3 text-[11px] font-mono text-zinc-700 dark:text-zinc-300 overflow-x-auto">
-    {
-      "type": "robot",
-      "status": "idle",
-      "battery": 100.0,
-      "current_task": null
-    }</pre>
+    // Robot / Móvil:
+    { "type": "robot", "status": "idle", "battery": 100.0, "current_task": null }
+
+    // Humano:
+    { "type": "human", "status": "idle", "stamina": 100.0, "current_task": null }</pre>
                     </div>
                 </div>
             </div>
@@ -1083,7 +1082,7 @@
                 </div>
                 <p class="text-zinc-500 dark:text-zinc-400 text-sm mb-6 leading-relaxed">Asigna una tarea a un activo.
                     La acción a ejecutar se indica como segmento de la ruta. El servidor validará si la tarea es
-                    compatible con el tipo de activo, si está disponible (estado 'idle') y si tiene batería suficiente
+                    compatible con el tipo de activo, si está disponible (estado 'idle') y si tiene energía/estamina suficiente
                     para completar la operación solicitada.</p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1132,9 +1131,11 @@
                 <div class="flex flex-col md:flex-row md:items-center mb-4 gap-3">
                     <span class="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 font-mono text-xs font-extrabold px-2.5 py-1 rounded w-max tracking-widest uppercase">POST</span>
                     <code class="text-sm font-mono font-bold text-zinc-800 dark:text-zinc-200 break-all">/api/v1/asset/{asset_id}/charge</code>
+                    <span class="text-xs text-zinc-400 dark:text-zinc-500 font-bold">o</span>
+                    <code class="text-sm font-mono font-bold text-zinc-800 dark:text-zinc-200 break-all">/api/v1/asset/{asset_id}/recover</code>
                 </div>
-                <p class="text-zinc-500 dark:text-zinc-400 text-sm mb-6 leading-relaxed">Alterna el estado de recarga de
-                    un activo. Para iniciar la recarga, el activo no puede estar realizando ninguna tarea. Si alcanza el
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm mb-6 leading-relaxed">Alterna el estado de recarga <code class="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">/charge</code> recuperación de
+                    un activo (para activos humanos se puede invocar también el endpoint <code class="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">/recover</code>). Para iniciar el proceso, el activo no puede estar realizando ninguna tarea. Si alcanza el
                     100%, el sistema lo devolverá automáticamente a estado 'idle'.</p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1144,7 +1145,7 @@
                         <ul class="text-sm text-zinc-600 dark:text-zinc-400 space-y-2">
                             <li><code
                                     class="text-xs font-mono text-zinc-900 dark:text-zinc-300 font-bold bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded">enable</code>
-                                <span class="italic text-xs">(boolean)</span> - True para cargar, False para detener (True por defecto si no se define body).
+                                <span class="italic text-xs">(boolean)</span> - True para recargar/recuperar, False para detener.
                             </li>
                         </ul>
                     </div>
@@ -1152,10 +1153,11 @@
                         <h4 class="text-xs font-extrabold tracking-widest text-zinc-900 dark:text-zinc-100 uppercase mb-3 border-b border-zinc-200 dark:border-zinc-800 pb-2">
                             Respuesta (200 OK)</h4>
                         <pre class="bg-zinc-50 dark:bg-[#0d1117] border border-zinc-200 dark:border-zinc-800 rounded-lg p-3 text-[11px] font-mono text-zinc-700 dark:text-zinc-300 overflow-x-auto">
-    {
-      "status": "success",
-      "charging": true
-    }</pre>
+    // Robot / Móvil:
+    { "status": "success", "charging": true }
+
+    // Humano:
+    { "status": "success", "recovering": true }</pre>
                     </div>
                 </div>
             </div>
@@ -1281,7 +1283,7 @@
             title: 'Human Assets',
             energyLabel: 'ESTAMINA',
             chargeIcon: 'coffee',
-            chargeText: 'Descansar',
+            chargeText: 'Recuperar',
             workingText: 'Trabajar',
             optionsHTML: buildOptions('human'),
             svgTemplate: `
@@ -1485,6 +1487,7 @@
         const isCharging = data.status === 'charging';
         const isBusy = data.status === 'busy';
         const isIdle = data.status === 'idle';
+        const energyVal = (data.stamina !== undefined) ? data.stamina : (data.battery !== undefined ? data.battery : 100.0);
 
         const badge = document.getElementById(`${p}status-badge-${assetId}`);
         if (!badge) return; // Card no existe en esta vista
@@ -1506,7 +1509,7 @@
             badge.className = "text-[9px] md:text-[10px] font-bold px-2 py-1 rounded flex items-center uppercase tracking-widest bg-emerald-500/20 text-emerald-700 dark:text-emerald-400";
             dot.className = "w-1.5 h-1.5 rounded-full mr-1.5 bg-emerald-500 animate-pulse";
             svgContainer.className = `flex justify-center mb-6 md:mb-8 h-28 md:h-32 items-end ${data.type} is-charging`;
-            taskLabel.innerText = data.type === 'human' ? "RECUPERANDO..." : "RECARGANDO...";
+            taskLabel.innerText = data.type === 'human' ? "DESCANSANDO..." : "RECARGANDO...";
             chargeTxt.innerText = config.workingText;
             spinner.classList.add('hidden');
             spinner.classList.remove('flex');
@@ -1528,12 +1531,12 @@
             spinner.classList.remove('flex');
         }
 
-        statusText.innerText = data.status.toUpperCase();
+        statusText.innerText = (data.type === 'human' && isCharging) ? "RECOVERING" : data.status.toUpperCase();
 
-        batText.innerText = `${data.battery.toFixed(0)}%`;
-        batText.className = data.battery < 20 ? 'font-mono text-red-600 dark:text-red-400 font-extrabold' : 'font-mono opacity-80';
-        batBar.style.width = `${data.battery}%`;
-        batBar.className = `h-full rounded-full transition-all duration-1000 ${data.battery < 20 ? 'bg-red-500' : 'bg-blue-600 dark:bg-blue-400'}`;
+        batText.innerText = `${energyVal.toFixed(0)}%`;
+        batText.className = energyVal < 20 ? 'font-mono text-red-600 dark:text-red-400 font-extrabold' : 'font-mono opacity-80';
+        batBar.style.width = `${energyVal}%`;
+        batBar.className = `h-full rounded-full transition-all duration-1000 ${energyVal < 20 ? 'bg-red-500' : 'bg-blue-600 dark:bg-blue-400'}`;
 
         inputDuration.disabled = !isIdle;
         inputTask.disabled = !isIdle;
@@ -1556,6 +1559,7 @@
             case 'ACTION':
                 return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
             case 'CHARGE':
+            case 'RECOVER':
                 return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400';
             case 'STATUS':
                 return 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400';
@@ -1800,17 +1804,19 @@
     }
 
     async function toggleCharge(assetId, prefix = '') {
-        const enable = currentGlobalState[assetId].status !== 'charging';
+        const assetState = currentGlobalState[assetId];
+        const isHuman = assetState?.type === 'human';
+        const enable = assetState.status !== 'charging';
 
         if (isLocalMode) {
-            if (enable && currentGlobalState[assetId].status === 'idle') currentGlobalState[assetId].status = 'charging';
-            else if (!enable && currentGlobalState[assetId].status === 'charging') currentGlobalState[assetId].status = 'idle';
+            if (enable && assetState.status === 'idle') assetState.status = 'charging';
+            else if (!enable && assetState.status === 'charging') assetState.status = 'idle';
 
             requestHistory.unshift({
                 timestamp: new Date().toISOString(),
                 asset_id: assetId,
-                asset_type: currentGlobalState[assetId].type,
-                type: 'CHARGE',
+                asset_type: assetState.type,
+                type: isHuman ? 'RECOVER' : 'CHARGE',
                 details: `Recuperación ${enable ? 'iniciada' : 'detenida'} (mock)`
             });
 
@@ -1820,7 +1826,8 @@
         }
 
         try {
-            await fetch(`/api/v1/asset/${assetId}/charge`, {
+            const endpoint = isHuman ? `/api/v1/asset/${assetId}/recover` : `/api/v1/asset/${assetId}/charge`;
+            await fetch(endpoint, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({enable: enable})
