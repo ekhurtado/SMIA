@@ -719,6 +719,41 @@
         .human.task-transport .tool-wrench {
             display: none;
         }
+
+
+        .assemble-workbench {
+            display: none;
+        }
+
+        .assemble-stock {
+            display: none;
+            transform-origin: 78px 60px;
+        }
+
+        .assemble-base {
+            display: none;
+            transform-origin: 78px 60px;
+        }
+
+        .human.task-assemble .assemble-piece {
+            display: block;
+            animation: hum-assemble-piece 2s infinite ease-in-out;
+        }
+
+        .human.task-assemble .assemble-workbench {
+            display: block;
+        }
+
+        .human.task-assemble .assemble-stock {
+            display: block;
+            animation: hum-assemble-stock 2s infinite ease-in-out;
+        }
+
+        .human.task-assemble .assemble-base {
+            display: block;
+            animation: hum-assemble-base-pulse 2s infinite ease-in-out;
+        }
+
     </style>
 </head>
 <body class="bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 h-screen overflow-hidden flex flex-col md:flex-row transition-colors duration-300">
@@ -1274,6 +1309,21 @@
                         </g>
                         <line x1="42" y1="70" x2="42" y2="100" stroke-width="8" stroke-linecap="round" class="human-leg-l stroke-[#1A2E44] dark:stroke-[#B0D5E8]" />
                         <line x1="58" y1="70" x2="58" y2="100" stroke-width="8" stroke-linecap="round" class="human-leg-r stroke-[#1A2E44] dark:stroke-[#B0D5E8]" />
+                    </g>
+                    <g class="assemble-workbench">
+                        <rect x="70" y="68" width="28" height="3" rx="1" class="fill-[#8A5A2B] dark:fill-[#6B4520]" />
+                        <rect x="73" y="71" width="2" height="14" class="fill-[#6B4520] dark:fill-[#4A3015]" />
+                        <rect x="93" y="71" width="2" height="14" class="fill-[#6B4520] dark:fill-[#4A3015]" />
+                        <g class="assemble-base">
+                            <rect x="74" y="58" width="20" height="10" rx="1" class="fill-[#5B82A1] dark:fill-[#41627D]" />
+                            <rect x="74" y="58" width="20" height="2.5" class="fill-[#41627D] dark:fill-[#2D4A6D]" />
+                            <circle cx="79" cy="63" r="1.2" class="fill-[#2F4A63] dark:fill-[#1A2E44]" />
+                            <circle cx="89" cy="63" r="1.2" class="fill-[#2F4A63] dark:fill-[#1A2E44]" />
+                        </g>
+                        <g class="assemble-stock">
+                            <rect x="74" y="55" width="20" height="6" rx="1" class="fill-[#D7EDF7] dark:fill-[#B0D5E8]" />
+                            <line x1="84" y1="55" x2="84" y2="61" stroke="#5B82A1" stroke-width="0.6" class="dark:stroke-[#4A6F96]" />
+                        </g>
                     </g>
                 </svg>
             `
