@@ -73,7 +73,6 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
             'Obtaining BPMN file ...', 'message': 'The BPMN file has been obtained from the AAS model.'})
 
         _logger.info("SMIA PE will wait 15 seconds for other instances to complete their initializations..")
-        # await asyncio.sleep(15)   # TODO DELETED FOR PERFORMANCE TESTS
 
     async def run(self):
         """
@@ -131,18 +130,6 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
         """
         This method executes the BPMN workflow.
         """
-
-        # TODO DELETE: REGISTRATION PERFORMANCE TEST
-        from smia.utilities import smia_general_info
-        from utilities import smia_bpmn_utils
-        import os
-        bpmn_finished_time = GeneralUtils.get_current_timer_nanosecs()
-        metrics_folder = os.environ.get('METRICS_FOLDER')
-        if metrics_folder is None:
-            metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
-        await smia_bpmn_utils.save_csv_bpmn_calculated_metrics(metrics_folder,
-                                                               bpmn_finished_time - self.bpmn_start_time)
-
         # Let's start from the beginning
         current_elem = self.process_parser.get_spec().start
 
@@ -181,17 +168,6 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
         Args:
             current_bpmn_elem: BPMN element object.
         """
-
-        # TODO DELETE: REGISTRATION PERFORMANCE TEST
-        from smia.utilities import smia_general_info
-        from utilities import smia_bpmn_utils
-        import os
-        metrics_folder = os.environ.get('METRICS_FOLDER')
-        if metrics_folder is None:
-            metrics_folder = smia_general_info.SMIAGeneralInfo.CONFIGURATION_AAS_FOLDER_PATH + '/metrics'
-        await smia_bpmn_utils.save_csv_bpmn_calculated_metrics(metrics_folder, 0.0 , 'ready-bpmn-')
-
-
         # Before executing the BPMN element it is necessary to check if some additional tasks need to be done
         if isinstance(current_bpmn_elem, ServiceTask):
             # Only ServiceTasks can be executed by SMIA PE
