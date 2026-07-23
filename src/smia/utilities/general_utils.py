@@ -367,13 +367,15 @@ class DockerUtils:
         exist.
 
         Returns:
-            var_type: value of the environmental variable.
+            var_type: env_value of the environmental variable.
         """
         try:
-            value = DockerUtils.get_env_var(key)
-            if value is None:
+            env_value = DockerUtils.get_env_var(key)
+            if env_value is None:
                 return default
+            elif var_type is bool:
+                return env_value.strip().lower() in ('true', '1', 't', 'yes', 'on')
             else:
-                return var_type(value)
+                return var_type(env_value)
         except (TypeError, ValueError, AttributeError):
             return default

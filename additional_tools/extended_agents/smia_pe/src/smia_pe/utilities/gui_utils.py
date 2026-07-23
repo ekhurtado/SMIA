@@ -50,6 +50,7 @@ class GUIControllers:
         """
         data = await request.json()
         bpmn_execution_change = data.get('BPMNExecutionChange', None)   # None if it is missing
+        _logger.error("HOLA ESTO ES LA GUI: {}".format(self.myagent.bpmn_execution_status))
 
         if bpmn_execution_change is not None:
             if bpmn_execution_change == 'Continue':
