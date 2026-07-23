@@ -23,7 +23,6 @@ class SMIAPEGUIBehaviour(OneShotBehaviour):
 
         # The dictionaries related to the HTML webpage are also initialized
         self.agent.bpmn_execution_status = DockerUtils.get_safe_env_var('WORKFLOW_AUTOSTART', default=True, var_type=bool)
-        _logger.error(self.agent.bpmn_execution_status)
         self.agent.bpmn_info = {'ServiceTasks': 0, 'ExclusiveGateways': 0, 'Capabilities': 0, 'Skills': 0, 'Assets': 0,
                                 'CompletedWorkflows': 0}
         self.agent.bpmn_graphviz_info = "digraph SMIA_PE_workflow { rankdir=LR; node [fixedsize=true];}"
