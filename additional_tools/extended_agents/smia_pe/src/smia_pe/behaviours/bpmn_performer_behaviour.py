@@ -476,7 +476,7 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
                     ACLSMIAJSONSchemas.JSON_SCHEMA_CSS_SERVICE, capabilityIRI=bpmn_element.smia_capability,
                     skillIRI=bpmn_element.smia_skill, constraints=bpmn_element.smia_constraints,
                     skillParams=bpmn_element.smia_skill_parameters,
-                    negCriterion='http://www.w3id.org/hsu-aut/css#NegotiateBasedOnRAM',
+                    negCriterion='http://www.w3id.org/hsu-aut/css#NegotiationBasedOnRAM',
                     negRequester=str(self.myagent.jid), negTargets=smia_instance_ids))
             await self.send(cfp_acl_message)
 

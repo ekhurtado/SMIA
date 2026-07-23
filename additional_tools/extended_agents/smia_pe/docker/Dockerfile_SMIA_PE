@@ -6,7 +6,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY smia_pe /smia_pe
 COPY smia_pe/htmls /htmls
 
-WORKDIR /smia_pe
+WORKDIR /
 
-CMD ["python3", "-u", "smia_pe_starter.py"]
+ENV PYTHONPATH=/
+
+CMD ["python3", "-u", "/smia_pe/smia_pe_starter.py"]
 #CMD [ "tail", "-f", "/dev/null"]
