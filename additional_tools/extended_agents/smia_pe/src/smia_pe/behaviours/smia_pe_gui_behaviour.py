@@ -1,6 +1,7 @@
 import logging
 from collections import OrderedDict
 
+from smia.utilities.general_utils import DockerUtils
 from spade.behaviour import OneShotBehaviour
 
 from smia_pe.utilities.gui_utils import GUIFeatures, GUIControllers
@@ -21,7 +22,8 @@ class SMIAPEGUIBehaviour(OneShotBehaviour):
         self.agent.build_avatar_url = GUIFeatures.build_avatar_url
 
         # The dictionaries related to the HTML webpage are also initialized
-        self.agent.bpmn_execution_status = True
+        self.agent.bpmn_execution_status = DockerUtils.get_safe_env_var('WORKFLOW_AUTOSTART', default=True, var_type=bool)
+        _logger.error(self.agent.bpmn_execution_status)
         self.agent.bpmn_info = {'ServiceTasks': 0, 'ExclusiveGateways': 0, 'Capabilities': 0, 'Skills': 0, 'Assets': 0,
                                 'CompletedWorkflows': 0}
         self.agent.bpmn_graphviz_info = "digraph SMIA_PE_workflow { rankdir=LR; node [fixedsize=true];}"

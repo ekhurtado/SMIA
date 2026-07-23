@@ -370,7 +370,7 @@ class DockerUtils:
             var_type: value of the environmental variable.
         """
         try:
-            value = DockerUtils.get_env_var(key)
+            value = os.environ.get(key)
             return var_type(value)
         except (TypeError, ValueError, AttributeError):
             return default
