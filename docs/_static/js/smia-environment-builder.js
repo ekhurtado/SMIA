@@ -827,7 +827,7 @@ const SMIA_Builder = {
                     image: isExtended
                         ? card.querySelector('.asset-image-input').value
                         : 'smia/standard-asset:latest',
-                    jid: card.querySelector('.agent-jid-input').value || `${this.state.assets.length + 1}`,
+                    jid: card.querySelector('.agent-jid-input').value || `smia-${this.state.assets.length + 1}`,
                     password: card.querySelector('.asset-password-input').value || 'gcis1234'
                 });
             });
@@ -2190,14 +2190,11 @@ echo "============================================================"
         const aasModelName = s.plan.path || s.plan.file?.name || 'plan.aasx';
 
         let safeJid = (s.plan.jid || 'smia-pe').toLowerCase().replace(/[^a-z0-9_.-]/g, '');
-        if (!safeJid.startsWith('smia-')) {
-            safeJid = 'smia-' + safeJid;
-        }
 
         let yaml =
-            `${I(1)}${safeJid}:\n` +
+            `${I(1)}${'smia-pe-' + safeJid}:\n` +
             `${I(2)}image: ekhurtado/smia-tools:latest-smia-pe\n` +
-            `${I(2)}container_name: ${safeJid}\n` +
+            `${I(2)}container_name: ${'smia-pe-' + safeJid}\n` +
             `${I(2)}environment:\n` +
             `${I(3)}- AAS_MODEL_NAME=${aasModelName}\n` +
             `${I(3)}- AGENT_ID=${safeJid}@${xmppDomain}\n` +
@@ -2235,11 +2232,7 @@ echo "============================================================"
      * @param {string} xmppDomain - XMPP domain for AGENT_ID
      */
     _yamlSmiaAsset: function (I, asset, index, xmppDomain, xmppNew, ismEnabled) {
-        let safeJid = (asset.jid || `smia-${index}`).toLowerCase().replace(/[^a-z0-9_.-]/g, '');
-        if (!safeJid.startsWith('smia-')) {
-            safeJid = 'smia-' + safeJid;
-        }
-        const serviceName = safeJid;
+        const serviceName = (asset.jid || `smia-${index}`).toLowerCase().replace(/[^a-z0-9_.-]/g, '');
 
         const dockerImage = asset.isExtended && asset.image
             ? asset.image
@@ -2266,9 +2259,9 @@ echo "============================================================"
         envVars += `${I(3)}- AGENT_PSSWD=${asset.password}\n`;
 
         let yaml =
-            `${I(1)}${serviceName}:\n` +
+            `${I(1)}${'smia-' + serviceName}:\n` +
             `${I(2)}image: ${dockerImage}\n` +
-            `${I(2)}container_name: ${serviceName}\n` +
+            `${I(2)}container_name: ${'smia-' + serviceName}\n` +
             `${I(2)}environment:\n` +
             envVars +
             `${I(2)}volumes:\n` +
