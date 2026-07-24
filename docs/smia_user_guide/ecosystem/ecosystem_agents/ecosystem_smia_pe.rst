@@ -35,7 +35,27 @@ Internal Design and Capabilities
 To achieve sufficient autonomy to interpret flexible workflows and provide their automated execution, the SMIA PE design relies on two main extended capabilities:
 
 * **AutomatedProductionCapability**: An agent capability endowed with autonomy to interpret, analyze, and execute modular production plans. It uses *Spiffworkflow*, an open-source Python package, to parse the CSS-enriched BPMN files. It is implemented through the agent behavior *BPMNPerformerBehavior*. Another complementary behavior (*ReceiveProductionACLBehavior*) manages the suspension of workflow execution until the associated incoming communication is received (if SMIA PE needs to interact with other components, it must wait until the interaction is complete).
-* **PEGUICapability**: An agent capability that provides the embedded web GUI for operational management by a human responsible for production (e.g., stopping and starting execution). It is implemented through the agent behaviour *PEGUIBehaviour*.
+
+  * Additionally, automatic execution of the BPMN workflow upon agent startup can be configured using the ``WORKFLOW_AUTOSTART`` environment variable (boolean ``True`` or ``False``).
+* **PEGUICapability**: An agent capability that provides the embedded web GUI for operational management by a human responsible for production (e.g., stopping and starting execution). It is implemented through the agent behaviour *PEGUIBehaviour*. By default, the web GUI runs on internal container port ``10000``.
+
+.. dropdown:: Docker Compose configuration example for SMIA PE
+    :octicon:`container;1em;sd-text-primary`
+
+    The following snippet illustrates how to configure the ``WORKFLOW_AUTOSTART`` environment variable and map the web GUI port exposed outside the container (in this example, mapping external port ``10010`` to internal port ``10000``):
+
+    .. code-block:: yaml
+
+        smia-pe-1:
+            image: ekhurtado/smia-tools:latest-smia-pe
+            container_name: smia-pe-1
+            environment:
+              - AAS_MODEL_NAME=<CSS-enriched AAS model>.aasx
+              - AGENT_ID=smia-pe-agent-1@ejabberd
+              - AGENT_PSSWD=gcis1234
+              - WORKFLOW_AUTOSTART=False
+            ports:
+                - 10010:10000
 
 Operational Lifecycle
 ---------------------
@@ -57,6 +77,7 @@ The support infrastructure must be selected in step 2 of the *Environment Builde
 When deploying, centralize the container and service definitions within the specific file: ``docker-compose.yml`` via Docker Compose and the specific YAML file via Kubernetes.
 
 - The JID configuration is managed via the ``AGENT_ID`` and ``AGENT_PSSWD`` environment variables.
+- Automatic workflow execution on startup is configured via the ``WORKFLOW_AUTOSTART`` environment variable (boolean ``True`` or ``False``).
 - Verify that the specific production plan model (`AASX file`) is located in the ``aas/`` directory.
 
 
@@ -75,7 +96,7 @@ To access the SMIA PE control panel, open a web browser and navigate to the inte
 
 .. note::
 
-    In virtualized environments, the IP address should be changed to that of the container. It should also be verified whether the container's exposed port matches or if a different one has been defined.
+    In virtualized environments, the IP address should be changed to that of the container. It should also be verified whether the container's exposed port matches internal port ``10000`` or if a custom external port has been defined (e.g., ``http://localhost:10010/smia_pe`` when mapping host port ``10010`` to container port ``10000``).
 
 Execution Workflow
 ~~~~~~~~~~~~~~~~~~
