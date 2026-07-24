@@ -827,7 +827,7 @@ const SMIA_Builder = {
                     image: isExtended
                         ? card.querySelector('.asset-image-input').value
                         : 'smia/standard-asset:latest',
-                    jid: card.querySelector('.asset-jid-input').value || `smia-${this.state.assets.length + 1}`,
+                    jid: card.querySelector('.agent-jid-input').value || `${this.state.assets.length + 1}`,
                     password: card.querySelector('.asset-password-input').value || 'gcis1234'
                 });
             });
@@ -2470,7 +2470,7 @@ echo "============================================================"
             <div class="form-group" style="display: flex; gap: 1rem; margin-top: 10px;">
                 <div style="flex: 1;">
                     <label>Agent JID</label>
-                    <input type="text" class="asset-jid-input smia-input" placeholder="e.g., smia-1">
+                    <input type="text" class="agent-jid-input smia-input" placeholder="e.g., smia-1">
                 </div>
                 <div style="flex: 1;">
                     <label>Agent Password</label>
