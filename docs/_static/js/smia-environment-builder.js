@@ -1013,7 +1013,7 @@ const SMIA_Builder = {
         const assetsSection = `<div class="summary-subsection">
             <div class="summary-subsection-title">Production Assets (${s.assets.length})</div>
             ${assetItems}
-            <div style="margin-top: 0.75rem; padding-top: 0.6rem; border-top: 1px dashed var(--color-border);">
+            <div style="margin-top: 0.75rem; padding-top: 0.6rem; border-top: 1px dashed var(--color-border); display: flex; flex-direction: column; gap: 0.2rem;">
                 ${operatorRow}
                 ${simulatorRow}
                 ${simulatorDetails}
@@ -2675,19 +2675,52 @@ spec:
             // Strip the subfolder prefix so ZIP entry is relative
             const zipPath = item.path.slice(prefix.length);
 
-            return fetch(rawUrl)
-                .then(r => {
-                    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-                    return r.arrayBuffer();
-                })
-                .then(data => {
-                    targetFolder.file(zipPath, data);
-                    successCount++;
-                })
-                .catch(err => {
-                    console.warn(`[SMIA Builder] Failed to fetch: ${item.path} — ${err.message}`);
-                    failCount++;
-                });
+            if (zipPath === 'main.py' || zipPath.endsWith('/main.py')) {
+                return fetch(rawUrl)
+                    .then(r => {
+                        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+                        return r.text();
+                    })
+                    .then(text => {
+                        const prodStr = JSON.stringify(s.assetsSimulator.productionAssets || '');
+                        const mobStr = JSON.stringify(s.assetsSimulator.mobileAssets || '');
+                        const humStr = JSON.stringify(s.assetsSimulator.humanAssets || '');
+
+                        let modifiedText = text;
+                        const targetLine = 'for a in [a.strip() for a in HUM_ASSETS_STR.split(",") if a.strip()]: ASSET_CATALOG[a] = "human"';
+                        const addedLines = `${targetLine}\n\n` +
+                            `# Activos anadidos desde SMIA Environment Builder (modo local)\n` +
+                            `_extra_prod = ${prodStr}\n` +
+                            `_extra_mob = ${mobStr}\n` +
+                            `_extra_hum = ${humStr}\n` +
+                            `for a in [a.strip() for a in _extra_prod.split(",") if a.strip()]: ASSET_CATALOG[a] = "robot"\n` +
+                            `for a in [a.strip() for a in _extra_mob.split(",") if a.strip()]: ASSET_CATALOG[a] = "mobile"\n` +
+                            `for a in [a.strip() for a in _extra_hum.split(",") if a.strip()]: ASSET_CATALOG[a] = "human"`;
+
+                        modifiedText = modifiedText.replace(targetLine, addedLines);
+
+                        targetFolder.file(zipPath, modifiedText);
+                        successCount++;
+                    })
+                    .catch(err => {
+                        console.warn(`[SMIA Builder] Failed to fetch string: ${item.path} — ${err.message}`);
+                        failCount++;
+                    });
+            } else {
+                return fetch(rawUrl)
+                    .then(r => {
+                        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+                        return r.arrayBuffer();
+                    })
+                    .then(data => {
+                        targetFolder.file(zipPath, data);
+                        successCount++;
+                    })
+                    .catch(err => {
+                        console.warn(`[SMIA Builder] Failed to fetch: ${item.path} — ${err.message}`);
+                        failCount++;
+                    });
+            }
         });
 
         await Promise.allSettled(fetchPromises);
