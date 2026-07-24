@@ -96,6 +96,45 @@ Properties file: ONTOLOGY section
         ontology.file = #
         ontology.inside-aasx = True
 
+Environment variables configuration
+-----------------------------------
+
+In addition to the properties file, SMIA software can also be configured using environment variables. This method is particularly useful when deploying SMIA instances in containerized environments (such as Docker or Kubernetes). Environment variables allow setting key operational parameters directly without modifying configuration files inside the container.
+
+The main environment variables available for configuring SMIA are:
+
+=========================  ===============  ==============================================================================================================================================================
+  Environment Variable          Type                                                                  Details
+=========================  ===============  ==============================================================================================================================================================
+``AAS_MODEL_NAME``            Mandatory*       Name of the CSS-enriched AAS model file (including file extension, e.g., ``<model_name>.aasx``) to self-configure SMIA.
+``AGENT_ID``                  Mandatory        Full JID identifier of the SMIA SPADE agent, including the agent name and XMPP server domain (e.g., ``smia-1@xmppserver``).
+``AGENT_PSSWD``               Mandatory        Password of the SMIA SPADE agent used to authenticate with the XMPP server.
+``SMIAI_KB_REGISTRATION``     Optional         Enables or disables self-registration of the SMIA agent in the SMIA-I KB (boolean ``True`` or ``False``).
+=========================  ===============  ==============================================================================================================================================================
+
+.. note::
+    *\*: ``AAS_MODEL_NAME`` is required when starting SMIA in containerized environments unless the model is loaded dynamically or defined in a properties file inside the container.*
+
+.. dropdown:: Example of environment variables in Docker Compose
+    :octicon:`container;1em;sd-text-primary`
+
+    The following snippet illustrates how to define environment variables for a SMIA service in a ``docker-compose.yml`` file:
+
+    .. code-block:: yaml
+
+        smia-1:
+            image: ekhurtado/smia:latest-alpine
+            container_name: smia-1
+            environment:
+              - AAS_MODEL_NAME=SMIA_CSS_enriched_AAS_model.aasx
+              - AGENT_ID=smia-1@ejabberd
+              - AGENT_PSSWD=1234
+              - SMIAI_KB_REGISTRATION=True
+
+.. seealso::
+
+    For more information on how to deploy SMIA using Docker, see the Start-up Guide :octicon:`repo;1em` :ref:`Running via Docker container`
+
 AAS model configuration
 -----------------------
 

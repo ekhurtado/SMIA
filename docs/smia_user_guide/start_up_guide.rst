@@ -120,6 +120,7 @@ The SMIA approach is also available as Docker image in DockerHub. To run SMIA so
       ``AAS_MODEL_NAME``            Path to the AAS model to self-configure SMIA (i.e. AASX Package): inside the given ``volume``.
       ``AGENT_ID``                  Identifier of the SMIA SPADE agent (incluyendo el servidor XMPP ``<id>@<xmpp_server>``).
       ``AGENT_PASSWD``              Password of the SMIA SPADE agent to connect with the XMPP server.
+    ``SMIAI_KB_REGISTRATION``       Enables or disables self-registration of the SMIA agent in the SMIA-I KB (boolean ``True`` or ``False``).
 ==============================  ===============
 
 In addition, for the SMIA container to have the AAS model accessible, it must be offered through the ``volume`` resource provided by Docker. This way, we can link a folder on the host to a folder in the container.
