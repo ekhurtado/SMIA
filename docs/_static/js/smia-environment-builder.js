@@ -421,10 +421,10 @@ const SMIA_Builder = {
                         </div>
                         <div id="assets-simulator-config" style="display:none; margin-top: 1rem;">
                             <small style="display:block; margin-bottom: 0.75rem; color: var(--color-foreground-secondary);">
-                                Configure the simulated asset IDs for each category (comma-separated):
+                                Configure the asset IDs for each category (comma-separated):
                             </small>
                             <div class="form-group">
-                                <label>Production Assets (Industrial)</label>
+                                <label>Production (Industrial) Assets</label>
                                 <input type="text" id="sim-production-assets" class="smia-input"
                                        placeholder="e.g., industrial_robot_001,industrial_robot_002">
                             </div>
@@ -1021,7 +1021,7 @@ const SMIA_Builder = {
         </div>`;
 
         // ── Card wrapper ──────────────────────────────────────────
-        const bodyHtml = `<div class="summary-assets-body">
+        const bodyHtml = `<div class="summary-assets-body"${isLocal ? ' style="grid-template-columns: 1fr;"' : ''}>
             ${planSection}
             ${assetsSection}
         </div>`;
