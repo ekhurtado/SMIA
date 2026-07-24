@@ -1543,6 +1543,7 @@ const SMIA_Builder = {
         if (s.plan.hasPlan) {
             const planFileName = s.plan.file ? s.plan.file.name : (s.plan.path || 'plan.aasx');
             k8sFolder.file('deploy-smia-pe.yaml', this._yamlK8sSmiaPe(planFileName, xmppDomain, s.plan.jid, s.plan.password));
+            k8sFolder.file('service-smia-pe.yaml', this._yamlK8sSmiaPeService());
             // Add the plan AAS file into aas/
             if (s.plan.file) aasFolder.file(s.plan.file.name, s.plan.file);
         }
@@ -1799,6 +1800,8 @@ spec:
       containers:
         - name: smia-pe
           image: ekhurtado/smia-tools:latest-smia-pe
+          ports:
+            - containerPort: 10000
           env:
             # AAS_MODEL_NAME: the manufacturing plan AAS file
             - name: AAS_MODEL_NAME
@@ -1819,6 +1822,29 @@ spec:
         - name: nfs-aas-volume
           persistentVolumeClaim:
             claimName: nfs-aas-pvc
+`;
+    },
+
+    /**
+     * Generates a Kubernetes Service YAML (NodePort) to expose SMIA PE.
+     * Maps external port 10010 → container targetPort 10000, exposed on nodePort 31010.
+     *
+     * @returns {string} Service YAML
+     */
+    _yamlK8sSmiaPeService: function () {
+        return `apiVersion: v1
+kind: Service
+metadata:
+  name: smia-pe
+spec:
+  type: NodePort
+  selector:
+    app: smia-pe
+  ports:
+    - name: "10010"
+      port: 10010
+      targetPort: 10000
+      nodePort: 31010
 `;
     },
 
@@ -2199,6 +2225,8 @@ echo "============================================================"
             `${I(3)}- AAS_MODEL_NAME=${aasModelName}\n` +
             `${I(3)}- AGENT_ID=${safeJid}@${xmppDomain}\n` +
             `${I(3)}- AGENT_PSSWD=${s.plan.password}\n` +
+            `${I(2)}ports:\n` +
+            `${I(3)}- "10010:10000"\n` +
             `${I(2)}volumes:\n` +
             `${I(3)}- ./aas:/smia_archive/config/aas\n`;
 
