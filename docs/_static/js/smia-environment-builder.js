@@ -130,6 +130,8 @@ const GITHUB_URLS = {
     //OPERATOR_AASX: 'https://raw.githubusercontent.com/ekhurtado/SMIA/refs/heads/main/additional_tools/extended_agents/smia_operator_agent/SMIA_operator.aasx',
     OPERATOR_AASX: 'https://raw.githubusercontent.com/ekhurtado/SMIA/refs/heads/main/use_cases/simple_human_in_the_mesh/deploy/aas/SMIA_Operator_article.aasx',
     CSS_ONTOLOGY: 'https://raw.githubusercontent.com/ekhurtado/SMIA/refs/heads/main/additional_resources/css_smia_ontology/CSS-ontology-smia.owl',
+    // Assets Simulator HTTP project subfolder in the SMIA repository
+    ASSETS_SIMULATOR_SUBFOLDER: 'additional_tools/assets_simulators/assets_simulator_http',
 };
 
 /* ============================================================
@@ -158,7 +160,13 @@ const SMIA_Builder = {
 
         plan: { hasPlan: false, file: null, path: '' },
         assets: [], // [{ path, file, isExtended, image }]
-        operator: false
+        operator: false,
+        assetsSimulator: {
+            enabled: false,
+            productionAssets: '',
+            mobileAssets: '',
+            humanAssets: ''
+        }
     },
 
     init: function () {
@@ -392,6 +400,46 @@ const SMIA_Builder = {
                             </div>
                         </div>
                     </div>
+
+                    <!-- Assets Simulator section — always visible (local AND docker/k8s) -->
+                    <div id="assets-simulator-section" style="margin-top: 2rem; border-top: 1px solid var(--color-border); padding-top: 2rem;">
+                        <label class="section-label">Assets Simulator</label>
+                        <div class="env-grid" style="grid-template-columns: 1fr; max-width: 320px;">
+                            <div class="toggle-card" id="card-assets-simulator">
+                                <span class="toggle-card-badge"></span>
+                                <input type="checkbox" id="chk-assets-simulator">
+                                <svg viewBox="0 0 64 64" width="44" height="44" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 0.75rem;">
+                                    <rect x="14" y="20" width="36" height="28" rx="4" fill="var(--color-brand-primary)" opacity="0.15" stroke="var(--color-brand-primary)" stroke-width="2"/>
+                                    <circle cx="26" cy="32" r="4" fill="var(--color-brand-primary)"/>
+                                    <circle cx="38" cy="32" r="4" fill="var(--color-brand-primary)"/>
+                                    <line x1="32" y1="12" x2="32" y2="20" stroke="var(--color-brand-primary)" stroke-width="2"/>
+                                    <circle cx="32" cy="10" r="3" fill="var(--color-brand-primary)" opacity="0.5"/>
+                                    <path d="M24 42 h16" stroke="var(--color-brand-primary)" stroke-width="2.5" stroke-linecap="round"/>
+                                </svg>
+                                <strong>Assets Simulator HTTP</strong>
+                            </div>
+                        </div>
+                        <div id="assets-simulator-config" style="display:none; margin-top: 1rem;">
+                            <small style="display:block; margin-bottom: 0.75rem; color: var(--color-foreground-secondary);">
+                                Configure the simulated asset IDs for each category (comma-separated):
+                            </small>
+                            <div class="form-group">
+                                <label>Production Assets (Industrial)</label>
+                                <input type="text" id="sim-production-assets" class="smia-input"
+                                       placeholder="e.g., industrial_robot_001,industrial_robot_002">
+                            </div>
+                            <div class="form-group">
+                                <label>Mobile Assets</label>
+                                <input type="text" id="sim-mobile-assets" class="smia-input"
+                                       placeholder="e.g., mobile_robot_001,agv_002">
+                            </div>
+                            <div class="form-group">
+                                <label>Human Assets</label>
+                                <input type="text" id="sim-human-assets" class="smia-input"
+                                       placeholder="e.g., human_worker_001">
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- ── STEP 4: Review & Generate (interactive) ── -->
@@ -530,6 +578,22 @@ const SMIA_Builder = {
         document.getElementById('chk-operator').addEventListener('change', (e) => {
             this.state.operator = e.target.checked;
             this.updateToggleCardVisual('card-operator', this.state.operator);
+        });
+
+        // ── Step 3: Assets Simulator toggle card ──
+        document.getElementById('card-assets-simulator').addEventListener('click', (e) => {
+            if (e.target.type === 'checkbox') return;
+            const chk = document.getElementById('chk-assets-simulator');
+            chk.checked = !chk.checked;
+            this.state.assetsSimulator.enabled = chk.checked;
+            this.updateToggleCardVisual('card-assets-simulator', this.state.assetsSimulator.enabled);
+            document.getElementById('assets-simulator-config').style.display = chk.checked ? 'block' : 'none';
+        });
+
+        document.getElementById('chk-assets-simulator').addEventListener('change', (e) => {
+            this.state.assetsSimulator.enabled = e.target.checked;
+            this.updateToggleCardVisual('card-assets-simulator', this.state.assetsSimulator.enabled);
+            document.getElementById('assets-simulator-config').style.display = e.target.checked ? 'block' : 'none';
         });
 
         // ── Navigation ──
@@ -677,6 +741,7 @@ const SMIA_Builder = {
             document.getElementById('plan-card-container').style.display = isLocal ? 'none' : 'block';
             //document.getElementById('plan-card-container').style.display = 'block';
             document.getElementById('operator-section').style.display = 'block';
+            document.getElementById('assets-simulator-section').style.display = 'block';
 
             const addBtn = document.getElementById('btn-add-asset');
             if (isLocal) {
@@ -735,6 +800,13 @@ const SMIA_Builder = {
             }
 
             this.state.operator = document.getElementById('chk-operator').checked;
+
+            this.state.assetsSimulator.enabled = document.getElementById('chk-assets-simulator').checked;
+            if (this.state.assetsSimulator.enabled) {
+                this.state.assetsSimulator.productionAssets = document.getElementById('sim-production-assets').value;
+                this.state.assetsSimulator.mobileAssets = document.getElementById('sim-mobile-assets').value;
+                this.state.assetsSimulator.humanAssets = document.getElementById('sim-human-assets').value;
+            }
 
             this.state.assets = [];
             document.querySelectorAll('#assets-list .asset-card').forEach(card => {
@@ -922,11 +994,29 @@ const SMIA_Builder = {
             s.operator ? this._badge('Enabled', 'green') : this._badge('Disabled', 'gray')
         );
 
+        // Assets Simulator row
+        const simulatorRow = this._row(
+            'Assets Simulator',
+            s.assetsSimulator.enabled ? this._badge('Enabled', 'green') : this._badge('Disabled', 'gray')
+        );
+
+        // Assets Simulator details (shown only when enabled)
+        let simulatorDetails = '';
+        if (s.assetsSimulator.enabled) {
+            const simRows = [];
+            if (s.assetsSimulator.productionAssets) simRows.push(this._row('Production', `<code class="summary-val">${s.assetsSimulator.productionAssets}</code>`));
+            if (s.assetsSimulator.mobileAssets) simRows.push(this._row('Mobile', `<code class="summary-val">${s.assetsSimulator.mobileAssets}</code>`));
+            if (s.assetsSimulator.humanAssets) simRows.push(this._row('Human', `<code class="summary-val">${s.assetsSimulator.humanAssets}</code>`));
+            if (simRows.length > 0) simulatorDetails = simRows.join('');
+        }
+
         const assetsSection = `<div class="summary-subsection">
             <div class="summary-subsection-title">Production Assets (${s.assets.length})</div>
             ${assetItems}
             <div style="margin-top: 0.75rem; padding-top: 0.6rem; border-top: 1px dashed var(--color-border);">
                 ${operatorRow}
+                ${simulatorRow}
+                ${simulatorDetails}
             </div>
         </div>`;
 
@@ -1099,6 +1189,11 @@ const SMIA_Builder = {
         // ── SMIA Operator: fetch repo archive and embed into ZIP ──
         if (s.operator) {
             await this._addOperatorToZip(zip, s);
+        }
+
+        // ── Assets Simulator: fetch project files and embed into ZIP ──
+        if (s.assetsSimulator.enabled) {
+            await this._addAssetsSimulatorToZip(zip, s);
         }
 
         // ── Fetch and add CSS-ontology-smia.owl ──
@@ -1356,6 +1451,7 @@ const SMIA_Builder = {
         if (s.xmpp.domain) md += `| XMPP Domain | \`${s.xmpp.domain}\` |\n`;
         if (aasxFilename) md += `| AAS Model File | \`aasx/${aasxFilename}\` |\n`;
         if (s.operator) md += `| SMIA Operator | Enabled |\n`;
+        if (s.assetsSimulator.enabled) md += `| Assets Simulator | Enabled |\n`;
 
         md += `\n## Directory Structure\n\n\`\`\`\n`;
         md += `smia_archive/\n  config/\n    aas/\n    CSS-ontology-smia.owl  ← CSS ontology file\n`;
@@ -1366,6 +1462,7 @@ const SMIA_Builder = {
             md += `docker/\n  Dockerfile           ← Extended SMIA image definition\n  docker_build.sh      ← Build script\n`;
         }
         if (s.operator) md += `smia_operator_agent/ ← SMIA Operator dashboard\n`;
+        if (s.assetsSimulator.enabled) md += `assets_simulator_http/ ← HTTP Assets Simulator\n`;
         md += `README.md\n\`\`\`\n`;
 
         md += `\n## Getting Started\n\n`;
@@ -1392,6 +1489,13 @@ const SMIA_Builder = {
             md += `> **Note:** Since you are running the SMIA Operator locally, you must manually specify the Agent JID and Password in \`smia_operator_agent/smia_operator_starter.py\`.\n\n`;
             md += `After starting the agent, the SMIA Operator web interface will be available at [http://127.0.0.1:10000/smia_operator](http://127.0.0.1:10000/smia_operator)\n\n`;
             md += `\`\`\`bash\ncd smia_operator_agent\npython smia_operator_starter.py\n\`\`\`\n\n`;
+        }
+
+        if (s.assetsSimulator.enabled) {
+            md += `**Assets Simulator (HTTP):**\n`;
+            md += `The Assets Simulator provides an HTTP interface to simulate manufacturing assets.\n\n`;
+            md += `\`\`\`bash\ncd assets_simulator_http\npip install -r docker/requirements.txt\npython main.py\n\`\`\`\n\n`;
+            md += `The simulator web interface will be available at [http://127.0.0.1:5000](http://127.0.0.1:5000)\n\n`;
         }
 
         md += `\n## Resources\n\n`;
@@ -1457,6 +1561,12 @@ const SMIA_Builder = {
             // Download the Operator AASX model from GitHub into aas/
             const operatorAasx = await this._fetchBinaryFile(GITHUB_URLS.OPERATOR_AASX);
             if (operatorAasx) aasFolder.file('SMIA_operator.aasx', operatorAasx);
+        }
+
+        // ── Assets Simulator (Step 3) ──
+        if (s.assetsSimulator.enabled) {
+            k8sFolder.file('deploy-assets-simulator.yaml', this._yamlK8sAssetsSimulator(s));
+            k8sFolder.file('service-assets-simulator.yaml', this._yamlK8sAssetsSimulatorService());
         }
 
         // ── Add AAS model files from production assets into the aas/ folder ──
@@ -2045,6 +2155,16 @@ echo "============================================================"
             if (operatorBlock) services.push(operatorBlock);
         }
 
+        // ── Assets Simulator HTTP ──
+        if (s.assetsSimulator.enabled) {
+            services.push(
+                `  # ----------------------------------------\n` +
+                `  # Assets Simulator (HTTP)\n` +
+                `  # ----------------------------------------`
+            );
+            services.push(this._yamlAssetsSimulator(I, s));
+        }
+
         // ── Inject extra_hosts when using existing XMPP server ──
         let serviceBlocks;
         if (s.xmpp.strategy === 'existing' && s.xmpp.domain && s.xmpp.ip) {
@@ -2264,6 +2384,7 @@ echo "============================================================"
         if (s.plan.hasPlan) md += `| Manufacturing Plan | Included |\n`;
         md += `| Assets | ${s.assets.length} |\n`;
         md += `| SMIA Operator | ${s.operator ? 'Enabled' : 'Disabled'} |\n`;
+        md += `| Assets Simulator | ${s.assetsSimulator.enabled ? 'Enabled' : 'Disabled'} |\n`;
 
         // Running instructions — different for Docker vs Kubernetes
         md += `\n## How to Run\n\n`;
@@ -2401,6 +2522,187 @@ echo "============================================================"
         } else {
             textSpan.textContent = 'Upload AASX File';
             label.classList.remove('has-file');
+        }
+    },
+
+    // ============================================================
+    // ASSETS SIMULATOR BUILDERS
+    // ============================================================
+
+    /**
+     * Generates a Docker Compose service block for the Assets Simulator HTTP.
+     * Uses image ekhurtado/smia-tools:latest-assets-simulator-http.
+     *
+     * @param {Function} I - Indentation helper
+     * @param {object} s  - SMIA_Builder.state
+     * @returns {string} Service YAML block
+     */
+    _yamlAssetsSimulator: function (I, s) {
+        let yaml =
+            `${I(1)}smia-assets-simulator-http:\n` +
+            `${I(2)}image: ekhurtado/smia-tools:latest-assets-simulator-http\n` +
+            `${I(2)}container_name: smia-assets-simulator-http\n` +
+            `${I(2)}ports:\n` +
+            `${I(3)}- "5000:5000"\n` +
+            `${I(2)}environment:\n` +
+            `${I(3)}- PRODUCTION_ASSETS=${s.assetsSimulator.productionAssets}\n` +
+            `${I(3)}- MOBILE_ASSETS=${s.assetsSimulator.mobileAssets}\n` +
+            `${I(3)}- HUMAN_ASSETS=${s.assetsSimulator.humanAssets}\n`;
+        return yaml;
+    },
+
+    /**
+     * Generates a Kubernetes Deployment YAML for the Assets Simulator HTTP.
+     * Uses image ekhurtado/smia-tools:latest-assets-simulator-http.
+     *
+     * @param {object} s - SMIA_Builder.state
+     * @returns {string} Deployment YAML
+     */
+    _yamlK8sAssetsSimulator: function (s) {
+        return `apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: assets-simulator-http
+  labels:
+    app: assets-simulator-http
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: assets-simulator-http
+  template:
+    metadata:
+      labels:
+        app: assets-simulator-http
+    spec:
+      containers:
+        - name: assets-simulator-http
+          image: ekhurtado/smia-tools:latest-assets-simulator-http
+          ports:
+            - containerPort: 5000
+          env:
+            - name: PRODUCTION_ASSETS
+              value: "${s.assetsSimulator.productionAssets}"
+            - name: MOBILE_ASSETS
+              value: "${s.assetsSimulator.mobileAssets}"
+            - name: HUMAN_ASSETS
+              value: "${s.assetsSimulator.humanAssets}"
+`;
+    },
+
+    /**
+     * Generates a Kubernetes Service YAML (NodePort) to expose Assets Simulator HTTP.
+     * Maps port 5000 → targetPort 5000, exposed on nodePort 31500.
+     *
+     * @returns {string} Service YAML
+     */
+    _yamlK8sAssetsSimulatorService: function () {
+        return `apiVersion: v1
+kind: Service
+metadata:
+  name: assets-simulator-http
+spec:
+  type: NodePort
+  selector:
+    app: assets-simulator-http
+  ports:
+    - name: "5000"
+      port: 5000
+      targetPort: 5000
+      nodePort: 31500
+`;
+    },
+
+    /**
+     * Fetches the Assets Simulator HTTP subfolder from the main repository
+     * and adds its contents to the output ZIP under `assets_simulator_http/`,
+     * preserving the internal directory structure.
+     *
+     * Uses the same GitHub Trees API approach as _addOperatorToZip.
+     *
+     * @param {JSZip} zip
+     * @param {object} s
+     */
+    _addAssetsSimulatorToZip: async function (zip, s) {
+        const targetFolder = zip.folder('assets_simulator_http');
+        const prefix = GITHUB_URLS.ASSETS_SIMULATOR_SUBFOLDER + '/';
+
+        // ── Stage 1: Fetch the full repo tree and filter to the simulator subfolder ──
+        let simulatorItems;
+        try {
+            const treeResp = await fetch(GITHUB_URLS.GITHUB_TREE);
+            if (!treeResp.ok) throw new Error(`GitHub Trees API returned HTTP ${treeResp.status}`);
+
+            const treeData = await treeResp.json();
+            if (!treeData.tree || !Array.isArray(treeData.tree)) {
+                throw new Error('Unexpected response format from GitHub Trees API');
+            }
+
+            if (treeData.truncated) {
+                console.warn('[SMIA Builder] GitHub Trees API response was truncated. Some simulator files may be missing.');
+            }
+
+            // Keep only file blobs whose path is inside the simulator subfolder
+            // Exclude .idea/ and other IDE configuration directories
+            simulatorItems = treeData.tree.filter(item =>
+                item.type === 'blob' &&
+                item.path.startsWith(prefix) &&
+                !item.path.includes('/.idea/')
+            );
+
+            if (simulatorItems.length === 0) {
+                throw new Error(`No files found under "${GITHUB_URLS.ASSETS_SIMULATOR_SUBFOLDER}" in the repository tree.`);
+            }
+        } catch (err) {
+            console.warn('[SMIA Builder] Could not fetch assets simulator file tree:', err);
+            targetFolder.file('README.md',
+                `# Assets Simulator HTTP\n\n` +
+                `> ⚠️ Files could not be downloaded automatically.\n\n` +
+                `**Reason:** ${err.message}\n\n` +
+                `Please copy the contents of:\n` +
+                `\`${GITHUB_URLS.ASSETS_SIMULATOR_SUBFOLDER}/\`\n` +
+                `from the SMIA repository into this folder.\n`
+            );
+            return;
+        }
+
+        // ── Stage 2: Fetch each file in parallel, strip the subfolder prefix ──
+        let successCount = 0;
+        let failCount = 0;
+
+        const fetchPromises = simulatorItems.map(item => {
+            const rawUrl = `${GITHUB_URLS.OPERATOR_RAW_BASE}${item.path}`;
+            // Strip the subfolder prefix so ZIP entry is relative
+            const zipPath = item.path.slice(prefix.length);
+
+            return fetch(rawUrl)
+                .then(r => {
+                    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+                    return r.arrayBuffer();
+                })
+                .then(data => {
+                    targetFolder.file(zipPath, data);
+                    successCount++;
+                })
+                .catch(err => {
+                    console.warn(`[SMIA Builder] Failed to fetch: ${item.path} — ${err.message}`);
+                    failCount++;
+                });
+        });
+
+        await Promise.allSettled(fetchPromises);
+
+        console.info(`[SMIA Builder] Assets Simulator: ${successCount} file(s) added, ${failCount} failed.`);
+
+        if (successCount === 0) {
+            targetFolder.file('README.md',
+                `# Assets Simulator HTTP\n\n` +
+                `> ⚠️ All ${failCount} file download(s) failed.\n\n` +
+                `This is usually caused by a network restriction or GitHub rate limiting.\n\n` +
+                `Please copy the contents of:\n` +
+                `\`${GITHUB_URLS.ASSETS_SIMULATOR_SUBFOLDER}/\`\n` +
+                `from the SMIA repository into this folder.\n`
+            );
         }
     },
 };

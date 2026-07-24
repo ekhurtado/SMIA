@@ -141,6 +141,28 @@
     border-color: #2e6d30;
 }
 
+/* Assets Simulator configuration panel (Step 3) */
+#assets-simulator-config {
+    padding: 1.25rem;
+    background: var(--color-background-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    border-left: 4px solid #0288d1;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+[data-theme="dark"] #assets-simulator-config {
+    border-left-color: #29b6f6;
+}
+
+#assets-simulator-config .form-group {
+    margin-bottom: 1rem;
+}
+
+#assets-simulator-config .form-group:last-child {
+    margin-bottom: 0;
+}
+
 .asset-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
