@@ -2,11 +2,11 @@
 
 services:
 
-  smia-kb:
+  smia-i-kb:
     build:
       context: .
-      dockerfile: Dockerfile_SMIA_KB
-    image: ekhurtado/smia-tools:latest-smia-kb
+      dockerfile: Dockerfile_SMIA_I_KB
+    image: ekhurtado/smia-tools:latest-smia-i-kb
     container_name: smia-kb
     ports:
       - '8080:8080'

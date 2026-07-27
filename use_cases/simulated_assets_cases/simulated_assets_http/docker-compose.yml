@@ -108,8 +108,8 @@ services:
       - ./logo:/usr/src/app/dist/Logo
 
   smia-i-kb:
-    image: ekhurtado/smia-tools:latest-smia-kb
-    container_name: smia-kb
+    image: ekhurtado/smia-tools:latest-smia-i-kb
+    container_name: smia-i-kb
     ports:
       - '8090:8080'
     environment:

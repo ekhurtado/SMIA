@@ -120,8 +120,8 @@ xmpp-server:
     retries: 10
 
 smia-i-kb:
-  image: ekhurtado/smia-tools:latest-smia-kb
-  container_name: smia-kb
+  image: ekhurtado/smia-tools:latest-smia-i-kb
+  container_name: smia-i-kb
   ports:
     - '8090:8080'
   environment:
@@ -131,7 +131,7 @@ smia-i-kb:
     aas-env:
       condition: service_healthy
   healthcheck:
-    test: wget --no-verbose --tries=1 --spider http://smia-kb:8080/api/v3/ui/ || exit 1
+    test: wget --no-verbose --tries=1 --spider http://smia-i-kb:8080/api/v3/ui/ || exit 1
     interval: 10s
     timeout: 5s
     retries: 5
@@ -144,7 +144,7 @@ smia-ism:
     - AAS_MODEL_NAME=SMIA_InfrastructureServicesManager.aasx
     - AGENT_ID=smia-ism@ejabberd
     - AGENT_PSSWD=gciscedri1234
-    - SMIA_KB_IP=http://smia-kb:8080
+    - SMIA_KB_IP=http://smia-i-kb:8080
   depends_on:
     xmpp-server:
       condition: service_healthy

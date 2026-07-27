@@ -1655,7 +1655,7 @@ spec:
 
     /**
      * Generates a Kubernetes Deployment YAML for the SMIA-I KB service.
-     * Uses image "ekhurtado/smia-tools:latest-smia-kb".
+     * Uses image "ekhurtado/smia-tools:latest-smia-i-kb".
      * No AAS volume mount needed — this is a standalone knowledge base service.
      *
      * @returns {string} Deployment YAML
@@ -1680,7 +1680,7 @@ spec:
     spec:
       containers:
         - name: smia-i-kb
-          image: ekhurtado/smia-tools:latest-smia-kb
+          image: ekhurtado/smia-tools:latest-smia-i-kb
           ports:
             - containerPort: 8080
 `;

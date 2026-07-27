@@ -49,7 +49,7 @@ The SMIA-I KB exposes a homogeneous and standardized HTTP/REST API following the
 
 .. note::
 
-    The SMIA-I KB server listens on port ``8080`` and exposes the API at the base path ``/api/v3``. It is recommended to containerize it, since it is available as a Docker image under ``ekhurtado/smia-tools:latest-smia-kb``.
+    The SMIA-I KB server listens on port ``8080`` and exposes the API at the base path ``/api/v3``. It is recommended to containerize it, since it is available as a Docker image under ``ekhurtado/smia-tools:latest-smia-i-kb``.
 
 API overview
 ~~~~~~~~~~~~
