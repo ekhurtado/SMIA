@@ -111,8 +111,8 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
             _logger.info("Management of the capability {} finished.".format(cap_name))
 
             # The information will be stored in the log
-            execution_info = {'capName': cap_name, 'capType': str(cap_ontology_instance.is_a),
-                              'result': str(cap_execution_result), 'taskType': 'CapabilityRequest'}
+            # execution_info = {'capName': cap_name, 'capType': str(cap_ontology_instance.is_a),
+            #                   'result': str(cap_execution_result), 'taskType': 'CapabilityRequest'}
             smia_archive_utils.save_completed_svc_log_info(
                 self.requested_timestamp, GeneralUtils.get_current_timestamp(),
                 await inter_smia_interactions_utils.acl_message_to_json(self.received_acl_msg), str(result),

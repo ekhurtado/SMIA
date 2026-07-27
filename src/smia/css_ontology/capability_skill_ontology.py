@@ -29,7 +29,7 @@ class CapabilitySkillOntology:
         self.ontology = get_ontology(CapabilitySkillOntologyUtils.get_ontology_file_path())
         try:
             self.ontology.load()
-        except FileNotFoundError as e:
+        except FileNotFoundError:
             self.ontology = None
             raise CriticalError("The OWL file of the ontology does not exist.")
         except OwlReadyOntologyParsingError as e:

@@ -24,5 +24,5 @@ def check_and_get_ontology_instance(instance_iri):
         if ontology_instance is None:
             return Error(code='404', message='The identifier is not valid, it does not exist an associated ontological instance.')
         return ontology_instance
-    except (UnicodeDecodeError, binascii.Error) as e:
+    except (UnicodeDecodeError, binascii.Error):
         return Error(code='400', message="The identifier is not in base64-url encoded, it is not valid.")

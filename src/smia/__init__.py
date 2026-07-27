@@ -93,7 +93,7 @@ def load_aas_model(file_path):
     # When the AAS model is inside the SMIA archive, it will be checked if it is valid
     try:
         config_file_path = AASModelUtils.get_configuration_file_path_from_standard_submodel()
-        init_config_file_name = ntpath.split(config_file_path)[1] or ntpath.basename(ntpath.split(config_file_path)[0])
+        # init_config_file_name = ntpath.split(config_file_path)[1] or ntpath.basename(ntpath.split(config_file_path)[0])
         config_file_bytes = AASModelUtils.get_file_bytes_from_aasx_by_path(config_file_path)
         properties_file_utils.update_properties_file_by_bytes(config_file_bytes)
         # with open(SMIAGeneralInfo.CONFIGURATION_FOLDER_PATH + '/' + init_config_file_name, "wb") as binary_file:

@@ -361,7 +361,7 @@ class ExtendedRange(Range):
                 formatted_value = int(value)
             # TODO Think about more types
             return True if self.min <= formatted_value <= self.max else False
-        except ValueError as e:
+        except ValueError:
             _logger.error("Value error with data {} of type {} in Range {}".format(value, self.value, self))
             return False
 

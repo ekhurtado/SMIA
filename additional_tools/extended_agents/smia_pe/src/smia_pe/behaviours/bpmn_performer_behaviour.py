@@ -177,6 +177,7 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
             _logger.assetinfo("-----------------> ")
 
             result = await self.execute_acl_rp_css_protocol(current_bpmn_elem)
+            _logger.info("SMIACL request result: {}".format(result))
 
     async def execute_additional_tasks_of_bpmn_element(self, bpmn_element):
         """
