@@ -5,7 +5,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY smia_ism /smia_ism
 
-WORKDIR /smia_ism
+WORKDIR /
 
-CMD ["python3", "-u", "smia_ism_starter.py"]
+ENV PYTHONPATH=/
+
+CMD ["python3", "-u", "smia_ism/smia_ism_starter.py"]
 #CMD [ "tail", "-f", "/dev/null"]
