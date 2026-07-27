@@ -1,0 +1,272 @@
+services:
+  # ----------------------------------------
+  # XMPP Server (Ejabberd)
+  # ----------------------------------------
+  xmpp-server:
+    image: ghcr.io/processone/ejabberd
+    container_name: ejabberd
+    environment:
+      - ERLANG_NODE_ARG=admin@ejabberd
+      - ERLANG_COOKIE=dummycookie123
+      - CTL_ON_CREATE=! register admin localhost asd
+    ports:
+      - "5222:5222"
+      - "5269:5269"
+      - "5280:5280"
+      - "5443:5443"
+    volumes:
+      - ./xmpp_server/ejabberd.yml:/opt/ejabberd/conf/ejabberd.yml
+    healthcheck:
+      test: netstat -nl | grep -q 5222
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ----------------------------------------
+  # AAS Infrastructure services (from BaSyx)
+  # ----------------------------------------
+  aas-env:
+    image: eclipsebasyx/aas-environment:2.0.0-SNAPSHOT
+    container_name: aas-env
+    environment:
+      - SERVER_PORT=8081
+    volumes:
+      - ./aas:/application/aas
+      - ./basyx/aas-env.properties:/application/application.properties
+    ports:
+      - '8081:8081'
+    restart: always
+    depends_on:
+      aas-registry:
+        condition: service_healthy
+      sm-registry:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+
+  aas-registry:
+    image: eclipsebasyx/aas-registry-log-mongodb:2.0.0-SNAPSHOT
+    container_name: aas-registry
+    ports:
+      - '8082:8080'
+    environment:
+      - SERVER_PORT=8080
+    volumes:
+      - ./basyx/aas-registry.yml:/workspace/config/application.yml
+    restart: always
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  sm-registry:
+    image: eclipsebasyx/submodel-registry-log-mongodb:2.0.0-SNAPSHOT
+    container_name: sm-registry
+    ports:
+      - '8083:8080'
+    environment:
+      - SERVER_PORT=8080
+    volumes:
+      - ./basyx/sm-registry.yml:/workspace/config/application.yml
+    restart: always
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  mongo:
+    image: mongo:5.0.10
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongoAdmin
+      MONGO_INITDB_ROOT_PASSWORD: mongoPassword
+    restart: always
+    healthcheck:
+      test: mongo
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  aas-web-ui:
+    image: eclipsebasyx/aas-gui:SNAPSHOT
+    container_name: aas-ui
+    ports:
+      - '3000:3000'
+    environment:
+      AAS_REGISTRY_PATH: http://localhost:8082/shell-descriptors
+      SUBMODEL_REGISTRY_PATH: http://localhost:8083/submodel-descriptors
+      AAS_REPO_PATH: http://localhost:8081/shells
+      SUBMODEL_REPO_PATH: http://localhost:8081/submodels
+      CD_REPO_PATH: http://localhost:8081/concept-descriptions
+      AAS_DISCOVERY_PATH: http://localhost:8084/lookup/shells
+      PRIMARY_COLOR: '#347EE1'
+      LOGO_PATH: SMIA_logo.ico
+    restart: always
+    depends_on:
+      aas-env:
+        condition: service_healthy
+    volumes:
+      - ./logo:/usr/src/app/dist/Logo
+
+  smia-i-kb:
+    image: ekhurtado/smia-tools:latest-smia-kb
+    container_name: smia-kb
+    ports:
+      - '8090:8080'
+    environment:
+      - AAS_ENV_IP=http://aas-env:8081
+      #- SELF_EXTRACT_CSS=yes
+    depends_on:
+      aas-env:
+        condition: service_healthy
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://smia-kb:8080/api/v3/ui/ || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  smia-ism:
+    image: ekhurtado/smia-tools:latest-smia-ism
+    container_name: smia-ism
+    environment:
+      - AAS_MODEL_NAME=SMIA_InfrastructureServicesManager.aasx
+      - AGENT_ID=smia-ism@ejabberd
+      - AGENT_PSSWD=gciscedri1234
+      - SMIA_KB_IP=http://smia-kb:8080
+    depends_on:
+      xmpp-server:
+        condition: service_healthy
+      smia-i-kb:
+        condition: service_healthy
+    healthcheck:
+      test: exit 0
+      start_period: 15s
+    volumes:
+      - ./aas:/smia_archive/config/aas
+      
+  smia-assets-simulator-http:
+    image: ekhurtado/smia-tools:latest-assets-simulator-http
+    ports:
+      - '5000:5000'
+    environment:
+      - PRODUCTION_ASSETS=assetID/industrialRobot001,assetID/industrialRobot002
+      - MOBILE_ASSETS=assetID/mobileRobot001,assetID/mobileRobot002
+      - HUMAN_ASSETS=assetID/humanWorker001
+    container_name: smia-assets-simulator-http
+
+  # ----------------------------------------
+  # SMIA Agents
+  # ----------------------------------------
+  smia-industrial-robot-1:
+    image: ekhurtado/smia:latest-alpine
+    container_name: smia-industrial-robot-1
+    environment:
+      - AAS_MODEL_NAME=SimulatedAssetHTTP_IndustrialRobot_1.aasx
+      - AGENT_ID=industrial_robot_001@ejabberd
+      - AGENT_PSSWD=gcis1234
+      - SMIAI_KB_REGISTRATION=TRUE
+    volumes:
+      - ./aas:/smia_archive/config/aas
+    depends_on:
+      xmpp-server:
+        condition: service_healthy
+      smia-ism:
+        condition: service_healthy
+    
+  smia-industrial-robot-2:
+    image: ekhurtado/smia:latest-alpine
+    container_name: smia-industrial-robot-2
+    environment:
+      - AAS_MODEL_NAME=SimulatedAssetHTTP_IndustrialRobot_2.aasx
+      - AGENT_ID=industrial_robot_002@ejabberd
+      - AGENT_PSSWD=gcis1234
+      - SMIAI_KB_REGISTRATION=TRUE
+    volumes:
+      - ./aas:/smia_archive/config/aas
+    depends_on:
+      xmpp-server:
+        condition: service_healthy
+      smia-ism:
+        condition: service_healthy
+        
+  smia-mobile-robot-1:
+    image: ekhurtado/smia:latest-alpine
+    container_name: smia-mobile-robot-1
+    environment:
+      - AAS_MODEL_NAME=SimulatedAssetHTTP_MobileRobot_1.aasx
+      - AGENT_ID=mobile_robot_001@ejabberd
+      - AGENT_PSSWD=gcis1234
+      - SMIAI_KB_REGISTRATION=TRUE
+    volumes:
+      - ./aas:/smia_archive/config/aas
+    depends_on:
+      xmpp-server:
+        condition: service_healthy
+      smia-ism:
+        condition: service_healthy
+     
+  smia-mobile-robot-2:
+    image: ekhurtado/smia:latest-alpine
+    container_name: smia-mobile-robot-2
+    environment:
+      - AAS_MODEL_NAME=SimulatedAssetHTTP_MobileRobot_2.aasx
+      - AGENT_ID=mobile_robot_002@ejabberd
+      - AGENT_PSSWD=gcis1234
+      - SMIAI_KB_REGISTRATION=TRUE
+    volumes:
+      - ./aas:/smia_archive/config/aas
+    depends_on:
+      xmpp-server:
+        condition: service_healthy
+      smia-ism:
+        condition: service_healthy
+        
+  smia-human-worker-1:
+    image: ekhurtado/smia:latest-alpine
+    container_name: smia-human-worker-1
+    environment:
+      - AAS_MODEL_NAME=SimulatedAssetHTTP_Human_1.aasx
+      - AGENT_ID=human_worker_001@ejabberd
+      - AGENT_PSSWD=gcis1234
+      - SMIAI_KB_REGISTRATION=TRUE
+    volumes:
+      - ./aas:/smia_archive/config/aas
+    depends_on:
+      xmpp-server:
+        condition: service_healthy
+      smia-ism:
+        condition: service_healthy
+
+  smia-pe-1:
+    image: ekhurtado/smia-tools:latest-smia-pe
+    container_name: smia-pe-1
+    environment:
+      - AAS_MODEL_NAME=SimulatedAssetsHTTP_Plan_1.aasx
+      - AGENT_ID=smia-pe-1@ejabberd
+      - AGENT_PSSWD=1234
+      - WORKFLOW_AUTOSTART=False
+    ports:
+      - 10010:10000
+    volumes:
+      - ./aas:/smia_archive/config/aas
+    depends_on:
+      xmpp-server:
+        condition: service_healthy
+      smia-ism:
+        condition: service_healthy
+
+
+  smia-operator:
+      image: ekhurtado/smia-tools:latest-smia-operator
+      container_name: smia-operator
+      environment:
+        - AAS_MODEL_NAME=SMIA_operator.aasx
+        - AGENT_ID=operator001@ejabberd
+        - AGENT_PSSWD=gcis1234
+      depends_on:
+        xmpp-server:
+          condition: service_healthy
+      volumes:
+        - ./aas:/smia_archive/config/aas
+      ports:
+        - 10000:10000
