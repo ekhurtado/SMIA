@@ -2,6 +2,47 @@
 
 (Release Notes)=
 
+## 0.3.5
+
+This release of Self-configurable Manufacturing Industrial Agents (SMIA) includes some improvements to additional tools of the SMIA ecocystem, as well as fixes for some bugs and errors throughout the project.
+
+> SMIA: All Python files structured in Python modules.
+> - It includes the launcher files to run the software in the ``launchers`` module: _smia_cli_starter.py_, _smia_starter.py_ and _smia_docker_starter.py_.
+
+### Features
+
+- Added new aCSS-enriched AAS models: in this case for industrial robot as simulated asset via HTTP.
+- Improvements to SMIA additional tool: assets simulator for HTTP-based assets. 
+  - Added Docker files for the generation and deployment of its container.
+  - Graphical interface improvements: Added options to minimize and maximize the sidebar, and fixed the display of asset status (it is now responsive).
+  - Now the battery for automated assets is distinguished from stamina for humans, with ``recharge`` for the former and ``recovery`` for the latter.
+- Improvements to SMIA Environment Builder tool within ReadTheDocs platform. 
+  - Asset simulators have been included in the environment generation process (currently, the only one developed is HTTP).
+  - Improved Asset simulators within local environments (now the specified assets IDs are included in the source code).
+
+
+### Major Changes
+
+- Improved SMIA additional tool: assets simulator for HTTP-based assets. 
+  - Now the assets can be charged (``charge``) without a body within the HTTP request (they are fully charged).
+  - Improved animations for mobile robots and added transportation task also for human.
+- Removed old code (related to performance tests) from SMIA PE additional tool (extended agent) source code.
+
+
+### Fixed errors
+
+- Fixed errors in SMIA additional tool: assets simulator for HTTP-based assets. 
+  - An issue with retrieving the assetID has been fixed. Since it is retrieved from the URL, it has been added as a path to retrieve it in its entirety.
+- Fixed bugs and errors in SMIA asset connection classes: 
+  - The URI for the asset interface was obtained without cleaning the URi. Now it is used ``strip`` to remove leading and tralining spaces to allow semi-valid URIs.
+  - Fixed an error in HTTP asset connection within SMIA source code: request params and body were not reset with each request (the value from the previous request was retained).
+- Fixed an error obtaining the response content from a message from the asset after executing an asset service. Now if ``dataQuery`` element in defined but with empty value, it is not considered to extract the information from the response.
+- Fixed Docker container generation of SMIA PE additional tool. Due to the previous generic modification to the import of the ``smia_pe`` package, the Dockerfile had to be modified to specify the PYTHONPATH.
+- Fixed error in ``get_safe_env_var()`` within ``DockerUtils`` of SMIA: with boolean environment variables it always returns True because the variable value is obtained in string, so ``bool(string)=True``.
+- Fixed SMIA Environment Builder tool within ReadTheDocs platform. 
+  - Fixed error when saving agent JID for each SMIA agent defined in Step 3.
+  - Fixed error when saving agent JID for each SMIA agent defined in Step 3 (a ``smia-`` prefix was added in JID, now it is only added in container name).
+
 ## v0.3.4
 
 This release of Self-configurable Manufacturing Industrial Agents (SMIA) comes with an significant upgrade of ... en la plataforma de documentación alojada en la plataforma ReadTheDocs, especificamente en relacion con los componentes del ecosistema SMIA. It also includes improvements to the source code's efficiency by removing obsolete code and comments.
