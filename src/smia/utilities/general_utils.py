@@ -307,7 +307,9 @@ class CLIUtils:
                     binary_file.write(config_file_bytes)
                 SMIAGeneralInfo.CM_GENERAL_PROPERTIES_FILENAME = init_config_file_name
 
+
 _logger = logging.getLogger(__name__)
+
 
 class DockerUtils:
     """This class contains utility methods related to SMIA execution in Docker containers."""

@@ -96,7 +96,7 @@ class GUIFeatures:
         Returns:
             web.FileResponse: response to the web browser.
         """
-        favicon_path = os.path.join(GUIFeatures.FAVICON_PATH)
+        # favicon_path = os.path.join(GUIFeatures.FAVICON_PATH)
         return web.FileResponse(GUIFeatures.FAVICON_PATH)
 
     @staticmethod
@@ -135,7 +135,6 @@ class GUIFeatures:
                 elems_to_analyze = [process_parser.get_spec().start]
                 analyzed_elems = []
                 while len(elems_to_analyze) > 0:
-                # while True:
                     current_elem = elems_to_analyze.pop()
                     if current_elem not in analyzed_elems:
                         if isinstance(current_elem, StartTask):

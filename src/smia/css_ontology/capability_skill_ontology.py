@@ -165,7 +165,7 @@ class CapabilitySkillOntology:
         range_instance = await self.get_ontology_instance_by_name(range_object_name)
         try:
             getattr(domain_instance, object_property_name).append(range_instance)
-        except AttributeError as e:
+        except AttributeError:
             raise OntologyReadingError("ERROR: The class {} does not have the attribute {}".format(domain_instance, object_property_name))
 
     async def check_instance_by_name(self, instance_name):

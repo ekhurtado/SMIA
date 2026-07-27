@@ -160,8 +160,8 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
             _logger.info("Checking of the capability {} finished with result {}.".format(cap_name, result))
 
             # The information will be stored in the log
-            execution_info = {'capName': cap_name, 'capType': str(cap_ontology_instance.is_a),
-                              'result': str(result), 'reason': reason, 'taskType': 'CapabilityChecking'}
+            # execution_info = {'capName': cap_name, 'capType': str(cap_ontology_instance.is_a),
+            #                   'result': str(result), 'reason': reason, 'taskType': 'CapabilityChecking'}
             smia_archive_utils.save_completed_svc_log_info(
                 self.requested_timestamp, GeneralUtils.get_current_timestamp(),
                 await inter_smia_interactions_utils.acl_message_to_json(self.received_acl_msg), str(result),
@@ -440,7 +440,7 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
                 skill_execution_result = await self.myagent.agent_services.execute_agent_service_by_id(
                     aas_skill_interface_elem.id_short, **received_skill_input_data)
 
-            except (KeyError, ValueError) as e:
+            except (KeyError, ValueError):
                 raise CapabilityRequestExecutionError(self.received_acl_msg.thread,
                                                       cap_instance.name, "The requested capability {} cannot be "
                                                       "executed because the agent service {} cannot be successfully "

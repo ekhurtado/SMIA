@@ -113,7 +113,7 @@ async def generate_json_from_schema(schema: dict, **kwargs) -> dict:
     # Validate final message
     try:
         await check_received_request_data_structure(json_object, schema)
-    except RequestDataError as e:
+    except RequestDataError:
         _logger.warning('A JSON object cannot be created using the schema. Check the failed code.')
         return None
 

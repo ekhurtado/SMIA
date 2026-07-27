@@ -84,7 +84,7 @@ class ExtendedQualifiable(Qualifiable):
                     qualifier_type_value, self), self, 'KeyError in qualifiers')
             else:
                 return qualifier_object.value
-        except KeyError as e:
+        except KeyError:
             raise AASModelReadingError("Qualifier type {} not found in the element {}".format(
                 qualifier_type_value, self), self, 'KeyError in qualifiers')
 
@@ -110,6 +110,6 @@ class ExtendedQualifiable(Qualifiable):
                 raise AASModelReadingError("Qualifier with semanticID {} not found in the element {}".format(
                     qualifier_semantic_id, self), self, 'SemanticIDError in qualifiers')
 
-        except KeyError as e:
+        except KeyError:
             raise AASModelReadingError("Qualifier with semanticID {} not found in the element {}".format(
                 qualifier_semantic_id, self), self, 'KeyError in qualifiers')

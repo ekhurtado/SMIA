@@ -5,7 +5,7 @@ class AASRepositoryInfrastructureInfo:
         Class to store server connection information with dynamic URL generation.
         """
     # Default values
-    _AAS_HOST_IP_ADDRESS = 'http://192.168.186.129'  # TODO DE MOMENTO ESTA LA IP DE LA MAQUINA VIRTUAL. PENSARLO SI AÑADIRLO DE FORMA QUE SEA PARAMETRIZABLE (p.e. con variable de entorno para Docker)
+    _AAS_HOST_IP_ADDRESS = 'http://192.168.186.129'  # TODO ESTA LA IP DE LA MAQUINA VIRTUAL
     _AAS_REPOSITORY_PORT = 8081
     _SELF_EXTRACT_CSS_FROM_AAS = False
 

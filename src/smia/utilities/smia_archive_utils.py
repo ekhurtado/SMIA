@@ -176,7 +176,7 @@ def copy_file_into_archive(source_file, dest_file):
         dest_file = SMIAGeneralInfo.SMIA_ARCHIVE_PATH + '/' + dest_file
     try:
         shutil.copy(source_file, dest_file)
-    except SameFileError as e:
+    except SameFileError:
         _logger.info("The {} file is already in SMIA archive.".format(source_file))
 
 
