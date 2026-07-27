@@ -5,9 +5,9 @@ import smia
 from smia.agents.extensible_smia_agent import ExtensibleSMIAAgent
 from smia.utilities.general_utils import DockerUtils
 
-from behaviours.receive_acl_behaviour import ReceiveACLBehaviour
-from behaviours.smia_hi_gui_behaviour import SMIAHIGUIBehaviour
-from logic.smia_hi_agent_services import SMIAHIAgentServices
+from smia_hi.behaviours.receive_acl_behaviour import ReceiveACLBehaviour
+from smia_hi.behaviours.smia_hi_gui_behaviour import SMIAHIGUIBehaviour
+from smia_hi.logic.smia_hi_agent_services import SMIAHIAgentServices
 
 _logger = logging.getLogger(__name__)
 
