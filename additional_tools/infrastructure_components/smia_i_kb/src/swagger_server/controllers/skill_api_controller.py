@@ -15,7 +15,7 @@ def delete_skill_by_id(skill_identifier, api_key=None):  # noqa: E501
 
     Deletes a skill related to the SMIA-CSS model. # noqa: E501
 
-    :param skill_identifier: Pet id to delete
+    :param skill_identifier: Skill id to delete
     :type skill_identifier: int
     :param api_key: 
     :type api_key: str
@@ -32,7 +32,7 @@ def delete_skill_parameter_by_skill_id(skill_parameter_identifier, skill_identif
 
     :param skill_parameter_identifier: The Skill parameter&#x27;s unique id
     :type skill_parameter_identifier: str
-    :param skill_identifier: Pet id to delete
+    :param skill_identifier: Skill id to delete
     :type skill_identifier: int
     :param api_key: 
     :type api_key: str
