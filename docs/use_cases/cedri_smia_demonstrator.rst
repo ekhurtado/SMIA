@@ -68,7 +68,7 @@ For human operators, as control is performed via a web graphical user interface 
 
 .. note::
 
-    The SMIA HI can be used via its Docker image: :bdg-primary:`ekhurtado/smia-tools:latest-smia-hi`. Its source code is also available at `<https://github.com/ekhurtado/SMIA/tree/main/additional_tools/smia_hi>`_.
+    The SMIA HI can be used via its Docker image: :bdg-primary:`ekhurtado/smia-tools:latest-smia-hi`. Its source code is also available at `<https://github.com/ekhurtado/SMIA/tree/main/additional_tools/extended_agents/smia_hi>`_.
 
 Deployment of the use case
 --------------------------
