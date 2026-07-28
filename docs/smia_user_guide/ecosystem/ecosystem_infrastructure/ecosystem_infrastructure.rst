@@ -12,6 +12,7 @@ This collection of user guides provides information about supporting infrastruct
     ecosystem_camunda_modeler
     ecosystem_smia_i_kb
     ecosystem_smia_ism
+    ecosystem_assets_simulator
 
 AASX Package Explorer
 ---------------------
@@ -47,4 +48,11 @@ SMIA-ISM (Infrastructure Services Manager) bridges the gap between the normalize
 
     The guide for SMIA ISM is available at :octicon:`repo;1em` :ref:`SMIA ecosystem SMIA ISM`.
 
+
+Asset Simulators
+----------------
+
+Asset Simulators provide mock environments representing physical and human assets for local testing and verification of SMIA agents.
+
+    The guide for Asset Simulators is available at :octicon:`repo;1em` :ref:`SMIA ecosystem Assets Simulators`.
 
