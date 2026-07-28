@@ -9,6 +9,10 @@ This use case represents a flexible production scenario, in which some different
 
     All the resources developed in the case study are available in the `SMIA repository on GitHub <https://github.com/ekhurtado/SMIA/tree/cedri_ipb_demonstrator/use_cases/cedri_ipb_demonstrator>`_. The use case was validated with SMIA version :bdg-primary:`0.3.0`.
 
+.. seealso::
+
+    A video demonstration of this use case is available in the :octicon:`video;1em` `SMIA YouTube playlist <https://youtube.com/playlist?list=PLs6bFF_iqW3HEwYAFOMHvW0xEngXnVF9K&si=UqWwelA3RO8C2A1u>`_, specifically the video titled **"Flexible manufacturing through modularization: from reference models to agent execution"**.
+
 
 Description of the use case
 ---------------------------
