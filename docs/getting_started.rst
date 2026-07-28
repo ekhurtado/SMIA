@@ -133,8 +133,9 @@ New to SMIA? This section will guide you through getting started with the softwa
 
     - **Guided Tutorial:** Follow the :octicon:`repo;1em` :ref:`Step-by-step tutorials <Guided tutorials>` to achieve comprehensive implementation cases.
     - **Extend SMIA:** Read the :octicon:`repo;1em` :ref:`SMIA Extension Guide` to add new logic: custom agent capabilities, services, or asset connections.
-    - **Analyze Use Cases:** Check :octicon:`repo;1em` :ref:`SMIA Use Cases` to see real-world applications
+    - **Analyze Use Cases:** Check :octicon:`repo;1em` :ref:`SMIA Use Cases` to see real-world applications.
     - **Explore the Ecosystem:** Look into the :octicon:`repo;1em` :ref:`SMIA ecosystem` for additional resources and tools available.
+        - Start with simulated assets for initial full-scale local environments: :octicon:`repo;1em` :ref:`SMIA ecosystem Assets Simulators`.
 
 Documentation project structure
 -------------------------------
