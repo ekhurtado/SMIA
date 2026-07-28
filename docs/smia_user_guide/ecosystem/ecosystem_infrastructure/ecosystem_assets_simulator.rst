@@ -40,6 +40,22 @@ The Assets Simulator HTTP can be deployed by configuring environment variables t
 
 The server listens on port ``5000`` and can be started locally via the main Python script (``python main.py``).
 
+Automated deployment
+^^^^^^^^^^^^^^^^^^^^
+
+A valid virtualized environment containing the HTTP Asset Simulator can be easily generated using the tool provided in this documentation platform: :octicon:`repo;1em` :ref:`SMIA Environment Builder`. To achieve the desired result, in step 3 the simulator must be selected along with the assets, and the specific identifiers for each asset type must be defined.
+
+Alternatively, a ready-to-deploy environment is available in the SMIA repository. It includes valid CSS-enriched AAS models (located inside the ``/aas`` folder) and can be easily launched using Docker Compose (``docker compose up``).
+
+.. dropdown:: Link to ready-to-deploy simulated environment
+       :octicon:`link;1em;sd-text-primary`
+
+       .. button-link:: https://github.com/ekhurtado/SMIA/tree/main/use_cases/simulated_assets_cases/simulated_assets_http
+            :color: primary
+            :outline:
+
+            :octicon:`mark-github;1em` Simulated HTTP Assets Environment
+
 
 Interface and Interaction
 ~~~~~~~~~~~~~~~~~~~~~~~~~
