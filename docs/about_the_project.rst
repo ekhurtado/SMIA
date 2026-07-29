@@ -18,7 +18,7 @@ The website of the research group is available at `<https://ehu-gcis.org/>`_.
 Contact
 -------
 
-The PhD student responsible of the project, and therefore the development lead, is Ekaitz Hurtado.
+The PhD responsible of the project, and therefore the development lead, is Ekaitz Hurtado.
 
 .. admonition:: Contact information
     :class: seealso
