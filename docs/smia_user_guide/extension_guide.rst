@@ -5,6 +5,13 @@ SMIA Extension Guide
 
 The objective of this guide is to assist in the extension of SMIA through the different extension mechanisms offered. The goal of SMIA extensibility, understood as the introduction of new functionalities without modifying the underlying base, is to provide future enhancements in the form of increased autonomy and intelligence and greater adaptability to new use cases.
 
+
+.. seealso::
+
+    A visual support for this guide is available in the :octicon:`video;1em` `SMIA YouTube playlist <https://youtube.com/playlist?list=PLs6bFF_iqW3HEwYAFOMHvW0xEngXnVF9K&si=UqWwelA3RO8C2A1u>`_, specifically the video titled **"SMIA tutorial: using the extension mechanisms"**.
+
+
+
 To this end, the different SMIA extension mechanisms try to offer extensibility in three key aspects of the approach:
 
 - Defining and adding **new connections to the asset** (i.e., new communication protocols): in order to be able to integrate as many assets as possible.

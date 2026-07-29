@@ -12,6 +12,13 @@ This guide is focused on the development of the :term:`AAS` model.
 
 The development of the AAS model will be realized using the :ref:`AASX Package Explorer`, so it is necessary to open this program.
 
+
+.. seealso::
+
+    A visual support for this guide is available in the :octicon:`video;1em` `SMIA YouTube playlist <https://youtube.com/playlist?list=PLs6bFF_iqW3HEwYAFOMHvW0xEngXnVF9K&si=UqWwelA3RO8C2A1u>`_, specifically the video titled **"SMIA tutorial: CSS-enriched AAS development and deployment"**.
+
+
+
 Building the AAS environment
 ----------------------------
 
