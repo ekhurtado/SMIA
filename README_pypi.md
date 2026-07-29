@@ -29,7 +29,7 @@ The Self-configurable Manufacturing Industrial Agents (SMIA) is a proposal for t
 > 💡 **TIP:**
 > For more details on Self-configurable Manufacturing Industrial Agents (SMIA) see the [📄 **full documentation**](https://smia.readthedocs.io/en/latest/).
 
-The development of the SMIA approach is addressed by Ekaitz Hurtado as part of a PhD thesis in the Systems Control and Integration (GCIS) research group at the University of the Basque Country (EHU).
+The SMIA approach originated as part of a PhD thesis addressed by Ekaitz Hurtado in the Systems Control and Integration (GCIS) research group at the University of the Basque Country (EHU). Following the completion of the thesis, the framework remains under active and continuous development to expand its ecosystem and enhance its industrial maturity.
 
 > ℹ️ **IMPORTANT:**
 > The SMIA software is developed as part of scientific research. If you use SMIA in scientific works, please cite the following articles.
@@ -47,10 +47,8 @@ The development of the SMIA approach is addressed by Ekaitz Hurtado as part of a
 ## Usage
 
 > ❗ **IMPORTANT:**
-> The project is currently under active development, 
-> so new features and bug fixes will be introduced continuously.
-> Therefore, although SMIA is not yet an industry-ready implementation,
-> validations of the approach with different use cases will be conducted during its development.
+> The SMIA reference framework is under active and continuous development, regularly introducing new features, architectural improvements, and bug fixes. 
+> Ongoing experimental validations and new industrial use cases continue to be integrated as the ecosystem evolves.
  
 Multiple ways of running SMIA software are available. The associated GitHub repository shows how to run the base SMIA software.
 

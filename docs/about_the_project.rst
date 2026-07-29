@@ -3,7 +3,7 @@ About the Project
 
 .. _About the Project:
 
-The Self-configurable Manufacturing Industrial Agents (SMIA) project represents the ongoing development of a solution that aims to achieve a  a proposal for the implementation of the concept of the I4.0 Component from the Reference Architectural Model Industrie 4.0 (RAMI 4.0) as an AAS-compliant agent-based Digital Twin (DT). This development is performed within a PhD thesis at the University of the Basque Country (EHU), specifically in the Systems Control and Integration (GCIS) research group.
+The Self-configurable Manufacturing Industrial Agents (SMIA) project represents the ongoing development of a proposal for the implementation of the concept of the I4.0 Component from the Reference Architectural Model Industrie 4.0 (RAMI 4.0) as an AAS-compliant agent-based Digital Twin (DT). The project originated as part of a PhD thesis by Ekaitz Hurtado in the Systems Control and Integration (GCIS) research group at the University of the Basque Country (EHU), and continues its active development.
 
 The website of the research group is available at `<https://ehu-gcis.org/>`_.
 
@@ -12,7 +12,8 @@ The website of the research group is available at `<https://ehu-gcis.org/>`_.
 
 .. important::
 
-    At the moment there is no final version available for the SMIA. The project is currently under development. Therefore, SMIA is not a ready-to-use implementation. New features and bug fixes will be uploaded during development.
+    The SMIA reference framework is under active and continuous development, regularly introducing new features, architectural improvements, and bug fixes. Ongoing experimental validations and new industrial use cases continue to be integrated as the ecosystem evolves.
+
 
 Contact
 -------
