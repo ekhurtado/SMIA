@@ -36,6 +36,12 @@ Additionally, the following links refer to all the own resources of the SMIA app
 
             :octicon:`container;1em` Official SMIA Docker Hub repository
 
+.. button-link:: https://youtube.com/playlist?list=PLs6bFF_iqW3HEwYAFOMHvW0xEngXnVF9K&si=UqWwelA3RO8C2A1u
+            :color: primary
+            :outline:
+
+            :octicon:`video;1em` Official SMIA YouTube playlist
+
 External links
 --------------
 
