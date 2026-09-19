@@ -64,7 +64,7 @@ Development Environment
 Before starting the code development part of the tutorial, it is necessary to verify that all resources are ready:
 
 1. **AASX Package Explorer:** Required for the development of the CSS-enriched AAS model. To achieve this, you can follow the `SMIA installation guide <https://smia.readthedocs.io/en/latest/smia_user_guide/installation_guide.html#aasx-package-explorer>`_.
-2. **Docker Compose:**The deployment will be conducted using Docker Compose to obtain a self-contained environment with the entire SMIA platform. It can be downloaded from its `official website <https://docs.docker.com/compose/install/>`_.
+2. **Docker Compose:** The deployment will be conducted using Docker Compose to obtain a self-contained environment with the entire SMIA platform. It can be downloaded from its `official website <https://docs.docker.com/compose/install/>`_.
 3. **SMIA package:** If you want to develop extended code and create an extended agent. To achieve this, you can follow the `SMIA installation guide <https://smia.readthedocs.io/en/latest/smia_user_guide/installation_guide.html#smia-source-code>`_.
 4. **Infrastructure:** The entire SMIA platform infrastructure will be deployed using Docker, so there is no need to install anything else. However, a web browser is required to access the graphical interfaces of the infrastructure components.
 
@@ -72,6 +72,8 @@ Before starting the code development part of the tutorial, it is necessary to ve
 First Phase: Generate the CSS-enriched AAS model
 ------------------------------------------------
 
+
+In the first phase, we will generate the CSS-enriched AAS model that will allow the SMIA agent to self-configure and obtain all information related to the simulated asset it will represent. This same process can be applied to the three types of simulated assets. The steps to follow to generate the model from scratch are as follows:
 .. TODO
 
 
