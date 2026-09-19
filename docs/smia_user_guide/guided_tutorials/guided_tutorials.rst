@@ -1,7 +1,8 @@
+.. _Guided tutorials:
+
 Step-by-step tutorials
 ======================
 
-.. _Guided tutorials:
 
 These step-by-step guides are a comprehensive resource for fully understand the :term:`SMIA` approach.
 

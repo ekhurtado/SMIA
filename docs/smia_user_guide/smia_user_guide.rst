@@ -53,4 +53,20 @@ SMIA can be extended to add custom code to the offered base, in order to add mor
     The guide is available at :octicon:`repo;1em` :ref:`SMIA Extension Guide`.
 
 
+Step-by-step tutorials
+----------------------
+
+To fully understand the SMIA approach, detailed step-by-step tutorials are provided.
+
+    The guide is available at :octicon:`repo;1em` :ref:`Guided tutorials`.
+
+
+SMIA ecosystem
+--------------
+
+The complete SMIA ecosystem offers a variety of distributed agents and infrastructure components to support its use and ensure its proper functioning. Each element of the ecosystem is described in detail in its own guide.
+
+    The guide is available at :octicon:`repo;1em` :ref:`SMIA ecosystem infrastructure`.
+
+
 
