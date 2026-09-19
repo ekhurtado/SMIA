@@ -5,6 +5,10 @@ SMIA ecosystem: Assets Simulators
 
 Asset Simulators are testing and validation infrastructure components designed for the SMIA ecosystem. These simulators provide mock endpoints and environments representing physical and human assets (such as production robots, mobile robots, and human operators) to enable local testing, verification, and validation of SMIA agents functionality without requiring physical hardware. They expose physical capabilities and states, allowing agents to interact with virtual assets in a homogeneous manner, ensuring robust and reliable testing of the ecosystem.
 
+.. figure:: ../../../_static/images/SMIA_Assets_Simulator.jpg
+   :width: 400
+   :alt: SMIA Assets Simulator icon
+
 HTTP Asset Simulator
 --------------------
 
