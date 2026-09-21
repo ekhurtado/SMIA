@@ -60,14 +60,14 @@ To construct the SPADE message, the FIPA-ACL parameters must be properly placed 
 - ``Message.metadata`` = protocol, performative, ontology, encoding, language
 - ``Message.body`` = content // body
 
-- La clase ``smia.utilities.fipa_acl_info.FIPAACLInfo`` (ver :octicon:`repo;1em` :ref:`API documentation`) recoge los atributos y valores dictaminados por FIPA:
-    - Los atributos para la estrucura del mensaje (para añadir o extraer información específica): ``FIPA_ACL_PERFORMATIVE_ATTRIB``, ``FIPA_ACL_ONTOLOGY_ATTRIB``, ``FIPA_ACL_PROTOCOL_ATTRIB``, ``FIPA_ACL_ENCODING_ATTRIB``, ``FIPA_ACL_LANGUAGE_ATTRIB``
-    - Los valores para las performativas dictaminadas por FIPA-ACL se puede obtener desde ``FIPA_ACL_PERFORMATIVE_x``: ``FIPA_ACL_PERFORMATIVE_CFP``, ``FIPA_ACL_PERFORMATIVE_INFORM``, ``FIPA_ACL_PERFORMATIVE_REQUEST``, ``FIPA_ACL_PERFORMATIVE_PROPOSE``, etc.
-    - Los valores para los protocolos dictaminados por FIPA: ``FIPA_ACL_REQUEST_PROTOCOL``, ``FIPA_ACL_CONTRACT_NET_PROTOCOL``, ``FIPA_ACL_QUERY_PROTOCOL``
-- La clase ``smia.utilities.fipa_acl_info.ACLSMIAOntologyInfo`` (ver :octicon:`repo;1em` :ref:`API documentation`) recoge el SMIA Ontology Library:
+- The class ``smia.utilities.fipa_acl_info.FIPAACLInfo`` (see :octicon:`repo;1em` :ref:`API documentation`) contains the attributes and values specified by FIPA:
+    - Attributes for the message structure (to add or extract specific information): ``FIPA_ACL_PERFORMATIVE_ATTRIB``, ``FIPA_ACL_ONTOLOGY_ATTRIB``, ``FIPA_ACL_PROTOCOL_ATTRIB``, ``FIPA_ACL_ENCODING_ATTRIB``, ``FIPA_ACL_LANGUAGE_ATTRIB``
+    - Values for the performatives defined by FIPA-ACL can be obtained from ``FIPA_ACL_PERFORMATIVE_x``: ``FIPA_ACL_PERFORMATIVE_CFP``, ``FIPA_ACL_PERFORMATIVE_INFORM``, ``FIPA_ACL_PERFORMATIVE_REQUEST``, ``FIPA_ACL_PERFORMATIVE_PROPOSE``, etc.
+    - Values for protocols defined by FIPA: ``FIPA_ACL_REQUEST_PROTOCOL``, ``FIPA_ACL_CONTRACT_NET_PROTOCOL``, ``FIPA_ACL_QUERY_PROTOCOL``
+- The class ``smia.utilities.fipa_acl_info.ACLSMIAOntologyInfo`` (see :octicon:`repo;1em` :ref:`API documentation`) includes the SMIA Ontology Library:
     - ``ACL_ONTOLOGY_ASSET_RELATED_SERVICE``, ``ACL_ONTOLOGY_AGENT_RELATED_SERVICE``, ``ACL_ONTOLOGY_AAS_SERVICE``, ``ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE``, ``ACL_ONTOLOGY_CSS_SERVICE``
 
-.. TODO REPASAR ESTA SECCION, MEJORARLA Y PASAR A INGLES TEXTO DE CASTELLANO (este si puede dejarse en la version final)
+.. TODO REPASAR ESTA SECCION, MEJORARLA
 
 Sending a message from SMIA instance
 ------------------------------------
