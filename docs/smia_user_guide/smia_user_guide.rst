@@ -13,6 +13,7 @@ These guides are a comprehensive resource for using the :term:`SMIA` software. F
     smia_configuration_guide
     start_up_guide
     extension_guide
+    communication_guide
     guided_tutorials/guided_tutorials
     ecosystem/ecosystem
 
