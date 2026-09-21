@@ -273,7 +273,7 @@ class ExtendedAASModel:
                     if isinstance(submodel_element, sme_class):
                         if submodel_element.check_semantic_id_exist(semantic_id_external_ref):
                             rels_elements.append(submodel_element)
-                        if isinstance(submodel_element, basyx.aas.model.Operation):
+                        if isinstance(submodel_element, basyx.aas.model.Operation): # TODO ESTE IF HAY QUE ELIMINARLO SI SE USA CON basyx-ptyhon-sdk 2.1.0 (lo han corregido)
                             # In case of Operation, OperationVariables need to be analyzed
                             rels_elements.extend(submodel_element.get_operation_variables_by_semantic_id(
                                 semantic_id_external_ref))
