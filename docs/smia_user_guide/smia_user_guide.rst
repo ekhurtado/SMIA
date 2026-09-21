@@ -53,6 +53,12 @@ SMIA can be extended to add custom code to the offered base, in order to add mor
 
     The guide is available at :octicon:`repo;1em` :ref:`SMIA Extension Guide`.
 
+SMIA communications
+-------------------
+
+Several SMIA agents can communicate with each other to take advantage of distributed intelligence.  The communications specification and associated mechanisms are detailed in the following guide.
+
+    The guide is available at :octicon:`repo;1em` :ref:`SMIA Communication Guide`.
 
 Step-by-step tutorials
 ----------------------
