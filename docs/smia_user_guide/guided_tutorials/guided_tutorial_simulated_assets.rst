@@ -4,7 +4,7 @@ Step-by-step tutorial: Simulated assets
 =======================================
 
 
-This document contains a step-by-step guide to building a SMIA agent and deploying it alongside the entire platform. An asset simulator is provided as part of the ecosystem infrastructure, enabling the evaluation of both the agent’s and the platform’s performance. It offers detailed steps to follow, as well as source code for specific parts, to successfully reproduce the development tutorial.
+This document contains a step-by-step guide to building a SMIA agent and deploying it alongside the entire platform. An Assets Simulator is provided as part of the ecosystem infrastructure, enabling the evaluation of both the agent’s and the platform’s performance. It offers detailed steps to follow, as well as source code for specific parts, to successfully reproduce the development tutorial.
 
 .. note::
 
@@ -41,10 +41,11 @@ The objective is to evaluate the CSS-enriched AAS models using simulated assets 
 
 In this tutorial, we will use the HTTP-based simulator, which provides three types of assets, each with different capabilities:
 
-The following figure shows the CSS-enriched AAS elements for the three types of assets provided by the HTTP asset simulator:
+The following figure shows the CSS-enriched AAS elements for the three types of assets provided by the HTTP Assets Simulator:
 
 .. figure:: ../../_static/images/guides_images/SMIA_guided_tutorial_simAss_asset_info.jpg
    :alt: SMIA simulated assets guided tutorial assets info
+   :name: SMIA simulated assets guided tutorial assets info
 
    **Figure**: SMIA simulated assets guided tutorial assets info
 
@@ -69,22 +70,78 @@ Before starting the code development part of the tutorial, it is necessary to ve
 4. **Infrastructure:** The entire SMIA platform infrastructure will be deployed using Docker, so there is no need to install anything else. However, a web browser is required to access the graphical interfaces of the infrastructure components.
 
 
-First Phase: Generate the CSS-enriched AAS model
+First Phase: generate the CSS-enriched AAS model
 ------------------------------------------------
 
 
 In the first phase, we will generate the CSS-enriched AAS model that will allow the SMIA agent to self-configure and obtain all information related to the simulated asset it will represent. This same process can be applied to the three types of simulated assets. The steps to follow to generate the model from scratch are as follows:
+
+
+1. Open the **``AASX Package Explorer``** tool and configure it for edit mode (``Workspace > Edit``).
+
+2. Create a new AAS within the environment and define its *idShort*. Also, add an identifier for the asset in *globalAssetId*, which will be used later to identify it as a simulated asset. It can be generated automatically, but it is recommended to add an identifier that represents the asset type (e.g., “assetID/humanWorker001”).
+
+3. Add the ontological identifiers of the CSS model in the form of ``ConceptDescriptions``.
+
+    3.1. Add the submodel with the ontological identifiers of the CSS model: ``Workspace > Create ... > New submodel from plugin > AasxPluginGenericForms | GCIS/SubmodelWithCapabilitySkillOntology``.
+
+    3.2. From the submodel, generate the ConceptDescriptions with ontological identifiers of the CSS model: button ``Create <- SMEs (all)``. Within *ConceptDescriptions*, all elements will have been generated. The submodel can now be deleted (button ``Delete``), as well as its ConceptDescription (*SubmodelWithCapabilitySkillOntology*) so that it does not produce errors later (since it generates it with an empty id).
+
+    .. note::
+       As of v2025-03-25, ConceptDescriptions are generated via the ``SMEs (all)`` functionality, but this is not capable of generating all information from the plugin for the CSS model. If you do not wish to fill in all the remaining information (e.g., *shortName* of each concept), it is possible to obtain it from the base resource for the development of the CSS-enriched AAS model. To do this, you can open a new window of the ``AASX Package Explorer`` tool, open the file ``CSS_AAS_model_base.aasx`` offered in this tutorial's folder, select and copy all ConceptDescriptions using the ``Copy`` button, and ``Paste into`` in our AAS.
+
+4. Add the submodel for defining the SMIA software: ``Workspace > Create ... > New submodel from plugin > AasxPluginGenericForms | Nameplate for Software in Manufacturing (IDTA) V1.0``.
+
+    4.1. Delete the SubmodelElement ``SoftwareNameplateType`` and modify the ``SoftwareNameplateInstance``: remove all occurrences of *{0:00}*.
+
+    4.2. Specify the agent identifier in ``SoftwareNameplateInstance/InstanceName[value]`` (the same one that will later be defined in the JID in the code, although in this case without the XMPP server, i.e., only the identifier before "@"), and the agent version in ``SoftwareNameplateInstance/InstalledVersion[value]`` (e.g., "1.0.0"). In addition to these mandatory data, the others are optional. You can add any data you wish to define the SMIA software in more depth (installed modules, OS on which it is deployed, etc.).
+
+    .. note::
+       If you do not want to modify the submodel, you can obtain a valid submodel with the following process: open a new window of the ``AASX Package Explorer`` tool, open the file ``CSS_AAS_model_base.aasx`` offered in this tutorial's folder, copy the "SoftwareNameplate" submodel using the ``Copy`` button, and in our AAS, ``Paste into``.
+
+
+5. Add the submodel for defining the interface of the simulated asset that the SMIA agent will represent: ``Workspace > Create ... > New submodel from plugin > AasxPluginGenericForms | AssetInterfacesDescription (IDTA) V1.0``. Completely define the *SubmodelElementCollection* corresponding to the protocols supported by the asset.
+
+    5.1. In this tutorial, we'll be using the HTTP-based Assets Simulator, so you can edit the HTTP *SubmodelElementCollection* ("InterfaceTemplateForHTTP") and rename it, for example, to ``SimulatedAssetHTTPInterface``.
+
+    5.2. To test and validate the interface, the *EndpointMetadata/base* element will be modified with the the endpoint of the asset on the server representing the Assets Simulator. To this end, the URI will be constructed as *http://<serverIP>:<serverPort>/api/v1/<assetID>*. Since we will later deploy all components using Docker, the container name can be used; therefore, a valid endpoint using the asset ID from the previous example would be: ``http://smia-assets-simulator-http:5000/api/v1/asset/assetID/humanWorker001``.
+
+    5.3. To test and validate asset properties, they will be added to *InteractionMetadata/properties/*. For each asset property, its *SubmodelElementCollection* must be added and specified.
+
+    First, define its *idShort*, which is the asset’s property. The Assets Simulator provides general information about each asset via ``status``. Depending on the asset type, this includes ``battery`` (production and mobile robots) or ``stamina`` (humans). Next, define the value of its data point in *forms/href/* (for example, ``/status``).
+
+    If you want to extract a specific piece of data from all the information returned by the asset, you can specify it in *dataQuery*. In this tutorial, the Assets Simulator returns a JSON object containing all the asset’s information from the ``/status`` data point. If you want to extract a specific piece of data, add the field where the data is located (``$.stamina`` or ``$.battery``) to *dataQuery*. This way, you can choose to retrieve all the information for further processing ("status"), or you can configure SMIA to automatically extract specific data (“stamina” or “battery”).
+
+    5.4. To test and validate asset services, they will be added to *InteractionMetadata/actions/*. For each asset property, its *SubmodelElementCollection* must be added and specified.
+
+    First, its *idShort* will be defined, which corresponds to the asset’s service. The Assets Simulator provides actions for each asset type and recovery/charging service (``recover/charge``). All of these are shown in the figure above (:ref:`SMIA simulated assets guided tutorial assets info`). It is also necessary to define the value of its data point in *forms/href/* using the format */action/<actionID>* (for example, ``/action/transport`` for the transport action for humans and mobile assets). In this case, it is a POST request, so it is necessary to ensure that the “Content-Type” is defined in *forms/htv_headers/*.
+
+.. TODO pensar si añadir un dropdown con una tabla y todas las acciones y datapoints de cada tipo de activo
+
+    .. note::
+       The submodel must be completely defined so that it does not produce errors during the SMIA startup. If you wish to modify a valid submodel, you can open a new window of the ``AASX Package Explorer`` tool, open the file ``CSS_AAS_model_base.aasx`` offered in this tutorial's folder, copy the "AssetInterfacesDescription" submodel using the ``Copy`` button, and in our AAS, ``Paste into``.
+
+
+
+.. TODO repasarlo y seguir con esta parte
+
+
+Second Phase: validate the SMIA agents manually
+-----------------------------------------------
+
 .. TODO
 
 
-Second Phase: Develop the logic to extend SMIA
-----------------------------------------------
+
+Third Phase: validate the SMIA agents via SMIA PE
+-------------------------------------------------
 
 .. TODO
 
 
 
-Third Phase: Validate the extended SMIA using SMIA Operator
------------------------------------------------------------
+.. note::
 
-.. TODO
+    This tutorial is currently in development and will be available soon!
+
+.. TODO ELIMINARLO CUANDO SE ACABE
