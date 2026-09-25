@@ -116,10 +116,98 @@ In the first phase, we will generate the CSS-enriched AAS model that will allow 
 
     First, its *idShort* will be defined, which corresponds to the asset’s service. The Assets Simulator provides actions for each asset type and recovery/charging service (``recover/charge``). All of these are shown in the figure above (:ref:`SMIA simulated assets guided tutorial assets info`). It is also necessary to define the value of its data point in *forms/href/* using the format */action/<actionID>* (for example, ``/action/transport`` for the transport action for humans and mobile assets). In this case, it is a POST request, so it is necessary to ensure that the “Content-Type” is defined in *forms/htv_headers/*.
 
-.. TODO pensar si añadir un dropdown con una tabla y todas las acciones y datapoints de cada tipo de activo
+    .. dropdown:: :octicon:`table;1em;sd-text-primary` Simulated assets actions mappings
+
+        The following table shows the relationship between the available actions of simulated assets and the corresponding datapoints (*/action/<actionID>* within Assets Simulator server).
+
+        +------------------+------------------+------------------+
+        | Asset type       | Action           | Datapoint        |
+        +==================+==================+==================+
+        | Production Asset | Welding          | ``/weld``        |
+        |                  +------------------+------------------+
+        |                  | Drilling         | ``/drill``       |
+        |                  +------------------+------------------+
+        |                  | Pick & Place     | ``/pick_place``  |
+        +------------------+------------------+------------------+
+        | Mobile Asset     | Transportation   | ``/transport``   |
+        |                  +------------------+------------------+
+        |                  | Patrol           | ``/patrol``      |
+        |                  +------------------+------------------+
+        |                  | RADAR Scan       | ``/scan``        |
+        +------------------+------------------+------------------+
+        | Human Asset      | Transportation   | ``/transport``   |
+        |                  +------------------+------------------+
+        |                  | Assembly         | ``/assemble``    |
+        |                  +------------------+------------------+
+        |                  | QA Inspection    | ``/inspect``     |
+        |                  +------------------+------------------+
+        |                  | Maintenance      | ``/maintain``    |
+        +------------------+------------------+------------------+
+
+        .. tip::
+            All actions allow specifying a ``duration`` as a parameter within the body of the HTTP request, but it is not necessary to specify it within the AID submodel (it is specified at the Skill CSS level and is automatically handled by SMIA).
 
     .. note::
        The submodel must be completely defined so that it does not produce errors during the SMIA startup. If you wish to modify a valid submodel, you can open a new window of the ``AASX Package Explorer`` tool, open the file ``CSS_AAS_model_base.aasx`` offered in this tutorial's folder, copy the "AssetInterfacesDescription" submodel using the ``Copy`` button, and in our AAS, ``Paste into``.
+
+
+6. Define the submodels with the asset information. To do this, create the submodels in the AAS via ``Create new Submodel of kind Instance``. For this tutorial, we will define two submodels to distinguish the CSS-enriched elements of the asset (functional information) and the ontological relations between them: ``CSSElements`` and ``CSSInfo``.
+
+    6.1. Define the submodel ``CSSElements``, adding the following SubmodelElementCollections (specified by the idShort): *Capabilities*, *Skills*,, and *Constraints*. Within each collection, SubmodelElements will be added so that they can be semantically enriched later. Within *Capabilities*, the asset’s capabilities will be added using Capability elements, with their *idShort* set to the corresponding capability (e.g., for human assets, ``Assembly`` or ``Recovering``), while within *Skills*, Operations will be added with the associated skills for those capabilities (e.g., for human assets, ``Assemble`` or ``Recover``).
+
+    All actions except "Recover" have a possible input SkillParameter to determine the duration of the action. This can be defined using a Property with the idShort *duration*. Finally, within *Constraints*, you can add the only currently possible limitation using a Range with the idShort *PayloadWeight*, with a type “xs:float” and values (e.g., min: 0.0 and max: 5.0).
+
+    6.2. Define the submodel ``CSSInfo``, adding the following RelationshipElements to link the CSS elements. Capabilities, Skills, Skill Parameters, Capability Constraints, and Skill Interfaces must be linked correctly. You can use any naming convention you wish for the idShort, but descriptive names are recommended, such as *RelCapSkill<>* to link capabilities and skills, *RelSkillSkillInterface<>* to link skills and their interfaces, and *RelCapConstraint<>* to link capabilities and their constraints. To link elements, add them to the ``first`` and ``second`` parameters  (use the ``Add existing`` button to select the elements).
+
+7. Semantically enrich the SubmodelElements with the ontological concepts of the CSS model. To do this, in each created element, add the corresponding ``semanticID``.
+
+    7.1. In each SubmodelElement to be enriched, create an empty semanticID (``Create w/ default!``), then ``Add existing`` and select the identifiers corresponding to each element from the ConceptDescriptions (e.g., "http://www.w3id.org/upv-ehu/gcis/css-smia#AssetCapability" for asset capabilities).
+
+    7.2. In each RelationshipElement defined for each ontological relationship, add its semanticID following the procedure in step ``7.1``.
+
+    7.3. Define the *Qualifiers* for capabilities, skills, and constraints. To do this, create an empty qualifier (``Create w/ default!``), then ``Add preset`` and select the associated qualifier from ``GCIS | CSS |``. For example, for capabilities, add the *hasLifecycle* qualifier with the value *ASSURANCE*; for skills, add *hasImplementationType* with the value *ASSURANCE*; or for skill parameters, add *hasType* with the value *INPUT*, among others.
+
+.. dropdown:: :octicon:`table;1em;sd-text-primary` Simulated assets CSS information
+
+    The following table shows the CSS information of simulated assets, required for their the CSS-enriched AAS model.
+
+    +------------------+---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
+    | Asset Type       | Capability          | Capability Type    | Skill                       | Skill Parameter   | Constraint                                     |
+    +==================+=====================+====================+=============================+===================+================================================+
+    | Production Asset | Welding             | Asset Capability   | Weld                        | duration          | \-                                             |
+    |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
+    |                  | Drilling            | Asset Capability   | Drill                       | duration          | \-                                             |
+    |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
+    |                  | PickingAndPlacing   | Asset Capability   | PickAndPlace                | duration          | PayloadWeight (*IR1 [0-5 kg] / IR2 [0-10 kg]*) |
+    |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
+    |                  | Charging            | Asset Capability   | Charge                      | \-                | \-                                             |
+    |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
+    |                  | Negotiation         | Agent Capability   | NegotiationBasedOnBattery   | NegotiationWinner | \-                                             |
+    +------------------+---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
+    | Mobile Asset     | Transportation      | Asset Capability   | Transport                   | duration          | PayloadWeight (*MR1 [0-5 kg] / MR2 [0-10 kg]*) |
+    |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
+    |                  | Patrolling          | Asset Capability   | Patrol                      | duration          | \-                                             |
+    |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
+    |                  | Scanning            | Asset Capability   | Scan                        | duration          | \-                                             |
+    |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
+    |                  | Charging            | Asset Capability   | Charge                      | \-                | \-                                             |
+    |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
+    |                  | Negotiation         | Agent Capability   | NegotiationBasedOnBattery   | NegotiationWinner | \-                                             |
+    +------------------+---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
+    | Human Asset      | Transportation      | Asset Capability   | Transport                   | duration          | PayloadWeight (*[0-15 kg]*)                    |
+    |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
+    |                  | Assembly            | Asset Capability   | Assemble                    | duration          | \-                                             |
+    |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
+    |                  | Inspection          | Asset Capability   | Inspect                     | duration          | \-                                             |
+    |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
+    |                  | Maintenance         | Asset Capability   | Maintain                    | duration          | \-                                             |
+    |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
+    |                  | Recovering          | Asset Capability   | Recover                     | \-                | \-                                             |
+    |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
+    |                  | Negotiation         | Agent Capability   | NegotiationBasedOnStamina   | NegotiationWinner | \-                                             |
+    +------------------+---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
+
+8. Save the AASX file with the complete definition of the valid CSS-enriched AAS model. To do this, use the menu: ``File > Save as ...``, select the folder where the CSS-enriched AAS model will be saved and specify the name for the AASX file.
 
 
 
