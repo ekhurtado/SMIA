@@ -210,14 +210,58 @@ In the first phase, we will generate the CSS-enriched AAS model that will allow 
 8. Save the AASX file with the complete definition of the valid CSS-enriched AAS model. To do this, use the menu: ``File > Save as ...``, select the folder where the CSS-enriched AAS model will be saved and specify the name for the AASX file.
 
 
-
-.. TODO repasarlo y seguir con esta parte
-
-
 Second Phase: validate the SMIA agents manually
 -----------------------------------------------
 
-.. TODO
+Once the phase required for SMIA's self-configuration (development of CSS-enriched AAS models for the simulated assets) is complete, its associated agents will be deployed alongside the rest of the SMIA platform to validate their operation. In this phase, validation will be performed manually using the ``SMIA Operator`` extended infrastructure agent.
+
+.. note::
+    In this tutorial, the platform will be deployed in a self-contained virtualized environment using Docker Compose, taking advantage of the fact that all platform components are available as images on Docker Hub (`SMIA agent image <https://hub.docker.com/r/ekhurtado/smia/tags>`_ and `platform component images <https://hub.docker.com/r/ekhurtado/smia-tools/tags>`_).
+
+    You can use the CSS-enriched AAS models for the simulated assets (human, mobile, and production) developed in the previous phase. The rest of the CSS-enriched AAS model files for the logical assets (SMIA PE and proactive analysis asset) and infrastructure assets (SMIA Operator or SMIA ISM) are available in the `GitHub resources of this tutorial <https://github.com/ekhurtado/SMIA/tree/main/examples/tutorials/SMIA_extension_simulated_assets>`_.
+
+To safely and easily set up a valid deployment environment, we will use the tool provided in this documentation platform: :octicon:`repo;1em` :ref:`SMIA Environment Builder`. The steps to follow to generate the appropriate deployment environment from scratch are as follows:
+
+1. Open :octicon:`repo;1em` :ref:`SMIA Environment Builder` and click ``Start configuration``.
+2. In *Step 1*, select the ``Docker Compose`` environment next to ``Deploy new`` XMPP server.
+3. In *Step 2*, select all SMIA infrastructure services (``SMIA-I KB`` and ``SMIA ISM``) and, for AAS Server, leave it set to ``Deploy Basyx``.
+4. In *Step 3*, we will add all the simulated assets.
+
+    4.1 First, we will enable the *Manufacturing Plan asset* and click on ``Upload AASX file`` to select its CSS-enriched AAS model from the GitHub resources: ``SimulatedAssetsHTTP_Plan_1.aasx``. We will also add its information, such as the agent JID (``simulated_assets_plan_001``). Since the XMPP server ejabberd has already been selected, you do not need to specify a password (the tool generates one by default).
+
+    4.2 Next, we’ll add each simulated asset along with its information. To do this, for each asset, click on ``Add asset instance`` and enter the following information: use the ``Upload AASX file`` button to select the associated CSS-enriched AAS model, and manually enter the agent JID in the text field. For this second piece of information (*agent JID*), if the CSS-enriched AAS models were developed from scratch, it is recommended to enter the same value that was added to the SubmodelElement ``SoftwareNameplate/SoftwareNameplateCollection/InstanceName``.
+
+    .. dropdown:: :octicon:`table;1em;sd-text-primary` Simulated assets instances information
+
+        The following table shows the AASX file and agent JID to configure for each simulated asset instance in ``Add asset instance``.
+
+        +------------------+--------------------+-----------------------------------------------+--------------------------+
+        | Asset Type       | Asset Instance     | AASX File                                     | agent JID                |
+        +==================+====================+===============================================+==========================+
+        | Production Asset | Industrial Robot 1 | ``SimulatedAssetHTTP_IndustrialRobot_1.aasx`` | ``industrial_robot_001`` |
+        |                  +--------------------+-----------------------------------------------+--------------------------+
+        |                  | Industrial Robot 2 | ``SimulatedAssetHTTP_IndustrialRobot_2.aasx`` | ``industrial_robot_002`` |
+        +------------------+--------------------+-----------------------------------------------+--------------------------+
+        | Mobile Asset     | Mobile Robot 1     | ``SimulatedAssetHTTP_MobileRobot_1.aasx``     | ``mobile_robot_001``     |
+        |                  +--------------------+-----------------------------------------------+--------------------------+
+        |                  | Mobile Robot 2     | ``SimulatedAssetHTTP_MobileRobot_2.aasx``     | ``mobile_robot_002``     |
+        +------------------+--------------------+-----------------------------------------------+--------------------------+
+        | Human Asset      | Human Worker 1     | ``SimulatedAssetHTTP_Human_1.aasx``           | ``human_worker_001``     |
+        +------------------+--------------------+-----------------------------------------------+--------------------------+
+
+    4.3 We will enable ``SMIA Operator`` so that we can validate the simulated assets later.
+
+    4.4 We will enable ``Assets Simulator HTTP``, where we will need to specify the identifiers of the simulated assets. The identifiers must be exactly the same as those defined in the CSS-enriched AAS model under ``AAS/AssetInformation/globalAssetId``. If no new values have been added, the values from the models provided in the GitHub resources of this tutorial can be used:
+
+    * **production_assets**: ``assetID/industrialRobot001,assetID/industrialRobot002``
+    * **mobile_assets**: ``assetID/mobileRobot001,assetID/mobileRobot002``
+    * **human_assets**: ``assetID/humanWorker001``
+
+5. Finally, review the information specified in *Review & Generate* and generate the environment by clicking ``Download ZIP``. A ZIP file containing the complete deployment environment, including the *docker-compose.yml* file, will be downloaded.
+
+Once the deployment environment is ready, you can launch the complete SMIA platform and validate the simulated asset instances. To do so, follow these steps:
+
+.. TODO 1. AÑADIR LOS PASOS PARA DESPLEGAR (descomprimir ZIP y ``docker compose up``) y VALIDAR (abre operator, carga, solicita, etc.)
 
 
 
