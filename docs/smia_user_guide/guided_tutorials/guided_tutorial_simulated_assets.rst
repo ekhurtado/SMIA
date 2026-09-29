@@ -25,7 +25,7 @@ Introduction
 Tutorial Description
 ~~~~~~~~~~~~~~~~~~~~
 
-The tutorial consists of three phases. It starts by generating the necessary pre-configuration, such as the CSS-enriched AAS model for each SMIA instance. Next, the entire SMIA platform is deployed to evaluate all the instances associated with these CSS-enriched AAS models, thanks to the necessary infrastructure (in particular, SMIA Operator). Finally, it evaluates the autonomous interaction between SMIA instances by deploying and running a BPMN manufacturing plan executed by an SMIA PE agent. The three phases are illustrated in the following figure:
+The tutorial consists of three phases. It starts by generating the necessary pre-configuration, such as the CSS-enriched AAS model for each SMIA instance. Next, the entire SMIA platform is deployed to evaluate all the instances associated with these CSS-enriched AAS models and their collaborative interaction. This process is facilitated by the Environment Builder tool on this documentation platform. Finally, it evaluates the operation of the agents and the collaborative and autonomous interaction among the SMIA instances in two stages. To validate the individual operation of each agent, the SMIA Operator infrastructure service is leveraged. To validate the distributed interactions, a BPMN manufacturing plan is launched and executed by an SMIA PE agent. The three phases are illustrated in the following figure:
 
 .. figure:: ../../_static/images/guides_images/SMIA_guided_tutorial_simAss_steps.jpg
    :alt: SMIA simulated assets guided tutorial steps
@@ -56,8 +56,9 @@ Tutorial Objective
 Upon completing this practice, you will have achieved the following:
 
 1. **Model:** Create a CSS-enriched AAS model that defines the asset's capabilities and serves to enable the self-configuration of the SMIA agent. As part of this process, you will also learn how to define a valid asset interface.
-2. **Individual validation:** Test and validate the operation of SMIA agents individually (the operation of each agent). The **SMIA Operator** agent will be used to make requests through an intuitive graphical interface (abstracting the underlying implementation using the I4.0 language).
-3. **Collaborative validation:** Test and validate the operation of the SMIA agents as a set of asset representatives within the SMIA platform. The **SMIA PE** agent will be used to automate production plans as BPMN workflows and verify how the involved agents interact and collaborate.
+2. **Deploy:** Deploy a self-contained execution environment with the entire SMIA platform, including agents for simulated assets, extended logical agents, SMIA PE agents, and the entire supporting infrastructure for them.
+3. **Individual validation:** Test and validate the operation of SMIA agents individually (the operation of each agent). The **SMIA Operator** agent will be used to make requests through an intuitive graphical interface (abstracting the underlying implementation using the I4.0 language).
+4. **Collaborative validation:** Test and validate the operation of the SMIA agents as a set of asset representatives within the SMIA platform. The **SMIA PE** agent will be used to automate production plans as BPMN workflows and verify how the involved agents interact and collaborate.
 
 Development Environment
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -147,7 +148,7 @@ In the first phase, we will generate the CSS-enriched AAS model that will allow 
         .. tip::
             All actions allow specifying a ``duration`` as a parameter within the body of the HTTP request, but it is not necessary to specify it within the AID submodel (it is specified at the Skill CSS level and is automatically handled by SMIA).
 
-    .. note::
+    .. tip::
        The submodel must be completely defined so that it does not produce errors during the SMIA startup. If you wish to modify a valid submodel, you can open a new window of the ``AASX Package Explorer`` tool, open the file ``CSS_AAS_model_base.aasx`` offered in this tutorial's folder, copy the "AssetInterfacesDescription" submodel using the ``Copy`` button, and in our AAS, ``Paste into``.
 
 
@@ -210,12 +211,12 @@ In the first phase, we will generate the CSS-enriched AAS model that will allow 
 8. Save the AASX file with the complete definition of the valid CSS-enriched AAS model. To do this, use the menu: ``File > Save as ...``, select the folder where the CSS-enriched AAS model will be saved and specify the name for the AASX file.
 
 
-Second Phase: validate the SMIA agents manually
------------------------------------------------
+Second Phase: deploy SMIA platform
+----------------------------------
 
-Once the phase required for SMIA's self-configuration (development of CSS-enriched AAS models for the simulated assets) is complete, its associated agents will be deployed alongside the rest of the SMIA platform to validate their operation. In this phase, validation will be performed manually using the ``SMIA Operator`` extended infrastructure agent.
+Once the phase required for SMIA's self-configuration (development of CSS-enriched AAS models for the simulated assets) is complete, its associated agents will be deployed alongside the rest of the SMIA platform to validate their operation.
 
-.. note::
+.. tip::
     In this tutorial, the platform will be deployed in a self-contained virtualized environment using Docker Compose, taking advantage of the fact that all platform components are available as images on Docker Hub (`SMIA agent image <https://hub.docker.com/r/ekhurtado/smia/tags>`_ and `platform component images <https://hub.docker.com/r/ekhurtado/smia-tools/tags>`_).
 
     You can use the CSS-enriched AAS models for the simulated assets (human, mobile, and production) developed in the previous phase. The rest of the CSS-enriched AAS model files for the logical assets (SMIA PE and proactive analysis asset) and infrastructure assets (SMIA Operator or SMIA ISM) are available in the `GitHub resources of this tutorial <https://github.com/ekhurtado/SMIA/tree/main/examples/tutorials/SMIA_extension_simulated_assets>`_.
@@ -261,12 +262,63 @@ To safely and easily set up a valid deployment environment, we will use the tool
 
 Once the deployment environment is ready, you can launch the complete SMIA platform and validate the simulated asset instances. To do so, follow these steps:
 
-.. TODO 1. AÑADIR LOS PASOS PARA DESPLEGAR (descomprimir ZIP y ``docker compose up``) y VALIDAR (abre operator, carga, solicita, etc.)
+
+1. Unzip the ZIP file and copy it to a system with Docker and Docker Compose installed.
+2. Navigate to the ``smia`` folder, which contains all the deployment files and information (``README.md``). As you can see, the CSS-enriched AAS models are located inside the ``aas`` folder. The remaining folders are related to infrastructure components (``xmpp_server`` for the Ejabberd server and ``basyx`` for the AAS server). The deployment file is :bdg-primary:`docker-compose.yml`.
+3. Make a few minor adjustments to ``docker-compose.yml`` for this tutorial:
+
+    3.1 For each SMIA instance of the industrial assets, configure self-registration in the SMIA-I KB so that they can expose their CSS information and agent identifier to the rest of the platform. To do this, in each Docker Compose service, add the following environment variable: ``SMIAI_KB_REGISTRATION=TRUE`` to all simulated assets (production, mobile, and human).
+
+    .. dropdown:: :octicon:`code;1em;sd-text-primary` Example of an SMIA instance for a simulated asset
+
+        .. code-block:: yaml
+            :emphasize-lines: 8
+
+            smia-mobile-robot-1:
+                image: ekhurtado/smia:latest-alpine
+                container_name: smia-mobile-robot-1
+                environment:
+                  - AAS_MODEL_NAME=SimulatedAssetHTTP_MobileRobot_1.aasx
+                  - AGENT_ID=mobile_robot_001@ejabberd
+                  - AGENT_PSSWD=gcis1234
+                  - SMIAI_KB_REGISTRATION=TRUE
+
+    3.2 In the SMIA PE instance, disable autonomous execution, so that it can be enabled later when needed (the first validation stage will be performed manually using SMIA Operator). To do this, add the following environment variable: ``WORKFLOW_AUTOSTART=False``.
+
+    .. dropdown:: :octicon:`code;1em;sd-text-primary` SMIA PE instance for manual validation
+
+        .. code-block:: yaml
+            :emphasize-lines: 8
+
+            smia-pe-simulated_assets_plan_001:
+                image: ekhurtado/smia-tools:latest-smia-pe
+                container_name: smia-pe-simulated_assets_plan_001
+                environment:
+                  - AAS_MODEL_NAME=SimulatedAssetsHTTP_Plan_1.aasx
+                  - AGENT_ID=simulated_assets_plan_001@ejabberd
+                  - AGENT_PSSWD=gcis1234
+                  - WORKFLOW_AUTOSTART=False
+
+4. Deploy the complete SMIA platform. To do so, simply run the following command in the ``smia`` folder:
+
+.. code:: bash
+
+    docker compose up
+
+Third Phase: validate simulated assets and their interactions
+-------------------------------------------------------------
+
+.. TODO
+
+Individual validation
+~~~~~~~~~~~~~~~~~~~~~
+
+In this stage, validation will be performed manually using the ``SMIA Operator`` extended infrastructure agent.
+
+Collaborative validation
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-
-Third Phase: validate the SMIA agents via SMIA PE
--------------------------------------------------
 
 .. TODO
 
