@@ -169,6 +169,7 @@ In the first phase, we will generate the CSS-enriched AAS model that will allow 
     7.3. Define the *Qualifiers* for capabilities, skills, and constraints. To do this, create an empty qualifier (``Create w/ default!``), then ``Add preset`` and select the associated qualifier from ``GCIS | CSS |``. For example, for capabilities, add the *hasLifecycle* qualifier with the value *ASSURANCE*; for skills, add *hasImplementationType* with the value *ASSURANCE*; or for skill parameters, add *hasType* with the value *INPUT*, among others.
 
 .. dropdown:: :octicon:`table;1em;sd-text-primary` Simulated assets CSS information
+    :name: SMIA assets CSS information
 
     The following table shows the CSS information of simulated assets, required for their the CSS-enriched AAS model.
 
@@ -262,7 +263,6 @@ To safely and easily set up a valid deployment environment, we will use the tool
 
 Once the deployment environment is ready, you can launch the complete SMIA platform and validate the simulated asset instances. To do so, follow these steps:
 
-
 1. Unzip the ZIP file and copy it to a system with Docker and Docker Compose installed.
 2. Navigate to the ``smia`` folder, which contains all the deployment files and information (``README.md``). As you can see, the CSS-enriched AAS models are located inside the ``aas`` folder. The remaining folders are related to infrastructure components (``xmpp_server`` for the Ejabberd server and ``basyx`` for the AAS server). The deployment file is :bdg-primary:`docker-compose.yml`.
 3. Make a few minor adjustments to ``docker-compose.yml`` for this tutorial:
@@ -305,15 +305,56 @@ Once the deployment environment is ready, you can launch the complete SMIA platf
 
     docker compose up
 
+5. Verify that the system components have started correctly (you can access each container's console by running ``docker logs <containerName>``). Next, access the different graphical user interfaces (GUIs) for the key components in this tutorial.
+
+.. dropdown:: :octicon:`browser;1em;sd-text-primary` Key web interfaces of SMIA platform components
+
+    The following table shows the web interfaces (GUIs) of the key components in this tutorial. All URLs use the external host port exposed in ``docker-compose.yml``, so they can be opened directly in a web browser modifying ``<Host IP>`` with the IP address of the system where the platform has been deployed.
+
+    .. list-table::
+       :header-rows: 1
+       :widths: 25 35 40
+
+       * - Component
+         - URL
+         - Description
+       * - Assets Simulator HTTP
+         - `http://<Host IP>:5000/ <http://localhost:5000/>`_
+         - Web interface to monitor the simulated assets in real time.
+       * - SMIA-I KB
+         - `http://<Host IP>:8090/api/v3/ui/ <http://localhost:8090/api/v3/ui/>`_
+         - Web interface to access and explore registered CSS information and agents.
+       * - SMIA Operator
+         - `http://<Host IP>:10000/smia_operator <http://localhost:10000/smia_operator>`_
+         - Control panel for individual validation of SMIA agents.
+       * - SMIA PE
+         - `http://<Host IP>:10010/smia_pe_dashboard <http://localhost:10010/smia_pe_dashboard>`_
+         - Control panel for collaborative BPMN manufacturing plans.
+
 Third Phase: validate simulated assets and their interactions
 -------------------------------------------------------------
 
-.. TODO
+Once the SMIA platform has been deployed, with all agents running alongside the infrastructure, it is possible to perform validations to verify the operation of the agents and their autonomous and collaborative capabilities. This validation will be performed in two stages.
 
 Individual validation
 ~~~~~~~~~~~~~~~~~~~~~
 
-In this stage, validation will be performed manually using the ``SMIA Operator`` extended infrastructure agent.
+n this stage, the individual operation of each agent will be validated manually using the ``SMIA Operator`` extended infrastructure agent. Specifically, CSS executions will be requested from the simulated assets. To do this, follow these steps:
+
+1. First, access the Assets Simulator GUI (`http://<Host IP>:5000/ <http://localhost:5000/>`_). Once logged in, you can view all assets in the ``Asset library`` or view only the desired ones in the ``Main panel`` (recommended for better visibility). A selection list at the top allows you to enable or disable each asset. It also offers the ability to request tasks and to reload or rest each asset, but in this case we will not use this functionality, since we will request it from an external agent (*SMIA Operator*).
+2. Access the SMIA Operator GUI (`http://<Host IP>:10000/smia_operator <http://localhost:10000/smia_operator>`_) and analyze all CSS-enriched AAS models by clicking the ``LOAD`` button (this will extract all CSS information from each asset). Upon completion, the page will refresh, and this information will appear in the *Available capabilities and skills* section.
+
+.. tip::
+
+    It is recommended that you keep both GUIs (Assets Simulator and SMIA Operator) open simultaneously so that you can observe both the requests and the execution of tasks by the assets. In the case of Assets Simulator, it is recommended that you stay on the ``Main panel`` or ``Asset library`` screen.
+
+3. Select a capability by clicking the ``SELECT`` button for the desired one. If this capability has associated constraints, you will be asked to enter the constraint value. Depending on the constraint value, the valid assets will appear in the *SMIA candidates* section, along with their asset ID and associated agent. You can verify that only those assets that meet the values within the constraint ranges established in the table :octicon:`table;1em;sd-text-primary` :ref:`SMIA assets CSS information` are displayed.
+4. Select an SMIA instance to request CSS execution by checking the corresponding checkbox, and fill in the skill parameters (in most cases, the task’s ``duration``) Once all the information has been entered, request the CSS execution by clicking ``REQUEST``. SMIA Operator will automatically perform the necessary interactions with the involved SMIA instances (e.g., if multiple assets are selected, it will request a negotiation based on battery/stamina to determine the most suitable asset) and will request the task using the FIPA-SMIACL language.
+5. Verify that the task is being performed in the Assets Simulator GUI. The asset requested to perform the task will play an animation showing the simulation of that task. Additionally, you can see that the asset has changed to the *busy* state and that its battery or stamina is decreasing as it performs the task for the specified duration.
+
+.. tip::
+
+    If tasks are requested by selecting multiple assets, they will compete based on their battery or stamina; therefore, you can make multiple requests for the same task to verify that the winner in each iteration is the one with the most battery/stamina.
 
 Collaborative validation
 ~~~~~~~~~~~~~~~~~~~~~~~~
