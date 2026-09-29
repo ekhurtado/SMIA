@@ -309,7 +309,7 @@ Once the deployment environment is ready, you can launch the complete SMIA platf
 
 .. dropdown:: :octicon:`browser;1em;sd-text-primary` Key web interfaces of SMIA platform components
 
-    The following table shows the web interfaces (GUIs) of the key components in this tutorial. All URLs use the external host port exposed in ``docker-compose.yml``, so they can be opened directly in a web browser modifying ``<Host IP>`` with the IP address of the system where the platform has been deployed.
+    The following table shows the web interfaces (GUIs) of the key components in this tutorial. All URLs use the external host port exposed in ``docker-compose.yml``, so they can be opened directly in a web browser modifying ``<HostIP>`` with the IP address of the system where the platform has been deployed.
 
     .. list-table::
        :header-rows: 1
@@ -319,16 +319,16 @@ Once the deployment environment is ready, you can launch the complete SMIA platf
          - URL
          - Description
        * - Assets Simulator HTTP
-         - `http://<Host IP>:5000/ <http://localhost:5000/>`_
+         - `http://<HostIP>:5000/ <http://localhost:5000/>`_
          - Web interface to monitor the simulated assets in real time.
        * - SMIA-I KB
-         - `http://<Host IP>:8090/api/v3/ui/ <http://localhost:8090/api/v3/ui/>`_
+         - `http://<HostIP>:8090/api/v3/ui/ <http://localhost:8090/api/v3/ui/>`_
          - Web interface to access and explore registered CSS information and agents.
        * - SMIA Operator
-         - `http://<Host IP>:10000/smia_operator <http://localhost:10000/smia_operator>`_
+         - `http://<HostIP>:10000/smia_operator <http://localhost:10000/smia_operator>`_
          - Control panel for individual validation of SMIA agents.
        * - SMIA PE
-         - `http://<Host IP>:10010/smia_pe_dashboard <http://localhost:10010/smia_pe_dashboard>`_
+         - `http://<HostIP>:10010/smia_pe_dashboard <http://localhost:10010/smia_pe_dashboard>`_
          - Control panel for collaborative BPMN manufacturing plans.
 
 Third Phase: validate simulated assets and their interactions
@@ -341,8 +341,8 @@ Individual validation
 
 n this stage, the individual operation of each agent will be validated manually using the ``SMIA Operator`` extended infrastructure agent. Specifically, CSS executions will be requested from the simulated assets. To do this, follow these steps:
 
-1. First, access the Assets Simulator GUI (`http://<Host IP>:5000/ <http://localhost:5000/>`_). Once logged in, you can view all assets in the ``Asset library`` or view only the desired ones in the ``Main panel`` (recommended for better visibility). A selection list at the top allows you to enable or disable each asset. It also offers the ability to request tasks and to reload or rest each asset, but in this case we will not use this functionality, since we will request it from an external agent (*SMIA Operator*).
-2. Access the SMIA Operator GUI (`http://<Host IP>:10000/smia_operator <http://localhost:10000/smia_operator>`_) and analyze all CSS-enriched AAS models by clicking the ``LOAD`` button (this will extract all CSS information from each asset). Upon completion, the page will refresh, and this information will appear in the *Available capabilities and skills* section.
+1. First, access the Assets Simulator GUI (`http://<HostIP>:5000/ <http://localhost:5000/>`_). Once logged in, you can view all assets in the ``Asset library`` or view only the desired ones in the ``Main panel`` (recommended for better visibility). A selection list at the top allows you to enable or disable each asset. It also offers the ability to request tasks and to reload or rest each asset, but in this case we will not use this functionality, since we will request it from an external agent (*SMIA Operator*).
+2. Access the SMIA Operator GUI (`http://<HostIP>:10000/smia_operator <http://localhost:10000/smia_operator>`_) and analyze all CSS-enriched AAS models by clicking the ``LOAD`` button (this will extract all CSS information from each asset). Upon completion, the page will refresh, and this information will appear in the *Available capabilities and skills* section.
 
 .. tip::
 
