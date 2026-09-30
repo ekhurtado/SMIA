@@ -39,15 +39,21 @@ The objective is to evaluate the CSS-enriched AAS models using simulated assets 
     The guide for Asset Simulators is available at :octicon:`repo;1em` :ref:`SMIA ecosystem Assets Simulators`.
 
 
-In this tutorial, we will use the HTTP-based simulator, which provides three types of assets, each with different capabilities:
-
-The following figure shows the CSS-enriched AAS elements for the three types of assets provided by the HTTP Assets Simulator:
+In this tutorial, we will use the HTTP-based simulator, which provides three types of assets, each with different capabilities. For this tutorial, the following figure shows the CSS-enriched AAS elements for the three types of assets provided by the HTTP Assets Simulator:
 
 .. figure:: ../../_static/images/guides_images/SMIA_guided_tutorial_simAss_asset_info.jpg
    :alt: SMIA simulated assets guided tutorial assets info
    :name: SMIA simulated assets guided tutorial assets info
 
    **Figure**: SMIA simulated assets guided tutorial assets info
+
+To evaluate not only negotiation-based asset selection, several simulated assets with different characteristics are defined. This also enables constraint-based asset selection. In addition to these simulated assets, two logical assets are deployed to evaluate this type as well. First, an SMIA PE agent is deployed to represent a manufacturing plan which involves the simulated assets. On the other hand, a proactive logical asset will be deployed that will analyze the health of the simulated assets and request their recovery or charging if they fall below an established threshold.
+
+.. figure:: ../../_static/images/guides_images/SMIA_guided_tutorial_simAss_all_assets.jpg
+   :alt: All assets and associated SMIA agents for simulated assets guided tutorial
+   :name: All assets and associated SMIA agents for simulated assets guided tutorial
+
+   **Figure**: All assets and associated SMIA agents for simulated assets guided tutorial
 
 
 Tutorial Objective
