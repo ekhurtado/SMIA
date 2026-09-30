@@ -339,9 +339,9 @@ Once the SMIA platform has been deployed, with all agents running alongside the 
 Individual validation
 ~~~~~~~~~~~~~~~~~~~~~
 
-n this stage, the individual operation of each agent will be validated manually using the ``SMIA Operator`` extended infrastructure agent. Specifically, CSS executions will be requested from the simulated assets. To do this, follow these steps:
+In this stage, the individual operation of each agent will be validated manually using the ``SMIA Operator`` extended infrastructure agent. Specifically, CSS executions will be requested from the simulated assets. To do this, follow these steps:
 
-1. First, access the Assets Simulator GUI (`http://<HostIP>:5000/ <http://localhost:5000/>`_). Once logged in, you can view all assets in the ``Asset library`` or view only the desired ones in the ``Main panel`` (recommended for better visibility). A selection list at the top allows you to enable or disable each asset. It also offers the ability to request tasks and to reload or rest each asset, but in this case we will not use this functionality, since we will request it from an external agent (*SMIA Operator*).
+1. First, access the Assets Simulator GUI (`http://<HostIP>:5000/ <http://localhost:5000/>`_). You can view all assets in the ``Asset library`` or view only the desired ones in the ``Main panel`` (recommended for better visibility). A selection list at the top allows you to enable or disable each asset. It also offers the ability to request tasks and to reload or rest each asset, but in this case we will not use this functionality, since we will request it from an external agent (*SMIA Operator*).
 2. Access the SMIA Operator GUI (`http://<HostIP>:10000/smia_operator <http://localhost:10000/smia_operator>`_) and analyze all CSS-enriched AAS models by clicking the ``LOAD`` button (this will extract all CSS information from each asset). Upon completion, the page will refresh, and this information will appear in the *Available capabilities and skills* section.
 
 .. tip::
@@ -359,14 +359,40 @@ n this stage, the individual operation of each agent will be validated manually 
 Collaborative validation
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
+In this stage, the collaborative interaction between the SMIA instances of the simulated assets will be validated. To do so, the special agent ``SMIA PE`` will be used with a plan that identifies the most suitable assets using two strategies: constraint-based asset selection and distributed negotiation-based asset selection.
+
+For this tutorial, the ready-to-use CSS-enriched AAS model is provided, which contains the complete definition of the logical asset representing the production plan, as well as the BPMN file with the appropriate workflow definition. However, if you wish to design the plan manually, you can follow these steps:
+
+.. dropdown:: :octicon:`workflow;1em;sd-text-primary` Steps for designing the production plan for simulated assets
+
+    1. Make sure you have the Camunda Modeler software and its associated SMIA plugin installed (if not, you can refer to the specific guide :octicon:`repo;1em` :ref:`SMIA ecosystem Camunda Modeler`).
+    2. Open the program and create a new BPMN diagram (``File > New File > BPMN diagram (Camunda 7)``).
+    3. Click on the SMIA plugin (in the lower-right corner of the program, next to the version number). A window titled “*SMIA-I KB loader*” will open, along with a text field labeled *KB endpoint*. In this field, enter the IP address and port where SMIA-I KB is located, then click the ``Request`` button (make sure the SMIA platform and, therefore, SMIA-I KB are running). The IP address will be that of the host where the SMIA platform has been deployed, and the default port is “*8090*”; thus, enter ``<HostIP>:8090``. If everything worked correctly, the program will display the message “*Successfully obtained all CSS information from SMIA-I KB*” and a checkmark icon and endpoint will appear next to the plugin.
+    4. In the BPMN elements panel, drag the ServiceTask from the SMIA plugin (from the bottom of the panel). For each task, fill in the CSS information in the “*SMIA Capability Group*” field of the properties palette on the right. Add all the CSS information relevant to this tutorial’s plan (detailed and shown below).
+    5. Save the file as a BPMN file and add it to the CSS-enriched AAS model. To do this, open the AASX Package Explorer for the plan’s logical asset, navigate to “*Supplemental files*,” add the file to the “*Source path*” using the ``Select`` button, and finally add it to the AAS using ``Add file to package``. You will then be asked to save the AASX file.
 
 
-.. TODO
+The workflow for the specified plan is shown in the following image. As can be seen, no specific task is assigned to any task, so that dynamic decisions regarding the appropriate assets are made according to the following logic for each task (considering the CSS information for each asset described in the table :octicon:`table;1em;sd-text-primary` :ref:`SMIA assets CSS information`):
 
+    * Task 1 (Welding): Since there are two production assets with this capability and there are no constraints, this task will be performed by the industrial robot with the most battery power (determined through distributed negotiation).
+    * Task 2 (Transportation): Since a weight of 11 kg is specified for this transport, only the human meets that constraint, so the human will always perform this task.
+    * Task 3 (Assembly): Since only the human has this capability, the human will always perform this task.
+    * Task 4 (Transportation): In this case, a weight of 3 kg is specified, so both mobile robots and the human will compete to perform the task through distributed negotiation, with the robots using their battery level and the human using their stamina level.
+    * Task 5 (Picking and Placing): Since a weight of 7 kg is specified for the picking and placing task, only Industrial Robot 2 meets this constraint, so it will always perform this task.
 
+.. figure:: ../../_static/images/guides_images/SMIA_guided_tutorial_simAssets_BPMN.jpg
+   :alt: BPMN workflow for SMIA simulated assets guided tutorial
 
-.. note::
+   **Figure**: BPMN workflow for SMIA simulated assets guided tutorial
 
-    This tutorial is currently in development and will be available soon!
+Now that the production plan has been explained, it will be launched. To do this, follow these steps:
 
-.. TODO ELIMINARLO CUANDO SE ACABE
+1. First, access the Assets Simulator GUI (`http://<HostIP>:5000/ <http://localhost:5000/>`_). You can view all assets in the ``Asset library`` or view only the desired ones in the ``Main panel`` (recommended for better visibility). A selection list at the top allows you to enable or disable each asset. It also offers the ability to request tasks and to reload or rest each asset, but in this case we will not use this functionality, since requests will be made automatically by an external agent (*SMIA PE*).
+2. Access the SMIA PE GUI (`http://<HostIP>:10010/smia_pe_dashboard <http://localhost:10010/smia_pe_dashboard>`_). If the instance has been configured correctly, the workflow will be paused (this can be seen in the “Workflow management” section, which displays the text “*SMIA workflow stopped*”).
+
+.. tip::
+
+    It is recommended that you keep both GUIs (Assets Simulator and SMIA PE) open simultaneously so that you can observe both the manufacturing plan execution and the realization of tasks by the assets. In the case of Assets Simulator, it is recommended that you stay on the ``Main panel`` or ``Asset library`` screen.
+
+3. To launch the plan via SMIA PE, click the ``CONTINUE`` button in the “Workflow management” section (the text will display “*SMIA workflow executing*”). In the “Workflow information” section, the table will be updated with the dynamic discovery of each asset for each task, and the workflow’s progress will be displayed in real time in "Workflow live status".
+4. Verify that the tasks are being performed in the Assets Simulator GUI. The asset requested to perform each task will play an animation showing the simulation of that task. Additionally, you can see that the asset changes to the *busy* state and that its battery or stamina decreases as it performs each task for the specified duration.
