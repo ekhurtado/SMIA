@@ -10,7 +10,7 @@ This document contains a step-by-step guide to building a SMIA agent and deployi
 
     All resources for this tutorial are available in the official SMIA repository.
 
-    .. button-link:: https://github.com/ekhurtado/SMIA/tree/main/examples/tutorials/SMIA_extension_simulated_assets
+    .. button-link:: https://github.com/ekhurtado/SMIA/tree/main/examples/tutorials/SMIA_simulated_assets_guided_tutorial
             :color: primary
             :outline:
 
@@ -226,7 +226,7 @@ Once the phase required for SMIA's self-configuration (development of CSS-enrich
 .. tip::
     In this tutorial, the platform will be deployed in a self-contained virtualized environment using Docker Compose, taking advantage of the fact that all platform components are available as images on Docker Hub (`SMIA agent image <https://hub.docker.com/r/ekhurtado/smia/tags>`_ and `platform component images <https://hub.docker.com/r/ekhurtado/smia-tools/tags>`_).
 
-    You can use the CSS-enriched AAS models for the simulated assets (human, mobile, and production) developed in the previous phase. The rest of the CSS-enriched AAS model files for the logical assets (SMIA PE and proactive analysis asset) and infrastructure assets (SMIA Operator or SMIA ISM) are available in the `GitHub resources of this tutorial <https://github.com/ekhurtado/SMIA/tree/main/examples/tutorials/SMIA_extension_simulated_assets>`_.
+    You can use the CSS-enriched AAS models for the simulated assets (human, mobile, and production) developed in the previous phase. The rest of the CSS-enriched AAS model files for the logical assets (SMIA PE and proactive analysis asset) and infrastructure assets (SMIA Operator or SMIA ISM) are available in the `GitHub resources of this tutorial <https://github.com/ekhurtado/SMIA/tree/main/examples/tutorials/SMIA_simulated_assets_guided_tutorial>`_.
 
 To safely and easily set up a valid deployment environment, we will use the tool provided in this documentation platform: :octicon:`repo;1em` :ref:`SMIA Environment Builder`. The steps to follow to generate the appropriate deployment environment from scratch are as follows:
 
