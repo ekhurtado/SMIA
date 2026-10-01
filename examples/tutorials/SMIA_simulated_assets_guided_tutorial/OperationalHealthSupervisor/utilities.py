@@ -1,7 +1,6 @@
 import logging
 from basyx.aas.model import SubmodelElement, SubmodelElementCollection, ModelReference
 
-from smia import AASModelUtils
 from smia.logic import acl_smia_messages_utils, inter_smia_interactions_utils
 from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
 from smia.utilities.fipa_acl_info import ACLSMIAJSONSchemas, FIPAACLInfo, ACLSMIAOntologyInfo
@@ -79,13 +78,13 @@ async def create_discover_acl_msg_to_smia_ism(agent_object, service_id: str, ser
         ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE,
         protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL, msg_body=smia_i_kb_body)
 
-async def create_aas_service_discover_acl_msg(agent_object, receiver_id: str, service_id, service_params):
+async def create_aas_service_discover_acl_msg(agent_object, receiver_jid: str, service_id, service_params):
     """
     This method creates an SMIACL message that will be sent to an SMIA instance for a discovery AAS service.
 
     Args:
         agent_object (smia.agents.smia_agent.SMIAAgent): SMIA Agent object.
-        receiver_id (str): identifier of the SMIA instance that will receive the message.
+        receiver_jid (str): identifier of the SMIA instance that will receive the message.
         service_id (str): identifier of the serviceID required in the content of the message.
         service_params: parameters of the service required in the content of the message.
 
@@ -98,20 +97,20 @@ async def create_aas_service_discover_acl_msg(agent_object, receiver_id: str, se
         serviceType=AASRelatedServicesInfo.AAS_SERVICE_TYPE_DISCOVERY,
         serviceParams=service_params)
     return await inter_smia_interactions_utils.create_acl_smia_message(
-        f"{receiver_id}@{await acl_smia_messages_utils.get_xmpp_server_from_jid(agent_object.jid)}",
+        receiver_jid,
         await acl_smia_messages_utils.create_random_thread(agent_object),
         FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_REF,
         ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_SERVICE,
         protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL, msg_body=aas_service_body)
 
-async def create_asset_service_acl_msg(agent_object, receiver_id: str, service_ref: ModelReference,
+async def create_asset_service_acl_msg(agent_object, receiver_jid: str, service_ref: ModelReference,
                                        service_params=None):
     """
     This method creates an SMIACL message that will be sent to an SMIA instance for a discovery AAS service.
 
     Args:
         agent_object (smia.agents.smia_agent.SMIAAgent): SMIA Agent object.
-        receiver_id (str): identifier of the SMIA instance that will receive the message.
+        receiver_jid (str): identifier of the SMIA instance that will receive the message.
         service_ref (basyx.aas.model.base.ModelReference): ModelReference of the asset service.
         service_params: parameters of the service required in the content of the message.
 
@@ -122,7 +121,7 @@ async def create_asset_service_acl_msg(agent_object, receiver_id: str, service_r
         ACLSMIAJSONSchemas.JSON_SCHEMA_ASSET_AGENT_RELATED_SERVICE, serviceRef=service_ref,
         service_params=service_params)
     return await inter_smia_interactions_utils.create_acl_smia_message(
-        f"{receiver_id}@{await acl_smia_messages_utils.get_xmpp_server_from_jid(agent_object.jid)}",
+        receiver_jid,
         await acl_smia_messages_utils.create_random_thread(agent_object),
         FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST,
         ACLSMIAOntologyInfo.ACL_ONTOLOGY_ASSET_RELATED_SERVICE,
