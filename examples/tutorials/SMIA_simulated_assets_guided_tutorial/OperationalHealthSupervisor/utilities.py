@@ -1,6 +1,7 @@
 import logging
-from basyx.aas.model import SubmodelElement, SubmodelElementCollection
+from basyx.aas.model import SubmodelElement, SubmodelElementCollection, ModelReference
 
+from smia import AASModelUtils
 from smia.logic import acl_smia_messages_utils, inter_smia_interactions_utils
 from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
 from smia.utilities.fipa_acl_info import ACLSMIAJSONSchemas, FIPAACLInfo, ACLSMIAOntologyInfo
@@ -46,7 +47,8 @@ async def extract_supervised_assets_data(supervised_assets_list: SubmodelElement
             continue
         supervised_assets_json[replenishment_cap_sme.id_short]= {'replenishmentSkill': replenishment_skill_sme.id_short,
                                                                  'assetID': supervised_asset_id_sme.value,
-                                                                 'healthProperty': health_property_sme.value}
+                                                                 'healthProperty': health_property_sme.id_short}
+                                                                 # 'healthProperty': health_property_sme.value} # TODO ANTIGUO
 
     return supervised_assets_json
 
@@ -90,7 +92,7 @@ async def create_aas_service_discover_acl_msg(agent_object, receiver_id: str, se
     Returns:
         spade.message.Message: SMIACL discovery message that will be sent to SMIA ISM.
     """
-    smia_i_kb_body = await acl_smia_messages_utils.generate_json_from_schema(
+    aas_service_body = await acl_smia_messages_utils.generate_json_from_schema(
         ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_SERVICE,
         serviceID=service_id,
         serviceType=AASRelatedServicesInfo.AAS_SERVICE_TYPE_DISCOVERY,
@@ -100,7 +102,31 @@ async def create_aas_service_discover_acl_msg(agent_object, receiver_id: str, se
         await acl_smia_messages_utils.create_random_thread(agent_object),
         FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_REF,
         ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_SERVICE,
-        protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL, msg_body=smia_i_kb_body)
+        protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL, msg_body=aas_service_body)
+
+async def create_asset_service_acl_msg(agent_object, receiver_id: str, service_ref: ModelReference,
+                                       service_params=None):
+    """
+    This method creates an SMIACL message that will be sent to an SMIA instance for a discovery AAS service.
+
+    Args:
+        agent_object (smia.agents.smia_agent.SMIAAgent): SMIA Agent object.
+        receiver_id (str): identifier of the SMIA instance that will receive the message.
+        service_ref (basyx.aas.model.base.ModelReference): ModelReference of the asset service.
+        service_params: parameters of the service required in the content of the message.
+
+    Returns:
+        spade.message.Message: SMIACL discovery message that will be sent to SMIA ISM.
+    """
+    asset_service_body = await acl_smia_messages_utils.generate_json_from_schema(
+        ACLSMIAJSONSchemas.JSON_SCHEMA_ASSET_AGENT_RELATED_SERVICE, serviceRef=service_ref,
+        service_params=service_params)
+    return await inter_smia_interactions_utils.create_acl_smia_message(
+        f"{receiver_id}@{await acl_smia_messages_utils.get_xmpp_server_from_jid(agent_object.jid)}",
+        await acl_smia_messages_utils.create_random_thread(agent_object),
+        FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST,
+        ACLSMIAOntologyInfo.ACL_ONTOLOGY_ASSET_RELATED_SERVICE,
+        protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL, msg_body=asset_service_body)
 
 class HealthSupervisorSemantics:
     """

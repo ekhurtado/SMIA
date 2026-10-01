@@ -11,8 +11,8 @@ def main():
 
     # The AAS model is added to SMIA
     aas_model_path = smia.utilities.general_utils.DockerUtils.get_aas_model_from_env_var()
-    # smia.load_aas_model(aas_model_path)
-    smia.load_aas_model('../SimulatedAssets_OperationalHealthSupervisor.aasx')
+    smia.load_aas_model(aas_model_path)
+    # smia.load_aas_model('../SimulatedAssets_OperationalHealthSupervisor.aasx')
 
     # The jid and password can also be set as environmental variables. In case they are not set, the values are obtained
     # from the initialization properties file
@@ -20,8 +20,8 @@ def main():
     smia_psswd = os.environ.get('AGENT_PASSWD')
 
     # Create the agent object
-    # ohs_extensible_smia_agent = ExtensibleSMIAAgent(smia_jid, smia_psswd)
-    ohs_extensible_smia_agent = ExtensibleSMIAAgent('gcis1@xmpp.jp', 'gcis1234')
+    ohs_extensible_smia_agent = ExtensibleSMIAAgent(smia_jid, smia_psswd)
+    # ohs_extensible_smia_agent = ExtensibleSMIAAgent('gcis1@xmpp.jp', 'gcis1234')
 
     # Add its extended capability
     ohs_extended_cap = HealthSupervisorBehaviour(agent_object=ohs_extensible_smia_agent)

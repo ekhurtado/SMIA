@@ -141,6 +141,9 @@ class HandleAASRelatedSvcBehaviour(OneShotBehaviour):
         if isinstance(self.received_body_json['serviceRef'], str):
             self.received_body_json['serviceRef'] = await AASModelUtils.aas_model_reference_string_to_dict(
                 self.received_body_json['serviceRef'])
+        if 'keys' in self.received_body_json['serviceRef']:
+            # If the service reference is included in 'keys', it is extracted
+            self.received_body_json['serviceRef'] = self.received_body_json['serviceRef']['keys']
         aas_asset_agent_service_ref = await AASModelUtils.create_aas_reference_object(
             'ModelReference', self.received_body_json['serviceRef'])
         aas_asset_agent_service_elem = await self.myagent.aas_model.get_object_by_reference(aas_asset_agent_service_ref)
