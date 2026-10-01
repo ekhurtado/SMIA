@@ -44,11 +44,9 @@ async def extract_supervised_assets_data(supervised_assets_list: SubmodelElement
                             " not contain all the required information (assetID, replenishment capability and "
                             "skill, and health property).".format(supervised_asset_data_sme))
             continue
-        if replenishment_cap_sme.id_short not in supervised_assets_json:
-            supervised_assets_json[replenishment_cap_sme.id_short] = []
-        supervised_assets_json[replenishment_cap_sme.id_short].append(
-            {'replenishmentSkill': replenishment_skill_sme.id_short, 'assetID': supervised_asset_id_sme.value,
-             'healthProperty': health_property_sme.value})
+        supervised_assets_json[replenishment_cap_sme.id_short]= {'replenishmentSkill': replenishment_skill_sme.id_short,
+                                                                 'assetID': supervised_asset_id_sme.value,
+                                                                 'healthProperty': health_property_sme.value}
 
     return supervised_assets_json
 
@@ -94,13 +92,13 @@ async def create_aas_service_discover_acl_msg(agent_object, receiver_id: str, se
     """
     smia_i_kb_body = await acl_smia_messages_utils.generate_json_from_schema(
         ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_SERVICE,
-        serviceID=AASRelatedServicesInfo.AAS_DISCOVERY_SERVICE_GET_SM_BY_SEMANTICID,
+        serviceID=service_id,
         serviceType=AASRelatedServicesInfo.AAS_SERVICE_TYPE_DISCOVERY,
         serviceParams=service_params)
     return await inter_smia_interactions_utils.create_acl_smia_message(
         f"{receiver_id}@{await acl_smia_messages_utils.get_xmpp_server_from_jid(agent_object.jid)}",
         await acl_smia_messages_utils.create_random_thread(agent_object),
-        FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST,
+        FIPAACLInfo.FIPA_ACL_PERFORMATIVE_QUERY_REF,
         ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_SERVICE,
         protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL, msg_body=smia_i_kb_body)
 

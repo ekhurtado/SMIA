@@ -66,6 +66,8 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
             smia_instances_list = await self.get_platform_smia_instances_by_capability(supervised_capability)
             _logger.warning("LISTA DE INSTANCIAS SMIA: {}".format(smia_instances_list)) # TODO BORRAR
 
+
+
             for smia_instance_id in smia_instances_list:
                 # For each SMIA instance, health asset data will be requested. To do this, first the ModelReference
                 # within the instance's submodel must be obtained
@@ -152,8 +154,16 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
         # First, we must obtain the AID (submodel identifier) for that SMIA instance. This will be done by sending a
         # request to an AAS service.
         aas_svc_msg = await create_aas_service_discover_acl_msg(self.myagent,
-            smia_instance_id, service_id=AASRelatedServicesInfo.AAS_DISCOVERY_SERVICE_GET_SM_VALUE_BY_SEMANTICID,
+            'gcis2', service_id=AASRelatedServicesInfo.AAS_DISCOVERY_SERVICE_GET_SM_BY_SEMANTICID,
+            # smia_instance_id, service_id=AASRelatedServicesInfo.AAS_DISCOVERY_SERVICE_GET_SM_BY_SEMANTICID,
             service_params=AssetInterfacesInfo.SEMANTICID_INTERFACES_SUBMODEL)
+        aid_submodel = await self.send_acl_and_wait(aas_svc_msg)
+        if aid_submodel is None or 'id' not in aid_submodel:
+            _logger.warning("The SMIA instance [{}] does not have the submodel AssetInterfacesDescription".format(
+                smia_instance_id))
+            return None
+        return aid_submodel['id']
+        print()
 
     async def send_acl_and_wait(self, acl_msg: Message) -> Any:
         """

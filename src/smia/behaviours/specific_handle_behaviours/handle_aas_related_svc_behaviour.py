@@ -276,6 +276,19 @@ class HandleAASRelatedSvcBehaviour(OneShotBehaviour):
                     if not isinstance(requested_sme.value, str):
                         return json.dumps(requested_sme.value, cls=AASToJsonEncoder)
                     return str(requested_sme.value)
+            case AASRelatedServicesInfo.AAS_DISCOVERY_SERVICE_GET_SM_BY_SEMANTICID:
+                # First, SMIA checks whether the element to be obtained is a submodel. If it is not a Submodel, SMIA
+                # checks whether it is a SubmodelElement
+                requested_sme = (
+                    await self.myagent.aas_model.get_submodel_by_semantic_id(self.received_body_json['serviceParams'])
+                    or await self.myagent.aas_model.get_submodel_elements_by_semantic_id(
+                        self.received_body_json['serviceParams']))
+                if not requested_sme:   # None or empty list
+                    raise RequestDataError(f"The SubmodelElement queried with the semanticID ["
+                                           f"{self.received_body_json['serviceParams']}] is missing, so it cannot"
+                                           f" be returned")
+                else:
+                    return json.dumps(requested_sme, cls=AASToJsonEncoder)
             case AASRelatedServicesInfo.AAS_DISCOVERY_SERVICE_GET_AAS_INFO:
                 #TODO
                 pass
