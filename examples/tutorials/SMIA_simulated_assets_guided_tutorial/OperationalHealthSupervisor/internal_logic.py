@@ -2,16 +2,15 @@ import asyncio
 import logging
 from typing import Any
 
-from basyx.aas.model import SubmodelElement, SubmodelElementCollection
 from spade.behaviour import CyclicBehaviour
 from spade.message import Message
 
-from examples.tutorials.SMIA_simulated_assets_guided_tutorial.OperationalHealthSupervisor.utilities import \
-    HealthSupervisorSemantics
+from smia.utilities.smia_info import AssetInterfacesInfo
+from utilities import HealthSupervisorSemantics, create_discover_acl_msg_to_smia_ism, extract_supervised_assets_data, \
+    create_aas_service_discover_acl_msg
 from smia.css_ontology.css_ontology_utils import CapabilitySkillOntologyInfo
-from smia.logic import acl_smia_messages_utils, inter_smia_interactions_utils
+from smia.logic import acl_smia_messages_utils
 from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
-from smia.utilities.fipa_acl_info import ACLSMIAJSONSchemas, ACLSMIAOntologyInfo, FIPAACLInfo
 
 _logger = logging.getLogger(__name__)
 
@@ -30,7 +29,7 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
         # Health Supervisor-specific variables
         self.supervision_interval: float = None
         self.health_threshold: float = None
-        self.supervised_assets: dict = None
+        self.supervised_assets_dict: dict = None
         self.platform_smia_instances: dict = {}
 
         # The additional behaviour for receiving, collecting, and interpreting ACL messages from other SMIA agents is
@@ -51,7 +50,7 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
         self.health_threshold = (await self.get_critical_sm_element_by_semantic_id(
             HealthSupervisorSemantics.SEMANTICID_OHS_HEALTH_THRESHOLD)).value
 
-        self.supervised_assets = await self.extract_supervised_assets_data(
+        self.supervised_assets_dict = await extract_supervised_assets_data(
             supervised_assets_list=await self.get_critical_sm_element_by_semantic_id(
             HealthSupervisorSemantics.SEMANTICID_OHS_SUPERVISED_ASSETS))
 
@@ -62,9 +61,17 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
 
         # In each iteration, the health of all assets to be supervised will be analyzed, and a replenishment action
         # will be requested for those that require it
-        for supervised_capability in self.supervision_interval:
+        for supervised_capability, supervised_asset_data in self.supervised_assets_dict.items():
             # For each capability, we will first identify all SMIA agents of the assets possessing that capability
             smia_instances_list = await self.get_platform_smia_instances_by_capability(supervised_capability)
+            _logger.warning("LISTA DE INSTANCIAS SMIA: {}".format(smia_instances_list)) # TODO BORRAR
+
+            for smia_instance_id in smia_instances_list:
+                # For each SMIA instance, health asset data will be requested. To do this, first the ModelReference
+                # within the instance's submodel must be obtained
+                health_property_ref = await self.health_property_model_reference(
+                    smia_instance_id, supervised_asset_data['healthProperty'])
+
 
 
         # Wait for the defined interval before the next iteration
@@ -95,48 +102,6 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
 
         return submodel_elem
 
-    async def extract_supervised_assets_data(self, supervised_assets_list: SubmodelElement):
-        """
-        This method extracts all the data about the assets to be supervised from the AAS SubmodelElement.
-
-        Args:
-            basyx.aas.model.SubmodelElement: SubmodelElementList with all the information about the assets to be
-            supervised.
-
-        Returns:
-            dict: all the information about the assets to be supervised, in form of a JSON object.
-        """
-        supervised_assets_json = {}
-        for supervised_asset_data_sme in supervised_assets_list:
-            if not isinstance(supervised_asset_data_sme, SubmodelElementCollection):
-                _logger.warning("SubmodelElement [{}] representing a data collection for an asset to be supervised is "
-                                "not a SubmodelElementCollection, skipping it.".format(supervised_asset_data_sme))
-                continue
-            try:
-                replenishment_cap_sme = supervised_asset_data_sme.get_sm_element_by_semantic_id(
-                    HealthSupervisorSemantics.SEMANTICID_OHS_REPLENISHMENT_CAPABILITY)
-                replenishment_skill_sme = supervised_asset_data_sme.get_sm_element_by_semantic_id(
-                    HealthSupervisorSemantics.SEMANTICID_OHS_REPLENISHMENT_SKILL)
-                supervised_asset_id_sme = supervised_asset_data_sme.get_sm_element_by_semantic_id(
-                    HealthSupervisorSemantics.SEMANTICID_OHS_SUPERVISED_ASSET_ID)   # TODO ESTA IGUAL SE QUITA (se obtiene del KB)
-                health_property_sme = supervised_asset_data_sme.get_sm_element_by_semantic_id(
-                    HealthSupervisorSemantics.SEMANTICID_OHS_HEALTH_ASSET_PROPERTY) # TODO ESTA EN LUGAR DE UNA REFERENCIA IGUAL ES SOLO EL NOMBRE DE LA PROPIEDAD (supondremos que está en el SM AID)
-                if (replenishment_cap_sme is None or replenishment_skill_sme is None or supervised_asset_id_sme is None
-                        or health_property_sme is None):
-                    raise Exception()
-            except Exception as e:
-                _logger.warning("SubmodelElement [{}] representing a data collection for an asset to be supervised does"
-                                " not contain all the required information (assetID, replenishment capability and "
-                                "skill, and health property).".format(supervised_asset_data_sme))
-                continue
-            if replenishment_cap_sme.id_short not in supervised_assets_json:
-                supervised_assets_json[replenishment_cap_sme.id_short] = []
-            supervised_assets_json[replenishment_cap_sme.id_short].append(
-                {'replenishmentSkill': replenishment_skill_sme.id_short, 'assetID': supervised_asset_id_sme.value,
-                 'healthProperty': health_property_sme.value})
-
-        return supervised_assets_json
-
     async def get_platform_smia_instances_by_capability(self, capability_name):
         """
         This method retrieves the SMIA instances deployed within the platform (MAS) that have the specified capacity.
@@ -151,7 +116,7 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
         """
         # First, it will obtain all the asset identifiers associated to the given capability
         capability_iri = '{}{}'.format(CapabilitySkillOntologyInfo.CSS_ONTOLOGY_SMIA_NAMESPACE, capability_name)
-        assets_request_acl_msg = await self.create_discover_acl_msg_to_smia_ism(
+        assets_request_acl_msg = await create_discover_acl_msg_to_smia_ism(self.myagent,
             service_id=AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_ALL_ASSET_BY_CAPABILITY,
             service_params=capability_iri)
         assets_id_list = await self.send_acl_and_wait(assets_request_acl_msg)
@@ -163,33 +128,32 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
                 smia_instances_cap_list.add(self.platform_smia_instances[asset_id])
             else:
                 # In this case it must be requested to the SMIA ISM, in order to obtain from the SMIA-I KB
-                smia_request_acl_msg = await self.create_discover_acl_msg_to_smia_ism(
+                smia_request_acl_msg = await create_discover_acl_msg_to_smia_ism(self.myagent,
                     service_id=AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_SMIA_BY_ASSET,
                     service_params=asset_id)
                 smia_instance_id = await self.send_acl_and_wait(smia_request_acl_msg)
 
                 if smia_instance_id is not None:
-                    smia_instances_cap_list.add(smia_instance_id)
+                    smia_instances_cap_list.add(str(smia_instance_id))
 
         return smia_instances_cap_list
 
-    async def create_discover_acl_msg_to_smia_ism(self, service_id: str, service_params):
+    async def health_property_model_reference(self, smia_instance_id: str, health_property: str):
         """
-        This method creates an SMIACL message that will be sent to SMIA ISM for a discovery infrastructure service.
+        This method
 
-        TODO VOY POR AQUI
+        Args:
+            smia_instance_id(str): identifier of the SMIA instance to be requested the model reference of the asset
+            health property.
+
+        Returns:
+            basyx.aas.model.base.ModelReference: AAS model reference of the asset health property.
         """
-        smia_i_kb_body = await acl_smia_messages_utils.generate_json_from_schema(
-            ACLSMIAJSONSchemas.JSON_SCHEMA_AAS_INFRASTRUCTURE_SERVICE,
-            serviceID=service_id, serviceType=AASRelatedServicesInfo.AAS_SERVICE_TYPE_DISCOVERY,
-            serviceParams=service_params)
-        return await inter_smia_interactions_utils.create_acl_smia_message(
-            f"{AASRelatedServicesInfo.SMIA_ISM_ID}@"
-            f"{await acl_smia_messages_utils.get_xmpp_server_from_jid(self.myagent.jid)}",
-            await acl_smia_messages_utils.create_random_thread(self.myagent),
-            FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST,
-            ACLSMIAOntologyInfo.ACL_ONTOLOGY_AAS_INFRASTRUCTURE_SERVICE,
-            protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL, msg_body=smia_i_kb_body)
+        # First, we must obtain the AID (submodel identifier) for that SMIA instance. This will be done by sending a
+        # request to an AAS service.
+        aas_svc_msg = await create_aas_service_discover_acl_msg(self.myagent,
+            smia_instance_id, service_id=AASRelatedServicesInfo.AAS_DISCOVERY_SERVICE_GET_SM_VALUE_BY_SEMANTICID,
+            service_params=AssetInterfacesInfo.SEMANTICID_INTERFACES_SUBMODEL)
 
     async def send_acl_and_wait(self, acl_msg: Message) -> Any:
         """
@@ -250,6 +214,7 @@ class OHSReceiveACLBehaviour(CyclicBehaviour):
             if msg.thread in self.myagent.ohs_acl_responses:
                 _logger.info("Unlocking HealthSupervisorBehaviour...")
                 msg_parsed_body = acl_smia_messages_utils.get_parsed_body_from_acl_msg(msg)
+                _logger.warning("VALUE : {}".format(msg_parsed_body))
                 self.myagent.ohs_acl_responses[msg.thread] = msg_parsed_body
                 # The behaviour is unlocked
                 self.myagent.ohs_acl_requests_event.set()
