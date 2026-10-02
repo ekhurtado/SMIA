@@ -121,11 +121,28 @@ async def create_asset_service_acl_msg(agent_object, receiver_jid: str, service_
         ACLSMIAJSONSchemas.JSON_SCHEMA_ASSET_AGENT_RELATED_SERVICE, serviceRef=service_ref,
         service_params=service_params)
     return await inter_smia_interactions_utils.create_acl_smia_message(
-        receiver_jid,
-        await acl_smia_messages_utils.create_random_thread(agent_object),
-        FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST,
-        ACLSMIAOntologyInfo.ACL_ONTOLOGY_ASSET_RELATED_SERVICE,
+        receiver_jid, await acl_smia_messages_utils.create_random_thread(agent_object),
+        FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST, ACLSMIAOntologyInfo.ACL_ONTOLOGY_ASSET_RELATED_SERVICE,
         protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL, msg_body=asset_service_body)
+
+async def create_capability_request_acl_msg(agent_object, receiver_jid: str, capability_iri, skill_iri):
+    """
+    This method creates an SMIACL message that will be sent to an SMIA instance for a CSS capability execution.
+
+    Args:
+        agent_object (smia.agents.smia_agent.SMIAAgent): SMIA Agent object.
+        receiver_jid (str): identifier of the SMIA instance that will receive the message.
+        capability_iri (str): IRI identifier of the capabilityIRI required in the content of the message.
+        skill_iri (str): IRI identifier of the skillIRI required in the content of the message.
+    Returns:
+        spade.message.Message: SMIACL discovery message that will be sent to SMIA ISM.
+    """
+    cap_request_body = await acl_smia_messages_utils.generate_json_from_schema(
+        ACLSMIAJSONSchemas.JSON_SCHEMA_CSS_SERVICE, capabilityIRI=capability_iri, skillIRI=skill_iri)
+    return await inter_smia_interactions_utils.create_acl_smia_message(
+        receiver_jid, await acl_smia_messages_utils.create_random_thread(agent_object),
+        FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST, ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE,
+        protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL, msg_body=cap_request_body)
 
 class HealthSupervisorSemantics:
     """

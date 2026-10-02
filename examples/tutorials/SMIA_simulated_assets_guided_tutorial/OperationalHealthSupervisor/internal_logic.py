@@ -6,9 +6,10 @@ from basyx.aas.model import ModelReference
 from spade.behaviour import CyclicBehaviour
 from spade.message import Message
 
+from smia.utilities.fipa_acl_info import FIPAACLInfo
 from smia.utilities.smia_info import AssetInterfacesInfo
 from utilities import HealthSupervisorSemantics, create_discover_acl_msg_to_smia_ism, extract_supervised_assets_data, \
-    create_aas_service_discover_acl_msg, create_asset_service_acl_msg
+    create_aas_service_discover_acl_msg, create_asset_service_acl_msg, create_capability_request_acl_msg
 from smia.css_ontology.css_ontology_utils import CapabilitySkillOntologyInfo
 from smia.logic import acl_smia_messages_utils
 from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
@@ -57,7 +58,6 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
 
         _logger.info("HealthSupervisorBehaviour initialization complete")
 
-
     async def run(self) -> None:
 
         # In each iteration, the health of all assets to be supervised will be analyzed, and a replenishment action
@@ -65,22 +65,31 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
         for supervised_capability, supervised_asset_data in self.supervised_assets_dict.items():
             # For each capability, we will first identify all SMIA agents of the assets possessing that capability
             smia_instances_list = await self.get_platform_smia_instances_by_capability(supervised_capability)
-            _logger.warning("LISTA DE INSTANCIAS SMIA: {}".format(smia_instances_list)) # TODO BORRAR
+            _logger.warning("LISTA DE INSTANCIAS SMIA PARA {}: {}".format(supervised_capability, smia_instances_list)) # TODO BORRAR
 
             for smia_instance_jid in smia_instances_list:
                 # For each SMIA instance, health asset data will be requested. To do this, first the ModelReference
                 # within the instance's submodel must be obtained
                 health_property_ref = await self.health_property_model_reference(
                     smia_instance_jid, supervised_asset_data['healthProperty'])
-                _logger.warning("REFERENCIA HEALTH PROPERTY: {}".format(health_property_ref))  # TODO BORRAR
+                # _logger.warning("REFERENCIA HEALTH PROPERTY: {}".format(health_property_ref))  # TODO BORRAR
 
                 # With the valid ModelReference, you can request the value of the property from the associated SMIA
                 health_property_value = await self.health_property_value_from_smia_instance(smia_instance_jid, health_property_ref)
-                _logger.warning("VALOR HEALTH PROPERTY: {}".format(health_property_value)) # TODO BORRAR
+                # _logger.info("The value of the health property [{}] of SMIA [{}] is: {}".format(
+                #     supervised_asset_data['healthProperty'], smia_instance_jid, health_property_value)) # TODO BORRAR
 
+                if float(health_property_value) < self.health_threshold:
+                    _logger.assetinfo("The health value is below the threshold, so the replenishment must be requested")
+                    await self.request_replenishment_capabiity(supervised_capability,
+                                                               supervised_asset_data['replenishmentSkill'],
+                                                               smia_instance_jid)
+                    _logger.assetinfo("The replenishment capability to [{}] has been requested.".format(smia_instance_jid))
+                _logger.warning("ANALIZADO {} PARA {}".format(smia_instance_jid, supervised_capability))  # TODO BORRAR
 
 
         # Wait for the defined interval before the next iteration
+        _logger.assetinfo("Waiting {} seconds until the next supervision iteration".format(self.supervision_interval))
         await asyncio.sleep(self.supervision_interval)
 
 
@@ -126,6 +135,8 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
             service_id=AASRelatedServicesInfo.AAS_INFRASTRUCTURE_DISCOVERY_SERVICE_GET_ALL_ASSET_BY_CAPABILITY,
             service_params=capability_iri)
         assets_id_list = await self.send_acl_and_wait(assets_request_acl_msg)
+        if assets_id_list is None:
+            return []   # If no capacities are found, an empty list is returned to prevent errors
 
         # The data will not be requested if it has already been obtained; it will be included in the behavior dictionary.
         smia_instances_cap_list = set()
@@ -167,17 +178,13 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
                 smia_instance_jid))
             return None
         # Using the submodel identifier, we can create the ModelReference
-
         return {'keys': [
-        # return await AASModelUtils.create_aas_reference_object(
-        #     reference_type='ModelReference', keys_dict=[
                 {'type': 'SUBMODEL', 'value': aid_submodel_json['id']},
                 {'type': 'SUBMODEL_ELEMENT_COLLECTION', 'value': aid_submodel_json['submodelElements'][0]['idShort']},
                 {'type': 'SUBMODEL_ELEMENT_COLLECTION', 'value': 'InteractionMetadata'},
                 {'type': 'SUBMODEL_ELEMENT_COLLECTION', 'value': 'properties'},
                 {'type': 'SUBMODEL_ELEMENT_COLLECTION', 'value': health_property},
             ]}
-            # ])
 
     async def health_property_value_from_smia_instance(self, smia_instance_jid, health_property_ref: ModelReference):
         """
@@ -193,6 +200,22 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
         asset_svc_acl_msg = await create_asset_service_acl_msg(self.myagent, receiver_jid=smia_instance_jid,
                                                                service_ref=health_property_ref)
         return await self.send_acl_and_wait(asset_svc_acl_msg)
+
+    async def request_replenishment_capabiity(self, capability_name, skill_name, smia_instance_jid):
+        """
+        This method requests the replenishment capabiity to a specific SMIA instance due to a health value that is low.
+
+        Args:
+            capability_name (str): name of the capability to be requested.
+            skill_name (str): name of the skill associated to the capability to be requested.
+            smia_instance_jid (str): identifier of the SMIA instance to be requested the capability value.
+        """
+        capability_iri = '{}{}'.format(CapabilitySkillOntologyInfo.CSS_ONTOLOGY_SMIA_NAMESPACE, capability_name)
+        skill_iri = '{}{}'.format(CapabilitySkillOntologyInfo.CSS_ONTOLOGY_BASE_NAMESPACE, skill_name)
+        cap_request_acl_msg = await create_capability_request_acl_msg(
+            self.myagent, receiver_jid=smia_instance_jid, capability_iri=capability_iri, skill_iri=skill_iri)
+        return await self.send_acl_and_wait(cap_request_acl_msg)
+
 
     async def send_acl_and_wait(self, acl_msg: Message) -> Any:
         """
@@ -253,7 +276,14 @@ class OHSReceiveACLBehaviour(CyclicBehaviour):
             if msg.thread in self.myagent.ohs_acl_responses:
                 _logger.info("Unlocking HealthSupervisorBehaviour...")
                 msg_parsed_body = acl_smia_messages_utils.get_parsed_body_from_acl_msg(msg)
-                _logger.warning("VALUE : {}".format(msg_parsed_body))
+                # SMIA will check whether it is an error message; if it is, it will be unlocked but with empty content.
+                if (msg.get_metadata(FIPAACLInfo.FIPA_ACL_PERFORMATIVE_ATTRIB) ==
+                        FIPAACLInfo.FIPA_ACL_PERFORMATIVE_FAILURE):
+                    _logger.error("OperationalHealthSupervisor has received a failure message from [{}] instance. "
+                                  "Reason {}: ExceptionType: {}".format(
+                        acl_smia_messages_utils.get_sender_from_acl_msg(msg), msg_parsed_body['reason'],
+                        msg_parsed_body['exceptionType']))
+                    msg_parsed_body = None
                 self.myagent.ohs_acl_responses[msg.thread] = msg_parsed_body
                 # The behaviour is unlocked
                 self.myagent.ohs_acl_requests_event.set()
