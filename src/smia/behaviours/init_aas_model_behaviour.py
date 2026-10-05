@@ -15,6 +15,7 @@ from smia.aas_model.extended_submodel import ExtendedSkill, ExtendedSkillInterfa
     ExtendedComplexSkill, ExtendedSimpleSkill, ExtendedSimpleSkillInterface
 from smia.assetconnection.http_asset_connection import HTTPAssetConnection
 from smia.assetconnection.mqtt_asset_connection import MQTTAssetConnection
+from smia.assetconnection.opcua_asset_connection import OPCUAAssetConnection
 from smia.css_ontology.css_ontology_utils import CapabilitySkillOntologyUtils, CapabilitySkillOntologyInfo, \
     CSSModelAASModelInfo
 from smia.utilities.smia_info import AssetInterfacesInfo
@@ -354,8 +355,11 @@ class InitAASModelBehaviour(OneShotBehaviour):
             elif interface_elem.check_suppl_semantic_id_exist(AssetInterfacesInfo.SUPPL_SEMANTICID_MQTT):
                 # MQTT interface is specified within the AAS model
                 smia_native_connection_class = MQTTAssetConnection()
-            if interface_elem.check_suppl_semantic_id_exist('id de opc ua'):
-                # TODO Hay una interfaz de tipo OPC CUA
+            elif interface_elem.check_suppl_semantic_id_exist(AssetInterfacesInfo.SUPPL_SEMANTICID_OPCUA):
+                # MQTT interface is specified within the AAS model
+                smia_native_connection_class = OPCUAAssetConnection()
+            if interface_elem.check_suppl_semantic_id_exist('id pf a new protocol'):
+                # TODO develop and add the class for the new connection protocol
                 pass
             if smia_native_connection_class is not None:
                 await smia_native_connection_class.configure_connection_by_aas_model(interface_elem)
