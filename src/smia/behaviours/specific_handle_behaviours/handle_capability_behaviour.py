@@ -131,7 +131,7 @@ class HandleCapabilityBehaviour(OneShotBehaviour):
             if isinstance(cap_request_error, AssetConnectionError):
                 cap_request_error = CapabilityRequestExecutionError(self.received_acl_msg.thread,
                     cap_name, f"The error [{cap_request_error.error_type}] has appeared during the asset "
-                              f"connection. Reason: {cap_request_error.reason}.", self)
+                              f"connection: {cap_request_error.message}. Reason: {cap_request_error.reason}.", self)
 
             await cap_request_error.handle_capability_execution_error()
             return  # killing a behaviour does not cancel its current run loop
