@@ -28,11 +28,17 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
         self.myagent.ohs_acl_requests_event = asyncio.Event()
         self.myagent.ohs_acl_responses = {}
 
+        # Specification of approach to determining the value of health properties
+        # Approach A: self.get_health_property_value_by_aid_semantic_id
+        # Approach B: self.get_health_property_value_by_capability_request
+        self.health_property_acquisition_approach = self.get_health_property_value_by_aid_semantic_id
+
         # Health Supervisor-specific variables
         self.supervision_interval: float = None
         self.health_threshold: float = None
         self.supervised_assets_dict: dict = None
         self.platform_smia_instances: dict = {}
+        self.platform_smia_instances_references: dict = {}
 
         # The additional behaviour for receiving, collecting, and interpreting ACL messages from other SMIA agents is
         # added to the agent
@@ -65,19 +71,12 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
         for supervised_capability, supervised_asset_data in self.supervised_assets_dict.items():
             # For each capability, we will first identify all SMIA agents of the assets possessing that capability
             smia_instances_list = await self.get_platform_smia_instances_by_capability(supervised_capability)
-            _logger.warning("LISTA DE INSTANCIAS SMIA PARA {}: {}".format(supervised_capability, smia_instances_list)) # TODO BORRAR
 
             for smia_instance_jid in smia_instances_list:
-                # For each SMIA instance, health asset data will be requested. To do this, first the ModelReference
-                # within the instance's submodel must be obtained
-                health_property_ref = await self.health_property_model_reference(
-                    smia_instance_jid, supervised_asset_data['healthProperty'])
-                # _logger.warning("REFERENCIA HEALTH PROPERTY: {}".format(health_property_ref))  # TODO BORRAR
-
-                # With the valid ModelReference, you can request the value of the property from the associated SMIA
-                health_property_value = await self.health_property_value_from_smia_instance(smia_instance_jid, health_property_ref)
-                # _logger.info("The value of the health property [{}] of SMIA [{}] is: {}".format(
-                #     supervised_asset_data['healthProperty'], smia_instance_jid, health_property_value)) # TODO BORRAR
+                # For each SMIA instance, health asset data will be obtained. The method for obtaining the value is
+                # defined when the behavior is initialized
+                health_property_value = await self.health_property_acquisition_approach(smia_instance_jid,
+                                                                                                   supervised_asset_data)
 
                 if float(health_property_value) < self.health_threshold:
                     _logger.assetinfo("The health value is below the threshold, so the replenishment must be requested")
@@ -85,14 +84,54 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
                                                                supervised_asset_data['replenishmentSkill'],
                                                                smia_instance_jid)
                     _logger.assetinfo("The replenishment capability to [{}] has been requested.".format(smia_instance_jid))
-                _logger.warning("ANALIZADO {} PARA {}".format(smia_instance_jid, supervised_capability))  # TODO BORRAR
 
 
         # Wait for the defined interval before the next iteration
         _logger.assetinfo("Waiting {} seconds until the next supervision iteration".format(self.supervision_interval))
         await asyncio.sleep(self.supervision_interval)
 
+    # APPROACH A: obtain the value using the semanticID of AID submodel and requesting it through an asset service
+    # ----------
+    async def get_health_property_value_by_aid_semantic_id(self, smia_instance_jid, supervised_asset_data) -> Any:
+        """
+        This method gets the value of the health property using the semanticID of AID submodel and requesting it
+        through an asset service.
 
+        Args:
+            smia_instance_jid (str): identifier of the SMIA instance to be requested the asset service for the health
+            property.
+            supervised_asset_data (dict): JSON with the information about the health supervision.
+
+        Returns:
+            obj: value of the health property, obtained from the SMIA instance.
+        """
+        # The health asset data will be obtained. To do this, first the ModelReference within the instance's submodel
+        # must be obtained
+        health_property_ref = await self.get_health_property_model_reference(
+            smia_instance_jid, supervised_asset_data['healthProperty'])
+
+        # With the valid ModelReference, you can request the value of the property from the associated SMIA
+        health_property_value = await self.health_property_value_from_smia_instance(smia_instance_jid,
+                                                                                    health_property_ref)
+        return health_property_value
+
+    # APPROACH B: obtain the value through a Capability request (defined in the AAS of the supervised asset)
+    # ----------
+    async def get_health_property_value_by_capability_request(self, smia_instance_jid, supervised_asset_data) -> Any:
+        """
+        This method gets the value of the health property through a Capability request (defined in the AAS of the
+        supervised asset).
+
+        Args:
+            smia_instance_jid (str): identifier of the SMIA instance to be requested the asset service for the health
+            property.
+            supervised_asset_data (dict): JSON with the information about the health supervision.
+
+        Returns:
+            obj: value of the health property, obtained from the SMIA instance.
+        """
+        # TODO working...
+        pass
 
     async def get_critical_sm_element_by_semantic_id(self, semantic_id):
         """
@@ -155,9 +194,9 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
 
         return smia_instances_cap_list
 
-    async def health_property_model_reference(self, smia_instance_jid: str, health_property: str):
+    async def get_health_property_model_reference(self, smia_instance_jid: str, health_property: str):
         """
-        This method
+        This method gets the AAS ModelReference for the health property.
 
         Args:
             smia_instance_jid(str): identifier of the SMIA instance to be requested the model reference of the asset
@@ -166,6 +205,9 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
         Returns:
             basyx.aas.model.base.ModelReference: AAS model reference of the asset health property.
         """
+        # If it has already been obtained previously, there is no need to obtain it again
+        if f"{smia_instance_jid}/{health_property}" in self.platform_smia_instances_references:
+            return self.platform_smia_instances_references[f"{smia_instance_jid}/{health_property}"]
         # First, we must obtain the AID (submodel identifier) for that SMIA instance. This will be done by sending a
         # request to an AAS service.
         aas_svc_msg = await create_aas_service_discover_acl_msg(
@@ -178,13 +220,16 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
                 smia_instance_jid))
             return None
         # Using the submodel identifier, we can create the ModelReference
-        return {'keys': [
+        health_property_model_ref = {'keys': [
                 {'type': 'SUBMODEL', 'value': aid_submodel_json['id']},
                 {'type': 'SUBMODEL_ELEMENT_COLLECTION', 'value': aid_submodel_json['submodelElements'][0]['idShort']},
                 {'type': 'SUBMODEL_ELEMENT_COLLECTION', 'value': 'InteractionMetadata'},
                 {'type': 'SUBMODEL_ELEMENT_COLLECTION', 'value': 'properties'},
                 {'type': 'SUBMODEL_ELEMENT_COLLECTION', 'value': health_property},
             ]}
+        # The reference is saved so there is no need to request it again
+        self.platform_smia_instances_references[f"{smia_instance_jid}/{health_property}"] = health_property_model_ref
+        return health_property_model_ref
 
     async def health_property_value_from_smia_instance(self, smia_instance_jid, health_property_ref: ModelReference):
         """
