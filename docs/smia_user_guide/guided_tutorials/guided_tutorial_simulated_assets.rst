@@ -401,3 +401,55 @@ Now that the production plan has been explained, it will be launched. To do this
 
 3. To launch the plan via SMIA PE, click the ``CONTINUE`` button in the “Workflow management” section (the text will display “*SMIA workflow executing*”). In the “Workflow information” section, the table will be updated with the dynamic discovery of each asset for each task, and the workflow’s progress will be displayed in real time in "Workflow live status".
 4. Verify that the tasks are being performed in the Assets Simulator GUI. The asset requested to perform each task will play an animation showing the simulation of that task. Additionally, you can see that the asset changes to the *busy* state and that its battery or stamina decreases as it performs each task for the specified duration.
+
+
+Additional feature: extended proactive agent
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+During agent validation, the operation of the logical proactive agent presented in this tutorial, developed as an extended agent and named ``OperationalHealthSupervisor``, can be analyzed.
+
+The purpose of this agent is to monitor the health of simulated assets and, if necessary, request their replenishment. To do this, SMIA is extended with behavior that provides the agent with the necessary autonomy to extract this information and take proactive action on the assets. The source code for the component is available among the :octicon:`mark-github;1em` `GitHub resources of this tutorial <https://github.com/ekhurtado/SMIA/tree/main/examples/tutorials/SMIA_simulated_assets_guided_tutorial/OperationalHealthSupervisor>`_.
+
+This extended agent retrieves information from its AAS to determine which health properties to analyze, the threshold at which replenishment should be requested, and the replenishment capability to request in that case. It does all of this through "*semanticIDs*" (e.g., ``:SupervisionInterval`` to determine how often the analysis should be performed, or ``:HealthThreshold`` to determine the allowed health threshold). The information for each property and capability of the assets is defined in a SubmodelElementList with the semantic identifier ``:SupervisedAssets``.
+
+It uses the SMIA platform to discover the assets that have these properties and replenishment capabilities and to perform the necessary interactions with each of them (retrieving information or requesting replenishment). Therefore, if this component was added during the development of the deployment environment, it will be possible to analyze how, if any asset falls below 15% stamina/battery (as defined in the AAS in the GitHub file), it is replenished (``charge`` in the case of robots or ``recover`` in the case of humans).
+
+.. note::
+
+    The component dynamically discovers assets with this health property and replenishment capability. For the critical step of obtaining the health property value (which must be provided by the asset itself), it offers two different approaches. This approach can be modified by setting the environment variable ``ACQUISITION_APPROACH`` to either ``A`` or ``B`` (if not set to approach B by default).
+
+    .. dropdown:: :octicon:`code;1em;sd-text-primary` Approaches to the functioning of OperationalHealthSupervisor
+
+        .. tab-set::
+
+            .. tab-item:: Approach A
+
+                This approach retrieves the value of the properties from the semanticID of the "*AssetInterfacesDescription*" submodel and from a direct request to an asset service (targeting the property itself).
+
+                To do this, it requires the following information in each SubmodelElementCollection of the ``SupervisedAssets`` list within the OperationalHealthSupervisor’s AAS:
+
+                * A SubmodelElement with semanticID ``:HealthAssetProperty`` and the property name in the *idShort*.
+                * A SubmodelElement with semanticID ``:ReplenishmentCapability`` and the name of the replenishment capability in the *idShort*.
+                * A SubmodelElement with semanticID ``:ReplenishmentSkill`` and the name of the replenishment skill in the *idShort*.
+
+                To retrieve the property value, the OHS agent requests the reference to its SubmodelElement via an AAS service (to determine the exact identifier of its AID submodel), and then retrieves the value by requesting an asset service.
+
+                .. important::
+
+                    Since this approach uses an AAS service added in SMIA v1.0.1, it does not work with earlier versions.
+
+            .. tab-item:: Approach B
+
+                This approach retrieves the value of the properties from a request to a CSS capability that provides this data.
+
+                To do this, it requires information from both the AAS for the simulated assets and its own AAS.
+
+                1.  In the AAS of the simulated assets, a capability and a skill must be defined to retrieve this data, linking them to the property within the AID submodel as the skill interface. For example, in the AAS provided on GitHub, the capability ``Asset[Battery/Stamina]Provision`` is defined alongside the skill ``GetAsset[Battery/Stamina]``.
+                2. In the OperationalHealthSupervisor AAS, the following information is required in each SubmodelElementCollection of the ``SupervisedAssets`` list:
+
+                * A SubmodelElement with semanticID ``:HealthProvisionCapability`` and the name of the capability to achieve the health property value in the *idShort*.
+                    * A SubmodelElement with semanticID ``:HealthProvisionSkill`` and the name of the skill used to achieve the health property value in the *idShort*.
+                    * A SubmodelElement with semanticID ``:ReplenishmentCapability`` and the name of the replenishment capability in the *idShort*.
+                    * A SubmodelElement with semanticID ``:ReplenishmentSkill`` and the name of the replenishment skill in the *idShort*.
+
+                To obtain the property value, it directly requests the execution of the CSS capability. Since this approach uses SMIA’s native CSS requests, it works for most versions.
