@@ -9,7 +9,8 @@ from spade.message import Message
 from smia.utilities.fipa_acl_info import FIPAACLInfo
 from smia.utilities.smia_info import AssetInterfacesInfo
 from utilities import HealthSupervisorSemantics, create_discover_acl_msg_to_smia_ism, extract_supervised_assets_data, \
-    create_aas_service_discover_acl_msg, create_asset_service_acl_msg, create_capability_request_acl_msg
+    create_aas_service_discover_acl_msg, create_asset_service_acl_msg, create_capability_request_acl_msg, \
+    get_acquisition_approach_env_var
 from smia.css_ontology.css_ontology_utils import CapabilitySkillOntologyInfo
 from smia.logic import acl_smia_messages_utils
 from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
@@ -31,7 +32,9 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
         # Specification of approach to determining the value of health properties
         # Approach A: self.get_health_property_value_by_aid_semantic_id
         # Approach B: self.get_health_property_value_by_capability_request
-        self.health_property_acquisition_approach = self.get_health_property_value_by_aid_semantic_id
+        self.health_property_acquisition_approach = get_acquisition_approach_env_var(self)
+        _logger.info("Health property acquisition approach: {}".format(
+            self.health_property_acquisition_approach.__name__))
 
         # Health Supervisor-specific variables
         self.supervision_interval: float = None
@@ -130,8 +133,14 @@ class HealthSupervisorBehaviour(CyclicBehaviour):
         Returns:
             obj: value of the health property, obtained from the SMIA instance.
         """
-        # TODO working...
-        pass
+        # The health property value is obtained through a capability request (using provision capability and skill)
+        capability_iri = '{}{}'.format(CapabilitySkillOntologyInfo.CSS_ONTOLOGY_SMIA_NAMESPACE,
+                                       supervised_asset_data['healthProvisionCapability'])
+        skill_iri = '{}{}'.format(CapabilitySkillOntologyInfo.CSS_ONTOLOGY_BASE_NAMESPACE,
+                                  supervised_asset_data['healthProvisionSkill'])
+        cap_request_acl_msg = await create_capability_request_acl_msg(
+            self.myagent, receiver_jid=smia_instance_jid, capability_iri=capability_iri, skill_iri=skill_iri)
+        return await self.send_acl_and_wait(cap_request_acl_msg)
 
     async def get_critical_sm_element_by_semantic_id(self, semantic_id):
         """

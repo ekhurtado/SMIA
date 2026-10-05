@@ -4,6 +4,7 @@ from basyx.aas.model import SubmodelElement, SubmodelElementCollection, ModelRef
 from smia.logic import acl_smia_messages_utils, inter_smia_interactions_utils
 from smia.utilities.aas_related_services_info import AASRelatedServicesInfo
 from smia.utilities.fipa_acl_info import ACLSMIAJSONSchemas, FIPAACLInfo, ACLSMIAOntologyInfo
+from smia.utilities.general_utils import DockerUtils
 
 _logger = logging.getLogger(__name__)
 
@@ -32,22 +33,27 @@ async def extract_supervised_assets_data(supervised_assets_list: SubmodelElement
                 HealthSupervisorSemantics.SEMANTICID_OHS_REPLENISHMENT_CAPABILITY)
             replenishment_skill_sme = supervised_asset_data_sme.get_sm_element_by_semantic_id(
                 HealthSupervisorSemantics.SEMANTICID_OHS_REPLENISHMENT_SKILL)
-            supervised_asset_id_sme = supervised_asset_data_sme.get_sm_element_by_semantic_id(
-                HealthSupervisorSemantics.SEMANTICID_OHS_SUPERVISED_ASSET_ID)  # TODO ESTA IGUAL SE QUITA (se obtiene del KB)
             health_property_sme = supervised_asset_data_sme.get_sm_element_by_semantic_id(
-                HealthSupervisorSemantics.SEMANTICID_OHS_HEALTH_ASSET_PROPERTY)  # TODO ESTA EN LUGAR DE UNA REFERENCIA IGUAL ES SOLO EL NOMBRE DE LA PROPIEDAD (supondremos que está en el SM AID)
-            if (replenishment_cap_sme is None or replenishment_skill_sme is None or supervised_asset_id_sme is None
-                    or health_property_sme is None):
-                raise Exception()
+                HealthSupervisorSemantics.SEMANTICID_OHS_HEALTH_ASSET_PROPERTY)
+            health_provision_cap_sme = supervised_asset_data_sme.get_sm_element_by_semantic_id(
+                HealthSupervisorSemantics.SEMANTICID_OHS_HEALTH_PROVISION_CAPABILITY)
+            health_provision_skill_sme = supervised_asset_data_sme.get_sm_element_by_semantic_id(
+                HealthSupervisorSemantics.SEMANTICID_OHS_HEALTH_PROVISION_SKILL)
+            if replenishment_cap_sme is None or replenishment_skill_sme is None or health_property_sme is None:
+                raise Exception()   # Exception for approach A
+            if (replenishment_cap_sme is None or replenishment_skill_sme is None or health_provision_cap_sme is None
+                    or health_provision_skill_sme is None):
+                raise Exception()   # Exception for approach B
         except Exception as e:
             _logger.warning("SubmodelElement [{}] representing a data collection for an asset to be supervised does"
                             " not contain all the required information (assetID, replenishment capability and "
                             "skill, and health property).".format(supervised_asset_data_sme))
             continue
-        supervised_assets_json[replenishment_cap_sme.id_short]= {'replenishmentSkill': replenishment_skill_sme.id_short,
-                                                                 'assetID': supervised_asset_id_sme.value,
-                                                                 'healthProperty': health_property_sme.id_short}
-                                                                 # 'healthProperty': health_property_sme.value} # TODO ANTIGUO
+        supervised_assets_json[replenishment_cap_sme.id_short]= {
+            'replenishmentSkill': replenishment_skill_sme.id_short,
+            'healthProvisionCapability': health_provision_cap_sme.id_short,
+            'healthProvisionSkill': health_provision_skill_sme.id_short,
+            'healthProperty': health_property_sme.id_short}
 
     return supervised_assets_json
 
@@ -144,6 +150,28 @@ async def create_capability_request_acl_msg(agent_object, receiver_jid: str, cap
         FIPAACLInfo.FIPA_ACL_PERFORMATIVE_REQUEST, ACLSMIAOntologyInfo.ACL_ONTOLOGY_CSS_SERVICE,
         protocol=FIPAACLInfo.FIPA_ACL_REQUEST_PROTOCOL, msg_body=cap_request_body)
 
+# ---------------
+# OTHER UTILITIES
+# ---------------
+def get_acquisition_approach_env_var(behav_obj):
+    """
+    Gets the specific environment variable for health property acquisition approach (A/B) and returns the associated
+    method.
+
+    Args:
+        behav_obj: SPADE behaviour of HealthSupervisorBehaviour.
+
+    Returns:
+        executable method associated to the specific approach specified (and default approach B if invalid data is
+        added in the environment variable).
+    """
+    value = str(DockerUtils.get_env_var('ACQUISITION_APPROACH'))
+    if value == 'A':
+        return behav_obj.get_health_property_value_by_aid_semantic_id
+    else:
+        # Default approach: if it is 'B' or None (if not defined)
+        return behav_obj.get_health_property_value_by_capability_request
+
 class HealthSupervisorSemantics:
     """
     This class contains the specific semanticIDs of Operational Health Supervisor extended agent.
@@ -155,5 +183,11 @@ class HealthSupervisorSemantics:
     SEMANTICID_OHS_REPLENISHMENT_CAPABILITY = 'urn:ehu:gcis:OperationalHealthSupervisor:1:1:ReplenishmentCapability'
     SEMANTICID_OHS_REPLENISHMENT_SKILL = 'urn:ehu:gcis:OperationalHealthSupervisor:1:1:ReplenishmentSkill'
     SEMANTICID_OHS_SUPERVISED_ASSET_ID = 'urn:ehu:gcis:OperationalHealthSupervisor:1:1:SupervisedAssetID'
+
+    # SemanticID for approach A
     SEMANTICID_OHS_HEALTH_ASSET_PROPERTY = 'urn:ehu:gcis:OperationalHealthSupervisor:1:1:HealthAssetProperty'
+
+    # SemanticIDs for approach B
+    SEMANTICID_OHS_HEALTH_PROVISION_CAPABILITY = 'urn:ehu:gcis:OperationalHealthSupervisor:1:1:HealthProvisionCapability'
+    SEMANTICID_OHS_HEALTH_PROVISION_SKILL = 'urn:ehu:gcis:OperationalHealthSupervisor:1:1:HealthProvisionSkill'
 
