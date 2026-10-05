@@ -28,12 +28,12 @@ class OPCUAAssetConnection(AssetConnection):
         self.endpoint_metadata_elem = None
         self.security_scheme_elem = None
 
-        # Data of the monitoring session (subscription to the observable interaction elements)
+        # Data of the OPC UA session, shared by the requests and the subscription to the observable interaction elements
         self.observable_elements = {}
         self.monitored_nodes = {}
         self.last_values = {}
         self.received_msgs_queue = asyncio.Queue()
-        self.monitoring_client = None
+        self.opcua_client = None
         self.subscription = None
         self.connected = False
         self.connection_lock = asyncio.Lock()
@@ -87,44 +87,49 @@ class OPCUAAssetConnection(AssetConnection):
             self.base.value, len(self.observable_elements)))
 
     async def check_asset_connection(self):
-        if not self.connected or self.monitoring_client is None:
+        if not self.connected or self.opcua_client is None:
             return False
         try:
             # The state of the server is a standard node that every OPC UA server has
-            server_state_node = self.monitoring_client.get_node(ua.NodeId(ua.ObjectIds.Server_ServerStatus_State))
+            server_state_node = self.opcua_client.get_node(ua.NodeId(ua.ObjectIds.Server_ServerStatus_State))
             await server_state_node.read_value()
             return True
         except Exception:
-            _logger.warning("The OPC UA monitoring session with {} has been lost.".format(self.base.value))
+            _logger.warning("The OPC UA session with {} has been lost.".format(self.base.value))
             self.connected = False
             return False
 
     async def connect_with_asset(self):
-        # The lock avoids that two simultaneous calls open two different monitoring sessions
+        # The lock avoids that two simultaneous calls open two different sessions
         async with self.connection_lock:
             if self.connected:
                 return
             # If there is an old session, it is closed before opening a new one
-            await self.close_monitoring_session()
+            await self.close_opcua_session()
             try:
-                self.monitoring_client = Client(url=self.base.value.strip(),
-                                                timeout=OPCUAAssetInterfaceSemantics.DEFAULT_TIMEOUT)
-                await self.monitoring_client.connect()
+                if self.base is None or not hasattr(self.base, 'value'):
+                    raise AssetConnectionError("Unable to open the OPC UA session due to 'base' data is missing in "
+                                               "EndpointMetadata.", "invalid endpoint metadata",
+                                               "Invalid AssetInterface ('base' missing in EndpointMetadata)")
+                self.opcua_client = Client(url=self.base.value.strip(),
+                                           timeout=OPCUAAssetInterfaceSemantics.DEFAULT_TIMEOUT)
+                await self.opcua_client.connect()
 
                 if self.observable_elements:
+                    # TODO DUDA: Si es observable hay que suscribirse directamente? O quizas es mas optimo realizar la suscripcion solo si se solicita (y ahí comprobar que sea observable)
                     handler = OPCUASubscriptionHandler(self)
-                    self.subscription = await self.monitoring_client.create_subscription(
+                    self.subscription = await self.opcua_client.create_subscription(
                         OPCUAAssetInterfaceSemantics.SUBSCRIPTION_PERIOD, handler)
                     for element_name, node_id in self.observable_elements.items():
-                        node = self.monitoring_client.get_node(node_id)
+                        node = self.opcua_client.get_node(node_id)
                         self.monitored_nodes[node.nodeid] = element_name
                         await self.subscription.subscribe_data_change(node)
 
                 self.connected = True
-                _logger.info("OPC UA monitoring session opened with {}".format(self.base.value))
+                _logger.info("OPC UA session opened with {}".format(self.base.value))
             except Exception as e:
-                await self.close_monitoring_session()
-                raise AssetConnectionError("Unable to open the OPC UA monitoring session with {}: {}".format(
+                await self.close_opcua_session()
+                raise AssetConnectionError("Unable to open the OPC UA session with {}: {}".format(
                     self.base.value, e), "connection error", type(e).__name__)
 
     async def execute_asset_service(self, interaction_metadata, service_input_data=None):
@@ -151,7 +156,7 @@ class OPCUAAssetConnection(AssetConnection):
             if not self.received_msgs_queue.empty():
                 return self.received_msgs_queue.get_nowait()
 
-            # The monitoring session is opened (or reopened) if it is not available
+            # The session is opened (or reopened) if it is not available
             if not await self.check_asset_connection():
                 await self.connect_with_asset()
 
@@ -190,54 +195,76 @@ class OPCUAAssetConnection(AssetConnection):
         else:
             self.request_operation = OPCUAAssetInterfaceSemantics.OPERATION_WRITE
 
-    async def send_opcua_request(self):
+    async def send_opcua_request(self, node_id=None, operation=None, new_value=None):
         """
-        This method sends the required OPC UA request (read or write) to the asset. All the required information is
-        obtained from the global variables of the class.
+        This method sends the required OPC UA request (read or write) to the asset through the single persistent
+        session. If the session is not open, it is opened automatically; if it has been lost, it is reopened once
+         and the request is retried.
+
+        When called without arguments, the request data previously stored by 'extract_general_interaction_metadata'
+        and 'add_asset_service_data' are used. The optional arguments allow concurrent requests without overwriting
+        them.
+
+        Args:
+            node_id (str, optional): NodeId of the variable. Defaults to the stored request NodeId.
+            operation (str, optional): 'read' or 'write'. Defaults to the stored request operation.
+            new_value (optional): raw value to be written. Defaults to the stored request value.
 
         Returns:
             object: the value read from the variable, or the written value.
         """
-        try:
-            # As in HTTP asset connection, a new session is opened for each request and closed at the end
-            async with Client(url=self.base.value.strip(),
-                              timeout=OPCUAAssetInterfaceSemantics.DEFAULT_TIMEOUT) as opcua_client:
-                node = opcua_client.get_node(self.request_node_id)
+        if node_id is None:
+            node_id = self.request_node_id
+        if operation is None:
+            operation = self.request_operation
+        if new_value is None:
+            new_value = self.request_value
 
-                if self.request_operation == OPCUAAssetInterfaceSemantics.OPERATION_READ:
-                    value = await node.read_value()
-                    _logger.info("OPC UA read of {} completed: {}".format(self.request_node_id,
-                                                                          self.value_to_log_text(value)))
+        for attempt in (1, 2):
+            try:
+                if not await self.check_asset_connection():
+                    await self.connect_with_asset()
+                async with self.connection_lock:
+                    node = self.opcua_client.get_node(node_id)
+
+                    if operation == OPCUAAssetInterfaceSemantics.OPERATION_READ:
+                        value = await node.read_value()
+                        _logger.info("OPC UA read of {} completed: {}".format(node_id, self.value_to_log_text(value)))
+                        return value
+
+                    # To write, the exact OPC UA data type of the variable is required (otherwise the server rejects it)
+                    variant_type = await node.read_data_type_as_variant_type()
+                    value = await self.convert_value_to_variant_type(new_value, variant_type)
+                    if isinstance(value, list):
+                        # The size of an OPC UA array cannot be changed, so it must match the current one
+                        current_value = await node.read_value()
+                        if isinstance(current_value, list) and len(current_value) != len(value):
+                            raise AssetConnectionError("The array {} has {} elements, but {} were received".format(
+                                node_id, len(current_value), len(value)), "invalid asset service request",
+                                "Invalid array size")
+                    # Siemens OPC UA servers do not accept writes with timestamps
+                    await node.write_value(ua.DataValue(Value=ua.Variant(value, variant_type),
+                                                        SourceTimestamp=None, ServerTimestamp=None))
+                    _logger.info("OPC UA write of {} completed: {}".format(node_id, self.value_to_log_text(value)))
                     return value
 
-                # To write, the exact OPC UA data type of the variable is required (otherwise the server rejects it)
-                variant_type = await node.read_data_type_as_variant_type()
-                value = await self.convert_value_to_variant_type(self.request_value, variant_type)
-                if isinstance(value, list):
-                    # The size of an OPC UA array cannot be changed, so it must match the current one
-                    current_value = await node.read_value()
-                    if isinstance(current_value, list) and len(current_value) != len(value):
-                        raise AssetConnectionError("The array {} has {} elements, but {} were received".format(
-                            self.request_node_id, len(current_value), len(value)), "invalid asset service request",
-                            "Invalid array size")
-                # Siemens OPC UA servers do not accept writes with timestamps
-                await node.write_value(ua.DataValue(Value=ua.Variant(value, variant_type),
-                                                    SourceTimestamp=None, ServerTimestamp=None))
-                _logger.info("OPC UA write of {} completed: {}".format(self.request_node_id,
-                                                                       self.value_to_log_text(value)))
-                return value
-
-        except AssetConnectionError:
-            raise
-        except ua.UaStatusCodeError as e:
-            raise AssetConnectionError("The OPC UA server rejected the {} of {}: {}".format(
-                self.request_operation, self.request_node_id, e), "asset service error", type(e).__name__)
-        except (ConnectionError, OSError, asyncio.TimeoutError) as e:
-            raise AssetConnectionError("Unable to communicate with the OPC UA server {}: {}".format(
-                self.base.value, e), "connection error", type(e).__name__)
-        except Exception as e:
-            raise AssetConnectionError("Unexpected error during the {} of {}: {}".format(
-                self.request_operation, self.request_node_id, e), "asset service error", type(e).__name__)
+            except AssetConnectionError:
+                raise
+            except (ua.UaStatusCodeError, ConnectionError, OSError, asyncio.TimeoutError) as e:
+                session_lost = not await self.check_asset_connection()
+                if session_lost:
+                    await self.close_opcua_session()
+                if attempt == 1 and session_lost:
+                    # The session expired while idle: reopen it and retry the request once
+                    continue
+                if isinstance(e, ua.UaStatusCodeError):
+                    raise AssetConnectionError("The OPC UA server rejected the {} of {}: {}".format(
+                        operation, node_id, e), "asset service error", type(e).__name__)
+                raise AssetConnectionError("Unable to communicate with the OPC UA server {}: {}".format(
+                    self.base.value, e), "connection error", type(e).__name__)
+            except Exception as e:
+                raise AssetConnectionError("Unexpected error during the {} of {}: {}".format(
+                    operation, node_id, e), "asset service error", type(e).__name__)
 
     def save_received_msg(self, node, value):
         """
@@ -257,22 +284,22 @@ class OPCUAAssetConnection(AssetConnection):
         self.received_msgs_queue.put_nowait({'interaction_element': element_name, 'value': value,
                                              'previous_value': previous_value})
 
-    async def close_monitoring_session(self):
+    async def close_opcua_session(self):
         """
-        This method closes the subscription and the monitoring session, ignoring the errors if the session is lost.
+        This method closes the subscription and the OPC UA session, ignoring the errors if the session is lost.
         """
         if self.subscription is not None:
             try:
                 await self.subscription.delete()
             except Exception:
                 pass
-        if self.monitoring_client is not None:
+        if self.opcua_client is not None:
             try:
-                await self.monitoring_client.disconnect()
+                await self.opcua_client.disconnect()
             except Exception:
                 pass
         self.subscription = None
-        self.monitoring_client = None
+        self.opcua_client = None
         self.monitored_nodes = {}
         self.connected = False
 
