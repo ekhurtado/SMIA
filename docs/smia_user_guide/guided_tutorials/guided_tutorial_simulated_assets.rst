@@ -14,10 +14,7 @@ This document contains a step-by-step guide to building a SMIA agent and deployi
             :color: primary
             :outline:
 
-            :octicon:`container;1em` Step-by-step tutorial GitHub resources
-
-.. TODO HAY QUE AÑADIR LOS RECURSOS A GITHUB
-
+            :octicon:`mark-github;1em` Step-by-step tutorial GitHub resources
 
 Introduction
 ------------
@@ -226,7 +223,7 @@ Once the phase required for SMIA's self-configuration (development of CSS-enrich
 .. tip::
     In this tutorial, the platform will be deployed in a self-contained virtualized environment using Docker Compose, taking advantage of the fact that all platform components are available as images on Docker Hub (`SMIA agent image <https://hub.docker.com/r/ekhurtado/smia/tags>`_ and `platform component images <https://hub.docker.com/r/ekhurtado/smia-tools/tags>`_).
 
-    You can use the CSS-enriched AAS models for the simulated assets (human, mobile, and production) developed in the previous phase. The rest of the CSS-enriched AAS model files for the logical assets (SMIA PE and proactive analysis asset) and infrastructure assets (SMIA Operator or SMIA ISM) are available in the `GitHub resources of this tutorial <https://github.com/ekhurtado/SMIA/tree/main/examples/tutorials/SMIA_simulated_assets_guided_tutorial>`_.
+    You can use the CSS-enriched AAS models for the simulated assets (human, mobile, and production) developed in the previous phase. The rest of the CSS-enriched AAS model files for the logical assets (SMIA PE and proactive analysis asset) and infrastructure assets (SMIA Operator or SMIA ISM) are available in the :octicon:`mark-github;1em` `GitHub resources of this tutorial <https://github.com/ekhurtado/SMIA/tree/main/examples/tutorials/SMIA_simulated_assets_guided_tutorial>`_.
 
 To safely and easily set up a valid deployment environment, we will use the tool provided in this documentation platform: :octicon:`repo;1em` :ref:`SMIA Environment Builder`. The steps to follow to generate the appropriate deployment environment from scratch are as follows:
 
@@ -257,9 +254,11 @@ To safely and easily set up a valid deployment environment, we will use the tool
         | Human Asset      | Human Worker 1     | ``SimulatedAssetHTTP_Human_1.aasx``           | ``human_worker_001``     |
         +------------------+--------------------+-----------------------------------------------+--------------------------+
 
-    4.3 We will enable ``SMIA Operator`` so that we can validate the simulated assets later.
+    4.3 We will add another asset (by clicking ``Add asset instance``) and specify the extended asset as the proactive logical asset "*OperationalHealthSupervisor*": use the ``Upload AASX file`` button to select the associated CSS-enriched AAS model (``SimulatedAssets_OperationalHealthSupervisor.aasx``), and manually enter the agent JID in the text field (e.g., ``operational_health_supervisor``).  In this case, since it is an extended agent, we must also enable ``Extended SMIA`` and add the Docker image for the agent in the text field: ``ekhurtado/smia-use-cases:latest-health-supervisor``.
 
-    4.4 We will enable ``Assets Simulator HTTP``, where we will need to specify the identifiers of the simulated assets. The identifiers must be exactly the same as those defined in the CSS-enriched AAS model under ``AAS/AssetInformation/globalAssetId``. If no new values have been added, the values from the models provided in the GitHub resources of this tutorial can be used:
+    4.4 We will enable ``SMIA Operator`` so that we can validate the simulated assets later.
+
+    4.5 We will enable ``Assets Simulator HTTP``, where we will need to specify the identifiers of the simulated assets. The identifiers must be exactly the same as those defined in the CSS-enriched AAS model under ``AAS/AssetInformation/globalAssetId``. If no new values have been added, the values from the models provided in the GitHub resources of this tutorial can be used:
 
     * **production_assets**: ``assetID/industrialRobot001,assetID/industrialRobot002``
     * **mobile_assets**: ``assetID/mobileRobot001,assetID/mobileRobot002``

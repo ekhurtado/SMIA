@@ -39,21 +39,33 @@ async def extract_supervised_assets_data(supervised_assets_list: SubmodelElement
                 HealthSupervisorSemantics.SEMANTICID_OHS_HEALTH_PROVISION_CAPABILITY)
             health_provision_skill_sme = supervised_asset_data_sme.get_sm_element_by_semantic_id(
                 HealthSupervisorSemantics.SEMANTICID_OHS_HEALTH_PROVISION_SKILL)
-            if replenishment_cap_sme is None or replenishment_skill_sme is None or health_property_sme is None:
-                raise Exception()   # Exception for approach A
-            if (replenishment_cap_sme is None or replenishment_skill_sme is None or health_provision_cap_sme is None
-                    or health_provision_skill_sme is None):
-                raise Exception()   # Exception for approach B
+
+            is_approach_a_valid = (
+                    replenishment_cap_sme is not None
+                    and replenishment_skill_sme is not None
+                    and health_property_sme is not None
+            )
+            is_approach_b_valid = (
+                    replenishment_cap_sme is not None
+                    and replenishment_skill_sme is not None
+                    and health_provision_cap_sme is not None
+                    and health_provision_skill_sme is not None
+            )
+
+            if not (is_approach_a_valid or is_approach_b_valid):
+                raise Exception()
+
         except Exception as e:
             _logger.warning("SubmodelElement [{}] representing a data collection for an asset to be supervised does"
-                            " not contain all the required information (assetID, replenishment capability and "
-                            "skill, and health property).".format(supervised_asset_data_sme))
+                            " not contain all the required information (neither Approach A nor Approach "
+                            "B).".format(supervised_asset_data_sme))
             continue
+
         supervised_assets_json[replenishment_cap_sme.id_short]= {
-            'replenishmentSkill': replenishment_skill_sme.id_short,
-            'healthProvisionCapability': health_provision_cap_sme.id_short,
-            'healthProvisionSkill': health_provision_skill_sme.id_short,
-            'healthProperty': health_property_sme.id_short}
+            'replenishmentSkill': replenishment_skill_sme.id_short if replenishment_skill_sme is not None else None,
+            'healthProvisionCapability': health_provision_cap_sme.id_short if health_provision_cap_sme is not None else None,
+            'healthProvisionSkill': health_provision_skill_sme.id_short if health_provision_skill_sme is not None else None,
+            'healthProperty': health_property_sme.id_short if health_property_sme is not None else None}
 
     return supervised_assets_json
 
