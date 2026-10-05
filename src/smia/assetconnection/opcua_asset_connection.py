@@ -38,11 +38,6 @@ class OPCUAAssetConnection(AssetConnection):
         self.connected = False
         self.connection_lock = asyncio.Lock()
 
-        # Data of each request
-        self.request_node_id = None
-        self.request_operation = None
-        self.request_value = None
-
     async def configure_connection_by_aas_model(self, interface_aas_elem):
 
         # The Interface element need to be checked
@@ -104,13 +99,13 @@ class OPCUAAssetConnection(AssetConnection):
         async with self.connection_lock:
             if self.connected:
                 return
+            if self.base is None or not hasattr(self.base, 'value'):
+                raise AssetConnectionError("Unable to open the OPC UA session due to 'base' data is missing in"
+                                           " EndpointMetadata.", "invalid endpoint metadata",
+                                           "Invalid AssetInterface ('base' missing in EndpointMetadata)")
             # If there is an old session, it is closed before opening a new one
             await self.close_opcua_session()
             try:
-                if self.base is None or not hasattr(self.base, 'value'):
-                    raise AssetConnectionError("Unable to open the OPC UA session due to 'base' data is missing in "
-                                               "EndpointMetadata.", "invalid endpoint metadata",
-                                               "Invalid AssetInterface ('base' missing in EndpointMetadata)")
                 self.opcua_client = Client(url=self.base.value.strip(),
                                            timeout=OPCUAAssetInterfaceSemantics.DEFAULT_TIMEOUT)
                 await self.opcua_client.connect()
@@ -139,13 +134,13 @@ class OPCUAAssetConnection(AssetConnection):
                                        "InteractionMetadata object is None")
 
         # First, the general data of the request are obtained from the AAS
-        await self.extract_general_interaction_metadata(interaction_metadata)
+        request_node_id = await self.extract_general_interaction_metadata(interaction_metadata)
 
         # Then, the data to be sent to the asset (if there is) are added, and the operation is defined
-        await self.add_asset_service_data(interaction_metadata, service_input_data)
+        request_operation, new_data = await self.extract_asset_service_data(interaction_metadata, service_input_data)
 
         # At this point, the OPC UA request can be performed
-        opcua_response = await self.send_opcua_request()
+        opcua_response = await self.send_opcua_request(request_node_id, request_operation, new_data)
 
         # The response is processed in the same way as in the rest of SMIA asset connections
         return await self.get_response_content(interaction_metadata, opcua_response)
@@ -177,10 +172,13 @@ class OPCUAAssetConnection(AssetConnection):
 
         Args:
             interaction_metadata (basyx.aas.model.SubmodelElementCollection): SubmodelElement of interactionMetadata.
-        """
-        self.request_node_id = await self.get_node_id(interaction_metadata)
 
-    async def add_asset_service_data(self, interaction_metadata, service_input_data):
+        Returns:
+            str: NodeId of the OPC UA variable.
+        """
+        return await self.get_node_id(interaction_metadata)
+
+    async def extract_asset_service_data(self, interaction_metadata, service_input_data):
         """
         This method adds the data of the asset service and defines the OPC UA operation: if a value is received, it
         will be written in the variable; otherwise, the variable will be read.
@@ -188,38 +186,33 @@ class OPCUAAssetConnection(AssetConnection):
         Args:
             interaction_metadata (basyx.aas.model.SubmodelElementCollection): SubmodelElement of interactionMetadata.
             service_input_data (dict): dictionary containing the input data of the asset service.
-        """
-        self.request_value = await self.get_single_input_value(service_input_data)
-        if self.request_value is None:
-            self.request_operation = OPCUAAssetInterfaceSemantics.OPERATION_READ
-        else:
-            self.request_operation = OPCUAAssetInterfaceSemantics.OPERATION_WRITE
 
-    async def send_opcua_request(self, node_id=None, operation=None, new_value=None):
+        Returns:
+            str: operation type ('read' or 'write').
+            obj: new data (None if service_input_data is empty).
+        """
+        new_data = await self.get_single_input_value(service_input_data)
+        if new_data is None:
+            return OPCUAAssetInterfaceSemantics.OPERATION_READ, None
+        else:
+            return OPCUAAssetInterfaceSemantics.OPERATION_WRITE, new_data
+
+    async def send_opcua_request(self, node_id, operation, new_data):
         """
         This method sends the required OPC UA request (read or write) to the asset through the single persistent
         session. If the session is not open, it is opened automatically; if it has been lost, it is reopened once
-         and the request is retried.
+        and the request is retried.
 
-        When called without arguments, the request data previously stored by 'extract_general_interaction_metadata'
-        and 'add_asset_service_data' are used. The optional arguments allow concurrent requests without overwriting
-        them.
+        The request data are given as arguments, so concurrent requests do not overwrite each other.
 
         Args:
-            node_id (str, optional): NodeId of the variable. Defaults to the stored request NodeId.
-            operation (str, optional): 'read' or 'write'. Defaults to the stored request operation.
-            new_value (optional): raw value to be written. Defaults to the stored request value.
+            node_id (str): NodeId of the variable.
+            operation (str): 'read' or 'write'.
+            new_data: new data to be written (only used when operation is 'write').
 
         Returns:
             object: the value read from the variable, or the written value.
         """
-        if node_id is None:
-            node_id = self.request_node_id
-        if operation is None:
-            operation = self.request_operation
-        if new_value is None:
-            new_value = self.request_value
-
         for attempt in (1, 2):
             try:
                 if not await self.check_asset_connection():
@@ -234,7 +227,7 @@ class OPCUAAssetConnection(AssetConnection):
 
                     # To write, the exact OPC UA data type of the variable is required (otherwise the server rejects it)
                     variant_type = await node.read_data_type_as_variant_type()
-                    value = await self.convert_value_to_variant_type(new_value, variant_type)
+                    value = await self.convert_value_to_variant_type(new_data, variant_type)
                     if isinstance(value, list):
                         # The size of an OPC UA array cannot be changed, so it must match the current one
                         current_value = await node.read_value()
