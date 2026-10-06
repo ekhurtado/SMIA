@@ -1,9 +1,12 @@
 import asyncio
 import logging
+import os
 import re
 
 from SpiffWorkflow.bpmn.specs.defaults import EndEvent, ExclusiveGateway, StartEvent
 from SpiffWorkflow.bpmn.specs.defaults import ServiceTask
+
+from smia.utilities.general_utils import DockerUtils
 
 from smia_pe.utilities.smia_bpmn_info import SMIABPMNInfo
 
@@ -39,10 +42,78 @@ class SMIABPMNUtils:
             attrib_name (str): name of the attribute
 
         Returns:
-            value of the attribute.
+            value of the attribute (None if missing or SMIA namespace not declared).
         """
-        prefix = '{' + node.nsmap.get('smia') + '}'
-        return node.attrib.get(f'{prefix}{attrib_name}')
+        if node is None or not hasattr(node, 'attrib'):
+            return None
+        nsmap = getattr(node, 'nsmap', {}) or {}
+        smia_ns = nsmap.get('smia')
+        if not smia_ns:
+            # Fallback to the canonical SMIA namespace (covers unprefixed lookups and
+            # files where the prefix map is not available on this node)
+            smia_ns = SMIABPMNInfo.BPMN_SMIA_NAMESPACE
+        return node.attrib.get(f'{{{smia_ns}}}{attrib_name}')
+
+    @staticmethod
+    def convert_smia_config_value(raw_value, var_type, default):
+        """
+        This method converts a raw SMIA config value (from env var or BPMN attribute) to the
+        desired type, using the same criteria as DockerUtils.get_safe_env_var.
+
+        Args:
+            raw_value: raw string/typed value.
+            var_type: desired type (bool, int, float, str).
+            default: value to return if conversion fails.
+
+        Returns:
+            converted value or default.
+        """
+        try:
+            if var_type is bool:
+                if isinstance(raw_value, bool):
+                    return raw_value
+                return str(raw_value).strip().lower() in ('true', '1', 't', 'yes', 'on')
+            return var_type(raw_value)
+        except (TypeError, ValueError, AttributeError):
+            return default
+
+    @staticmethod
+    def get_process_smia_config(process_parser, bpmn_attrib_name, env_var_name, default, var_type=str):
+        """
+        This method resolves a workflow-level configuration with the precedence:
+        environment variable > BPMN process attribute (smia:*) > default. The env var
+        predominates only when defined (non-empty); otherwise the smia: attribute of the
+        <bpmn:process> element is used.
+
+        Args:
+            process_parser (SpiffWorkflow.bpmn.parser.ProcessParser): BPMN process parser instance.
+            bpmn_attrib_name (str): name of the smia: attribute in the BPMN process element.
+            env_var_name (str): name of the environment variable.
+            default: default value if neither env var nor BPMN attribute is defined.
+            var_type: desired type of the value.
+
+        Returns:
+            resolved configuration value.
+        """
+        # 1. Environment variable predominates, but only if defined (and non-empty)
+        env_raw = os.environ.get(env_var_name)
+        if env_raw is not None and str(env_raw).strip() != '':
+            value = DockerUtils.get_safe_env_var(env_var_name, default, var_type)
+            _logger.info(f"Workflow config [{env_var_name}] obtained from environment variable: {value}")
+            return value
+
+        # 2. BPMN process-level smia: attribute
+        try:
+            process_node = getattr(process_parser, 'node', None)
+            bpmn_raw = SMIABPMNUtils.get_node_smia_attrib(process_node, bpmn_attrib_name)
+        except Exception:
+            bpmn_raw = None
+        if bpmn_raw is None or (isinstance(bpmn_raw, str) and bpmn_raw.strip() == ''):
+            return default
+        value = SMIABPMNUtils.convert_smia_config_value(bpmn_raw, var_type, default)
+        _logger.info(f"Workflow config [{env_var_name}] obtained from BPMN process attribute "
+                     f"[smia:{bpmn_attrib_name}]: {value}")
+        return value
 
     @staticmethod
     def add_smia_attributes_values(process_parser):

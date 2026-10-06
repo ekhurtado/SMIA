@@ -48,6 +48,11 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
         # message, it will add the content with the thread of the message {'threadValue': 'ACLcontent'}
         self.acl_messages_responses = {}
 
+        # Process configuration defined in BPMN
+        self.bpmn_config_initialized = False
+        self.myagent.workflow_repeat = SMIABPMNInfo.DEFAULT_WORKFLOW_REPEAT
+        self.myagent.negotiation_criterion = SMIABPMNInfo.DEFAULT_NEGOTIATION_CRITERION
+
     async def on_start(self):
         """
         This method implements the initialization process of this behaviour.
@@ -84,6 +89,14 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
         # blocked until the response for this message arrives. A complementary Cyclic behavior has been developed to
         # receive all messages and unblock this behavior to continue with the production plan.
 
+        # If the workflow must not repeat, only the first Cyclic iteration executes it.
+        # bpmn_config_initialized is set in the first iteration
+        if self.bpmn_config_initialized and not self.myagent.workflow_repeat:
+            _logger.info("WORKFLOW_REPEAT is False and the workflow has already been executed, "
+                         "so further executions are skipped.")
+            await asyncio.sleep(5)
+            return
+
         # First, the BPMN parser is created, the SMIA namespace is added and the BPMN file content is loaded
         bpmn_parser = BpmnParser()
         bpmn_parser.namespaces['smia'] = SMIABPMNInfo.BPMN_SMIA_NAMESPACE
@@ -97,6 +110,26 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
 
         # The complete process parser is also saved in the agent object
         self.myagent.bpmn_process_parser = self.process_parser
+
+        # The workflow-level configuration is resolved once at startup (env var predominates
+        # over the smia: process attribute). Later Cyclic iterations must not overwrite GUI toggles.
+        if not self.bpmn_config_initialized:
+            self.myagent.bpmn_execution_status = SMIABPMNUtils.get_process_smia_config(
+                process_parser, SMIABPMNInfo.PROCESS_WORKFLOW_AUTOSTART_ATTRIBUTE,
+                SMIABPMNInfo.WORKFLOW_AUTOSTART_ENV_VAR,
+                SMIABPMNInfo.DEFAULT_WORKFLOW_AUTOSTART, bool)
+            self.myagent.workflow_repeat = SMIABPMNUtils.get_process_smia_config(
+                process_parser, SMIABPMNInfo.PROCESS_WORKFLOW_REPEAT_ATTRIBUTE,
+                SMIABPMNInfo.WORKFLOW_REPEAT_ENV_VAR,
+                SMIABPMNInfo.DEFAULT_WORKFLOW_REPEAT, bool)
+            self.myagent.negotiation_criterion = SMIABPMNUtils.get_process_smia_config(
+                process_parser, SMIABPMNInfo.PROCESS_NEGOTIATION_CRITERION_ATTRIBUTE,
+                SMIABPMNInfo.NEGOTIATION_CRITERION_ENV_VAR,
+                SMIABPMNInfo.DEFAULT_NEGOTIATION_CRITERION, str)
+            self.bpmn_config_initialized = True
+            _logger.info(f"Workflow config resolved: autostart=[{self.myagent.bpmn_execution_status}], "
+                         f"repeat=[{self.myagent.workflow_repeat}], negotiation_criterion="
+                         f"[{self.myagent.negotiation_criterion}].")
 
         # The information to be displayed in the GUI is also added
         self.myagent.smia_pe_info['InteractionsDict'].append({'type': 'analysis', 'title':
@@ -468,6 +501,9 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
             'capability with IRI {}'.format(smia_instance_ids, bpmn_element.smia_capability)})
 
         # The FIPA-CNP message will be sent with CFP performative and same thread for all receivers
+        # The negotiation criterion is a workflow-level config (env > BPMN > default), resolved once at startup
+        neg_criterion = getattr(self, 'negotiation_criterion',
+                                SMIABPMNInfo.DEFAULT_NEGOTIATION_CRITERION)
         cfp_thread = await acl_smia_messages_utils.create_random_thread(self.myagent)
         for smia_instance_id in smia_instance_ids:
             cfp_acl_message = await inter_smia_interactions_utils.create_acl_smia_message(
@@ -477,7 +513,7 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
                     ACLSMIAJSONSchemas.JSON_SCHEMA_CSS_SERVICE, capabilityIRI=bpmn_element.smia_capability,
                     skillIRI=bpmn_element.smia_skill, constraints=bpmn_element.smia_constraints,
                     skillParams=bpmn_element.smia_skill_parameters,
-                    negCriterion='http://www.w3id.org/hsu-aut/css#NegotiationBasedOnRAM',
+                    negCriterion=neg_criterion,
                     negRequester=str(self.myagent.jid), negTargets=smia_instance_ids))
             await self.send(cfp_acl_message)
 
