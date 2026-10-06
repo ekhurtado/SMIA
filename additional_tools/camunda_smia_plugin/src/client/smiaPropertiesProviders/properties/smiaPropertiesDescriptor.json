@@ -55,6 +55,26 @@
       "name": "timeoutValue",
       "isAttr": true,
       "type": "Integer"
+    },
+    {
+      "name": "isTimeoutGateway",
+      "isAttr": true,
+      "type": "Boolean"
+    },
+    {
+      "name": "workflowAutostart",
+      "isAttr": true,
+      "type": "Boolean"
+    },
+    {
+      "name": "workflowRepeat",
+      "isAttr": true,
+      "type": "Boolean"
+    },
+    {
+      "name": "negotiationCriterion",
+      "isAttr": true,
+      "type": "String"
     }
         ]}
   ]

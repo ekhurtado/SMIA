@@ -28,6 +28,14 @@ export default class SMIAPropertiesProvider {
         groups.push(this._createSMIATimeoutGroup(element));
       }
 
+      // Add global process properties (visible when the process or its
+      // participant/pool is selected, or the canvas background)
+      if (element.type === 'bpmn:Process' ||
+          element.type === 'bpmn:Participant' ||
+          element.type === 'bpmn:Collaboration') {
+        groups.push(this._createSMIAProcessGroup(element));
+      }
+
       return groups;
     };
   }
@@ -120,6 +128,36 @@ export default class SMIAPropertiesProvider {
         //   component: TimeoutExpressionEntry,
         //   isEdited: isTextFieldEntryEdited,
         //   element
+        }
+      ]
+    };
+  }
+
+  // -------------------
+  // Process-level code (global workflow configuration)
+  // -------------------
+  _createSMIAProcessGroup(element) {
+    return {
+      id: 'smia-process-group',
+      label: this._translate('SMIA Process Group'),
+      entries: [
+        {
+          id: 'workflowAutostart',
+          component: WorkflowAutostartEntry,
+          isEdited: isSelectEntryEdited,
+          element
+        },
+        {
+          id: 'workflowRepeat',
+          component: WorkflowRepeatEntry,
+          isEdited: isSelectEntryEdited,
+          element
+        },
+        {
+          id: 'negotiationCriterion',
+          component: NegotiationCriterionEntry,
+          isEdited: isSelectEntryEdited,
+          element
         }
       ]
     };
@@ -647,8 +685,218 @@ function TimeoutEntry(props) {
   });
 }
 
+// ---------------------------
+// Process-level Entry functions (global workflow configuration)
+// ---------------------------
+function WorkflowAutostartEntry(props) {
+  const { element } = props;
+  const translate = useService('translate');
+  const commandStack = useService('commandStack');
+  const debounce = useService('debounceInput');
+  const processBO = getProcessBusinessObject(element);
+
+  const getValue = () => {
+    if (!processBO) {
+      return '';
+    }
+    const rawValue = processBO.get('smia:workflowAutostart');
+    if (rawValue === true || rawValue === 'true') {
+      return 'true';
+    }
+    if (rawValue === false || rawValue === 'false') {
+      return 'false';
+    }
+    return '';
+  };
+
+  const setValue = (value) => {
+    if (!processBO) {
+      return;
+    }
+    let newValue;
+    if (value === 'true') {
+      newValue = true;
+    } else if (value === 'false') {
+      newValue = false;
+    } else {
+      newValue = undefined;
+    }
+    commandStack.execute('element.updateModdleProperties', {
+      element,
+      moddleElement: processBO,
+      properties: { 'smia:workflowAutostart': newValue }
+    });
+  };
+
+  const getOptions = () => {
+    return [
+      { value: 'true', label: translate('true') },
+      { value: 'false', label: translate('false') }
+    ];
+  };
+
+  return SelectEntry({
+    element,
+    id: 'workflowAutostart',
+    label: translate('Workflow autostart'),
+    tooltip: translate('Whether the workflow must start automatically (true) or wait (false).'),
+    getValue,
+    setValue,
+    debounce,
+    getOptions
+  });
+}
+
+function WorkflowRepeatEntry(props) {
+  const { element } = props;
+  const translate = useService('translate');
+  const commandStack = useService('commandStack');
+  const debounce = useService('debounceInput');
+  const processBO = getProcessBusinessObject(element);
+
+  const getValue = () => {
+    if (!processBO) {
+      return '';
+    }
+    const rawValue = processBO.get('smia:workflowRepeat');
+    if (rawValue === true || rawValue === 'true') {
+      return 'true';
+    }
+    if (rawValue === false || rawValue === 'false') {
+      return 'false';
+    }
+    return '';
+  };
+
+  const setValue = (value) => {
+    if (!processBO) {
+      return;
+    }
+    let newValue;
+    if (value === 'true') {
+      newValue = true;
+    } else if (value === 'false') {
+      newValue = false;
+    } else {
+      newValue = undefined;
+    }
+    commandStack.execute('element.updateModdleProperties', {
+      element,
+      moddleElement: processBO,
+      properties: { 'smia:workflowRepeat': newValue }
+    });
+  };
+
+  const getOptions = () => {
+    return [
+      { value: 'true', label: translate('true') },
+      { value: 'false', label: translate('false') }
+    ];
+  };
+
+  return SelectEntry({
+    element,
+    id: 'workflowRepeat',
+    label: translate('Workflow repeat'),
+    tooltip: translate('Whether the workflow must be executed iteratively (true) or only once (false).'),
+    getValue,
+    setValue,
+    debounce,
+    getOptions
+  });
+}
+
+function NegotiationCriterionEntry(props) {
+  const { element } = props;
+  const translate = useService('translate');
+  const commandStack = useService('commandStack');
+  const debounce = useService('debounceInput');
+  const processBO = getProcessBusinessObject(element);
+
+  const getValue = () => {
+    if (!processBO) {
+      return '';
+    }
+    return processBO.get('smia:negotiationCriterion') || '';
+  };
+
+  const setValue = (value) => {
+    if (!processBO) {
+      return;
+    }
+    commandStack.execute('element.updateModdleProperties', {
+      element,
+      moddleElement: processBO,
+      properties: { 'smia:negotiationCriterion': value || undefined }
+    });
+  };
+
+  const getOptions = () => {
+    const skillOptions = getNegotiationSkillOptions();
+    return skillOptions.map(option => ({
+      ...option,
+      label: translate(option.label)
+    }));
+  };
+
+  return SelectEntry({
+    element,
+    id: 'negotiationCriterion',
+    label: translate('Negotiation criterion'),
+    tooltip: translate('The negotiation criterion for asset assignment as part of the Negotiation capability.'),
+    getValue,
+    setValue,
+    debounce,
+    getOptions
+  });
+}
+
 // Useful functions
 // ----------------
+function getProcessBusinessObject(element) {
+  if (!element || !element.businessObject) {
+    return null;
+  }
+  const businessObject = element.businessObject;
+  // When a pool/participant is selected, the process is referenced via processRef.
+  // The SMIA attributes must be stored in <bpmn:process>, not in the participant.
+  if (businessObject.processRef) {
+    return businessObject.processRef;
+  }
+  if (businessObject.processRef === undefined && businessObject.$type === 'bpmn:Participant') {
+    return null;
+  }
+  return businessObject;
+}
+
+function getNegotiationSkillOptions() {
+  const emptyOption = [{ value: '', label: '' }];
+  const kbData = window.SMIA_KB_DATA;
+  if (!kbData || kbData.length === 0 || !kbData.Capabilities || !kbData.Skills) {
+    return emptyOption;
+  }
+  const negotiationCaps = kbData.Capabilities.filter((capItem) => {
+    const nameMatch = capItem.name && capItem.name.toLowerCase() === 'negotiation';
+    const iriMatch = capItem.iri && capItem.iri.endsWith('css-smia#Negotiation');
+    return nameMatch || iriMatch;
+  });
+  if (negotiationCaps.length === 0) {
+    return emptyOption;
+  }
+  const skillOptions = negotiationCaps
+    .flatMap((capItem) => capItem.isRealizedBy || [])
+    .map((skillIRI) => kbData.Skills.find((skillItem) => skillItem.iri === skillIRI))
+    .filter((skillItem) => skillItem !== undefined && skillItem !== null)
+    .map((skillItem) => ({ value: skillItem.iri, label: skillItem.name }));
+  if (skillOptions.length === 0) {
+    return emptyOption;
+  }
+  // Remove duplicates (same skill IRI exposed by several Negotiation capabilities)
+  const uniqueOptions = skillOptions.filter((option, index, self) =>
+    self.findIndex((item) => item.value === option.value) === index
+  );
+  return uniqueOptions;
+}
 function attribExistInElement(element, elem, attrib) {
   let dict_values = {};
   if (elem === 'SkillParameter') {
