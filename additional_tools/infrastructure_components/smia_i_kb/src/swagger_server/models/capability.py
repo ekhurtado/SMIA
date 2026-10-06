@@ -102,6 +102,8 @@ class Capability(Model):
                         ontology_value = 'AssetCapability'
                     elif CapabilitySkillOntologyInfo.CSS_ONTOLOGY_AGENT_CAPABILITY_IRI in ontology_instance.is_a[0].iri:
                         ontology_value = 'AgentCapability'
+                    elif CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI in ontology_instance.is_a[0].iri:
+                        ontology_value = 'Capability'
                 elif attrib == 'assets':
                     ontology_value = [
                         Asset.from_ontology_instance_data_to_json(asset_id, asset_info)

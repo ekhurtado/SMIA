@@ -285,7 +285,12 @@ def post_capability(body):  # noqa: E501
     else:
 
         # Se crea la instancia ontologica con los datos añadidos
-        capability_ontology_class = ontology.get_ontology_class_by_iri(CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI)
+        capability_ontology_class_iri = CapabilitySkillOntologyInfo.CSS_ONTOLOGY_CAPABILITY_IRI # Default value
+        if new_capability.category == 'AssetCapability':
+            capability_ontology_class_iri = CapabilitySkillOntologyInfo.CSS_ONTOLOGY_ASSET_CAPABILITY_IRI
+        elif new_capability.category == 'AgentCapability':
+            capability_ontology_class_iri = CapabilitySkillOntologyInfo.CSS_ONTOLOGY_AGENT_CAPABILITY_IRI
+        capability_ontology_class = ontology.get_ontology_class_by_iri(capability_ontology_class_iri)
         new_capability_instance = ontology.create_ontology_object_instance(capability_ontology_class, new_capability.name)
         new_capability_instance.iri = new_capability.iri
         new_capability_instance.set_category(new_capability.category)
