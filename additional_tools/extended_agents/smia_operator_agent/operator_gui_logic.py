@@ -134,15 +134,27 @@ class GUIControllers:
         # Once all data is analyzed, it is saved in the agent dictionary
         self.myagent.css_elems_info = css_elems_info
 
-        # The negotiation criteria are extracted from the skills associated (via 'isRealizedBy') to
-        # capabilities named 'Negotiation' (id_short or IRI ending with '#Negotiation'). Negotiation
-        # skills only have output parameters, so no extra form fields are required.
+        # The negotiation information is also extracted
         try:
-            neg_skills = set()
-            for cap_name, cap_info in css_elems_info.items():
-                if cap_name == 'Negotiation' or cap_name.endswith('#Negotiation'):
-                    neg_skills.update(cap_info.get('skills', []))
-            neg_skills = sorted(neg_skills)
+            neg_instances = {}
+            for file_name, info_dict in self.myagent.loaded_smias.items():
+                smia_jid = info_dict.get('SMIA_JID')
+                if not smia_jid:
+                    continue
+                for rel, aas_elems in info_dict.items():
+                    if isinstance(rel, str):
+                        continue
+                    if CapabilitySkillOntologyInfo.CSS_ONTOLOGY_PROP_ISREALIZEDBY_IRI != rel.iri:
+                        continue
+                    for capability, skills in aas_elems.items():
+                        cap_id = getattr(capability, 'id_short', '')
+                        if cap_id == 'Negotiation' or str(cap_id).endswith('#Negotiation'):
+                            for skill in skills:
+                                skill_id = getattr(skill, 'id_short', None)
+                                if skill_id:
+                                    neg_instances.setdefault(skill_id, set()).add(smia_jid)
+            self.myagent.negotiation_smia_instances_info = {k: sorted(v) for k, v in neg_instances.items()}
+            neg_skills = sorted(neg_instances.keys())
             default_neg = 'NegotiationBasedOnRAM'
             if default_neg in neg_skills:
                 neg_skills = [default_neg] + [s for s in neg_skills if s != default_neg]
@@ -150,6 +162,7 @@ class GUIControllers:
         except Exception as e:
             _logger.warning("Failed to extract negotiation criteria, using empty list. Reason: {}".format(e))
             self.myagent.negotiation_criteria = []
+            self.myagent.negotiation_smia_instances_info = {}
 
         return {"status": "success", "reason": "success reason"}
         # return {"status": "error", "reason": "error reason"}

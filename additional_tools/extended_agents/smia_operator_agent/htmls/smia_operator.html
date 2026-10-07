@@ -188,6 +188,17 @@
             cursor: pointer;
         }
 
+        .neg-warning {
+            margin-top: 6px;
+            font-size: 13px;
+            color: #d9820b;
+        }
+
+        .neg-warning .fa {
+            margin-right: 6px;
+            color: #d9820b;
+        }
+
         .request-div {
             display: flex;
             margin-top: 10px;
@@ -477,12 +488,15 @@
 
                                     {% if agent.negotiation_criteria|length > 0 %}
                                     <div id="negotiation-div" class="negotiation-div hidden">
-                                        <label for="negCriterion" class="neg-label">Negotiation criterion:</label>
+                                        <label for="negCriterion" class="neg-label">Negotiation criteria:</label>
                                         <select name="negCriterion" id="negCriterion" class="form-control">
                                             {% for crit in agent.negotiation_criteria %}
                                             <option value="{{ crit }}">{{ crit }}</option>
                                             {% endfor %}
                                         </select>
+                                        <div id="neg-warning" class="neg-warning hidden">
+                                            <i class="fa fa-exclamation-triangle"></i><span>Not all selected instances support this negotiation criterion.</span>
+                                        </div>
                                     </div>
                                     {% endif %}
 
@@ -691,6 +705,13 @@
                 }
             }
 
+            // Negotiation support per criterion: {criterion: [smia_jid, ...]} (checkbox values)
+            const NEG_INFO = {
+                {% for crit, jids in agent.negotiation_smia_instances_info.items() %}
+                "{{ crit }}": [{% for j in jids %}"{{ j }}"{% if not loop.last %}, {% endif %}{% endfor %}]{% if not loop.last %},{% endif %}
+                {% endfor %}
+            };
+
             // Show the negotiation criterion selector only when more than one SMIA is checked
             function updateNegVisibility() {
                 const checkedCount = [...document.querySelectorAll('.request-checkbox')].filter(c => c.checked).length;
@@ -700,10 +721,37 @@
                 }
             }
 
+            // Warn (without blocking) when a checked SMIA does not support the chosen criterion
+            function validateNegCriterion() {
+                const sel = document.getElementById('negCriterion');
+                const warn = document.getElementById('neg-warning');
+                if (!sel || !warn) {
+                    return;
+                }
+                const crit = sel.value;
+                const checked = [...document.querySelectorAll('.request-checkbox')]
+                    .filter(c => c.checked).map(c => c.value);
+                if (!crit || checked.length <= 1) {
+                    warn.classList.add('hidden');
+                    return;
+                }
+                const supported = NEG_INFO[crit] || [];
+                const allOk = checked.every(jid => supported.includes(jid));
+                warn.classList.toggle('hidden', allOk);
+            }
+
             document.querySelectorAll('.request-checkbox').forEach(cb => {
-                cb.addEventListener('change', updateNegVisibility);
+                cb.addEventListener('change', () => {
+                    updateNegVisibility();
+                    validateNegCriterion();
+                });
             });
+            const negSelect = document.getElementById('negCriterion');
+            if (negSelect) {
+                negSelect.addEventListener('change', validateNegCriterion);
+            }
             updateNegVisibility();
+            validateNegCriterion();
 
         });
 

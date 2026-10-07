@@ -39,6 +39,7 @@ class OperatorGUIBehaviour(OneShotBehaviour):
         self.agent.available_smia_selection = []
         self.agent.request_exec_info = {}
         self.agent.negotiation_criteria = []
+        self.agent.negotiation_smia_instances_info = {}
 
         _logger.info("SMIA SPADE web interface required resources initialized.")
 
