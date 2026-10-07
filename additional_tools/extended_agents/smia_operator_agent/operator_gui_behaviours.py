@@ -38,6 +38,7 @@ class OperatorGUIBehaviour(OneShotBehaviour):
         self.agent.skills_info = {}
         self.agent.available_smia_selection = []
         self.agent.request_exec_info = {}
+        self.agent.negotiation_criteria = []
 
         _logger.info("SMIA SPADE web interface required resources initialized.")
 
@@ -112,6 +113,10 @@ class OperatorRequestBehaviour(OneShotBehaviour):
     This behaviour handles the CSS-related requests through FIPA-ACL messages.
     """
 
+    NEGOTIATION_CAPABILITY_NAME = 'Negotiation'
+    DEFAULT_NEGOTIATION_SKILL = 'NegotiationBasedOnRAM'
+    NEGOTIATION_SKILL_IRI_BASE = 'http://www.w3id.org/hsu-aut/css#'
+
     def __init__(self, agent_object, req_data):
         """
         The constructor method is rewritten to add the object of the agent.
@@ -141,6 +146,11 @@ class OperatorRequestBehaviour(OneShotBehaviour):
         self.skill = req_data['formData'].get('skill', None)
         self.skill_params = req_data['formData'].get('skillParams', None)
         self.form_data = req_data['formData']
+
+        # Negotiation criterion selected in the GUI
+        self.neg_criterion = req_data['formData'].get(
+            'negCriterion', OperatorRequestBehaviour.DEFAULT_NEGOTIATION_SKILL
+        ) or OperatorRequestBehaviour.DEFAULT_NEGOTIATION_SKILL
 
         # Group data by row index
         self.processed_data = []
@@ -183,7 +193,8 @@ class OperatorRequestBehaviour(OneShotBehaviour):
             # The information of the CSS-related request is added in the agent dictionary for the HTML result page
             self.myagent.request_exec_info['InteractionsDict'].append(
                 {'type': 'analysis', 'title': 'Analyzing operator selection ...', 'capability': self.capability,
-                 'skill': self.skill, 'constraints': self.constraints, 'smia_ids': self.selected_smia_ids})
+                 'skill': self.skill, 'constraints': self.constraints, 'smia_ids': self.selected_smia_ids,
+                 'negCriterion': self.neg_criterion})
 
             # The JSON for the message body is added to message object
             msg.body = json.dumps(msg_body_json)
@@ -203,12 +214,11 @@ class OperatorRequestBehaviour(OneShotBehaviour):
                 neg_body_json = copy.deepcopy(msg_body_json)
                 neg_body_json['serviceData']['serviceParams'].update({'neg_requester_jid': str(self.myagent.jid),
                                                                       'targets': (','.join(self.selected_smia_ids))})
-                     # 'capabilityName': 'Negotiation', 'skillName': 'NegotiationBasedOnRAM'})
 
-                if self.capability != 'Negotiation':
-                    # If the capability requested is not Negotiation, the skill will be using RAM that every SMIA has
-                    neg_body_json['serviceData']['serviceParams'].update({'capabilityName': 'Negotiation',
-                                                                          'skillName': 'NegotiationBasedOnRAM'})
+                # The negotiation criterion selected in the GUI is always used
+                neg_body_json['serviceData']['serviceParams'].update(
+                    {'capabilityName': OperatorRequestBehaviour.NEGOTIATION_CAPABILITY_NAME,
+                     'skillName': self.neg_criterion})
 
                 if (OperatorRequestBehaviour.version_str_to_tuple(self.get_smia_version_by_id(smia_id)) >=
                         OperatorRequestBehaviour.version_str_to_tuple('0.2.4')):
@@ -222,7 +232,7 @@ class OperatorRequestBehaviour(OneShotBehaviour):
                         ACLSMIAJSONSchemas.JSON_SCHEMA_CSS_SERVICE, capabilityIRI=self.capability,
                         skillIRI=self.skill, constraints=neg_body_json.get('constraints'),  # Adapted constraints
                         skillParams=neg_body_json.get('skillParams'),  # Adapted skill params
-                        negCriterion='http://www.w3id.org/hsu-aut/css#NegotiationBasedOnRAM',
+                        negCriterion=self.get_neg_criterion_iri(),
                         negRequester=str(self.myagent.jid), negTargets=self.selected_smia_ids)
                 else:
                     neg_msg_metadata = SMIAInteractionInfo.NEG_STANDARD_ACL_TEMPLATE_CFP.metadata
@@ -277,8 +287,9 @@ class OperatorRequestBehaviour(OneShotBehaviour):
                         'The SMIA winner of the negotiation is: {}.'.format(smia_id)})
                 self.myagent.request_exec_info['InteractionsDict'].append(response_info)
 
-            if ((self.capability != 'Negotiation') or
-                    (self.capability == 'Negotiation' and len(self.processed_data) == 1)):  # TODO CUIDADO SI SE CAMBIA EL NOMBRE DE NEGOTIATION
+            if (not OperatorRequestBehaviour.is_negotiation_capability(self.capability) or
+                    (OperatorRequestBehaviour.is_negotiation_capability(self.capability) and
+                     len(self.processed_data) == 1)):
                 # If the capacity is not Negotiation and there are several SMIA, a request for negotiation had to be made
                 # and the winner has been received, so the capacity will have to be requested from the winner. If there is
                 # only one SMIA, the capacity will be requested directly.
@@ -290,11 +301,11 @@ class OperatorRequestBehaviour(OneShotBehaviour):
                     msg_metadata = {'performative': 'request', 'ontology': 'css-service', 'protocol': 'fipa-request'}
                     msg_body_json = await self.adapt_msg_to_fipa_smiacl(msg_body_json)
                 else:
-                    if self.capability == 'Negotiation':
+                    if OperatorRequestBehaviour.is_negotiation_capability(self.capability):
                         # In this particular case, the negotiation request is made via the performative CallForProposal
                         msg_metadata = SMIAInteractionInfo.NEG_STANDARD_ACL_TEMPLATE_CFP.metadata
-                        msg_body_json['serviceData']['serviceParams'].update({'neg_requester_jid': str(self.myagent.jid),
-                                                                              'targets': smia_id})
+                        msg_body_json['serviceData']['serviceParams'].update(
+                            {'neg_requester_jid': str(self.myagent.jid), 'targets': smia_id})
                     else:
                         msg_metadata = SMIAInteractionInfo.CAP_STANDARD_ACL_TEMPLATE_REQUEST.metadata
 
@@ -441,3 +452,33 @@ class OperatorRequestBehaviour(OneShotBehaviour):
             tuple: version in tuple format.
         """
         return tuple(map(int, version_str.split('.')))
+
+
+    def get_neg_criterion_iri(self):
+        """
+        This method returns the full IRI of the selected negotiation criterion. The namespace is
+        always the same, so a short skill name is expanded with the base IRI.
+
+        Returns:
+            str: negotiation criterion IRI.
+        """
+        criterion = self.neg_criterion or OperatorRequestBehaviour.DEFAULT_NEGOTIATION_SKILL
+        if '#' in criterion:
+            return criterion
+        return OperatorRequestBehaviour.NEGOTIATION_SKILL_IRI_BASE + criterion
+
+    @staticmethod
+    def is_negotiation_capability(capability):
+        """
+        This method checks whether a capability is the 'Negotiation' capability, either by short
+        name or by IRI ending with '#Negotiation' (e.g. '...css-smia#Negotiation').
+
+        Args:
+            capability (str): capability name or IRI.
+
+        Returns:
+            bool: True if it is the Negotiation capability.
+        """
+        if capability is None:
+            return False
+        return capability == OperatorRequestBehaviour.NEGOTIATION_CAPABILITY_NAME or str(capability).endswith('#Negotiation')

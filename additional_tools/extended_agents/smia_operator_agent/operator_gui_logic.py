@@ -134,6 +134,23 @@ class GUIControllers:
         # Once all data is analyzed, it is saved in the agent dictionary
         self.myagent.css_elems_info = css_elems_info
 
+        # The negotiation criteria are extracted from the skills associated (via 'isRealizedBy') to
+        # capabilities named 'Negotiation' (id_short or IRI ending with '#Negotiation'). Negotiation
+        # skills only have output parameters, so no extra form fields are required.
+        try:
+            neg_skills = set()
+            for cap_name, cap_info in css_elems_info.items():
+                if cap_name == 'Negotiation' or cap_name.endswith('#Negotiation'):
+                    neg_skills.update(cap_info.get('skills', []))
+            neg_skills = sorted(neg_skills)
+            default_neg = 'NegotiationBasedOnRAM'
+            if default_neg in neg_skills:
+                neg_skills = [default_neg] + [s for s in neg_skills if s != default_neg]
+            self.myagent.negotiation_criteria = neg_skills
+        except Exception as e:
+            _logger.warning("Failed to extract negotiation criteria, using empty list. Reason: {}".format(e))
+            self.myagent.negotiation_criteria = []
+
         return {"status": "success", "reason": "success reason"}
         # return {"status": "error", "reason": "error reason"}
 

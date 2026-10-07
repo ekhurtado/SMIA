@@ -165,6 +165,29 @@
             float: right;
         }
 
+        .negotiation-div {
+            margin: 12px 5px 4px;
+            padding: 10px 5px 2px;
+            border-top: 1px solid #eeeeee;
+        }
+
+        .negotiation-div .neg-label {
+            font-size: 14px;
+            font-weight: 400;
+            color: #333;
+            margin-right: 8px;
+        }
+
+        .negotiation-div select.form-control {
+            display: inline-block;
+            width: auto;
+            max-width: 260px;
+            font-size: 13px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
         .request-div {
             display: flex;
             margin-top: 10px;
@@ -452,6 +475,17 @@
                                         </tbody>
                                     </table>
 
+                                    {% if agent.negotiation_criteria|length > 0 %}
+                                    <div id="negotiation-div" class="negotiation-div hidden">
+                                        <label for="negCriterion" class="neg-label">Negotiation criterion:</label>
+                                        <select name="negCriterion" id="negCriterion" class="form-control">
+                                            {% for crit in agent.negotiation_criteria %}
+                                            <option value="{{ crit }}">{{ crit }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    {% endif %}
+
                                     <div class="request-div">
                                         <button type="submit" class="btn btn-primary request-button">Request</button>
                                         <img src="static/requesting.gif" alt="Requesting..." class="request-gif hidden">
@@ -656,6 +690,20 @@
                     return availableSkillsRows[0].textContent;
                 }
             }
+
+            // Show the negotiation criterion selector only when more than one SMIA is checked
+            function updateNegVisibility() {
+                const checkedCount = [...document.querySelectorAll('.request-checkbox')].filter(c => c.checked).length;
+                const negDiv = document.getElementById('negotiation-div');
+                if (negDiv) {
+                    negDiv.classList.toggle('hidden', checkedCount <= 1);
+                }
+            }
+
+            document.querySelectorAll('.request-checkbox').forEach(cb => {
+                cb.addEventListener('change', updateNegVisibility);
+            });
+            updateNegVisibility();
 
         });
 
