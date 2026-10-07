@@ -1968,7 +1968,7 @@
                     "PresetCategory": "",
                     "KeySemanticId": {
                       "type": "GlobalReference",
-                      "value": "https://www.w3.org/2019/wot/td#base"
+                      "value": "https://www.w3.org/2019/wot/td#baseURI"
                     },
                     "Multiplicity": "One",
                     "IsReadOnly": false,
@@ -3954,7 +3954,7 @@
                     "PresetCategory": "",
                     "KeySemanticId": {
                       "type": "GlobalReference",
-                      "value": "https://www.w3.org/2019/wot/td#base"
+                      "value": "https://www.w3.org/2019/wot/td#baseURI"
                     },
                     "Multiplicity": "One",
                     "IsReadOnly": false,
@@ -5675,6 +5675,2004 @@
                     "$type": "FormFile",
                     "FormTitle": "fileName",
                     "FormInfo": "",
+                    "FormEditIdShort": false,
+                    "FormEditDescription": false,
+                    "PresetIdShort": "fileName",
+                    "PresetCategory": "",
+                    "KeySemanticId": {
+                      "type": "GlobalReference",
+                      "value": "https://admin-shell.io/idta/AssetInterfacesDescription/1/0/externalDescriptorName"
+                    },
+                    "Multiplicity": "One",
+                    "IsReadOnly": false,
+                    "presetMimeType": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "$type": "FormSubmodelElementCollection",
+            "FormTitle": "InterfaceTemplateForOPCUA",
+            "FormInfo": "Indicates entry point for HTTP interface.\r\nIndicates entry point for OPC UA interface.",
+            "FormEditIdShort": false,
+            "FormEditDescription": false,
+            "PresetIdShort": "InterfaceTemplateForOPCUA{00}",
+            "PresetCategory": "",
+            "KeySemanticId": {
+              "type": "GlobalReference",
+              "value": "https://admin-shell.io/idta/AssetInterfacesDescription/1/0/Interface"
+            },
+            "Multiplicity": "ZeroToMany",
+            "IsReadOnly": false,
+            "value": [
+              {
+                "$type": "FormProperty",
+                "FormTitle": "title",
+                "FormInfo": "Provides a human-readable title to give a human-readable context of the interface.\r\nProvides a human-readable title to give a human-readable context of the interface.",
+                "FormEditIdShort": false,
+                "FormEditDescription": false,
+                "PresetIdShort": "title",
+                "PresetCategory": "",
+                "KeySemanticId": {
+                  "type": "GlobalReference",
+                  "value": "https://www.w3.org/2019/wot/td#title"
+                },
+                "Multiplicity": "One",
+                "IsReadOnly": false,
+                "allowedValueTypes": [
+                  "xs:string"
+                ],
+                "presetValue": ""
+              },
+              {
+                "$type": "FormProperty",
+                "FormTitle": "created",
+                "FormInfo": "Provides information when the AID Submodel was created.\r\nProvides information when the AID Submodel was created.",
+                "FormEditIdShort": false,
+                "FormEditDescription": false,
+                "PresetIdShort": "created",
+                "PresetCategory": "",
+                "KeySemanticId": {
+                  "type": "GlobalReference",
+                  "value": "http://purl.org/dc/terms/created"
+                },
+                "Multiplicity": "ZeroToOne",
+                "IsReadOnly": false,
+                "allowedValueTypes": [
+                  "xs:dateTime"
+                ],
+                "presetValue": ""
+              },
+              {
+                "$type": "FormProperty",
+                "FormTitle": "modified",
+                "FormInfo": "Provides information when the AID Submodel was modified.\r\nProvides information when the AID Submodel was modified.",
+                "FormEditIdShort": false,
+                "FormEditDescription": false,
+                "PresetIdShort": "modified",
+                "PresetCategory": "",
+                "KeySemanticId": {
+                  "type": "GlobalReference",
+                  "value": "http://purl.org/dc/terms/modified"
+                },
+                "Multiplicity": "ZeroToOne",
+                "IsReadOnly": false,
+                "allowedValueTypes": [
+                  "xs:dateTime"
+                ],
+                "presetValue": ""
+              },
+              {
+                "$type": "FormProperty",
+                "FormTitle": "support",
+                "FormInfo": "Provides an address on how to contact the maintainer of AID Submodel as URI scheme.\r\nProvides an address on how to contact the maintainer of AID Submodel as URI scheme.",
+                "FormEditIdShort": false,
+                "FormEditDescription": false,
+                "PresetIdShort": "support",
+                "PresetCategory": "",
+                "KeySemanticId": {
+                  "type": "GlobalReference",
+                  "value": "https://www.w3.org/2019/wot/td#supportContact"
+                },
+                "Multiplicity": "ZeroToOne",
+                "IsReadOnly": false,
+                "allowedValueTypes": [
+                  "xs:anyURI"
+                ],
+                "presetValue": ""
+              },
+              {
+                "$type": "FormSubmodelElementCollection",
+                "FormTitle": "EndpointMetadata",
+                "FormInfo": "Provides the metadata of the asset’s endpoint (base, content type that is used for interaction, etc)\r\nProvides the metadata of the asset’s endpoint (base, content type that is used for interaction, etc)",
+                "FormEditIdShort": false,
+                "FormEditDescription": false,
+                "PresetIdShort": "EndpointMetadata",
+                "PresetCategory": "",
+                "KeySemanticId": {
+                  "type": "GlobalReference",
+                  "value": "https://admin-shell.io/idta/AssetInterfacesDescription/1/0/EndpointMetadata"
+                },
+                "Multiplicity": "One",
+                "IsReadOnly": false,
+                "value": [
+                  {
+                    "$type": "FormProperty",
+                    "FormTitle": "base",
+                    "FormInfo": "Defines asset connection entry point. The base pattern for HTTP is defined in Qalifier.\r\nDefines asset connection entry point. The base pattern for HTTP is defined in Qalifier.",
+                    "FormEditIdShort": false,
+                    "FormEditDescription": false,
+                    "PresetIdShort": "base",
+                    "PresetCategory": "",
+                    "KeySemanticId": {
+                      "type": "GlobalReference",
+                      "value": "https://www.w3.org/2019/wot/td#baseURI"
+                    },
+                    "Multiplicity": "One",
+                    "IsReadOnly": false,
+                    "allowedValueTypes": [
+                      "xs:anyURI"
+                    ],
+                    "presetValue": ""
+                  },
+                  {
+                    "$type": "FormProperty",
+                    "FormTitle": "contentType",
+                    "FormInfo": "Defines content type based on a media type (e.g., text/plain) and potential character decoding/encoding type (e.g., charset=utf-8) for the media type (see RFC2046) of the whole interface.\r\nDefines content type based on a media type (e.g., text/plain) and potential character decoding/encoding type (e.g., charset=utf-8) for the media type (see RFC2046) of the whole interface.",
+                    "FormEditIdShort": false,
+                    "FormEditDescription": false,
+                    "PresetIdShort": "contentType",
+                    "PresetCategory": "",
+                    "KeySemanticId": {
+                      "type": "GlobalReference",
+                      "value": "https://www.w3.org/2019/wot/hypermedia#forContentType"
+                    },
+                    "Multiplicity": "One",
+                    "IsReadOnly": false,
+                    "allowedValueTypes": [
+                      "xs:string"
+                    ],
+                    "presetValue": ""
+                  },
+                  {
+                    "$type": "FormSubmodelElementCollection",
+                    "FormTitle": "securityDefinitions",
+                    "FormInfo": "References a security scheme defined in securityDefinitions.\r\nDefines the security scheme according to W3C.",
+                    "FormEditIdShort": false,
+                    "FormEditDescription": false,
+                    "PresetIdShort": "securityDefinitions",
+                    "PresetCategory": "",
+                    "KeySemanticId": {
+                      "type": "GlobalReference",
+                      "value": "https://www.w3.org/2019/wot/td#definesSecurityScheme"
+                    },
+                    "Multiplicity": "One",
+                    "IsReadOnly": false,
+                    "value": [
+                      {
+                        "$type": "FormSubmodelElementCollection",
+                        "FormTitle": "nosec_sc",
+                        "FormInfo": "This SubmodelElements holds the information about security mechanism based on nosec security.\r\nThis SubmodelElements holds the information about security mechanism based on nosec security.",
+                        "FormEditIdShort": false,
+                        "FormEditDescription": false,
+                        "PresetIdShort": "nosec_sc",
+                        "PresetCategory": "",
+                        "KeySemanticId": {
+                          "type": "GlobalReference",
+                          "value": "https://www.w3.org/2019/wot/security#NoSecurityScheme"
+                        },
+                        "Multiplicity": "ZeroToOne",
+                        "IsReadOnly": false,
+                        "value": [
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "scheme",
+                            "FormInfo": "Defines the security mechanism that used during access. the scheme for nosec_sc is nosec\r\nDefines the security mechanism that used during access. the scheme for nosec_sc is nosec",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "scheme",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#SecurityScheme"
+                            },
+                            "Multiplicity": "One",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          }
+                        ]
+                      },
+                      {
+                        "$type": "FormSubmodelElementCollection",
+                        "FormTitle": "auto_sc",
+                        "FormInfo": "This SubmodelElements holds the information about security mechanism based on auto security.\r\nThis SubmodelElements holds the information about security mechanism based on auto security.",
+                        "FormEditIdShort": false,
+                        "FormEditDescription": false,
+                        "PresetIdShort": "auto_sc",
+                        "PresetCategory": "",
+                        "KeySemanticId": {
+                          "type": "GlobalReference",
+                          "value": "https://www.w3.org/2019/wot/security#AutoSecurityScheme"
+                        },
+                        "Multiplicity": "ZeroToOne",
+                        "IsReadOnly": false,
+                        "value": [
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "scheme",
+                            "FormInfo": "Defines the security mechanism that used during access. the scheme for nosec_sc is nosec\r\nDefines the security mechanism that used during access. The scheme for auto_sc is auto.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "scheme",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#SecurityScheme"
+                            },
+                            "Multiplicity": "One",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "proxy",
+                            "FormInfo": "Provides address information of the proxy server the security configuration provides access to.\r\nProvides address information of the proxy server the security configuration provides access to.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "proxy",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#proxy"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          }
+                        ]
+                      },
+                      {
+                        "$type": "FormSubmodelElementCollection",
+                        "FormTitle": "basic_sc",
+                        "FormInfo": "This SubmodelElements holds the information about security mechanism based on basic security.\r\nThis SubmodelElements holds the information about security mechanism based on basic security.",
+                        "FormEditIdShort": false,
+                        "FormEditDescription": false,
+                        "PresetIdShort": "basic_sc",
+                        "PresetCategory": "",
+                        "KeySemanticId": {
+                          "type": "GlobalReference",
+                          "value": "https://www.w3.org/2019/wot/security#BasicSecurityScheme"
+                        },
+                        "Multiplicity": "ZeroToOne",
+                        "IsReadOnly": false,
+                        "value": [
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "scheme",
+                            "FormInfo": "Defines the security mechanism that used during access. the scheme for nosec_sc is nosec\r\nDefines the security mechanism that used during access. The scheme for basic_sc is basic.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "scheme",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#SecurityScheme"
+                            },
+                            "Multiplicity": "One",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "name",
+                            "FormInfo": "Name for query, header, cookie, or uri parameters\r\nName for query, header, cookie, or uri parameters",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "name",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#name"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "in",
+                            "FormInfo": "Specifies the location of security authentication information. Proposed values are header, query, body, cookie or auto\r\nSpecifies the location of security authentication information. Proposed values are header, query, body, cookie or auto",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "in",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#in"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "proxy",
+                            "FormInfo": "Provides address information of the proxy server the security configuration provides access to.\r\nProvides address information of the proxy server the security configuration provides access to.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "proxy",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#proxy"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          }
+                        ]
+                      },
+                      {
+                        "$type": "FormSubmodelElementCollection",
+                        "FormTitle": "combo_sc",
+                        "FormInfo": "This SubmodelElements holds the information about security mechanism based on combo security.\r\nThis SubmodelElements holds the information about security mechanism based on combo security.",
+                        "FormEditIdShort": false,
+                        "FormEditDescription": false,
+                        "PresetIdShort": "combo_sc",
+                        "PresetCategory": "",
+                        "KeySemanticId": {
+                          "type": "GlobalReference",
+                          "value": "https://www.w3.org/2019/wot/security#ComboSecurityScheme"
+                        },
+                        "Multiplicity": "ZeroToOne",
+                        "IsReadOnly": false,
+                        "value": [
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "scheme",
+                            "FormInfo": "Defines the security mechanism that used during access. the scheme for nosec_sc is nosec\r\nDefines the security mechanism that used during access. The scheme for combo_sc is combo.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "scheme",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#SecurityScheme"
+                            },
+                            "Multiplicity": "One",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "proxy",
+                            "FormInfo": "Provides address information of the proxy server the security configuration provides access to.\r\nProvides address information of the proxy server the security configuration provides access to.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "proxy",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#proxy"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          }
+                        ]
+                      },
+                      {
+                        "$type": "FormSubmodelElementCollection",
+                        "FormTitle": "apikey_sc",
+                        "FormInfo": "This SubmodelElements holds the information about security mechanism based on apikey security.\r\nThis SubmodelElements holds the information about security mechanism based on apikey security.",
+                        "FormEditIdShort": false,
+                        "FormEditDescription": false,
+                        "PresetIdShort": "apikey_sc",
+                        "PresetCategory": "",
+                        "KeySemanticId": {
+                          "type": "GlobalReference",
+                          "value": "https://www.w3.org/2019/wot/security#APIKeySecurityScheme"
+                        },
+                        "Multiplicity": "ZeroToOne",
+                        "IsReadOnly": false,
+                        "value": [
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "scheme",
+                            "FormInfo": "Defines the security mechanism that used during access. the scheme for nosec_sc is nosec\r\nDefines the security mechanism that used during access. The scheme for apikey_sc is apikey.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "scheme",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#SecurityScheme"
+                            },
+                            "Multiplicity": "One",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "name",
+                            "FormInfo": "Name for query, header, cookie, or uri parameters\r\nName for query, header, cookie, or uri parameters.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "name",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#name"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "in",
+                            "FormInfo": "Specifies the location of security authentication information. Proposed values are header, query, body, cookie or auto\r\nSpecifies the location of security authentication information. Proposed values are header, query, body, cookie or auto.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "in",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#in"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "proxy",
+                            "FormInfo": "Provides address information of the proxy server the security configuration provides access to.\r\nProvides address information of the proxy server the security configuration provides access to.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "proxy",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#proxy"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          }
+                        ]
+                      },
+                      {
+                        "$type": "FormSubmodelElementCollection",
+                        "FormTitle": "psk_sc",
+                        "FormInfo": "This SubmodelElements holds the information about security mechanism based on psk security.\r\nThis SubmodelElements holds the information about security mechanism based on psk security.",
+                        "FormEditIdShort": false,
+                        "FormEditDescription": false,
+                        "PresetIdShort": "psk_sc",
+                        "PresetCategory": "",
+                        "KeySemanticId": {
+                          "type": "GlobalReference",
+                          "value": "https://www.w3.org/2019/wot/security#PSKSecurityScheme"
+                        },
+                        "Multiplicity": "ZeroToOne",
+                        "IsReadOnly": false,
+                        "value": [
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "scheme",
+                            "FormInfo": "Defines the security mechanism that used during access. the scheme for nosec_sc is nosec\r\nDefines the security mechanism that used during access. The scheme for psk_sc is psk.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "scheme",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#SecurityScheme"
+                            },
+                            "Multiplicity": "One",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "identity",
+                            "FormInfo": "Identifier providing information which can be used for selection or confirmation.\r\nIdentifier providing information which can be used for selection or confirmation.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "identity",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#identity"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "proxy",
+                            "FormInfo": "Provides address information of the proxy server the security configuration provides access to.\r\nProvides address information of the proxy server the security configuration provides access to.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "proxy",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#proxy"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          }
+                        ]
+                      },
+                      {
+                        "$type": "FormSubmodelElementCollection",
+                        "FormTitle": "digest_sc",
+                        "FormInfo": "This SubmodelElements holds the information about security mechanism based on digest security.\r\nThis SubmodelElements holds the information about security mechanism based on digest security.",
+                        "FormEditIdShort": false,
+                        "FormEditDescription": false,
+                        "PresetIdShort": "digest_sc",
+                        "PresetCategory": "",
+                        "KeySemanticId": {
+                          "type": "GlobalReference",
+                          "value": "https://www.w3.org/2019/wot/security#DigestSecurityScheme"
+                        },
+                        "Multiplicity": "ZeroToOne",
+                        "IsReadOnly": false,
+                        "value": [
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "scheme",
+                            "FormInfo": "Defines the security mechanism that used during access. the scheme for nosec_sc is nosec\r\nDefines the security mechanism that used during access. The scheme for digest_sc is digest.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "scheme",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#SecurityScheme"
+                            },
+                            "Multiplicity": "One",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "name",
+                            "FormInfo": "Name for query, header, cookie, or uri parameters\r\nName for query, header, cookie, or uri parameters.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "name",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#name"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "in",
+                            "FormInfo": "Specifies the location of security authentication information. Proposed values are header, query, body, cookie or auto\r\nSpecifies the location of security authentication information. Proposed values are header, query, body, cookie or auto",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "in",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#in"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "qop",
+                            "FormInfo": "Defines Quality of protection. Values is one of auth or auth-int\r\nDefines Quality of protection. Values is one of auth or auth-int",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "qop",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#qop"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "proxy",
+                            "FormInfo": "Provides address information of the proxy server the security configuration provides access to.\r\nProvides address information of the proxy server the security configuration provides access to.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "proxy",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#proxy"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          }
+                        ]
+                      },
+                      {
+                        "$type": "FormSubmodelElementCollection",
+                        "FormTitle": "bearer_sc",
+                        "FormInfo": "This SubmodelElements holds the information about security mechanism based on bearer security.\r\nThis SubmodelElements holds the information about security mechanism based on bearer security.",
+                        "FormEditIdShort": false,
+                        "FormEditDescription": false,
+                        "PresetIdShort": "bearer_sc",
+                        "PresetCategory": "",
+                        "KeySemanticId": {
+                          "type": "GlobalReference",
+                          "value": "https://www.w3.org/2019/wot/security#BearerSecurityScheme"
+                        },
+                        "Multiplicity": "ZeroToOne",
+                        "IsReadOnly": false,
+                        "value": [
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "scheme",
+                            "FormInfo": "Defines the security mechanism that used during access. the scheme for nosec_sc is nosec\r\nDefines the security mechanism that used during access. The scheme for bearer_sc is bearer.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "scheme",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#SecurityScheme"
+                            },
+                            "Multiplicity": "One",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "name",
+                            "FormInfo": "Name for query, header, cookie, or uri parameters\r\nName for query, header, cookie, or uri parameters.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "name",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#name"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "in",
+                            "FormInfo": "Specifies the location of security authentication information. Proposed values are header, query, body, cookie or auto\r\nSpecifies the location of security authentication information. Proposed values are header, query, body, cookie or auto.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "in",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#in"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "authorization",
+                            "FormInfo": "Specifies URI of the authorization server.\r\nSpecifies URI of the authorization server.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "authorization",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#authorization"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "alg",
+                            "FormInfo": "Defines Encoding, encryption, or digest algorithm (e.g. ES256, ES512-256).\r\nDefines Encoding, encryption, or digest algorithm (e.g. ES256, ES512-256).",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "alg",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#alg"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "format",
+                            "FormInfo": "Specifies format of security authentication information. Options as value are jwt, cwt, jwe or jws\r\nSpecifies format of security authentication information. Options as value are jwt, cwt, jwe or jws",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "format",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#format"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "proxy",
+                            "FormInfo": "Provides address information of the proxy server the security configuration provides access to.\r\nProvides address information of the proxy server the security configuration provides access to.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "proxy",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#proxy"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          }
+                        ]
+                      },
+                      {
+                        "$type": "FormSubmodelElementCollection",
+                        "FormTitle": "oauth2_sc",
+                        "FormInfo": "This SubmodelElements holds the information about security mechanism based on oauth2 security.\r\nThis SubmodelElements holds the information about security mechanism based on oauth2 security.",
+                        "FormEditIdShort": false,
+                        "FormEditDescription": false,
+                        "PresetIdShort": "oauth2_sc",
+                        "PresetCategory": "",
+                        "KeySemanticId": {
+                          "type": "GlobalReference",
+                          "value": "https://www.w3.org/2019/wot/security#OAuth2SecurityScheme"
+                        },
+                        "Multiplicity": "ZeroToOne",
+                        "IsReadOnly": false,
+                        "value": [
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "scheme",
+                            "FormInfo": "Defines the security mechanism that used during access. the scheme for nosec_sc is nosec\r\nDefines the security mechanism that used during access. The scheme for oauth2_sc is oauth2.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "scheme",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#SecurityScheme"
+                            },
+                            "Multiplicity": "One",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "token",
+                            "FormInfo": "Specifies URI of the token server.\r\nSpecifies URI of the token server.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "token",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#token"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:anyURI"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "refresh",
+                            "FormInfo": "Specifies URI of the refresh server.\r\nSpecifies URI of the refresh server.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "refresh",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#refresh"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:anyURI"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "authorization",
+                            "FormInfo": "Specifies URI of the authorization server.\r\nSpecifies URI of the authorization server.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "authorization",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#authorization"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:anyURI"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "flow",
+                            "FormInfo": "Defines authorization flow such as code or client.\r\nDefines authorization flow such as code or client.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "flow",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#flow"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "proxy",
+                            "FormInfo": "Provides address information of the proxy server the security configuration provides access to.\r\nProvides address information of the proxy server the security configuration provides access to.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "proxy",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#proxy"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:anyURI"
+                            ],
+                            "presetValue": ""
+                          }
+                        ]
+                      },
+                      {
+                        "$type": "FormSubmodelElementCollection",
+                        "FormTitle": "opcua_channel_sc",
+                        "FormInfo": "This SubmodelElements holds the information about security mechanism based on opcua_channel security.\r\nThis SubmodelElements holds the information about security mechanism based on opcua_channel security.",
+                        "FormEditIdShort": false,
+                        "FormEditDescription": false,
+                        "PresetIdShort": "opcua_channel_sc",
+                        "PresetCategory": "",
+                        "KeySemanticId": {
+                          "type": "GlobalReference",
+                          "value": "http://opcfoundation.org/UA/WoT-Binding/OPCUASecurityChannelScheme"
+                        },
+                        "Multiplicity": "ZeroToOne",
+                        "IsReadOnly": false,
+                        "value": [
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "scheme",
+                            "FormInfo": "Defines the security mechanism that used during access. the scheme for nosec_sc is nosec\r\nDefines the security mechanism that used during access. The scheme for opcua_channel_sc is ua_channelsec.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "scheme",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#SecurityScheme"
+                            },
+                            "Multiplicity": "One",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "proxy",
+                            "FormInfo": "Provides address information of the proxy server the security configuration provides access to.\r\nProvides address information of the proxy server the security configuration provides access to.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "proxy",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#proxy"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "uav_securityMode",
+                            "FormInfo": "Provides information about the security modes supported by the OPC UA server endpoint(e.g None, Sign,SignAndEncrypt)\r\nProvides information about the security modes supported by the OPC UA server endpoint(e.g None, Sign,SignAndEncrypt)",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "uav_securityMode",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "http://opcfoundation.org/UA/WoT-Binding/securityMode "
+                            },
+                            "Multiplicity": "One",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "uav_securityPolicy",
+                            "FormInfo": "Provides information about which policy options are available from the supported endpoints of the OPC UA server(e.g None, Basic256Sha256)\r\nProvides information about which policy options are available from the supported endpoints of the OPC UA server(e.g None, Basic256Sha256)",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "uav_securityPolicy",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "http://opcfoundation.org/UA/WoT-Binding/securityPolicy"
+                            },
+                            "Multiplicity": "One",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          }
+                        ]
+                      },
+                      {
+                        "$type": "FormSubmodelElementCollection",
+                        "FormTitle": "opcua_authentication_sc",
+                        "FormInfo": "This SubmodelElements holds the information about security mechanism based on opcua_authentication security.\r\nThis SubmodelElements holds the information about security mechanism based on opcua_authentication security.",
+                        "FormEditIdShort": false,
+                        "FormEditDescription": false,
+                        "PresetIdShort": "opcua_authentication_sc",
+                        "PresetCategory": "",
+                        "KeySemanticId": {
+                          "type": "GlobalReference",
+                          "value": "http://opcfoundation.org/UA/WoT-Binding/OPCUASecurityAuthenticationScheme "
+                        },
+                        "Multiplicity": "ZeroToOne",
+                        "IsReadOnly": false,
+                        "value": [
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "scheme",
+                            "FormInfo": "Defines the security mechanism that used during access. the scheme for nosec_sc is nosec\r\nDefines the security mechanism that used during access. The scheme for opcua_authentication_sc is ua_authentication.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "scheme",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#SecurityScheme"
+                            },
+                            "Multiplicity": "One",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "proxy",
+                            "FormInfo": "Provides address information of the proxy server the security configuration provides access to.\r\nProvides address information of the proxy server the security configuration provides access to.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "proxy",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/security#proxy"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "uav_userIdentityToken",
+                            "FormInfo": "Provides information about which policy options are available from the supported endpoints of the OPC UA server (e.g Anonymous)\r\nProvides information about which policy options are available from the supported endpoints of the OPC UA server (e.g Anonymous)",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "uav_userIdentityToken",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "http://opcfoundation.org/UA/WoT-Binding/userIdentityToken"
+                            },
+                            "Multiplicity": "One",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormReferenceElement",
+                            "FormTitle": "uav_issueToken",
+                            "FormInfo": "Provides reference to security scheme within SecurityDefinition SMC that holds information about the token to use (e.g OAuth2).\r\nProvides reference to security scheme within SecurityDefinition SMC that holds information about the token to use (e.g OAuth2).",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "uav_issueToken",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "http://opcfoundation.org/UA/WoT-Binding/issueToken"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "presetFilter": ""
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "$type": "FormSubmodelElementCollection",
+                "FormTitle": "InteractionMetadata",
+                "FormInfo": "Provides the metadata of the actually interfaces such as which datapoints and functions are provided by the properties, actions, and events interaction abstraction. \r\nProvides the metadata of the actually interfaces such as which datapoints and functions are provided by the properties, actions, and events interaction abstraction. ",
+                "FormEditIdShort": false,
+                "FormEditDescription": false,
+                "PresetIdShort": "InteractionMetadata",
+                "PresetCategory": "",
+                "KeySemanticId": {
+                  "type": "GlobalReference",
+                  "value": "https://admin-shell.io/idta/AssetInterfacesDescription/1/0/InteractionMetadata"
+                },
+                "Multiplicity": "One",
+                "IsReadOnly": false,
+                "value": [
+                  {
+                    "$type": "FormSubmodelElementCollection",
+                    "FormTitle": "properties",
+                    "FormInfo": "Collection of asset’s datapoint definitions\r\nCollection of asset’s datapoint definitions",
+                    "FormEditIdShort": false,
+                    "FormEditDescription": false,
+                    "PresetIdShort": "properties",
+                    "PresetCategory": "",
+                    "KeySemanticId": {
+                      "type": "GlobalReference",
+                      "value": "https://www.w3.org/2019/wot/td#PropertyAffordance"
+                    },
+                    "Multiplicity": "ZeroToOne",
+                    "IsReadOnly": false,
+                    "value": [
+                      {
+                        "$type": "FormSubmodelElementCollection",
+                        "FormTitle": "property_name",
+                        "FormInfo": "Defines an interaction property that covers usually a datapoint definition that can be read or subscribed to.  \r\nDefines an interaction property that covers usually a datapoint definition that can be read or subscribed to. ",
+                        "FormEditIdShort": false,
+                        "FormEditDescription": false,
+                        "PresetIdShort": "property_name{00}",
+                        "PresetCategory": "",
+                        "KeySemanticId": {
+                          "type": "GlobalReference",
+                          "value": "https://admin-shell.io/idta/AssetInterfacesDescription/1/0/PropertyDefinition"
+                        },
+                        "Multiplicity": "ZeroToMany",
+                        "IsReadOnly": false,
+                        "value": [
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "key",
+                            "FormInfo": "Optional element when the idShort of {property_name} cannot be used to reflect the desired property name due to the idShort restrictions (e.g., payload message uses “temperature-value” as key term).\r\nOptional element when the idShort of {property_name} cannot be used to reflect the desired property name due to the idShort restrictions (e.g., payload message uses “temperature-value” as key term).",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "key",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://admin-shell.io/idta/AssetInterfacesDescription/1/0/key"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "type",
+                            "FormInfo": "Indicates the abstract data type (one of object, array, string, number, integer, boolean, or null) of the described datapoint.\r\nIndicates the abstract data type (one of object, array, string, number, integer, boolean, or null) of the described datapoint.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "type",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "title",
+                            "FormInfo": "Provides a human-readable title to give a human-readable context of the interface.\r\nProvides a human-readable title of this interaction (e.g., display a text for UI representation)",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "title",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/td#title"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "observable",
+                            "FormInfo": "An indicator that tells that the interaction datapoint can be observed with a, e.g., subscription mechanism by an underlying protocol.\r\nAn indicator that tells that the interaction datapoint can be observed with a, e.g., subscription mechanism by an underlying protocol.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "observable",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/td#isObservable"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:boolean"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "const",
+                            "FormInfo": "Provides a constant value for defined datapoint. The data type should be identical to the one provided by the Property type.\r\nProvides a constant value for defined datapoint. The data type should be identical to the one provided by the Property type.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "const",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/json-schema#const"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:int"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "default",
+                            "FormInfo": "Provides a default value that must of the type as the datapoint valueType. The data type should be identical to the one as provided by the Property type.\r\nProvides a default value that must of the type as the datapoint valueType. The data type should be identical to the one as provided by the Property type.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "default",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/json-schema#default"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormProperty",
+                            "FormTitle": "unit",
+                            "FormInfo": "Provides information about the datapoint’s unit.\r\nProvides information about the datapoint’s unit.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "unit",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://schema.org/unitCode"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "allowedValueTypes": [
+                              "xs:string"
+                            ],
+                            "presetValue": ""
+                          },
+                          {
+                            "$type": "FormSubmodelElementCollection",
+                            "FormTitle": "items",
+                            "FormInfo": "Used to define the data schema characteristics (as specified within Section 2.9) of an array payload.\r\nUsed to define the data schema characteristics (as specified within Section 2.9) of an array payload.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "items",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/json-schema#items"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "value": [
+                              {
+                                "$type": "FormProperty",
+                                "FormTitle": "type",
+                                "FormInfo": "Indicates the abstract data type (one of object, array, string, number, integer, boolean, or null) of the described datapoint.\r\nIndicates the abstract data type (one of object, array, string, number, integer, boolean, or null) of the described datapoint.",
+                                "FormEditIdShort": false,
+                                "FormEditDescription": false,
+                                "PresetIdShort": "type",
+                                "PresetCategory": "",
+                                "KeySemanticId": {
+                                  "type": "GlobalReference",
+                                  "value": "https://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                                },
+                                "Multiplicity": "ZeroToOne",
+                                "IsReadOnly": false,
+                                "allowedValueTypes": [
+                                  "xs:string"
+                                ],
+                                "presetValue": ""
+                              },
+                              {
+                                "$type": "FormProperty",
+                                "FormTitle": "title",
+                                "FormInfo": "Provides a human-readable title to give a human-readable context of the interface.\r\nProvides a human-readable title of this interaction (e.g., display a text for UI representation)",
+                                "FormEditIdShort": false,
+                                "FormEditDescription": false,
+                                "PresetIdShort": "title",
+                                "PresetCategory": "",
+                                "KeySemanticId": {
+                                  "type": "GlobalReference",
+                                  "value": "https://www.w3.org/2019/wot/td#title"
+                                },
+                                "Multiplicity": "ZeroToOne",
+                                "IsReadOnly": false,
+                                "allowedValueTypes": [
+                                  "xs:string"
+                                ],
+                                "presetValue": ""
+                              },
+                              {
+                                "$type": "FormProperty",
+                                "FormTitle": "observable",
+                                "FormInfo": "An indicator that tells that the interaction datapoint can be observed with a, e.g., subscription mechanism by an underlying protocol.\r\nAn indicator that tells that the interaction datapoint can be observed with a, e.g., subscription mechanism by an underlying protocol.",
+                                "FormEditIdShort": false,
+                                "FormEditDescription": false,
+                                "PresetIdShort": "observable",
+                                "PresetCategory": "",
+                                "KeySemanticId": {
+                                  "type": "GlobalReference",
+                                  "value": "https://www.w3.org/2019/wot/td#isObservable"
+                                },
+                                "Multiplicity": "ZeroToOne",
+                                "IsReadOnly": false,
+                                "allowedValueTypes": [
+                                  "xs:boolean"
+                                ],
+                                "presetValue": ""
+                              },
+                              {
+                                "$type": "FormProperty",
+                                "FormTitle": "const",
+                                "FormInfo": "Provides a constant value for defined datapoint. The data type should be identical to the one provided by the Property type.\r\nProvides a constant value for defined datapoint. The data type should be identical to the one provided by the Property type.",
+                                "FormEditIdShort": false,
+                                "FormEditDescription": false,
+                                "PresetIdShort": "const",
+                                "PresetCategory": "",
+                                "KeySemanticId": {
+                                  "type": "GlobalReference",
+                                  "value": "https://www.w3.org/2019/wot/json-schema#const"
+                                },
+                                "Multiplicity": "ZeroToOne",
+                                "IsReadOnly": false,
+                                "allowedValueTypes": [
+                                  "xs:int"
+                                ],
+                                "presetValue": ""
+                              },
+                              {
+                                "$type": "FormProperty",
+                                "FormTitle": "default",
+                                "FormInfo": "Provides a default value that must of the type as the datapoint valueType. The data type should be identical to the one as provided by the Property type.\r\nProvides a default value that must of the type as the datapoint valueType. The data type should be identical to the one as provided by the Property type.",
+                                "FormEditIdShort": false,
+                                "FormEditDescription": false,
+                                "PresetIdShort": "default",
+                                "PresetCategory": "",
+                                "KeySemanticId": {
+                                  "type": "GlobalReference",
+                                  "value": "https://www.w3.org/2019/wot/json-schema#default"
+                                },
+                                "Multiplicity": "ZeroToOne",
+                                "IsReadOnly": false,
+                                "allowedValueTypes": [
+                                  "xs:string"
+                                ],
+                                "presetValue": ""
+                              },
+                              {
+                                "$type": "FormProperty",
+                                "FormTitle": "unit",
+                                "FormInfo": "Provides information about the datapoint’s unit.\r\nProvides information about the datapoint’s unit.",
+                                "FormEditIdShort": false,
+                                "FormEditDescription": false,
+                                "PresetIdShort": "unit",
+                                "PresetCategory": "",
+                                "KeySemanticId": {
+                                  "type": "GlobalReference",
+                                  "value": "https://schema.org/unitCode"
+                                },
+                                "Multiplicity": "ZeroToOne",
+                                "IsReadOnly": false,
+                                "allowedValueTypes": [
+                                  "xs:string"
+                                ],
+                                "presetValue": ""
+                              },
+                              {
+                                "$type": "FormReferenceElement",
+                                "FormTitle": "valueSemantics",
+                                "FormInfo": "Provides additional semantic information of the value that is read/subscribed at runtime. \r\nProvides additional semantic information of the value that is read/subscribed at runtime. ",
+                                "FormEditIdShort": false,
+                                "FormEditDescription": false,
+                                "PresetIdShort": "valueSemantics",
+                                "PresetCategory": "",
+                                "KeySemanticId": {
+                                  "type": "GlobalReference",
+                                  "value": "https://admin-shell.io/idta/AssetInterfacesDescription/1/0/valueSemantics"
+                                },
+                                "Multiplicity": "ZeroToOne",
+                                "IsReadOnly": false,
+                                "presetFilter": ""
+                              }
+                            ]
+                          },
+                          {
+                            "$type": "FormSubmodelElementCollection",
+                            "FormTitle": "properties",
+                            "FormInfo": "Nested definitions of a datapoint. Only applicable if type=object.\r\nNested definitions of a datapoint. Only applicable if type=object.",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "properties",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/json-schema#properties"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "value": [
+                              {
+                                "$type": "FormSubmodelElementCollection",
+                                "FormTitle": "property_name",
+                                "FormInfo": "Defines a data element within an object-based datapoint.  \r\nDefines a data element within an object-based datapoint.  ",
+                                "FormEditIdShort": false,
+                                "FormEditDescription": false,
+                                "PresetIdShort": "property_name{00}",
+                                "PresetCategory": "",
+                                "KeySemanticId": {
+                                  "type": "GlobalReference",
+                                  "value": "https://www.w3.org/2019/wot/json-schema#propertyName"
+                                },
+                                "Multiplicity": "ZeroToMany",
+                                "IsReadOnly": false,
+                                "value": [
+                                  {
+                                    "$type": "FormProperty",
+                                    "FormTitle": "key",
+                                    "FormInfo": "Optional element when the idShort of {property_name} cannot be used to reflect the desired property name due to the idShort restrictions (e.g., payload message uses “temperature-value” as key term).\r\nOptional element when the idShort of {property_name} cannot be used to reflect the desired property name due to the idShort restrictions (e.g., payload message uses “temperature-value” as key term).",
+                                    "FormEditIdShort": false,
+                                    "FormEditDescription": false,
+                                    "PresetIdShort": "key",
+                                    "PresetCategory": "",
+                                    "KeySemanticId": {
+                                      "type": "GlobalReference",
+                                      "value": "https://admin-shell.io/idta/AssetInterfacesDescription/1/0/key"
+                                    },
+                                    "Multiplicity": "ZeroToOne",
+                                    "IsReadOnly": false,
+                                    "allowedValueTypes": [
+                                      "xs:string"
+                                    ],
+                                    "presetValue": ""
+                                  },
+                                  {
+                                    "$type": "FormProperty",
+                                    "FormTitle": "type",
+                                    "FormInfo": "Indicates the abstract data type (one of object, array, string, number, integer, boolean, or null) of the described datapoint.\r\nIndicates the abstract data type (one of object, array, string, number, integer, boolean, or null) of the described datapoint.",
+                                    "FormEditIdShort": false,
+                                    "FormEditDescription": false,
+                                    "PresetIdShort": "type",
+                                    "PresetCategory": "",
+                                    "KeySemanticId": {
+                                      "type": "GlobalReference",
+                                      "value": "https://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                                    },
+                                    "Multiplicity": "ZeroToOne",
+                                    "IsReadOnly": false,
+                                    "allowedValueTypes": [
+                                      "xs:string"
+                                    ],
+                                    "presetValue": ""
+                                  },
+                                  {
+                                    "$type": "FormProperty",
+                                    "FormTitle": "title",
+                                    "FormInfo": "Provides a human-readable title to give a human-readable context of the interface.\r\nProvides a human-readable title of this interaction (e.g., display a text for UI representation)",
+                                    "FormEditIdShort": false,
+                                    "FormEditDescription": false,
+                                    "PresetIdShort": "title",
+                                    "PresetCategory": "",
+                                    "KeySemanticId": {
+                                      "type": "GlobalReference",
+                                      "value": "https://www.w3.org/2019/wot/td#title"
+                                    },
+                                    "Multiplicity": "ZeroToOne",
+                                    "IsReadOnly": false,
+                                    "allowedValueTypes": [
+                                      "xs:string"
+                                    ],
+                                    "presetValue": ""
+                                  },
+                                  {
+                                    "$type": "FormProperty",
+                                    "FormTitle": "observable",
+                                    "FormInfo": "An indicator that tells that the interaction datapoint can be observed with a, e.g., subscription mechanism by an underlying protocol.\r\nAn indicator that tells that the interaction datapoint can be observed with a, e.g., subscription mechanism by an underlying protocol.",
+                                    "FormEditIdShort": false,
+                                    "FormEditDescription": false,
+                                    "PresetIdShort": "observable",
+                                    "PresetCategory": "",
+                                    "KeySemanticId": {
+                                      "type": "GlobalReference",
+                                      "value": "https://www.w3.org/2019/wot/td#isObservable"
+                                    },
+                                    "Multiplicity": "ZeroToOne",
+                                    "IsReadOnly": false,
+                                    "allowedValueTypes": [
+                                      "xs:boolean"
+                                    ],
+                                    "presetValue": ""
+                                  },
+                                  {
+                                    "$type": "FormProperty",
+                                    "FormTitle": "const",
+                                    "FormInfo": "Provides a constant value for defined datapoint. The data type should be identical to the one provided by the Property type.\r\nProvides a constant value for defined datapoint. The data type should be identical to the one provided by the Property type.",
+                                    "FormEditIdShort": false,
+                                    "FormEditDescription": false,
+                                    "PresetIdShort": "const",
+                                    "PresetCategory": "",
+                                    "KeySemanticId": {
+                                      "type": "GlobalReference",
+                                      "value": "https://www.w3.org/2019/wot/json-schema#const"
+                                    },
+                                    "Multiplicity": "ZeroToOne",
+                                    "IsReadOnly": false,
+                                    "allowedValueTypes": [
+                                      "xs:int"
+                                    ],
+                                    "presetValue": ""
+                                  },
+                                  {
+                                    "$type": "FormProperty",
+                                    "FormTitle": "default",
+                                    "FormInfo": "Provides a default value that must of the type as the datapoint valueType. The data type should be identical to the one as provided by the Property type.\r\nProvides a default value that must of the type as the datapoint valueType. The data type should be identical to the one as provided by the Property type.",
+                                    "FormEditIdShort": false,
+                                    "FormEditDescription": false,
+                                    "PresetIdShort": "default",
+                                    "PresetCategory": "",
+                                    "KeySemanticId": {
+                                      "type": "GlobalReference",
+                                      "value": "https://www.w3.org/2019/wot/json-schema#default"
+                                    },
+                                    "Multiplicity": "ZeroToOne",
+                                    "IsReadOnly": false,
+                                    "allowedValueTypes": [
+                                      "xs:string"
+                                    ],
+                                    "presetValue": ""
+                                  },
+                                  {
+                                    "$type": "FormProperty",
+                                    "FormTitle": "unit",
+                                    "FormInfo": "Provides information about the datapoint’s unit.\r\nProvides information about the datapoint’s unit.",
+                                    "FormEditIdShort": false,
+                                    "FormEditDescription": false,
+                                    "PresetIdShort": "unit",
+                                    "PresetCategory": "",
+                                    "KeySemanticId": {
+                                      "type": "GlobalReference",
+                                      "value": "https://schema.org/unitCode"
+                                    },
+                                    "Multiplicity": "ZeroToOne",
+                                    "IsReadOnly": false,
+                                    "allowedValueTypes": [
+                                      "xs:string"
+                                    ],
+                                    "presetValue": ""
+                                  },
+                                  {
+                                    "$type": "FormSubmodelElementCollection",
+                                    "FormTitle": "items",
+                                    "FormInfo": "Used to define the data schema characteristics (as specified within Section 2.9) of an array payload.\r\nUsed to define the data schema characteristics (as specified within Section 2.9) of an array payload.",
+                                    "FormEditIdShort": false,
+                                    "FormEditDescription": false,
+                                    "PresetIdShort": "items",
+                                    "PresetCategory": "",
+                                    "KeySemanticId": {
+                                      "type": "GlobalReference",
+                                      "value": "https://www.w3.org/2019/wot/json-schema#items"
+                                    },
+                                    "Multiplicity": "ZeroToOne",
+                                    "IsReadOnly": false,
+                                    "value": [
+                                      {
+                                        "$type": "FormProperty",
+                                        "FormTitle": "type",
+                                        "FormInfo": "Indicates the abstract data type (one of object, array, string, number, integer, boolean, or null) of the described datapoint.\r\nIndicates the abstract data type (one of object, array, string, number, integer, boolean, or null) of the described datapoint.",
+                                        "FormEditIdShort": false,
+                                        "FormEditDescription": false,
+                                        "PresetIdShort": "type",
+                                        "PresetCategory": "",
+                                        "KeySemanticId": {
+                                          "type": "GlobalReference",
+                                          "value": "https://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                                        },
+                                        "Multiplicity": "ZeroToOne",
+                                        "IsReadOnly": false,
+                                        "allowedValueTypes": [
+                                          "xs:string"
+                                        ],
+                                        "presetValue": ""
+                                      },
+                                      {
+                                        "$type": "FormProperty",
+                                        "FormTitle": "title",
+                                        "FormInfo": "Provides a human-readable title to give a human-readable context of the interface.\r\nProvides a human-readable title of this interaction (e.g., display a text for UI representation)",
+                                        "FormEditIdShort": false,
+                                        "FormEditDescription": false,
+                                        "PresetIdShort": "title",
+                                        "PresetCategory": "",
+                                        "KeySemanticId": {
+                                          "type": "GlobalReference",
+                                          "value": "https://www.w3.org/2019/wot/td#title"
+                                        },
+                                        "Multiplicity": "ZeroToOne",
+                                        "IsReadOnly": false,
+                                        "allowedValueTypes": [
+                                          "xs:string"
+                                        ],
+                                        "presetValue": ""
+                                      },
+                                      {
+                                        "$type": "FormProperty",
+                                        "FormTitle": "observable",
+                                        "FormInfo": "An indicator that tells that the interaction datapoint can be observed with a, e.g., subscription mechanism by an underlying protocol.\r\nAn indicator that tells that the interaction datapoint can be observed with a, e.g., subscription mechanism by an underlying protocol.",
+                                        "FormEditIdShort": false,
+                                        "FormEditDescription": false,
+                                        "PresetIdShort": "observable",
+                                        "PresetCategory": "",
+                                        "KeySemanticId": {
+                                          "type": "GlobalReference",
+                                          "value": "https://www.w3.org/2019/wot/td#isObservable"
+                                        },
+                                        "Multiplicity": "ZeroToOne",
+                                        "IsReadOnly": false,
+                                        "allowedValueTypes": [
+                                          "xs:boolean"
+                                        ],
+                                        "presetValue": ""
+                                      },
+                                      {
+                                        "$type": "FormProperty",
+                                        "FormTitle": "const",
+                                        "FormInfo": "Provides a constant value for defined datapoint. The data type should be identical to the one provided by the Property type.\r\nProvides a constant value for defined datapoint. The data type should be identical to the one provided by the Property type.",
+                                        "FormEditIdShort": false,
+                                        "FormEditDescription": false,
+                                        "PresetIdShort": "const",
+                                        "PresetCategory": "",
+                                        "KeySemanticId": {
+                                          "type": "GlobalReference",
+                                          "value": "https://www.w3.org/2019/wot/json-schema#const"
+                                        },
+                                        "Multiplicity": "ZeroToOne",
+                                        "IsReadOnly": false,
+                                        "allowedValueTypes": [
+                                          "xs:int"
+                                        ],
+                                        "presetValue": ""
+                                      },
+                                      {
+                                        "$type": "FormProperty",
+                                        "FormTitle": "default",
+                                        "FormInfo": "Provides a default value that must of the type as the datapoint valueType. The data type should be identical to the one as provided by the Property type.\r\nProvides a default value that must of the type as the datapoint valueType. The data type should be identical to the one as provided by the Property type.",
+                                        "FormEditIdShort": false,
+                                        "FormEditDescription": false,
+                                        "PresetIdShort": "default",
+                                        "PresetCategory": "",
+                                        "KeySemanticId": {
+                                          "type": "GlobalReference",
+                                          "value": "https://www.w3.org/2019/wot/json-schema#default"
+                                        },
+                                        "Multiplicity": "ZeroToOne",
+                                        "IsReadOnly": false,
+                                        "allowedValueTypes": [
+                                          "xs:string"
+                                        ],
+                                        "presetValue": ""
+                                      },
+                                      {
+                                        "$type": "FormProperty",
+                                        "FormTitle": "unit",
+                                        "FormInfo": "Provides information about the datapoint’s unit.\r\nProvides information about the datapoint’s unit.",
+                                        "FormEditIdShort": false,
+                                        "FormEditDescription": false,
+                                        "PresetIdShort": "unit",
+                                        "PresetCategory": "",
+                                        "KeySemanticId": {
+                                          "type": "GlobalReference",
+                                          "value": "https://schema.org/unitCode"
+                                        },
+                                        "Multiplicity": "ZeroToOne",
+                                        "IsReadOnly": false,
+                                        "allowedValueTypes": [
+                                          "xs:string"
+                                        ],
+                                        "presetValue": ""
+                                      },
+                                      {
+                                        "$type": "FormReferenceElement",
+                                        "FormTitle": "valueSemantics",
+                                        "FormInfo": "Provides additional semantic information of the value that is read/subscribed at runtime. \r\nProvides additional semantic information of the value that is read/subscribed at runtime. ",
+                                        "FormEditIdShort": false,
+                                        "FormEditDescription": false,
+                                        "PresetIdShort": "valueSemantics",
+                                        "PresetCategory": "",
+                                        "KeySemanticId": {
+                                          "type": "GlobalReference",
+                                          "value": "https://admin-shell.io/idta/AssetInterfacesDescription/1/0/valueSemantics"
+                                        },
+                                        "Multiplicity": "ZeroToOne",
+                                        "IsReadOnly": false,
+                                        "presetFilter": ""
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "$type": "FormSubmodelElementCollection",
+                                    "FormTitle": "properties",
+                                    "FormInfo": "Defines a data element within an object-based datapoint.  \r\nNested definitions of a datapoint. Only applicable if type=object.",
+                                    "FormEditIdShort": false,
+                                    "FormEditDescription": false,
+                                    "PresetIdShort": "properties",
+                                    "PresetCategory": "",
+                                    "KeySemanticId": {
+                                      "type": "GlobalReference",
+                                      "value": "https://www.w3.org/2019/wot/json-schema#propertyName"
+                                    },
+                                    "Multiplicity": "ZeroToOne",
+                                    "IsReadOnly": false,
+                                    "value": []
+                                  },
+                                  {
+                                    "$type": "FormReferenceElement",
+                                    "FormTitle": "valueSemantics",
+                                    "FormInfo": "Provides additional semantic information of the value that is read/subscribed at runtime. \r\nProvides additional semantic information of the value that is read/subscribed at runtime. ",
+                                    "FormEditIdShort": false,
+                                    "FormEditDescription": false,
+                                    "PresetIdShort": "valueSemantics",
+                                    "PresetCategory": "",
+                                    "KeySemanticId": {
+                                      "type": "GlobalReference",
+                                      "value": "https://admin-shell.io/idta/AssetInterfacesDescription/1/0/valueSemantics"
+                                    },
+                                    "Multiplicity": "ZeroToOne",
+                                    "IsReadOnly": false,
+                                    "presetFilter": ""
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "$type": "FormReferenceElement",
+                            "FormTitle": "valueSemantics",
+                            "FormInfo": "Provides additional semantic information of the value that is read/subscribed at runtime. \r\nProvides additional semantic information of the value that is read/subscribed at runtime. ",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "valueSemantics",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://admin-shell.io/idta/AssetInterfacesDescription/1/0/valueSemantics"
+                            },
+                            "Multiplicity": "ZeroToOne",
+                            "IsReadOnly": false,
+                            "presetFilter": ""
+                          },
+                          {
+                            "$type": "FormSubmodelElementCollection",
+                            "FormTitle": "forms",
+                            "FormInfo": "Contains information about datapoint resource location. Note, forms is only available at the top level {property_name}\r\nContains information about datapoint resource location. Note, forms is only available at the top level {property_name}",
+                            "FormEditIdShort": false,
+                            "FormEditDescription": false,
+                            "PresetIdShort": "forms",
+                            "PresetCategory": "",
+                            "KeySemanticId": {
+                              "type": "GlobalReference",
+                              "value": "https://www.w3.org/2019/wot/td#hasForm"
+                            },
+                            "Multiplicity": "One",
+                            "IsReadOnly": false,
+                            "value": [
+                              {
+                                "$type": "FormProperty",
+                                "FormTitle": "href",
+                                "FormInfo": "Indicates target IRI relative path or full IRI of asset’s datapoint. The relative endpoint definition in href is always relative to base defined in EndpointMetadata. \r\nIndicates target IRI relative path or full IRI of asset’s datapoint. The relative endpoint definition in href is always relative to base defined in EndpointMetadata. ",
+                                "FormEditIdShort": false,
+                                "FormEditDescription": false,
+                                "PresetIdShort": "href",
+                                "PresetCategory": "",
+                                "KeySemanticId": {
+                                  "type": "GlobalReference",
+                                  "value": "https://www.w3.org/2019/wot/hypermedia#hasTarget"
+                                },
+                                "Multiplicity": "One",
+                                "IsReadOnly": false,
+                                "allowedValueTypes": [
+                                  "xs:string"
+                                ],
+                                "presetValue": ""
+                              },
+                              {
+                                "$type": "FormProperty",
+                                "FormTitle": "contentType",
+                                "FormInfo": "Defines content type based on a media type (e.g., text/plain) and potential character decoding/encoding type (e.g., charset=utf-8) for the media type (see RFC2046) of the whole interface.\r\nIndicates the datapoint media type specified by IANA.Note: this local definition overwrites the globally defined contentType specified in EndpointMetadata (if it exists).",
+                                "FormEditIdShort": false,
+                                "FormEditDescription": false,
+                                "PresetIdShort": "contentType",
+                                "PresetCategory": "",
+                                "KeySemanticId": {
+                                  "type": "GlobalReference",
+                                  "value": "https://www.w3.org/2019/wot/hypermedia#forContentType"
+                                },
+                                "Multiplicity": "ZeroToOne",
+                                "IsReadOnly": false,
+                                "allowedValueTypes": [
+                                  "xs:string"
+                                ],
+                                "presetValue": ""
+                              },
+                              {
+                                "$type": "FormProperty",
+                                "FormTitle": "subprotocol",
+                                "FormInfo": "Indicates the exact mechanism by which an interaction will be accomplished for a given protocol when there are multiple options.\r\nIndicates the exact mechanism by which an interaction will be accomplished for a given protocol when there are multiple options.",
+                                "FormEditIdShort": false,
+                                "FormEditDescription": false,
+                                "PresetIdShort": "subprotocol",
+                                "PresetCategory": "",
+                                "KeySemanticId": {
+                                  "type": "GlobalReference",
+                                  "value": "https://www.w3.org/2019/wot/hypermedia#forSubProtocol"
+                                },
+                                "Multiplicity": "ZeroToOne",
+                                "IsReadOnly": false,
+                                "allowedValueTypes": [
+                                  "xs:string"
+                                ],
+                                "presetValue": ""
+                              },
+                              {
+                                "$type": "FormProperty",
+                                "FormTitle": "uav_browsePath",
+                                "FormInfo": "Defines an absolute path of a datapoint, starting from the root node of an OPC UA address space. This term is only used for OPC UA interface. \r\nDefines an absolute path of a datapoint, starting from the root node of an OPC UA address space. This term is only used for OPC UA interface. ",
+                                "FormEditIdShort": false,
+                                "FormEditDescription": false,
+                                "PresetIdShort": "uav_browsePath",
+                                "PresetCategory": "",
+                                "KeySemanticId": {
+                                  "type": "GlobalReference",
+                                  "value": "http://opcfoundation.org/UA/WoT-Binding/browsePath"
+                                },
+                                "Multiplicity": "ZeroToOne",
+                                "IsReadOnly": false,
+                                "allowedValueTypes": [
+                                  "xs:string"
+                                ],
+                                "presetValue": ""
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "$type": "FormSubmodelElementCollection",
+                    "FormTitle": "actions",
+                    "FormInfo": "Collection of functions that can be done on asset as action SMC\r\nCollection of functions that can be done on asset as action SMC",
+                    "FormEditIdShort": false,
+                    "FormEditDescription": false,
+                    "PresetIdShort": "actions",
+                    "PresetCategory": "",
+                    "KeySemanticId": {
+                      "type": "GlobalReference",
+                      "value": "https://www.w3.org/2019/wot/td#ActionAffordance"
+                    },
+                    "Multiplicity": "ZeroToOne",
+                    "IsReadOnly": false,
+                    "value": []
+                  },
+                  {
+                    "$type": "FormSubmodelElementCollection",
+                    "FormTitle": "events",
+                    "FormInfo": "Collection of events triggerable by datapoint state as event SMC\r\nCollection of events triggerable by datapoint state as event SMC",
+                    "FormEditIdShort": false,
+                    "FormEditDescription": false,
+                    "PresetIdShort": "events",
+                    "PresetCategory": "",
+                    "KeySemanticId": {
+                      "type": "GlobalReference",
+                      "value": "https://www.w3.org/2019/wot/td#EventAffordance"
+                    },
+                    "Multiplicity": "ZeroToOne",
+                    "IsReadOnly": false,
+                    "value": []
+                  }
+                ]
+              },
+              {
+                "$type": "FormSubmodelElementCollection",
+                "FormTitle": "ExternalDescriptor",
+                "FormInfo": "Provides a place for existing description files (e.g., Thing Description, GSDML, etc,).\r\nProvides a place for existing description files (e.g., Thing Description, GSDML, etc,).",
+                "FormEditIdShort": false,
+                "FormEditDescription": false,
+                "PresetIdShort": "ExternalDescriptor",
+                "PresetCategory": "",
+                "KeySemanticId": {
+                  "type": "GlobalReference",
+                  "value": "https://admin-shell.io/idta/AssetInterfacesDescription/1/0/ExternalDescriptor"
+                },
+                "Multiplicity": "ZeroToOne",
+                "IsReadOnly": false,
+                "value": [
+                  {
+                    "$type": "FormFile",
+                    "FormTitle": "fileName",
+                    "FormInfo": "File reference (local in AASX or outside) to an external descriptor description (e.g., Thing Description, GSDML, MTP, etc,).  \r\nFile reference (local in AASX or outside) to an external descriptor description (e.g., Thing Description, GSDML, MTP, etc,).  ",
                     "FormEditIdShort": false,
                     "FormEditDescription": false,
                     "PresetIdShort": "fileName",
