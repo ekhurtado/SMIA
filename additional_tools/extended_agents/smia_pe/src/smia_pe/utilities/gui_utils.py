@@ -50,12 +50,20 @@ class GUIControllers:
         """
         data = await request.json()
         bpmn_execution_change = data.get('BPMNExecutionChange', None)   # None if it is missing
+        workflow_repeat_change = data.get('WorkflowRepeatChange', None)   # None if it is missing
 
         if bpmn_execution_change is not None:
             if bpmn_execution_change == 'Continue':
                 self.myagent.bpmn_execution_status = True
             if bpmn_execution_change == 'Stop':
                 self.myagent.bpmn_execution_status = False
+
+        if workflow_repeat_change is not None:
+            # The repeat toggle only applies to the next workflow cycle
+            if workflow_repeat_change == 'Enable':
+                self.myagent.workflow_repeat = True
+            if workflow_repeat_change == 'Disable':
+                self.myagent.workflow_repeat = False
 
         # TODO Think more buttons for SMIA PE
         return {'status': 'success'}

@@ -114,6 +114,97 @@
             font-style: italic;
         }
 
+        /*Workflow repeat toggle switch (iterative execution on/off)*/
+        .workflow-repeat-div {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .workflow-repeat-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .repeat-switch {
+            position: relative;
+            display: inline-block;
+            width: 88px;
+            height: 34px;
+        }
+
+        .repeat-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .repeat-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .3s;
+            border-radius: 34px;
+        }
+
+        .repeat-slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .repeat-switch input:checked + .repeat-slider {
+            background-color: #28a745;
+        }
+
+        .repeat-switch input:checked + .repeat-slider:before {
+            transform: translateX(54px);
+        }
+
+        .repeat-slider .repeat-icon-on,
+        .repeat-slider .repeat-icon-off {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            line-height: 1;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .repeat-slider .repeat-icon-on {
+            left: 12px;
+            color: white;
+            opacity: 0;
+            transition: .3s;
+        }
+
+        .repeat-slider .repeat-icon-off {
+            right: 12px;
+            color: #1a1a1a;
+            font-weight: bold;
+            opacity: 1;
+            transition: .3s;
+        }
+
+        .repeat-switch input:checked + .repeat-slider .repeat-icon-on {
+            opacity: 1;
+        }
+
+        .repeat-switch input:checked + .repeat-slider .repeat-icon-off {
+            opacity: 0;
+        }
+
 
         .table {
             width: 100%;
@@ -324,8 +415,19 @@
                                                 <span class="bpmn-execution-status">SMIA workflow executing</span>
                                             {% else %}
                                                 <i class="fas fa-pause-circle fa-lg" style="color: #e30000;"></i>
-                                                <span class="bpmn-execution-status">SMIA workflow stoped</span>
+                                                <span class="bpmn-execution-status">SMIA workflow stopped</span>
                                             {% endif %}
+                                    </div>
+
+                                    <div class="workflow-repeat-div">
+                                        <div class="workflow-repeat-title">Iterative execution</div>
+                                        <label class="repeat-switch" title="Enable/disable iterative workflow execution">
+                                            <input type="checkbox" id="workflow-repeat-toggle" {% if agent.workflow_repeat == True %}checked{% endif %}>
+                                            <span class="repeat-slider">
+                                                <i class="fas fa-repeat repeat-icon-on" aria-hidden="true"></i>
+                                                <span class="repeat-icon-off" aria-hidden="true">1×</span>
+                                            </span>
+                                        </label>
                                     </div>
 
                                     </div>
@@ -435,6 +537,7 @@
 
         const continueButton = document.getElementById('bpmn-continue-button');
         const stopButton = document.getElementById('bpmn-stop-button');
+        const repeatToggle = document.getElementById('workflow-repeat-toggle');
 
         continueButton.addEventListener('click', async function(event) {
 
@@ -483,6 +586,31 @@
             } catch (error) {
                 console.error('Error:', error);
                 alert('Failed to stop the SMIA PE workflow execution. Error: .' + error);
+            }
+
+            location.reload();  // The web page is reloaded
+        });
+
+        repeatToggle.addEventListener('change', async function(event) {
+
+            // Send data as JSON using fetch (applies to the next workflow cycle)
+            const requestJSON = {'WorkflowRepeatChange': event.target.checked ? 'Enable' : 'Disable'};
+            try {
+                const response = await fetch('/smia_pe_dashboard', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestJSON)
+                });
+
+                const json = await response.json();
+                if (json.status !== 'success') {
+                    alert(`Failed to change the iterative execution: ${json.reason}.`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to change the iterative execution. Error: .' + error);
             }
 
             location.reload();  // The web page is reloaded

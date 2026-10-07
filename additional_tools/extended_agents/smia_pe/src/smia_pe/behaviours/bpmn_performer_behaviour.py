@@ -502,7 +502,7 @@ class BPMNPerformerBehaviour(CyclicBehaviour):
 
         # The FIPA-CNP message will be sent with CFP performative and same thread for all receivers
         # The negotiation criterion is a workflow-level config (env > BPMN > default), resolved once at startup
-        neg_criterion = getattr(self, 'negotiation_criterion',
+        neg_criterion = getattr(self.myagent, 'negotiation_criterion',
                                 SMIABPMNInfo.DEFAULT_NEGOTIATION_CRITERION)
         cfp_thread = await acl_smia_messages_utils.create_random_thread(self.myagent)
         for smia_instance_id in smia_instance_ids:

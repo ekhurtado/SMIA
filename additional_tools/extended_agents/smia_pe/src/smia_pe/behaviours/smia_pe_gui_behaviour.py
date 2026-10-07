@@ -27,6 +27,10 @@ class SMIAPEGUIBehaviour(OneShotBehaviour):
             self.agent.bpmn_execution_status = DockerUtils.get_safe_env_var(
                 SMIABPMNInfo.WORKFLOW_AUTOSTART_ENV_VAR,
                 default=SMIABPMNInfo.DEFAULT_WORKFLOW_AUTOSTART, var_type=bool)
+        if not hasattr(self.agent, 'workflow_repeat'):
+            self.agent.workflow_repeat = DockerUtils.get_safe_env_var(
+                SMIABPMNInfo.WORKFLOW_REPEAT_ENV_VAR,
+                default=SMIABPMNInfo.DEFAULT_WORKFLOW_REPEAT, var_type=bool)
         self.agent.bpmn_info = {'ServiceTasks': 0, 'ExclusiveGateways': 0, 'Capabilities': 0, 'Skills': 0, 'Assets': 0,
                                 'CompletedWorkflows': 0}
         self.agent.bpmn_graphviz_info = "digraph SMIA_PE_workflow { rankdir=LR; node [fixedsize=true];}"
