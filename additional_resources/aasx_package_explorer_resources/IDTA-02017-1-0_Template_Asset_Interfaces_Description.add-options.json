@@ -24,7 +24,7 @@
             "FormInfo": "",
             "FormEditIdShort": false,
             "FormEditDescription": false,
-            "PresetIdShort": "InterfaceTemplateForHTTP{0:00}",
+            "PresetIdShort": "InterfaceTemplateForHTTP",
             "PresetCategory": "",
             "KeySemanticId": {
               "type": "GlobalReference",
@@ -1035,7 +1035,7 @@
                         "FormInfo": "Current counter value",
                         "FormEditIdShort": false,
                         "FormEditDescription": false,
-                        "PresetIdShort": "property_name{0:00}",
+                        "PresetIdShort": "property_name",
                         "PresetCategory": "",
                         "KeySemanticId": {
                           "type": "GlobalReference",
@@ -1345,7 +1345,7 @@
                                 "FormInfo": "Current counter value",
                                 "FormEditIdShort": false,
                                 "FormEditDescription": false,
-                                "PresetIdShort": "property_name{0:00}",
+                                "PresetIdShort": "property_name",
                                 "PresetCategory": "",
                                 "KeySemanticId": {
                                   "type": "GlobalReference",
@@ -1858,7 +1858,7 @@
             "FormInfo": "",
             "FormEditIdShort": false,
             "FormEditDescription": false,
-            "PresetIdShort": "InterfaceTemplateForMODBUS{0:00}",
+            "PresetIdShort": "InterfaceTemplateForMODBUS",
             "PresetCategory": "",
             "KeySemanticId": {
               "type": "GlobalReference",
@@ -2907,7 +2907,7 @@
                         "FormInfo": "Current counter value",
                         "FormEditIdShort": false,
                         "FormEditDescription": false,
-                        "PresetIdShort": "property_name{0:00}",
+                        "PresetIdShort": "property_name",
                         "PresetCategory": "",
                         "KeySemanticId": {
                           "type": "GlobalReference",
@@ -3217,7 +3217,7 @@
                                 "FormInfo": "Current counter value",
                                 "FormEditIdShort": false,
                                 "FormEditDescription": false,
-                                "PresetIdShort": "property_name{0:00}",
+                                "PresetIdShort": "property_name",
                                 "PresetCategory": "",
                                 "KeySemanticId": {
                                   "type": "GlobalReference",
@@ -3844,7 +3844,7 @@
             "FormInfo": "",
             "FormEditIdShort": false,
             "FormEditDescription": false,
-            "PresetIdShort": "InterfaceTemplateForMQTT{0:00}",
+            "PresetIdShort": "InterfaceTemplateForMQTT",
             "PresetCategory": "",
             "KeySemanticId": {
               "type": "GlobalReference",
@@ -4855,7 +4855,7 @@
                         "FormInfo": "Current counter value",
                         "FormEditIdShort": false,
                         "FormEditDescription": false,
-                        "PresetIdShort": "property_name{0:00}",
+                        "PresetIdShort": "property_name",
                         "PresetCategory": "",
                         "KeySemanticId": {
                           "type": "GlobalReference",
@@ -5165,7 +5165,7 @@
                                 "FormInfo": "Current counter value",
                                 "FormEditIdShort": false,
                                 "FormEditDescription": false,
-                                "PresetIdShort": "property_name{0:00}",
+                                "PresetIdShort": "property_name",
                                 "PresetCategory": "",
                                 "KeySemanticId": {
                                   "type": "GlobalReference",
