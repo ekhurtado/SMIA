@@ -187,7 +187,7 @@ In the first phase, we will generate the CSS-enriched AAS model that will allow 
     |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
     |                  | Charging            | Asset Capability   | Charge                      | \-                | \-                                             |
     |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
-    |                  | Negotiation         | Agent Capability   | NegotiationBasedOnBattery   | NegotiationWinner | \-                                             |
+    |                  | Negotiation         | Agent Capability   | NegotiationBasedOnAssetData | NegotiationWinner | \-                                             |
     +------------------+---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
     | Mobile Asset     | Transportation      | Asset Capability   | Transport                   | duration          | PayloadWeight (*MR1 [0-5 kg] / MR2 [0-10 kg]*) |
     |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
@@ -197,7 +197,7 @@ In the first phase, we will generate the CSS-enriched AAS model that will allow 
     |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
     |                  | Charging            | Asset Capability   | Charge                      | \-                | \-                                             |
     |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
-    |                  | Negotiation         | Agent Capability   | NegotiationBasedOnBattery   | NegotiationWinner | \-                                             |
+    |                  | Negotiation         | Agent Capability   | NegotiationBasedOnAssetData | NegotiationWinner | \-                                             |
     +------------------+---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
     | Human Asset      | Transportation      | Asset Capability   | Transport                   | duration          | PayloadWeight (*[0-15 kg]*)                    |
     |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
@@ -209,7 +209,7 @@ In the first phase, we will generate the CSS-enriched AAS model that will allow 
     |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
     |                  | Recovering          | Asset Capability   | Recover                     | \-                | \-                                             |
     |                  +---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
-    |                  | Negotiation         | Agent Capability   | NegotiationBasedOnStamina   | NegotiationWinner | \-                                             |
+    |                  | Negotiation         | Agent Capability   | NegotiationBasedOnAssetData | NegotiationWinner | \-                                             |
     +------------------+---------------------+--------------------+-----------------------------+-------------------+------------------------------------------------+
 
 8. Save the AASX file with the complete definition of the valid CSS-enriched AAS model. To do this, use the menu: ``File > Save as ...``, select the folder where the CSS-enriched AAS model will be saved and specify the name for the AASX file.
@@ -270,9 +270,9 @@ Once the deployment environment is ready, you can launch the complete SMIA platf
 
 1. Unzip the ZIP file and copy it to a system with Docker and Docker Compose installed.
 2. Navigate to the ``smia`` folder, which contains all the deployment files and information (``README.md``). As you can see, the CSS-enriched AAS models are located inside the ``aas`` folder. The remaining folders are related to infrastructure components (``xmpp_server`` for the Ejabberd server and ``basyx`` for the AAS server). The deployment file is :bdg-primary:`docker-compose.yml`.
-3. Make a few minor adjustments to ``docker-compose.yml`` for this tutorial:
+3. Verify the generated ``docker-compose.yml`` for this tutorial:
 
-    3.1 For each SMIA instance of the industrial assets, configure self-registration in the SMIA-I KB so that they can expose their CSS information and agent identifier to the rest of the platform. To do this, in each Docker Compose service, add the following environment variable: ``SMIAI_KB_REGISTRATION=TRUE`` to all simulated assets (production, mobile, and human).
+    3.1 Check that each simulated asset service already includes self-registration in the SMIA-I KB so that they can expose their CSS information and agent identifier to the rest of the platform. The Environment Builder adds the environment variable ``SMIAI_KB_REGISTRATION=TRUE`` automatically to all simulated assets (production, mobile, and human) when ``SMIA-I KB`` and ``SMIA ISM`` are selected, so no change is needed.
 
     .. dropdown:: :octicon:`code;1em;sd-text-primary` Example of an SMIA instance for a simulated asset
 
@@ -288,21 +288,7 @@ Once the deployment environment is ready, you can launch the complete SMIA platf
                   - AGENT_PSSWD=gcis1234
                   - SMIAI_KB_REGISTRATION=TRUE
 
-    3.2 In the SMIA PE instance, disable autonomous execution, so that it can be enabled later when needed (the first validation stage will be performed manually using SMIA Operator). To do this, add the following environment variable: ``WORKFLOW_AUTOSTART=False``.
-
-    .. dropdown:: :octicon:`code;1em;sd-text-primary` SMIA PE instance for manual validation
-
-        .. code-block:: yaml
-            :emphasize-lines: 8
-
-            smia-pe-simulated_assets_plan_001:
-                image: ekhurtado/smia-tools:latest-smia-pe
-                container_name: smia-pe-simulated_assets_plan_001
-                environment:
-                  - AAS_MODEL_NAME=SimulatedAssetsHTTP_Plan_1.aasx
-                  - AGENT_ID=simulated_assets_plan_001@ejabberd
-                  - AGENT_PSSWD=gcis1234
-                  - WORKFLOW_AUTOSTART=False
+    3.2 No change is needed in the SMIA PE instance to disable autonomous execution (the first validation stage will be performed manually using SMIA Operator). The BPMN workflow already specifies that the flow must not start when the agent starts, so the SMIA PE dashboard will show the workflow as stopped. The same behavior can also be configured with the environment variable ``WORKFLOW_AUTOSTART=False``.
 
 4. Deploy the complete SMIA platform. To do so, simply run the following command in the ``smia`` folder:
 
@@ -360,6 +346,8 @@ In this stage, the individual operation of each agent will be validated manually
 .. tip::
 
     If tasks are requested by selecting multiple assets, they will compete based on their battery or stamina; therefore, you can make multiple requests for the same task to verify that the winner in each iteration is the one with the most battery/stamina.
+
+    If multiple instances are selected, SMIA Operator displays the option to specify the skill that will be used to resolve the negotiation. In this case, only one option appears (``NegotiationBasedOnAssetData``), since all assets have this same skill (although linked to different asset data to compete based on battery/stamina).
 
 Collaborative validation
 ~~~~~~~~~~~~~~~~~~~~~~~~
