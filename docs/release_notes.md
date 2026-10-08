@@ -2,12 +2,15 @@
 
 (Release Notes)=
 
-## 1.0.1
+## 1.0.2
 
 This release of Self-configurable Manufacturing Industrial Agents (SMIA) includes improvements to agent's source code, such as a new asset communication protocol (OPC UA) or a new AAS service, and improvements to SMIA ecosystem (SMIA PE, SMIA Operator and the Camunda Modeler plugin). A new step-by-step tutorial with simulated assets and a new extended agent for health supervision is also added to the documentation platform.
 
 > SMIA: All Python files structured in Python modules.
 > - It includes the launcher files to run the software in the ``launchers`` module: _smia_cli_starter.py_, _smia_starter.py_ and _smia_docker_starter.py_.
+
+> [!NOTE]
+> **Version 1.0.1 skipped**: Version `1.0.1` was skipped due to a packaging issue on PyPI.
 
 ### Features
 
@@ -37,6 +40,8 @@ This release of Self-configurable Manufacturing Industrial Agents (SMIA) include
 - Improved SMIA PE graphical interface: added toggle switch for workflow management to configure iterative vs. single execution, and fixed retrieving of negotiation criteria for CNP requests.
 - Improved SMIA Operator graphical interface: Added a selection option for the negotiation criteria only if the user selects multiple SMIA instances. 
   - Additionally, if the selected instances do not share the same negotiation criteria, the user is notified in the interface that the negotiation may fail.
+- Added ``asyncua`` as a dependency for SMIA, due to the new communication protocol.
+  - It has been added to ``pyproject.toml`` so that it is generated in the SMIA package on PyPI.
 
 ### Fixed errors
 
