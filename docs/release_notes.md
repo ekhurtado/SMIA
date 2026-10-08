@@ -2,6 +2,53 @@
 
 (Release Notes)=
 
+## 1.0.1
+
+This release of Self-configurable Manufacturing Industrial Agents (SMIA) includes improvements to agent's source code, such as a new asset communication protocol (OPC UA) or a new AAS service, and improvements to SMIA ecosystem (SMIA PE, SMIA Operator and the Camunda Modeler plugin). A new step-by-step tutorial with simulated assets and a new extended agent for health supervision is also added to the documentation platform.
+
+> SMIA: All Python files structured in Python modules.
+> - It includes the launcher files to run the software in the ``launchers`` module: _smia_cli_starter.py_, _smia_starter.py_ and _smia_docker_starter.py_.
+
+### Features
+
+- Added new asset connection protocol to SMIA: ``OPC UA``.
+  - Created ``OPCUAAssetConnection`` class with a single persistent client across requests and subscriptions, and local variables per request to prevent errors in concurrent requests.
+  - Added its semanticID in ``AssetInterfacesInfo`` and self-generation in ``InitAASModelBehaviour`` during self-configuration.
+  - Added new OPC UA protocol to the template for the ``AssetInterfacesDescription`` submodel as additional resource for AASX Package Explorer.
+- Added new AAS service for SMIA: ``GetSubmodelElementBySemanticID``. It returns an AAS Submodel or SubmodelElement using the ``semanticID`` (useful when information is needed but the submodel identifier is not available).
+- Added new step-by-step guide on ReadTheDocs: evaluating SMIA platform with the assets simulator (part of SMIA ecosystem).
+  - Developed the CSS-enriched AAS models (AASX files) for all simulated assets and added to GitHub resources in ``examples/tutorials/SMIA_simulated_assets_guided_tutorial``.
+  - Added full guide on ReadTheDocs platform in ``SMIA User Guide/Step-by-step tutorials``: ``Step-by-step tutorial: Simulated assets``.
+  - The tutorial consists of three phases: development of CSS-enriched AAS models for simulated assets, deployment of the SMIA platform, and validation of SMIA instances individually via SMIA Operator and collaboratively via SMIA PE (including ``OperationalHealthSupervisor``).
+- Developed a new extended agent ``OperationalHealthSupervisor`` for the new step-by-step guide with simulated assets.
+  - The purpose of this agent is to monitor the health of simulated assets and, if necessary, request their replenishment.
+  - First operational version with multiple approaches for health property acquisition: approach A based on semanticID references and asset services erquests, and approach B based on ``AssetPropertyProvision`` capability requests.
+  - Added source code in GitHub within ``examples/tutorials/SMIA_simulated_assets_guided_tutorial``. It includes launcher, internal logic, utilities, Docker files and CSS-enriched AAS model ``SimulatedAssets_OperationalHealthSupervisor.aasx``.
+- Added communication guide as SMIA user guide in ReadTheDocs platform, and improved SMIA User Guide page with references to step-by-step tutorials and the ecosystem.
+- Improvements to SMIA plugin for Camunda Modeler: a new set of three global attributes has been added for the CSS-enriched BPMN process: ``autostart``, ``repeat`` and ``negotiation criterion``.
+  - This allows users to define the criteria for assigning assets when tasks are left without specifying an asset.
+- Improved SMIA PE extended agent to configure settings from BPMN process information (``autostart``, ``repeat``, ``negotiation criterion``). If defined as environment variables, their values take precedence over those defined in the BPMN.
+  - This allows assets to be assigned based on the criteria defined in the BPMN during the CNP distributed protocol.
+- Improved SMIA Operator extended agent: added option to specify the negotiation criterion when multiple SMIA instances are selected, with instant validation that warns when the selected SMIAs do not all support the chosen criterion.
+
+### Major Changes
+
+- Improved OPC UA asset connection efficiency by reusing a single persistent client following best practices for communication.
+- Improved SMIA PE graphical interface: added toggle switch for workflow management to configure iterative vs. single execution, and fixed retrieving of negotiation criteria for CNP requests.
+- Improved SMIA Operator graphical interface: Added a selection option for the negotiation criteria only if the user selects multiple SMIA instances. 
+  - Additionally, if the selected instances do not share the same negotiation criteria, the user is notified in the interface that the negotiation may fail.
+
+### Fixed errors
+
+- Fixed bug in SMIA-I KB when generating (POST) and returning (GET) capabilities: it did not take the ``Agent/AssetCapability`` category into account and returned the capability name instead of the category. Now instances are correctly generated and categorized.
+  - Previously, when SMIA instances were registered, ontological instances were always generated from the ``Capability`` class; now they are generated from the correct class, ``Agent/AssetCapability``.
+  - Previously, when capabilities were obtained, they all displayed their category using the same name as the capability; now they are displayed with their correct ``Agent/AssetCapability`` category.
+- Fixed template for the ``AssetInterfacesDescription`` submodel: removed ``{0:00}`` entries which caused a parsing error in SMIA.
+- Added error message when an ``AssetConnectionError`` occurs during CSS capability execution in ``HandleCapabilityBehaviour``.
+- Added compatibility comment in ``extended_aas_model``: if ``basyx-python-sdk`` is updated to v2.1.0 an ``if`` statement must be removed.
+  - This compatibility issue has been verified through testing with different versions of ``basyx-python-sdk``.
+- Fixed minor errors in communication guide and simulated assets tutorial guide.
+
 ## 0.3.5
 
 This release of Self-configurable Manufacturing Industrial Agents (SMIA) includes some improvements to additional tools of the SMIA ecocystem, as well as fixes for some bugs and errors throughout the project.
