@@ -1549,9 +1549,11 @@ const SMIA_Builder = {
         }
 
         // ── Production Assets — smia-X (Step 3) ──
+        // SMIA-I KB registration: only when both KB and ISM are enabled
+        const kbRegistrationEnabled = !!(s.core.smiakb && s.core.ism);
         s.assets.forEach((asset, i) => {
             const index = i + 1;                         // 1-based index
-            const deployYaml = this._yamlK8sDeployment(asset, index, xmppDomain);
+            const deployYaml = this._yamlK8sDeployment(asset, index, xmppDomain, kbRegistrationEnabled);
             // Add each manifest inside the kubernetes/ directory
             k8sFolder.file(`deploy-smia-${index}.yaml`, deployYaml);
         });
@@ -1590,9 +1592,10 @@ const SMIA_Builder = {
      * @param {object} asset      - Asset state { path, file, isExtended, image }
      * @param {number} index      - 1-based sequential index
      * @param {string} xmppDomain - XMPP domain for AGENT_ID
+     * @param {boolean} kbRegistrationEnabled - Add SMIAI_KB_REGISTRATION when KB and ISM are enabled
      * @returns {string} Complete Deployment YAML as a string
      */
-    _yamlK8sDeployment: function (asset, index, xmppDomain) {
+    _yamlK8sDeployment: function (asset, index, xmppDomain, kbRegistrationEnabled) {
         // Unique identifier for this asset: smia-1, smia-2, etc.
         const id = `smia-${index}`;
 
@@ -1608,6 +1611,13 @@ const SMIA_Builder = {
         // IMPORTANT: YAML indentation is strictly 2 spaces per level.
         // The volumeMount uses subPath to mount only the specific file,
         // and readOnly: true to prevent accidental writes from the container.
+        // SMIA-I KB registration: only when both KB and ISM are enabled
+        const kbRegistrationBlock = kbRegistrationEnabled
+            ? `            # SMIAI_KB_REGISTRATION: register asset in SMIA-I KB via SMIA ISM
+            - name: SMIAI_KB_REGISTRATION
+              value: "TRUE"
+`
+            : '';
         const yaml =
             `apiVersion: apps/v1
 kind: Deployment
@@ -1638,7 +1648,7 @@ spec:
             # AGENT_PSSWD: default agent password
             - name: AGENT_PSSWD
               value: "${asset.password}"
-          volumeMounts:
+${kbRegistrationBlock}          volumeMounts:
             # Mount only the specific AAS file via subPath (NFS-backed PVC)
             - name: nfs-aas-volume
               mountPath: /smia_archive/config/aas/${aasModelName}
@@ -2154,6 +2164,8 @@ echo "============================================================"
         const xmppNew = s.xmpp.strategy === 'new';
         // Whether SMIA ISM is enabled (agents must depend on it)
         const ismEnabled = !!s.core.ism;
+        // Whether SMIA-I KB registration is required (both KB and ISM enabled)
+        const kbRegistrationEnabled = !!(s.core.smiakb && s.core.ism);
 
         // ── Dynamic services section header ──
         const hasDynamic = s.plan.hasPlan || s.assets.length > 0 || s.operator;
@@ -2172,7 +2184,7 @@ echo "============================================================"
 
         // ── Production Assets (smia-X) ──
         s.assets.forEach((asset, i) => {
-            services.push(this._yamlSmiaAsset(I, asset, i + 1, xmppDomain, xmppNew, ismEnabled));
+            services.push(this._yamlSmiaAsset(I, asset, i + 1, xmppDomain, xmppNew, ismEnabled, kbRegistrationEnabled));
         });
 
         // ── SMIA Operator — fetched from GitHub docker-compose.yml ──
@@ -2258,8 +2270,9 @@ echo "============================================================"
      * @param {object} asset - Asset state object { path, file, isExtended, image }
      * @param {number} index - 1-based asset index
      * @param {string} xmppDomain - XMPP domain for AGENT_ID
+     * @param {boolean} kbRegistrationEnabled - Add SMIAI_KB_REGISTRATION when KB and ISM are enabled
      */
-    _yamlSmiaAsset: function (I, asset, index, xmppDomain, xmppNew, ismEnabled) {
+    _yamlSmiaAsset: function (I, asset, index, xmppDomain, xmppNew, ismEnabled, kbRegistrationEnabled) {
         const serviceName = (asset.jid || `smia-${index}`).toLowerCase().replace(/[^a-z0-9_.-]/g, '');
 
         const dockerImage = asset.isExtended && asset.image
@@ -2285,6 +2298,11 @@ echo "============================================================"
 
         envVars += `${I(3)}- AGENT_ID=${serviceName}@${xmppDomain}\n`;
         envVars += `${I(3)}- AGENT_PSSWD=${asset.password}\n`;
+
+        // SMIA-I KB registration: only when both KB and ISM are enabled
+        if (kbRegistrationEnabled) {
+            envVars += `${I(3)}- SMIAI_KB_REGISTRATION=TRUE\n`;
+        }
 
         let yaml =
             `${I(1)}${'smia-' + serviceName}:\n` +
