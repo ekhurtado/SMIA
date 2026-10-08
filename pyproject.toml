@@ -31,6 +31,7 @@ dependencies = [
     "jsonpath-ng == 1.7.0",
     "aiohttp >= 3.10.4",
     "aiomqtt ~= 2.5.1",
+    "asyncua >= 2.0.1",
     "psutil ~= 6.1.0",
     "jsonschema == 4.22.0",
     "tqdm ~= 4.67.1",
