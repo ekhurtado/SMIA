@@ -3,6 +3,7 @@ import logging
 import types
 
 import basyx.aas.model
+import basyx.aas.util.traversal
 from basyx.aas.model import SubmodelElementList, SubmodelElement, Operation, Submodel, RelationshipElement, \
     AnnotatedRelationshipElement, BasicEventElement, SubmodelElementCollection, Property, MultiLanguageProperty, \
     Range, Blob, File, ReferenceElement, Capability
@@ -34,6 +35,21 @@ class ExtendedSubmodel(Submodel):
         print("\tdataSpecifications: " + "{}".format(
             ExtendedGeneralMethods.print_data_specifications(self.embedded_data_specifications)))
         print("\tqualifiers: " + "{}".format(ExtendedGeneralMethods.print_namespace_set(self.qualifier)))
+
+    def get_sm_element_by_semantic_id(self, semantic_id_ref):
+        """
+        This method gets the first submodel element inside a Submodel (at any nesting level) by its semantic
+        identifier, no matter the element type.
+        Args:
+            semantic_id_ref (str): semantic identifier of the submodel element to find.
+
+        Returns:
+           basyx.aas.model.SubmodelElement: submodel element in form of Python object (None if not found).
+        """
+        for sm_elem in basyx.aas.util.traversal.walk_submodel(self):
+            if sm_elem.check_semantic_id_exist(semantic_id_ref):
+                return sm_elem
+        return None
 
 
 class ExtendedSubmodelElement(SubmodelElement):
@@ -276,6 +292,20 @@ class ExtendedSubmodelElementList(SubmodelElementList):
         print("Specific attributes of SubmodelElementLists:")
         # TODO
 
+    def get_sm_element_by_semantic_id(self, semantic_id_ref):
+        """
+        This method gets a submodel element inside a SubmodelElementList by its semantic identifier.
+        Args:
+            semantic_id_ref (str): semantic identifier of the submodel element to find.
+
+        Returns:
+           basyx.aas.model.SubmodelElement: submodel element in form of Python object.
+        """
+        for sm_elem in self.value:
+            if sm_elem.check_semantic_id_exist(semantic_id_ref):
+                return sm_elem
+        return None
+
 
 class ExtendedSubmodelElementCollection(SubmodelElementCollection):
 
@@ -307,9 +337,8 @@ class ExtendedSubmodelElementCollection(SubmodelElementCollection):
            basyx.aas.model.SubmodelElement: submodel element in form of Python object.
         """
         for sm_elem in self.value:
-            for reference in sm_elem.semantic_id.key:
-                if reference.value == semantic_id_ref:
-                    return sm_elem
+            if sm_elem.check_semantic_id_exist(semantic_id_ref):
+                return sm_elem
         return None
 
 
