@@ -12,7 +12,7 @@ _logger = logging.getLogger(__name__)
 
 
 def nuevo_svc():
-    print("dsfsdffsd")
+    print("new agent service")
 
 async def nuevo_svc_params(param1, param2):
     print("{}, {}".format(param1, param2))
