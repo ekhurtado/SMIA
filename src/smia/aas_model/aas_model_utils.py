@@ -41,7 +41,11 @@ class AASModelUtils:
                 elif aas_model_file_extension == '.xml':
                     object_store = basyx.aas.adapter.xml.read_aas_xml_file(aas_model_file_path)
                 elif aas_model_file_extension == '.aasx':
-                    with aasx.AASXReader(aas_model_file_path) as reader:
+                    # TODO A patch has been added for AASX packages using the AAS V3.1 model (compatible with the
+                    #  current SMIA-supported V3.0 version). Future versions of AAS will need to be evaluated to
+                    #  verify their compatibility and modify the preparation method
+                    with aasx.AASXReader(AASModelUtils.prepare_aas_model_source(aas_model_file_path)) as reader:
+                    # with aasx.AASXReader(aas_model_file_path) as reader:  # TODO original line
                         # Read all contained AAS objects and all referenced auxiliary files
                         object_store = model.DictObjectStore()
                         suppl_file_store = aasx.DictSupplementaryFileContainer()
@@ -266,6 +270,48 @@ class AASModelUtils:
         return ref_object
 
 
+    @staticmethod
+    def prepare_aas_model_source(aas_model_path):
+        """
+        This method returns an AAS model that the basyx-python-sdk version pinned by SMIA (AAS metamodel V3.0) can
+        deserialize. AAS V3.1 is a superset of V3.0, so a V3.1 file is a valid V3.0 model once its
+        AAS namespace declarations are re-labelled to V3.0. Only those declarations are changed:
+        the original file is never modified, and no model element, value or other versioned IRI is
+        touched.
+
+        Args:
+            aas_model_path (str): path of the AAS model to be prepared.
+
+        Returns:
+            obj: aas model source prepared for Basyx-Python-SDK version of SMIA
+        """
+        # TODO: This method serves as a patch for AASX packages using the AAS V3.1 model (compatible with the
+        #  current V3.0 version that supports SMIA). Future versions of AAS will need to be evaluated to verify
+        #  their compatibility and modify this preparation method (currently, it only changes the XML namespace
+        #  version from 3.1 to 3.0).
+
+        # Local imports
+        import io
+        import zipfile
+
+        _AAS_30 = "https://admin-shell.io/aas/3/0"
+        _AAS_31 = "https://admin-shell.io/aas/3/1"
+
+        with open(aas_model_path, 'rb') as model_file:
+            raw = model_file.read()
+
+        if path.splitext(aas_model_path)[1].lower() == '.xml':
+            return io.BytesIO(raw.replace(f'"{_AAS_31}"'.encode(), f'"{_AAS_30}"'.encode()))
+
+        output = io.BytesIO()
+        with zipfile.ZipFile(io.BytesIO(raw)) as source, zipfile.ZipFile(output, 'w') as target:
+            for info in source.infolist():
+                data = source.read(info.filename)
+                if info.filename.lower().endswith('.xml'):
+                    data = data.replace(f'"{_AAS_31}"'.encode(), f'"{_AAS_30}"'.encode())
+                target.writestr(info, data)
+        output.seek(0)
+        return output
 
 class AASModelInfo:
     """This class contains the information related to AAS model."""
