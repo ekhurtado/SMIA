@@ -123,13 +123,11 @@ class GUIControllers:
                             else:
                                 css_elems_info[capability.id_short]['capConstraints'].update(const_info)
                     if CapabilitySkillOntologyInfo.CSS_ONTOLOGY_PROP_HASPARAMETER_IRI == rel.iri:
-                        for skill, skill_param in aas_elems.items():
-                            if skill not in css_elems_info['skillData']:
-                                param_set = set()
-                                param_set.add(skill_param)
-                                self.myagent.skills_info[skill] = param_set
-                            else:
-                                self.myagent.skills_info[skill].add(skill_param)
+                        for skill, skill_params in aas_elems.items():
+                            if skill not in self.myagent.skills_info:
+                                self.myagent.skills_info[skill] = set()
+                            for param in skill_params:
+                                self.myagent.skills_info[skill].add(param.id_short)
 
         # Once all data is analyzed, it is saved in the agent dictionary
         self.myagent.css_elems_info = css_elems_info

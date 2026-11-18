@@ -229,7 +229,22 @@ class SMIAAgent(Agent):
         """
         async with self.lock:  # safe access to a shared object of the agent
             for conn_ref, conn_class in self.asset_connections.items():
+                # Strategy 1: the own equality operator of the references
                 if conn_ref == asset_connection_ref:
+                    return conn_class
+                # Strategy 2: comparison of the string representations of the references
+                if str(conn_ref) == str(asset_connection_ref):
+                    return conn_class
+                # Strategy 3: structural comparison of the key paths of the references
+                try:
+                    requested_ref_key_path = tuple((str(key.type), key.value)
+                                                   for key in asset_connection_ref.key)
+                    conn_ref_key_path = tuple((str(key.type), key.value) for key in conn_ref.key)
+                except (AttributeError, TypeError) as error:
+                    _logger.warning('The references {} and {} cannot be compared by key path. Reason: {}'.format(
+                        conn_ref, asset_connection_ref, error))
+                    continue
+                if conn_ref_key_path == requested_ref_key_path:
                     return conn_class
             raise AASModelReadingError("There is not asset connection class linked to {}".format(asset_connection_ref),
                                        asset_connection_ref, "MissingAssetConnectionClass")
